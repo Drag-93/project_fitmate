@@ -1,0 +1,12 @@
+# IDE
+.vscode
+.idea
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 환경파일
+.env
+backend/src/main/resources/application-open.yml
+backend/src/main/resources/application-oauth2.yml
