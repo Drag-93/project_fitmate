@@ -3,7 +3,6 @@ import { Navigate } from "react-router-dom";
 const Loading = <div className="loading">...Loading</div>;
 
 const StoreIndexPage = lazy(() => import("../page/store/StoreIndexPage"));
-const TestPage = lazy(() => import("../page/TestPage"));
 const toStoreRouter = () => {
   return [
     {
@@ -15,14 +14,6 @@ const toStoreRouter = () => {
       element: (
         <Suspense fallback={Loading}>
           <StoreIndexPage />
-        </Suspense>
-      ),
-    },
-    {
-      path: "test",
-      element: (
-        <Suspense fallback={Loading}>
-          <TestPage />
         </Suspense>
       ),
     },
