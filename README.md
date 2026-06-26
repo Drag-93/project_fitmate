@@ -1,14 +1,14 @@
 ================작업 시작 전에================
-
- git pull origin dev 
+<br/>
+ git pull origin dev <br/>
 -> 먼저 하고 작업 시작해주세요
 
 ================작업 완료는================
 
-git add .
+git add . <br/>
 
-git commit -m "작업 내용"
+git commit -m "작업 내용" <br/>
 
-git push
+git push <br/>
 
 ================================
