@@ -1,4 +1,5 @@
 import React from "react";
+import "../css/common/Footer.css";
 
 const Footer = () => {
   return (
@@ -22,7 +23,7 @@ const Footer = () => {
           <div className="footer-mid2">
             <ul>
               <li>365고객센터 | 전자금융거래분쟁처리담당</li>
-              <h3>1500-0000 (유료)</h3>
+              <li className="footer-tel">1500-0000 (유료)</li>
               <li>서울특별시 노원구 상계동 593-1 화일빌딩 3층</li>
               <li>email : fitmate@email.com</li>
             </ul>
