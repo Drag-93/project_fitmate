@@ -6,7 +6,7 @@ const Main = () => {
       <div className="main">
         <div className="main-wrap">
           <div className="main-top">
-            <div className="main-top-con"></div>
+            <div className="main-top-con">Main</div>
           </div>
           <div className="main-bottom">
             <div className="main-bottom-con"></div>
