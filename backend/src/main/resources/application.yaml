@@ -48,3 +48,6 @@ logging:
 
 img.path.item: file:///E:/fitmate/backend/item/
 img.path.community: file:///E:/fitmate/backend/community/
+
+#jwt시크릿키 설정
+jwt.secret.key: 31etDl5pbKSUAwcbEEXVEtmv78LXhOxHFlULnKn3usw=
