@@ -1,0 +1,252 @@
+.header {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  z-index: 1000;
+}
+
+.header * {
+  box-sizing: border-box;
+}
+
+.header ul,
+.header li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.header a {
+  color: #222;
+  text-decoration: none;
+}
+
+.header-con {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.nav-wrap {
+  height: 78px;
+  padding: 0 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.gnb-left,
+.gnb-right {
+  flex: 1;
+}
+
+.gnb-left ul,
+.gnb-right ul {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.gnb-right ul {
+  justify-content: flex-end;
+}
+
+.gnb-left a,
+.gnb-right a {
+  font-size: 15px;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.gnb-left a:hover,
+.gnb-right a:hover {
+  color: #35c75a;
+}
+
+.gnb-logo {
+  flex: 0 0 auto;
+}
+
+.gnb-logo h1 {
+  margin: 0;
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+/* 검색 */
+.header_search_btn {
+  cursor: pointer;
+  font-size: 14px;
+  color: #222;
+}
+
+.header_search {
+  position: absolute;
+  top: 88px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 460px;
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.25s ease;
+  z-index: 1001;
+}
+
+.header_search.active {
+  top: 96px;
+  opacity: 1;
+  visibility: visible;
+}
+
+.search-bar {
+  position: relative;
+  width: 100%;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 999px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.search-close {
+  position: absolute;
+  right: 82px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  width: 26px;
+  height: 26px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 50%;
+  cursor: pointer;
+
+  font-size: 22px;
+  font-weight: 300;
+  color: #777;
+
+  transition: 0.2s;
+}
+
+.search-close:hover {
+  background: #f2f2f2;
+  color: #111;
+}
+.search_box {
+  display: flex;
+  align-items: center;
+}
+
+.search_box input {
+  flex: 1;
+  height: 52px;
+  padding: 0 20px;
+
+  border: none;
+  outline: none;
+
+  font-size: 15px;
+}
+
+.search-btn {
+  width: 72px;
+  height: 52px;
+
+  border: none;
+  background: #222;
+  color: #fff;
+
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.search-btn:hover {
+  background: #35c75a;
+}
+
+/* depth */
+.header_depth {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+
+  border-top: 1px solid transparent;
+  background: #fff;
+
+  transition:
+    max-height 0.32s ease,
+    opacity 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.header_depth.active {
+  max-height: 220px;
+  opacity: 1;
+  border-top-color: #eee;
+}
+
+.header_depth > ul {
+  min-height: 150px;
+  padding: 28px 32px;
+
+  display: flex;
+  gap: 90px;
+}
+
+.header_depth > ul > li {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  min-width: 140px;
+}
+
+.header_depth a {
+  font-size: 14px;
+  color: #444;
+  transition: color 0.2s ease;
+}
+
+.header_depth a:first-child {
+  margin-bottom: 4px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #111;
+}
+
+.header_depth a:hover {
+  color: #35c75a;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .nav-wrap {
+    height: auto;
+    padding: 20px;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .gnb-left ul,
+  .gnb-right ul {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 18px;
+  }
+
+  .header_search {
+    width: calc(100% - 40px);
+  }
+
+  .header_depth > ul {
+    flex-direction: column;
+    gap: 28px;
+  }
+}
