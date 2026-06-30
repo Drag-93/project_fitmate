@@ -17,8 +17,9 @@ git merge dev
 ---
 
 ### 2. 작업
-
+작업 시작 전 본인 브랜치인지 먼저 확인해주세요.
 ```bash
+git checkout 본인브랜치
 git add .
 git commit -m "작업 내용"
 ```
