@@ -9,6 +9,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "refresh_token")
 public class RefreshEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
