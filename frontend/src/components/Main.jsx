@@ -46,6 +46,7 @@ const Main = () => {
                           height: `40vh`,
                         }}
                       />
+                      <del>배너 위치(delete)</del>
                     </a>
                   </li>
                   <li style={{ display: `none`, justifyContent: `center` }}>
@@ -122,7 +123,10 @@ const Main = () => {
                   <div className="main-right-slide">
                     <ul>
                       <li style={{ display: `flex`, justifyContent: `end` }}>
-                        <a href="/store">
+                        <a
+                          href="/store"
+                          style={{ display: "flex", flexDirection: "column" }}
+                        >
                           <img
                             src="/images/test2.jpg"
                             alt="테스트이미지"
@@ -131,6 +135,7 @@ const Main = () => {
                               height: `30vh`,
                             }}
                           />
+                          <del>베스트 상품 위치(delete)</del>
                         </a>
                       </li>
                     </ul>
@@ -161,7 +166,7 @@ const Main = () => {
                     gap: "3rem",
                   }}
                 >
-                  <li>
+                  <li style={{ display: "flex", flexDirection: "column" }}>
                     <a href="/store">
                       <img
                         src="/images/test1.jpg"
@@ -172,8 +177,9 @@ const Main = () => {
                         }}
                       />
                     </a>
+                    <del>상품 목록1</del>
                   </li>
-                  <li>
+                  <li style={{ display: "flex", flexDirection: "column" }}>
                     <a href="/store">
                       <img
                         src="/images/test2.jpg"
@@ -184,8 +190,9 @@ const Main = () => {
                         }}
                       />
                     </a>
+                    <del>상품 목록2</del>
                   </li>
-                  <li>
+                  <li style={{ display: "flex", flexDirection: "column" }}>
                     <a href="/store">
                       <img
                         src="/images/test3.jpg"
@@ -196,8 +203,9 @@ const Main = () => {
                         }}
                       />
                     </a>
+                    <del>상품 목록3</del>
                   </li>
-                  <li>
+                  <li style={{ display: "flex", flexDirection: "column" }}>
                     <a href="/store">
                       <img
                         src="/images/test4.jpg"
@@ -208,8 +216,9 @@ const Main = () => {
                         }}
                       />
                     </a>
+                    <del>상품 목록4</del>
                   </li>
-                  <li>
+                  <li style={{ display: "flex", flexDirection: "column" }}>
                     <a href="/store">
                       <img
                         src="/images/test4.jpg"
@@ -220,8 +229,9 @@ const Main = () => {
                         }}
                       />
                     </a>
+                    <del>상품 목록5</del>
                   </li>
-                  <li>
+                  <li style={{ display: "flex", flexDirection: "column" }}>
                     <a href="/store">
                       <img
                         src="/images/test3.jpg"
@@ -232,8 +242,9 @@ const Main = () => {
                         }}
                       />
                     </a>
+                    <del>상품 목록6</del>
                   </li>
-                  <li>
+                  <li style={{ display: "flex", flexDirection: "column" }}>
                     <a href="/store">
                       <img
                         src="/images/test2.jpg"
@@ -244,8 +255,9 @@ const Main = () => {
                         }}
                       />
                     </a>
+                    <del>상품 목록7</del>
                   </li>
-                  <li>
+                  <li style={{ display: "flex", flexDirection: "column" }}>
                     <a href="/store">
                       <img
                         src="/images/test1.jpg"
@@ -256,6 +268,7 @@ const Main = () => {
                         }}
                       />
                     </a>
+                    <del>상품 목록8</del>
                   </li>
                 </ul>
               </div>
