@@ -3,6 +3,7 @@ package org.spring.backend.store.subscription.entity;
 import java.time.LocalDateTime;
 
 import org.spring.backend.common.BasicTime;
+import org.spring.backend.member.entity.MemberEntity;
 import org.spring.backend.store.product.entity.ProductEntity;
 import org.spring.backend.store.subscription.type.SubscriptionStatus;
 
@@ -54,8 +55,8 @@ public class SubscriptionEntity extends BasicTime{
   private ProductEntity productEntity;
 
     // //N:1
-  // @JsonIgnore
-  // @ManyToOne(fetch = FetchType.LAZY)
-  // @JoinColumn(name = "member_id")
-  // private MemberEntity memberEntity;
+  @JsonIgnore
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "member_id")
+  private MemberEntity memberEntity;
 }

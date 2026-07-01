@@ -3,6 +3,7 @@ package org.spring.backend.store.product.entity;
 import java.util.List;
 
 import org.spring.backend.common.BasicTime;
+import org.spring.backend.member.entity.MemberEntity;
 import org.spring.backend.store.product.type.BillingType;
 import org.spring.backend.store.product.type.ProductStatus;
 import org.spring.backend.store.product.type.ProductType;
@@ -69,8 +70,8 @@ public class ProductEntity extends BasicTime{
 
 
   // //N:1
-  // @JsonIgnore
-  // @ManyToOne(fetch = FetchType.LAZY)
-  // @JoinColumn(name = "member_id")
-  // private MemberEntity memberEntity;
+  @JsonIgnore
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "member_id")
+  private MemberEntity memberEntity;
 }

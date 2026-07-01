@@ -3,6 +3,7 @@ package org.spring.backend.store.cart.entity;
 import java.util.List;
 
 import org.spring.backend.common.BasicTime;
+import org.spring.backend.member.entity.MemberEntity;
 import org.spring.backend.store.payment.entity.PaymentEntity;
 
 import jakarta.persistence.CascadeType;
@@ -42,7 +43,7 @@ public class CartEntity extends BasicTime {
   private PaymentEntity paymentEntity;
 
   // 1:1 > 한쪽만 설정
-  // @OneToOne
-  // @JoinColumn(name = "member_id")
-  // private MemberEntity memberEntity;
+  @OneToOne
+  @JoinColumn(name = "member_id")
+  private MemberEntity memberEntity;
 }
