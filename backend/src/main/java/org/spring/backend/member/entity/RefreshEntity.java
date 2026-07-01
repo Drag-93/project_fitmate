@@ -15,7 +15,7 @@ public class RefreshEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String userName;
+    private String userEmail;
 
     private String refresh;
 
