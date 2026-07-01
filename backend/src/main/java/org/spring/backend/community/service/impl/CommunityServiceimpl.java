@@ -2,15 +2,16 @@ package org.spring.backend.community.service.impl;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.spring.backend.community.dto.CommunityDto;
+import org.spring.backend.community.entity.CategoryEntity;
 import org.spring.backend.community.entity.CommunityEntity;
 import org.spring.backend.community.entity.FileEntity;
+import org.spring.backend.community.repository.CategoryRepository;
 import org.spring.backend.community.repository.CommunityRepository;
 import org.spring.backend.community.repository.FileRepository;
 import org.spring.backend.community.service.CommunityService;
@@ -25,8 +26,10 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class CommunityServiceimpl implements CommunityService{
+  
 private final CommunityRepository communityRepository;
 private final FileRepository fileRepository;
+private final CategoryRepository categoryRepository;
 
   String path = "file:///E:/backend/community/";
 
@@ -40,15 +43,19 @@ private final FileRepository fileRepository;
         return uuid + "-" + originalFileName;
     }
 
-  @Override
 @Transactional // DB 트랜잭션 보장
 public void insertWithFile(CommunityDto communityDto) {
+      CategoryEntity category = categoryRepository.findById(communityDto.getId())
+              .orElseThrow(()->new IllegalArgumentException("존재하지 않는 카테고리입니다"));
     // 1. 엔티티 우선 저장 (게시글 정보)
     CommunityEntity communityEntity = CommunityEntity.builder()
         .title(communityDto.getTitle())
+            .writerName(communityDto.getWriterName())
         .content(communityDto.getContent())
+        .categoryEntity(category)
         .hasFile(1)
         .hit(0)
+            .reply(0)
         .build();
     CommunityEntity saveCommunity = communityRepository.save(communityEntity);
 
@@ -75,19 +82,36 @@ public void insertWithFile(CommunityDto communityDto) {
     }
 }
 
-  
-  @Override
-  public void insertWithOutFile(CommunityDto communityDto) {
-    CommunityEntity communityEntity = CommunityEntity.builder()
-    .title(communityDto.getTitle())
-    .content(communityDto.getContent())
-    .hasFile(0)
-    .hit(0)
-    .build();
-    communityRepository.save(communityEntity);
-   }
+    @Transactional
+    public void insertWithOutFile(CommunityDto communityDto) {
+        // 1. 카테고리 조회 (존재 여부 확인 및 객체 획득)
+        CategoryEntity category = categoryRepository.findById(communityDto.getCategoryId())
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 카테고리입니다"));
 
-  @Override
+        // 2. 조회한 category 객체를 Builder에 연결
+        CommunityEntity communityEntity = CommunityEntity.builder()
+                .title(communityDto.getTitle())
+                .writerName(communityDto.getWriterName())
+                .content(communityDto.getContent())
+                .categoryEntity(category) // ★ 이 부분을 넣어줘야 귀속됩니다!
+                .hasFile(0)
+                .hit(0)
+                .reply(0)
+                .build();
+
+        communityRepository.save(communityEntity);
+    }
+
+    @Override
+    public void communityInsert(CommunityDto communityDto) {
+      if (communityDto.getAttachFile() == null || communityDto.getAttachFile().isEmpty()){
+          insertWithOutFile(communityDto);
+      }else{
+          insertWithFile(communityDto);
+      }
+    }
+
+    @Override
   public List<CommunityDto> communityList() {
     return communityRepository.findAll().stream().map(el->
       CommunityDto.builder()
@@ -95,6 +119,7 @@ public void insertWithFile(CommunityDto communityDto) {
       .title(el.getTitle())
       .content(el.getContent())
       .hasFile(el.getHasFile())
+      .categoryName(el.getCategoryEntity().getCategoryName())
       .createTime(el.getCreateTime())
       .updateTime(el.getUpdateTime())
       .build()
@@ -103,13 +128,14 @@ public void insertWithFile(CommunityDto communityDto) {
 
   @Override
   public void communityUpdate(CommunityDto communityDto) {
-   communityRepository.findById(communityDto.getId()).orElseThrow(()->new IllegalArgumentException("게시글이 존재하지 않습니다"));
+   communityRepository.findById(communityDto.getCategoryId()).orElseThrow(()->new IllegalArgumentException("게시글이 존재하지 않습니다"));
    communityRepository.save(CommunityEntity.builder()
    .id(communityDto.getId())
    .title(communityDto.getTitle())
    .content(communityDto.getContent())
    .hasFile(communityDto.getHasFile())
    .hit(communityDto.getHit())
+                   .reply(communityDto.getReply())
    .build());
 
    
@@ -132,6 +158,7 @@ public void insertWithFile(CommunityDto communityDto) {
    .id(communityEntity.getId())
    .title(communityEntity.getTitle())
    .content(communityEntity.getContent())
+   .categoryName(communityEntity.getCategoryEntity().getCategoryName())
    .hasFile(communityEntity.getHasFile())
    .hit(communityEntity.getHit())
    .reply(communityEntity.getReply())

@@ -1,5 +1,6 @@
 package org.spring.backend.community.service;
 
+import org.spring.backend.community.dto.CategoryDto;
 import org.spring.backend.community.dto.TabDto;
 
 import java.util.List;
@@ -14,4 +15,6 @@ public interface TabService {
   void tabDelete(Long id);
 
   TabDto tabDetail(Long id);
+
+  List<CategoryDto> categoryList();
 }

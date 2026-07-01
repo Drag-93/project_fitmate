@@ -1,9 +1,7 @@
 package org.spring.backend.community.entity;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.spring.backend.common.BasicTime;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -12,7 +10,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,25 +18,25 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Builder
-@Setter
-@Getter
-@Table(name="category_tb")
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoryEntity {
+@Setter
+@Getter
+@Builder
+@Table(name = "community_reply_tb")
+public class CommunityReplyEntity extends BasicTime {
   @Id
-  @Column(name="category_id")
+  @Column(name = "community_reply_id")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    private Long id;
 
-  private String categoryName;
+    private String writerName;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name="tab_id")
-  private TabEntity tabEntity;
+    private String content;
 
-  @OneToMany(mappedBy = "categoryEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<CommunityEntity> communityEntity = new ArrayList<>();
+    private int emoticon;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="community_id")
+    private CommunityEntity communityEntity;
 }
-

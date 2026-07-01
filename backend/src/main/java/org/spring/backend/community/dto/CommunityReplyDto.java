@@ -1,8 +1,5 @@
 package org.spring.backend.community.dto;
 
-import org.spring.backend.community.entity.TabEntity;
-import org.springframework.web.multipart.MultipartFile;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,14 +7,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Builder
-@Setter
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoryDto {
+public class CommunityReplyDto {
   private Long id;
 
-  private String categoryName;
+  private String emoticon;
 
-  private TabEntity tabEntity;
+  private String content;
+
+  private String writerName;
 }
