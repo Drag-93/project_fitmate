@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { loginPostAsync, logout } from "../../store/slices/loginSlice";
-import Header from "../../components/common/Header";
-import Footer from "../../components/common/Footer";
+import Header from "../common/Header";
+import Footer from "../common/Footer";
 import { useDispatch, useSelector } from "react-redux";
 
-const LoginPage = () => {
+const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -49,7 +49,6 @@ const LoginPage = () => {
   };
   return (
     <>
-      <Header />
       <div className="login">
         <div className="login-con">
           <ul>
@@ -91,9 +90,8 @@ const LoginPage = () => {
           </ul>
         </div>
       </div>
-      <Footer />
     </>
   );
 };
 
-export default LoginPage;
+export default Login;
