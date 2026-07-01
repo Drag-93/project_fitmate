@@ -1,5 +1,6 @@
 package org.spring.backend.member.jwt;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,9 +17,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
+import java.io.PrintWriter;
+import java.util.*;
 
 @RequiredArgsConstructor
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
@@ -28,6 +28,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private final JWTUtil jwtUtil;
     //Refresh토큰 저장 레포지토리
     private final RefreshRepository refreshRepository;
+
+    private final ObjectMapper objectMapper;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
@@ -43,7 +45,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
 
-        String userName = customUserDetails.getUsername();
+
+        String userEmail = customUserDetails.getUsername();
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
@@ -51,15 +54,40 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         String role = auth.getAuthority();
 
-        String access = jwtUtil.createJwt("access",userName, role, 60 * 60 * 100L);
-        String refresh = jwtUtil.createJwt("refresh",userName, role, 86400000L);
+        String access = jwtUtil.createJwt("access",userEmail, role, 60 * 60 * 100L);
+        String refresh = jwtUtil.createJwt("refresh",userEmail, role, 86400000L);
 
-        //Refresh토큰 저장
+        //Refresh토큰 저장        addRefreshEntity(userEmail, refresh, 86400000L);
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("userEmail",userEmail);
+        claims.put("role",role);
+        claims.put("access",access);
+        claims.put("refresh",refresh);
 
+        String jsonStr = objectMapper.writeValueAsString(claims);
+        response.setContentType("application/json");
+
+        PrintWriter printWriter = response.getWriter();
+        printWriter.println(jsonStr);
+        printWriter.close();
     }
-    private void addRefreshEntity(String userName, String refresh, Long expireMs){
+
+    //Refresh토큰 DB서버에 저장
+    private void addRefreshEntity(String userEmail, String refresh, Long expireMs){
         Date date = new Date(System.currentTimeMillis() + expireMs);
 
+        RefreshEntity refreshEntity = RefreshEntity.builder()
+                .userEmail(userEmail)
+                .refresh(refresh)
+                .expiration(date.toString())
+                .build();
+        refreshRepository.save(refreshEntity);
+    }
+
+    //인증 실패시
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+        response.setStatus(401);
     }
 }
 

@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.spring.backend.common.Role;
 import org.spring.backend.member.dto.MemberDto;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Getter
 @Setter
@@ -42,24 +43,22 @@ public class MemberEntity extends BasicTime {
   @Column(nullable = false)
   private Gender gender;
 
-  @Column(nullable = false)
   private int subscribe;
 
-  @Column(nullable = false)
   private int profilePhoto;
 
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
   private Role role;
 
-  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-  @JoinColumn(name = "member_add_id")
-  private MemberAddEntity memberAddEntity;
+//  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+//  @JoinColumn(name = "member_add_id")
+//  private MemberAddEntity memberAddEntity;
 
-  public static MemberEntity toInsertMemberEntity(MemberDto memberDto){
+  public static MemberEntity toInsertMemberEntity(MemberDto memberDto, String encodePw){
     return MemberEntity.builder()
             .userEmail(memberDto.getUserEmail())
-            .userPw(memberDto.getUserPw())
+            .userPw(encodePw)
             .userName(memberDto.getUserName())
             .userAddress(memberDto.getUserAddress())
             .userPhone(memberDto.getUserPhone())
@@ -69,11 +68,11 @@ public class MemberEntity extends BasicTime {
             .role(Role.MEMBER)
             .build();
   }
-  public static MemberEntity toUpdateMemberEntity(MemberDto memberDto){
+  public static MemberEntity toUpdateMemberEntity(MemberDto memberDto, String encodePw){
     return MemberEntity.builder()
             .id(memberDto.getId())
             .userEmail(memberDto.getUserEmail())
-            .userPw(memberDto.getUserPw())
+            .userPw(encodePw)
             .userName(memberDto.getUserName())
             .userAddress(memberDto.getUserAddress())
             .userPhone(memberDto.getUserPhone())

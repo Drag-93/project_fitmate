@@ -20,7 +20,7 @@ public class MemberController {
 
     @PostMapping("/join")
     public ResponseEntity<?> join(MemberDto memberDto){
-        
+        System.out.println(memberDto.getUserPw());
         // 회원가입 비즈니스 로직 실행
         memberService.insertMember(memberDto);
 

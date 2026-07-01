@@ -5,6 +5,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.spring.backend.common.Role;
 import org.spring.backend.member.entity.MemberEntity;
@@ -51,12 +53,12 @@ public class JWTFilter extends OncePerRequestFilter {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
-        //유저이름, 권한 가져오기
-        String userName = jwtUtil.getUserName(accessToken);
+        //유저계정, 권한 가져오기
+        String userEmail = jwtUtil.getUserEmail(accessToken);
         String role = jwtUtil.getRole(accessToken);
 
         MemberEntity memberEntity = MemberEntity.builder()
-                .userName(userName)
+                .userEmail(userEmail)
                 .role(Role.valueOf(role)).build();
         CustomUserDetails customUserDetails = new CustomUserDetails(memberEntity);
 
