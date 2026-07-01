@@ -8,6 +8,7 @@ import org.spring.backend.member.repository.MemberRepository;
 import org.spring.backend.member.service.MemberService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
     @Transactional
     @Override
     public void insertMember(MemberDto memberDto) {
@@ -26,9 +28,8 @@ public class MemberServiceImpl implements MemberService {
         if(optionalMemberEntity.isPresent()){
             throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
         }
-        memberRepository.save(MemberEntity.toInsertMemberEntity(memberDto));
+        memberRepository.save(MemberEntity.toInsertMemberEntity(memberDto,passwordEncoder.encode(memberDto.getUserPw())));
     }
-    @Transactional
     @Override
     public boolean emailCheck(String userEmail) {
         return memberRepository.existsByUserEmail(userEmail);
@@ -39,7 +40,6 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.findAll().stream().map(MemberDto::toMemberDto)
                 .collect(Collectors.toList());
     }
-    @Transactional
     @Override
     public Page<MemberDto> memberList(Pageable pageable, String subject, String search) {
         if(subject==null||subject.isBlank()||search==null||search.isBlank()){
@@ -59,7 +59,6 @@ public class MemberServiceImpl implements MemberService {
         }
         return memberEntities.map(MemberDto::toMemberDto);
     }
-    @Transactional
     @Override
     public MemberDto memberDetail(Long id) {
         MemberEntity memberEntity = memberRepository.findById(id)
@@ -77,9 +76,9 @@ public class MemberServiceImpl implements MemberService {
                 throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
             }
         }
-        memberRepository.save(MemberEntity.toUpdateMemberEntity(memberDto));
+        memberRepository.save(MemberEntity.toUpdateMemberEntity(memberDto, passwordEncoder.encode(memberDto.getUserPw())));
     }
-
+    @Transactional
     @Override
     public void memberDelete(Long id) {
         MemberEntity memberEntity = memberRepository.findById(id)
