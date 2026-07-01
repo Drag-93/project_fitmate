@@ -1,18 +1,23 @@
 package org.spring.backend.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.spring.backend.member.jwt.CustomLogoutFilter;
 import org.spring.backend.member.jwt.JWTFilter;
 import org.spring.backend.member.jwt.JWTUtil;
+import org.spring.backend.member.jwt.LoginFilter;
+import org.spring.backend.member.repository.RefreshRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -24,13 +29,25 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JWTUtil jwtUtil;
+
+    private final AuthenticationConfiguration authenticationConfiguration;
+
+    private final RefreshRepository refreshRepository;
+
+    private final ObjectMapper objectMapper;
+
+
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception{
+        return configuration.getAuthenticationManager();
+    }
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http)throws Exception{
+    public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authenticationManager)throws Exception{
         http.csrf(
                 csrf -> csrf.disable()
                 )
@@ -43,10 +60,11 @@ public class SecurityConfig {
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSoruce()))
                 .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-//                .addFilter(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
-//                .addFilterAt(new Login)
-
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class) //기본 로그인 필터 이전에 실행
+                .addFilterAt(new LoginFilter(authenticationManager, jwtUtil,
+                        refreshRepository, objectMapper), UsernamePasswordAuthenticationFilter.class) //Spring 기본 로그인 필터대신 사용
+                .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository), LogoutFilter.class); //로그아웃 처리
 
         return http.build();
     }
