@@ -40,6 +40,6 @@ public class CategoryEntity {
   private TabEntity tabEntity;
 
   @OneToMany(mappedBy = "categoryEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<CommunityEntity> communityEntiy = new ArrayList<>();
+  private List<CommunityEntity> communityEntity = new ArrayList<>();
 }
 

@@ -1,6 +1,7 @@
 package org.spring.backend.community.service.impl;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -63,51 +64,45 @@ public class TabServiceImpl implements TabService {
                     .categoryDtos(dtos)
                     .categoryNames(names)
                     .build();
-        }).collect(Collectors.toList()); // 여기를 수정!
+        }).toList();
     }
 
     @Override
     @Transactional
     public void tabUpdate(TabDto tabDto) {
-//    TabEntity tab = tabRepository.findById(tabDto.getId())
-//    .orElseThrow(()->new IllegalArgumentException("탭이 존재하지 않습니다"));
-//     for (CategoryDto catDto : tabDto.getCategoryDtos()) {
-//         if (catDto.getId() == null) {
-//             // 1. ID가 없으면? -> 새로 추가된 카테고리
-//             categoryRepository.save(CategoryEntity.builder()
-//                     .categoryName(catDto.getCategoryName())
-//                     .tabEntity(tab)
-//                     .build());
-//         } else {
-//             // 2. ID가 있으면? -> 기존 카테고리 이름 수정
-//             CategoryEntity category = categoryRepository.findById(catDto.getId())
-//                     .orElseThrow();
-//             category.setCategoryName(catDto.getCategoryName());
-//         }
-//     }
-//    tab.setTabName(tabDto.getTabName()); // 탭 이름 수정
+        // 1. 탭 조회
+        TabEntity tab = tabRepository.findById(tabDto.getId())
+                .orElseThrow(() -> new IllegalArgumentException("탭이 존재하지 않습니다"));
 
-//    // 1. 요청받은 ID 목록 추출
-//    List<Long> requestIds = tabDto.getCategoryDtos().stream()
-//        .map(CategoryDto::getId)
-//        .filter(id -> id != null)
-//        .collect(Collectors.toList());
-//
-//    // 2. 요청 목록에 없는 기존 카테고리 삭제 (DB에서 삭제)
-//    tab.getCategoryList().removeIf(cat -> !requestIds.contains(cat.getId()));
-//
-//    // 3. 기존 카테고리 수정 및 새 카테고리 추가
-//    for (CategoryDto catDto : tabDto.getCategoryDtos()) {
-//        if (catDto.getId() == null) {
-//            categoryRepository.save(CategoryEntity.builder()
-//                .categoryName(catDto.getCategoryName())
-//                .tabEntity(tab)
-//                .build());
-//        } else {
-//            CategoryEntity category = categoryRepository.findById(catDto.getId()).orElseThrow();
-//            category.setCategoryName(catDto.getCategoryName());
-//        }
-//    }
+        // 2. 탭 이름 수정
+        tab.setTabName(tabDto.getTabName());
+
+        // 3. 기존 카테고리 리스트 가져오기
+        List<CategoryEntity> existingCategories = tab.getCategoryList();
+
+        // 4. 요청받은 카테고리 DTO를 기반으로 리스트 동기화
+        List<CategoryEntity> updatedCategories = tabDto.getCategoryDtos().stream()
+                .map(dto -> {
+                    if (dto.getId() != null) {
+                        // 기존 카테고리 업데이트
+                        CategoryEntity existing = existingCategories.stream()
+                                .filter(c -> c.getId().equals(dto.getId()))
+                                .findFirst()
+                                .orElseThrow(() -> new IllegalArgumentException("카테고리를 찾을 수 없습니다."));
+                        existing.setCategoryName(dto.getCategoryName());
+                        return existing;
+                    } else {
+                        // 새로운 카테고리 추가
+                        return CategoryEntity.builder()
+                                .categoryName(dto.getCategoryName())
+                                .tabEntity(tab)
+                                .build();
+                    }
+                }).toList();
+
+        // 5. 기존 리스트를 지우고 새로운 리스트로 교체 (orphanRemoval에 의해 삭제됨)
+        existingCategories.clear();
+        existingCategories.addAll(updatedCategories);
     }
 
     @Override
@@ -159,5 +154,16 @@ public TabDto tabDetail(Long id) {
             .categoryDtos(dtos)
             .categoryNames(names) // 이제 올바른 List<String>이 들어갑니다.
             .build();
+}
+
+@Override
+public List<CategoryDto> categoryList() {
+        List<CategoryEntity> categoryEntity = categoryRepository.findAll();
+        return categoryEntity.stream().map(el->
+                CategoryDto.builder()
+                .id(el.getId())
+                .categoryName(el.getCategoryName())
+                .build()
+        ).toList();
 }
 }
