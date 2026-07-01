@@ -3,6 +3,7 @@ package org.spring.backend.store.cart.entity;
 import java.util.List;
 
 import org.spring.backend.common.BasicTime;
+import org.spring.backend.store.payment.entity.PaymentEntity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -29,17 +30,16 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "cart")
-public class CartEntity extends BasicTime{
+public class CartEntity extends BasicTime {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "cart_id")
   private Long id;
 
-  // 1:N
-  @OneToMany(mappedBy = "cartEntity", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-  private List<CartListEntity> CartListEntities;
-
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "payment_id")
+  private PaymentEntity paymentEntity;
 
   // 1:1 > 한쪽만 설정
   // @OneToOne
