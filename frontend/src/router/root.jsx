@@ -3,8 +3,10 @@ import { createBrowserRouter } from "react-router-dom";
 import toStoreRouter from "./toStoreRouter";
 import toCommunityRouter from "./toCommunityRouter";
 import toAdminRouter from "./toAdminRouter";
-import LoginPage from "../page/member/LoginPage";
-import JoinPage from "../page/member/JoinPage";
+import LoginPage from "../components/auth/Login";
+import JoinPage from "../components/auth/Join";
+import AuthLayout from "../layout/AuthLayout";
+import toAuthRouter from "./toAuthRouter";
 
 const Loading = (
   <div className="loading">
@@ -53,23 +55,15 @@ const root = createBrowserRouter([
     ),
     children: toAdminRouter(),
   },
-  //회원가입
+  //로그인,회원가입
   {
-    path: "join",
+    path: "auth",
     element: (
       <Suspense fallback={Loading}>
-        <JoinPage />
+        <AuthLayout />
       </Suspense>
     ),
-  },
-  //로그인
-  {
-    path: "login",
-    element: (
-      <Suspense fallback={Loading}>
-        <LoginPage />
-      </Suspense>
-    ),
+    children: toAuthRouter(),
   },
 ]);
 
