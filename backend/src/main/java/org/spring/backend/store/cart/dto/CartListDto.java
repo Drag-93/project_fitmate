@@ -18,6 +18,10 @@ public class CartListDto {
 
   private int quantity;
 
+  private Long productId;
+
+  private Long cartId;
+
   private LocalDateTime createTime;
 
   private LocalDateTime updateTime;

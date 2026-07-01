@@ -3,6 +3,10 @@ import { createBrowserRouter } from "react-router-dom";
 import toStoreRouter from "./toStoreRouter";
 import toCommunityRouter from "./toCommunityRouter";
 import toAdminRouter from "./toAdminRouter";
+import toProductsRouter from "./toProductsRouter";
+import toCartRouter from "./toCartRouter";
+import toOrderRouter from "./toOrderRouter";
+import toPaymentRouter from "./toPaymentRouter";
 
 const Loading = (
   <div className="loading">
@@ -32,6 +36,26 @@ const root = createBrowserRouter([
       </Suspense>
     ),
     children: toStoreRouter(),
+  },
+  {
+    path: 'products',
+    element: <Suspense fallback = {Loading}><StoreLayout/></Suspense>,
+    children: toProductsRouter()
+  },
+  {
+    path: 'cart',
+    element: <Suspense fallback = {Loading}><StoreLayout/></Suspense>,
+    children: toCartRouter()
+  },
+  {
+    path: 'order',
+    element: <Suspense fallback = {Loading}><StoreLayout/></Suspense>,
+    children: toOrderRouter()
+  },
+  {
+    path: 'payment',
+    element: <Suspense fallback = {Loading}><StoreLayout/></Suspense>,
+    children: toPaymentRouter()
   },
   {
     path: "community",

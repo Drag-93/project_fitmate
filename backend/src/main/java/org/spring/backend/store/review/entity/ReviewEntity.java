@@ -1,7 +1,6 @@
 package org.spring.backend.store.review.entity;
 
 import org.spring.backend.common.BasicTime;
-import org.spring.backend.store.order.entity.OrderEntity;
 import org.spring.backend.store.order.entity.OrderItemEntity;
 import org.spring.backend.store.product.entity.ProductEntity;
 
