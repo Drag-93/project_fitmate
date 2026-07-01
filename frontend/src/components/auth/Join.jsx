@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Header from "../../components/common/Header";
-import Footer from "../../components/common/Footer";
+import Header from "../common/Header";
+import Footer from "../common/Footer";
 import axios from "axios";
 import { API_SERVER_URL } from "../../apis/commonApi";
 import { useNavigate } from "react-router-dom";
@@ -11,7 +11,7 @@ const initUserData = {
   userName: "",
   gender: "MALE",
 };
-const JoinPage = () => {
+const Join = () => {
   const navigate = useNavigate();
   // 회원가입정보를 담게될 변수
   const [joinData, setJoinData] = useState(initUserData);
@@ -60,7 +60,6 @@ const JoinPage = () => {
   };
   return (
     <>
-      <Header />
       <div className="join">
         <div className="join-con">
           <ul>
@@ -114,9 +113,8 @@ const JoinPage = () => {
           </ul>
         </div>
       </div>
-      <Footer />
     </>
   );
 };
 
-export default JoinPage;
+export default Join;
