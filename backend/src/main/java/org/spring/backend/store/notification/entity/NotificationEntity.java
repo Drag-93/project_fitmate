@@ -1,6 +1,7 @@
 package org.spring.backend.store.notification.entity;
 
 import org.spring.backend.common.BasicTime;
+import org.spring.backend.member.entity.MemberEntity;
 import org.spring.backend.store.subscription.entity.SubscriptionEntity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -49,9 +50,9 @@ public class NotificationEntity extends BasicTime {
   @JoinColumn(name = "subscription_id")
   private SubscriptionEntity subscriptionEntity;
 
-  // //N:1
-  // @JsonIgnore
-  // @ManyToOne(fetch = FetchType.LAZY)
-  // @JoinColumn(name = "member_id")
-  // private MemberEntity memberEntity;
+  //N:1
+  @JsonIgnore
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "member_id")
+  private MemberEntity memberEntity;
 }

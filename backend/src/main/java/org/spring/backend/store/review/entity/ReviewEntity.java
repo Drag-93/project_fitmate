@@ -1,8 +1,11 @@
 package org.spring.backend.store.review.entity;
 
 import org.spring.backend.common.BasicTime;
+import org.spring.backend.member.entity.MemberEntity;
 import org.spring.backend.store.order.entity.OrderItemEntity;
 import org.spring.backend.store.product.entity.ProductEntity;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -46,8 +49,8 @@ public class ReviewEntity extends BasicTime {
   private OrderItemEntity orderItemEntity;
 
       // //N:1
-  // @JsonIgnore
-  // @ManyToOne(fetch = FetchType.LAZY)
-  // @JoinColumn(name = "member_id")
-  // private MemberEntity memberEntity;
+  @JsonIgnore
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "member_id")
+  private MemberEntity memberEntity;
 }
