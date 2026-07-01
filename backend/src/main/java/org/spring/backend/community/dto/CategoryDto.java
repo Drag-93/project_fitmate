@@ -19,7 +19,5 @@ public class CategoryDto {
 
   private String categoryName;
 
-  private MultipartFile attachFile;
-
   private TabEntity tabEntity;
 }

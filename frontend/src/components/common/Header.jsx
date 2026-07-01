@@ -69,8 +69,15 @@ const Header = () => {
                   className="header_auth_btn header_search_btn"
                   onClick={() => setIsSearchOpen(true)}
                 >
-                  돋보기아이콘
+                  <img
+                    src="/images/magnifier-icon.png"
+                    alt="돋보기 아이콘"
+                    style={{ width: "25px", height: "25px" }}
+                  />
                 </span>
+                <li>
+                  <Link to={`/admin`}>관리자</Link>
+                </li>
                 <li>
                   <Link to={`/login`}>로그인</Link>
                 </li>
@@ -88,15 +95,15 @@ const Header = () => {
               <ul>
                 <li>
                   <Link to={`/store`}>스토어</Link>
-                  <Link to={``}>운동기구</Link>
-                  <Link to={``}>식품</Link>
-                  <Link to={``}>스토어3</Link>
+                  <Link to={`/store`}>운동기구</Link>
+                  <Link to={`/store`}>식품</Link>
+                  <Link to={`/store`}>스토어3</Link>
                 </li>
                 <li>
-                  <Link to={``}>구독상품</Link>
-                  <Link to={``}>헬스장</Link>
-                  <Link to={``}>식단</Link>
-                  <Link to={``}>구독3</Link>
+                  <Link to={`/store`}>구독상품</Link>
+                  <Link to={`/store`}>헬스장</Link>
+                  <Link to={`/store`}>식단</Link>
+                  <Link to={`/store`}>구독3</Link>
                 </li>
               </ul>
             )}

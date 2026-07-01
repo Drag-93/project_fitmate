@@ -19,13 +19,11 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/join")
-    public ResponseEntity<?> join(MemberDto memberDto){
-        System.out.println(memberDto.getUserPw());
+    public String join(MemberDto memberDto){
         // 회원가입 비즈니스 로직 실행
         memberService.insertMember(memberDto);
 
-        // 201 Created 상태코드와 함께 성공 메시지 반환
-        return ResponseEntity.status(HttpStatus.CREATED).body("회원가입이 완료되었습니다.");
+        return "ok";
     }
 
 }

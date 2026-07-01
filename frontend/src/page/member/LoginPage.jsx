@@ -54,7 +54,10 @@ const LoginPage = () => {
         <div className="login-con">
           <ul>
             {isLogin ? (
-              logoutFn
+              <>
+                <li>로그인상태입니다.</li>
+                <button onClick={logoutFn}>로그아웃</button>
+              </>
             ) : (
               <>
                 <li>Login</li>
