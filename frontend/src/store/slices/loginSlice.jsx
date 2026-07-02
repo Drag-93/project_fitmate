@@ -1,8 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getCookie, setCookie, removeCookie } from "../../apis/util/cookieUtil";
 import { loginFn } from "../../apis/auth/login";
+import { API_SERVER_URL } from "../../apis/commonApi";
+import axios from "axios";
 const initState = {
-  userEmail: "",
+  memberData: [],
 };
 export const loginPostAsync = createAsyncThunk(
   "loginPostAsync",
@@ -17,9 +19,33 @@ const loadMemberCookie = () => {
   if (memberInfo && memberInfo.userEmail) {
     memberInfo.userEmail = decodeURIComponent(memberInfo.userEmail);
   }
-  if (memberInfo !== null) return memberInfo;
+  if (memberInfo !== null) {
+    return memberInfo;
+  }
   if (memberInfo === null) return null;
 };
+
+export const loadMemberInit = createAsyncThunk(
+  "auth/loadMemberInit",
+  async (_, { rejectWithValue }) => {
+    try {
+      const memberInfo = getCookie("member");
+      if (memberInfo === null) return null;
+
+      if (memberInfo && memberInfo.userEmail) {
+        memberInfo.userEmail = decodeURIComponent(memberInfo.userEmail);
+        const res = await axios.get(
+          `${API_SERVER_URL}/api/member/init/${encodeURIComponent(memberInfo.userEmail)}`,
+        );
+        console.log(res.data);
+        return res.data;
+      }
+      return null;
+    } catch (err) {
+      return rejectWithValue(err);
+    }
+  },
+);
 
 //로그인 관련 슬라이스 설정
 const loginSlice = createSlice({
@@ -47,18 +73,23 @@ const loginSlice = createSlice({
         if (payload && !payload.error) {
           const cookiePayload = { ...payload };
 
-          //이메일의 한글 처리(필요한지는 모르겠음)
+          //이메일의 한글 처리
           if (cookiePayload.userEmail) {
             cookiePayload.userEmail = encodeURIComponent(
               cookiePayload.userEmail,
             );
           }
-
           //쿠키 저장
           setCookie("member", JSON.stringify(cookiePayload), 1);
         }
 
         return payload;
+      })
+      .addCase(loadMemberInit.fulfilled, (state, action) => {
+        // 추가사항이므로 기존 data배열의 길이에 맞춰 추가
+        if (action.payload) {
+          state.memberData = action.payload;
+        }
       })
       .addCase(loginPostAsync.pending, (state, action) => {
         console.log("pending");

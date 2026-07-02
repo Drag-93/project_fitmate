@@ -5,6 +5,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.spring.backend.common.Role;
 import org.spring.backend.member.entity.RefreshEntity;
@@ -47,6 +48,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
 
         String userEmail = customUserDetails.getUsername();
+        //재 로그인시에 refresh토큰이 쌓이는걸 방지하기 위해 제거
+        refreshRepository.deleteByUserEmail(userEmail);
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
@@ -57,7 +60,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String access = jwtUtil.createJwt("access",userEmail, role, 60 * 60 * 100L);
         String refresh = jwtUtil.createJwt("refresh",userEmail, role, 86400000L);
 
-        //Refresh토큰 저장        addRefreshEntity(userEmail, refresh, 86400000L);
+        //Refresh토큰 저장        
+        addRefreshEntity(userEmail, refresh, 86400000L);
         Map<String, Object> claims = new HashMap<>();
         claims.put("userEmail",userEmail);
         claims.put("role",role);

@@ -16,8 +16,6 @@ export const loginFn = async (userEmail, userPw) => {
     });
 
     if (rs.status === 200) {
-      alert("로그인 성공!");
-
       //LoginFilter에서 가공한 유저 데이터 'member'를 쿠키에 저장
       setCookie("member", JSON.stringify(rs.data), 1);
       return rs.data;
