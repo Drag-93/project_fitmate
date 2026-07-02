@@ -5,6 +5,7 @@ import java.util.List;
 import org.spring.backend.store.payment.entity.PaymentEntity;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 public interface PaymentRepository extends JpaRepository<PaymentEntity, Long> {
 
@@ -14,7 +15,7 @@ public interface PaymentRepository extends JpaRepository<PaymentEntity, Long> {
 
   // 관리자용 전체 조회
   @EntityGraph(attributePaths = {"orderEntity"})
-  List<PaymentEntity> findAllWithOrder();
+  List<PaymentEntity> findAll();
   
 
 }
