@@ -38,10 +38,10 @@ public class JWTUtil {
                 .getExpiration().before(new Date());
     }
 
-    public String createJwt(String category, String userName, String role, long expiredMs){
+    public String createJwt(String category, String userEmail, String role, long expiredMs){
         return Jwts.builder()
                 .claim("category",category)
-                .claim("userName",userName)
+                .claim("userEmail",userEmail)
                 .claim("role",role)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expiredMs))

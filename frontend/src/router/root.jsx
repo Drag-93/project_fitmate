@@ -19,6 +19,7 @@ const MainPage = lazy(() => import("../page/MainPage"));
 const StoreLayout = lazy(() => import("../layout/StoreLayout"));
 const CommunityLayout = lazy(() => import("../layout/CommunityLayout"));
 const AdminLayout = lazy(() => import("../layout/AdminLayout"));
+const AuthLayout = lazy(() => import("../layout/AuthLayout"));
 
 const root = createBrowserRouter([
   {

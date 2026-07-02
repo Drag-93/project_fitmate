@@ -4,6 +4,7 @@ import { loginPostAsync, logout } from "../../store/slices/loginSlice";
 import Header from "../common/Header";
 import Footer from "../common/Footer";
 import { useDispatch, useSelector } from "react-redux";
+import "../css/auth/login.css";
 
 const Login = () => {
   const dispatch = useDispatch();
