@@ -4,6 +4,11 @@ import toStoreRouter from "./toStoreRouter";
 import toCommunityRouter from "./toCommunityRouter";
 import toAdminRouter from "./toAdminRouter";
 import toAuthRouter from "./toAuthRouter";
+import toProductsRouter from "./toProductsRouter";
+import toCartRouter from "./toCartRouter";
+import toOrderRouter from "./toOrderRouter";
+import toPaymentRouter from "./toPaymentRouter";
+import AuthLayout from "../layout/AuthLayout";
 
 const Loading = (
   <div className="loading">
@@ -15,6 +20,7 @@ const MainPage = lazy(() => import("../page/MainPage"));
 const StoreLayout = lazy(() => import("../layout/StoreLayout"));
 const CommunityLayout = lazy(() => import("../layout/CommunityLayout"));
 const AdminLayout = lazy(() => import("../layout/AdminLayout"));
+const AuthLayout = lazy(() => import("../layout/AuthLayout"));
 
 const root = createBrowserRouter([
   {

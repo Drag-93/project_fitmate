@@ -2,10 +2,13 @@ import React, { lazy, Suspense } from "react";
 
 const Loading = <div className="loading">...Loading</div>;
 
-const ProductListPage = lazy(() => import("../page/store/product/ProductListPage"));
+const ProductListPage = lazy(
+  () => import("../page/store/product/ProductListPage"),
+);
 const CategoryPage = lazy(() => import("../page/store/product/CategoryPage"));
-const ProductDetailPage = lazy(() => import("../page/store/product/ProductDetailPage"));
-
+const ProductDetailPage = lazy(
+  () => import("../page/store/product/ProductDetailPage"),
+);
 
 const toProductsRouter = () => {
   return [
@@ -13,27 +16,27 @@ const toProductsRouter = () => {
       path: "",
       element: (
         <Suspense fallback={Loading}>
-        <ProductListPage />
-      </Suspense>
+          <ProductListPage />
+        </Suspense>
       ),
     },
     {
       path: "category/:category",
       element: (
         <Suspense fallback={Loading}>
-        <CategoryPage />
-      </Suspense>
+          <CategoryPage />
+        </Suspense>
       ),
     },
     {
       path: "detail/:productId",
       element: (
         <Suspense fallback={Loading}>
-        <ProductDetailPage />
-      </Suspense>
+          <ProductDetailPage />
+        </Suspense>
       ),
     },
-  ]
-}
+  ];
+};
 
-export default toProductsRouter
+export default toProductsRouter;
