@@ -2,7 +2,6 @@ package org.spring.backend.member.dto;
 
 import java.time.LocalDateTime;
 
-import jakarta.validation.constraints.NotBlank;
 import org.spring.backend.common.Gender;
 
 import lombok.AllArgsConstructor;
@@ -19,17 +18,16 @@ import org.spring.backend.member.entity.MemberEntity;
 public class MemberDto {
   private Long id;
 
-  @NotBlank(message = "이메일을 입력해주세요.")
   private String userEmail;
-  @NotBlank(message = "비밀번호를 입력해주세요.")
+
   private String userPw;
-  @NotBlank(message = "이름을 입력해주세요.")
+
   private String userName;
 
   private String userAddress;
 
   private String userPhone;
-  @NotBlank(message = "성별을 선택해주세요.")
+
   private Gender gender;
 
   private int subscribe;

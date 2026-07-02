@@ -36,7 +36,11 @@ const beforeRes = async (res) => {
   const data = res.data;
 
   //JwtFilter에서 걸러지는 error코드 감지시
-  if (data && data.error === "ERROR_ACCESS_TOKEN") {
+  if (
+    err.response &&
+    (err.response.status === 401 ||
+      (data && data.error === "ERROR_ACCESS_TOKEN"))
+  ) {
     try {
       const memberCookieValue = getCookie("member");
 
@@ -55,6 +59,7 @@ const beforeRes = async (res) => {
       return await axios(originalRequest);
     } catch (refreshError) {
       //리프레시 토큰까지 만료 시 만료 응답 처리
+      alert("세션이 만료되었습니다. 다시 로그인해주세요.");
       return Promise.reject(refreshError);
     }
   }

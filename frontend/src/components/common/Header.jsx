@@ -1,11 +1,26 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../css/common/Header.css";
+import { useDispatch, useSelector } from "react-redux";
+import loginSlice, { logout } from "../../store/slices/loginSlice";
 const Header = () => {
+  //변수 선언
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  //로그인 여부 판단
+  const user = useSelector((state) => state.loginSlice);
+  const isLogin = !!user?.userEmail;
+  //로그아웃
+  const logoutFn = () => {
+    dispatch(logout());
+    alert("로그아웃 되었습니다.");
+    navigate("/");
+  };
+
   // 검색기능변수
   const [keyword, setKeyword] = useState("");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const navigate = useNavigate();
   //메뉴 depth 기능 -> onMouseEnter시 오픈
   const [activeMenu, setActiveMenu] = useState(null);
 
@@ -75,18 +90,38 @@ const Header = () => {
                     style={{ width: "25px", height: "25px" }}
                   />
                 </span>
-                <li>
-                  <Link to={`/admin`}>관리자</Link>
-                </li>
-                <li>
-                  <Link to={`/login`}>로그인</Link>
-                </li>
-                <li>
-                  <Link to={`/join`}>회원가입</Link>
-                </li>
-                <li>
-                  <Link to={`/cart`}>장바구니</Link>
-                </li>
+                {!isLogin && (
+                  <>
+                    <li>
+                      <Link to={`/auth/login`}>로그인</Link>
+                    </li>
+                    <li>
+                      <Link to={`/auth/join`}>회원가입</Link>
+                    </li>
+                  </>
+                )}
+                {isLogin &&
+                  // user?.role==="ADMIN" &&(
+                  user?.userEmail === "test@email.com" && (
+                    <li>
+                      <Link to="/admin">관리자</Link>
+                    </li>
+                  )}
+                {isLogin && (
+                  <>
+                    <li>
+                      <Link to={`/cart`}>장바구니</Link>
+                    </li>
+                    <li>
+                      <Link to={`/mypage`}>내정보</Link>
+                    </li>
+                    <li>
+                      <button className="header-logout-btn" onClick={logoutFn}>
+                        로그아웃
+                      </button>
+                    </li>
+                  </>
+                )}
               </ul>
             </div>
           </div>

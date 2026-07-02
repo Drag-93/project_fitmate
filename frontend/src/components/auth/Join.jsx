@@ -3,7 +3,7 @@ import Header from "../common/Header";
 import Footer from "../common/Footer";
 import axios from "axios";
 import { API_SERVER_URL } from "../../apis/commonApi";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../css/auth/join.css";
 const initUserData = {
   userEmail: "",
@@ -19,9 +19,19 @@ const Join = () => {
     const { name, value } = e.target;
     setJoinData({ ...joinData, [name]: value });
   };
+
+  //이메일 형식 체크를 위한 정규식 선언
+  const emailRegex =
+    /^[a-zA-Z0-9_+&*-]+(?:\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/;
+
   const onJoinFn = async () => {
     if (!joinData.userEmail) {
       alert("이메일을 입력해주세요");
+      return;
+    }
+    //이메일 형식에 맞지않는지 체크
+    if (!emailRegex.test(joinData.userEmail.trim())) {
+      alert("이메일 형식이 올바르지 않습니다.");
       return;
     }
     if (!joinData.userPw) {
@@ -48,25 +58,22 @@ const Join = () => {
       );
       if (res.data === "ok") {
         alert("회원가입 성공!");
-        navigate("/login");
+        navigate("/auth/login");
       }
     } catch (err) {
       console.error("회원가입 통신 에러:", err);
       alert("서버 연결에 실패하였습니다.");
     }
   };
-  const onLogin = () => {
-    navigate("/login");
-  };
   return (
     <>
       <div className="join">
         <div className="join-con">
           <ul>
-            <li>Login</li>
+            <li>Join</li>
             <li>
               <input
-                type="text"
+                type="email"
                 name="userEmail"
                 id="userEmail"
                 placeholder="이메일을 입력해주세요"
@@ -108,7 +115,7 @@ const Join = () => {
             </li>
             <li>
               <button onClick={onJoinFn}>회원가입</button>
-              <button onClick={onLogin}>로그인</button>
+              <Link to="/auth/login">회원가입</Link>
             </li>
           </ul>
         </div>

@@ -20,11 +20,20 @@ const Login = () => {
   const onLoginFnId = (e) => setUserEmail(e.target.value);
   const onLoginFnPw = (e) => setuserPw(e.target.value);
 
+  //이메일 형식 체크를 위한 정규식 선언
+  const emailRegex =
+    /^[a-zA-Z0-9_+&*-]+(?:\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/;
+
   //로그인 처리 함수
   const onLoginFn = async () => {
     //입력값 유효성 검사
     if (!userEmail.trim() || !userPw.trim()) {
       alert("아이디와 비밀번호를 모두 입력해주세요.");
+      return;
+    }
+    //이메일 형식에 맞지않는지 체크
+    if (!emailRegex.test(userEmail.trim())) {
+      alert("이메일 형식이 올바르지 않습니다.");
       return;
     }
 
@@ -63,7 +72,7 @@ const Login = () => {
                 <li>Login</li>
                 <li>
                   <input
-                    type="text"
+                    type="email"
                     name="userEmail"
                     id="userEmail"
                     placeholder="이메일을 입력해주세요"
@@ -84,7 +93,7 @@ const Login = () => {
                 </li>
                 <li>
                   <button onClick={onLoginFn}>로그인</button>
-                  <Link to="/join">회원가입</Link>
+                  <Link to="/auth/join">회원가입</Link>
                 </li>
               </>
             )}

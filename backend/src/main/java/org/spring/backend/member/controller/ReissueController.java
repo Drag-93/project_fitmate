@@ -4,6 +4,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.spring.backend.member.entity.RefreshEntity;
 import org.spring.backend.member.jwt.JWTUtil;
@@ -22,6 +23,7 @@ public class ReissueController {
     private final RefreshRepository refreshRepository;
 
     @PostMapping("/reissue")
+    @Transactional
     public ResponseEntity<?> reissue(HttpServletRequest request,
                                      HttpServletResponse response){
         //Refresh토큰 가져오기
@@ -63,7 +65,7 @@ public class ReissueController {
         String newRefresh = jwtUtil.createJwt("refresh",userEmail,role,84600000L);
         //Refresh 토큰 저장, 기존의 Refresh토큰이 있었다면 제거 후 새 Refresh토큰으로 저장
         refreshRepository.deleteByRefresh(refresh);
-        addRefreshEntity(userEmail, refresh, 86400000L);
+        addRefreshEntity(userEmail, newRefresh, 86400000L);
 
         response.setHeader("access",newAccess);
         response.addCookie(createCookie("refresh", newRefresh));
@@ -71,6 +73,7 @@ public class ReissueController {
     }
 
     private void addRefreshEntity(String userEmail, String refresh, Long expiredMs){
+        
         Date date = new Date(System.currentTimeMillis() + expiredMs);
         RefreshEntity refreshEntity = RefreshEntity.builder()
                 .userEmail(userEmail)
