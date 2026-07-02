@@ -79,10 +79,10 @@ const Header = () => {
                   <Link to={`/admin`}>관리자</Link>
                 </li>
                 <li>
-                  <Link to={`/login`}>로그인</Link>
+                  <Link to={`/auth/login`}>로그인</Link>
                 </li>
                 <li>
-                  <Link to={`/join`}>회원가입</Link>
+                  <Link to={`/auth/join`}>회원가입</Link>
                 </li>
                 <li>
                   <Link to={`/cart`}>장바구니</Link>
