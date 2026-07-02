@@ -3,6 +3,7 @@ package org.spring.backend.store.order.service;
 import java.util.List;
 
 import org.spring.backend.store.order.dto.OrderDto;
+import org.spring.backend.store.order.type.DeliveryStatus;
 
 public interface OrderService {
       // 주문 생성
@@ -18,5 +19,5 @@ public interface OrderService {
       void cancelOrder(Long orderId);
   
       // 주문 상태 변경
-      void updateOrderStatus(Long orderId);
+      void updateOrderStatus(Long orderId, DeliveryStatus deliveryStatus);
 }

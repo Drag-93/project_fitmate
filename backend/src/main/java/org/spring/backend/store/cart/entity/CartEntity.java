@@ -38,12 +38,13 @@ public class CartEntity extends BasicTime {
   @Column(name = "cart_id")
   private Long id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "payment_id")
-  private PaymentEntity paymentEntity;
-
   // 1:1 > 한쪽만 설정
   @OneToOne
   @JoinColumn(name = "member_id")
   private MemberEntity memberEntity;
+
+  // 1:N
+  @OneToMany(mappedBy = "cartEntity", 
+  fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+  List<CartListEntity> cartListEntities;
 }

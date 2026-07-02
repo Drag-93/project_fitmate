@@ -39,7 +39,7 @@ public class OrderDto {
 
   private LocalDateTime createTime;
 
-  public static OrderDto tOrderDto(OrderEntity orderEntity){
+  public static OrderDto toOrderDto(OrderEntity orderEntity){
     return OrderDto.builder()
     .id(orderEntity.getId())
     .totalPrice(orderEntity.getTotalPrice())

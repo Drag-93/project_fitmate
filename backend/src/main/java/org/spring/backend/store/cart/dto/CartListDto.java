@@ -2,6 +2,8 @@ package org.spring.backend.store.cart.dto;
 
 import java.time.LocalDateTime;
 
+import org.spring.backend.store.cart.entity.CartListEntity;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,7 +24,30 @@ public class CartListDto {
 
   private Long cartId;
 
+  private String productName;
+
+  private int price;
+
+  private String productImage;
+
   private LocalDateTime createTime;
 
   private LocalDateTime updateTime;
+
+  public static CartListDto toCartListDto(CartListEntity cartListEntity) {
+    return CartListDto.builder()
+        .id(cartListEntity.getId())
+        .quantity(cartListEntity.getQuantity())
+        .productId(cartListEntity.getProductEntity() != null
+            ? cartListEntity.getProductEntity().getId()
+            : null)
+        .cartId(cartListEntity.getCartEntity() != null
+            ? cartListEntity.getCartEntity().getId()
+            : null)
+        .productName(cartListEntity.getProductEntity().getProductName())
+        .price(cartListEntity.getProductEntity().getPrice())
+        .createTime(cartListEntity.getCreateTime())
+        .updateTime(cartListEntity.getUpdateTime())
+        .build();
+  }
 }
