@@ -3,8 +3,12 @@ import React, { lazy, Suspense } from "react";
 const Loading = <div className="loading">...Loading</div>;
 
 const PaymentPage = lazy(() => import("../page/store/payment/PaymentPage"));
-const PaymentFailPage = lazy(() => import("../page/store/payment/PaymentFailPage"));
-const PaymentSuccessPage = lazy(() => import("../page/store/payment/PaymentSuccessPage"));
+const PaymentFailPage = lazy(
+  () => import("../page/store/payment/PaymentFailPage"),
+);
+const PaymentSuccessPage = lazy(
+  () => import("../page/store/payment/PaymentSuccessPage"),
+);
 
 const toPaymentRouter = () => {
   return [
@@ -12,27 +16,27 @@ const toPaymentRouter = () => {
       path: "",
       element: (
         <Suspense fallback={Loading}>
-        <PaymentPage />
-      </Suspense>
+          <PaymentPage />
+        </Suspense>
       ),
     },
     {
       path: "success",
       element: (
         <Suspense fallback={Loading}>
-        <PaymentSuccessPage />
-      </Suspense>
+          <PaymentSuccessPage />
+        </Suspense>
       ),
     },
     {
       path: "fail",
       element: (
         <Suspense fallback={Loading}>
-        <PaymentFailPage />
-      </Suspense>
+          <PaymentFailPage />
+        </Suspense>
       ),
     },
-  ]
-}
+  ];
+};
 
-export default toPaymentRouter
+export default toPaymentRouter;
