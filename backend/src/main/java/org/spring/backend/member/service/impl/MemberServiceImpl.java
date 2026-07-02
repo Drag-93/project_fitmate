@@ -85,4 +85,11 @@ public class MemberServiceImpl implements MemberService {
                 .orElseThrow(()->new NoSuchElementException("회원아이디 없음"));
         memberRepository.deleteById(id);
     }
+    @Override
+    public MemberDto memberInit(String userEmail) {
+        MemberEntity memberEntity = memberRepository.findByUserEmail(userEmail)
+        .orElseThrow(()->new NoSuchElementException("이메일이 존재하지 않습니다."));
+
+        return MemberDto.toMemberDto(memberEntity);
+    }
 }

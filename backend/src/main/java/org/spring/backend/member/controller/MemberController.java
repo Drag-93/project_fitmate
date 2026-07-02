@@ -19,10 +19,13 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/join")
-    public String join(MemberDto memberDto){
+    public ResponseEntity<?> join(MemberDto memberDto){
         // 회원가입 비즈니스 로직 실행
         memberService.insertMember(memberDto);
 
-        return "ok";
+        return ResponseEntity.ok("ok");
     }
+
+    @GetMapping("/init/{userEmail}")
+    public ResponseEntity<?>
 }
