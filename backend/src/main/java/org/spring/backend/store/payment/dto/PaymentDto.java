@@ -2,6 +2,7 @@ package org.spring.backend.store.payment.dto;
 
 import java.time.LocalDateTime;
 
+import org.spring.backend.store.payment.entity.PaymentEntity;
 import org.spring.backend.store.payment.type.PaymentMethod;
 import org.spring.backend.store.payment.type.PaymentStatus;
 
@@ -31,7 +32,6 @@ public class PaymentDto {
   // 결제 승인 시간
   private LocalDateTime approveTime;
 
-  // 결제 상태
   private PaymentStatus paymentStatus;
 
   // 주문 ID
@@ -40,5 +40,23 @@ public class PaymentDto {
   private Long subscriptionId;
 
   private LocalDateTime createTime;
+
+  public static PaymentDto toPaymentDto(PaymentEntity paymentEntity) {
+    return PaymentDto.builder()
+        .id(paymentEntity.getId())
+        .tid(paymentEntity.getTid())
+        .paymentMethod(paymentEntity.getPaymentMethod())
+        .amount(paymentEntity.getAmount())
+        .approveTime(paymentEntity.getApproveTime())
+        .paymentStatus(paymentEntity.getPaymentStatus())
+        .orderId(paymentEntity.getOrderEntity() != null
+            ? paymentEntity.getOrderEntity().getId()
+            : null)
+        .subscriptionId(paymentEntity.getSubscriptionEntity() != null
+            ? paymentEntity.getSubscriptionEntity().getId()
+            : null)
+        .createTime(paymentEntity.getCreateTime())
+        .build();
+  }
 
 }
