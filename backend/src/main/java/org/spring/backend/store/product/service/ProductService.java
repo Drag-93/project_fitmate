@@ -1,8 +1,10 @@
 package org.spring.backend.store.product.service;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.spring.backend.store.product.dto.ProductDto;
+import org.spring.backend.store.product.type.ProductType;
 
 public interface ProductService {
 
@@ -19,8 +21,9 @@ public interface ProductService {
   ProductDto productDetail(Long productId);
 
   // 카테고리별 조회
-  List<ProductDto> categoryList(String category);
+  List<ProductDto> categoryList(ProductType productType);
 
   // 상품 검색
   List<ProductDto> searchProduct(String keyword);
+
 }

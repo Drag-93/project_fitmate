@@ -3,10 +3,9 @@ package org.spring.backend.store.order.repository;
 import java.util.List;
 
 import org.spring.backend.store.order.entity.OrderEntity;
+import org.spring.backend.store.order.entity.OrderItemEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface OrderRepository extends JpaRepository<OrderEntity,Long>{
-
-  List<OrderEntity> findByMemberEntityId(Long memberId);
+public interface OrderItemRepository extends JpaRepository<OrderItemEntity,Long>{
   
 }

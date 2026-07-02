@@ -2,18 +2,18 @@ package org.spring.backend.store.cart.service;
 
 import java.util.List;
 
-import org.spring.backend.store.cart.dto.CartDto;
+import org.spring.backend.store.cart.dto.CartListDto;
 
 
 public interface CartService {
 
-  void insertCart(Long memberId, CartDto cartDto);
+  void insertCart(Long memberId, CartListDto carListDto);
 
-  List<CartDto> cartList(Long memberId);
+  List<CartListDto> cartList(Long memberId);
 
   int countCartItems(Long memberId);
 
-  void updateQuantity(Long cartItemId, CartDto cartDto);
+  void updateQuantity(Long cartItemId, CartListDto carListDto);
 
   void deleteCartItem(Long cartItemId);
 
