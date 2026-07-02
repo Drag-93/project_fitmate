@@ -1,7 +1,12 @@
 package org.spring.backend.store.subscription.dto;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Optional;
 
+import org.spring.backend.store.product.entity.ProductEntity;
+import org.spring.backend.store.product.entity.ProductFileEntity;
+import org.spring.backend.store.subscription.entity.SubscriptionEntity;
 import org.spring.backend.store.subscription.type.SubscriptionStatus;
 
 import lombok.AllArgsConstructor;
@@ -25,7 +30,7 @@ public class SubscriptionDto {
   private LocalDateTime endDate;
 
   private LocalDateTime nextPaymentDate;
-  
+
   private LocalDateTime createTime;
 
   private Long productId;
@@ -33,4 +38,25 @@ public class SubscriptionDto {
   private String productName;
 
   private String productImage;
+
+  public static SubscriptionDto toSubscriptionDto(SubscriptionEntity subscriptionEntity) {
+    return SubscriptionDto.builder()
+        .id(subscriptionEntity.getId())
+        .subscriptionStatus(subscriptionEntity.getSubscriptionStatus())
+        .startDate(subscriptionEntity.getStartDate())
+        .endDate(subscriptionEntity.getEndDate())
+        .nextPaymentDate(subscriptionEntity.getNextPaymentDate())
+        .createTime(subscriptionEntity.getCreateTime())
+        .productId(subscriptionEntity.getProductEntity().getId())
+        .productName(subscriptionEntity.getProductEntity().getProductName())
+        .productImage(
+            Optional.ofNullable(subscriptionEntity.getProductEntity())
+                .map(ProductEntity::getProductFileEntities)
+                .orElse(Collections.emptyList())
+                .stream()
+                .findFirst()
+                .map(ProductFileEntity::getNewFileName)
+                .orElse(null))
+        .build();
+  }
 }

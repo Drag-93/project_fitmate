@@ -1,8 +1,15 @@
 package org.spring.backend.store.notification.repository;
 
-import org.spring.backend.store.review.entity.ReviewEntity;
+import java.util.List;
+
+import org.spring.backend.store.notification.entity.NotificationEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface NotificationRepository extends JpaRepository<ReviewEntity,Long>{
-  
+public interface NotificationRepository extends JpaRepository<NotificationEntity, Long> {
+
+  List<NotificationEntity> findByMemberEntity_IdOrderByIdDesc(Long memberId);
+
+  List<NotificationEntity> findByMemberEntity_Id(Long memberId);
+
+  int countByMemberEntity_IdAndIsRead(Long memberId, int isRead);
 }

@@ -24,7 +24,9 @@ public class NotificationDto {
 
   private int isRead;
 
-  private Long subscription_id;
+  private Long subscriptionId;
+
+  private Long memberId;
 
   private LocalDateTime createTime;
 
@@ -34,6 +36,14 @@ public class NotificationDto {
         .title(entity.getTitle())
         .content(entity.getContent())
         .isRead(entity.getIsRead())
+        .subscriptionId(
+            entity.getSubscriptionEntity() != null
+                ? entity.getSubscriptionEntity().getId()
+                : null)
+        .memberId(
+            entity.getMemberEntity() != null
+                ? entity.getMemberEntity().getId()
+                : null)
         .createTime(entity.getCreateTime())
         .build();
   }

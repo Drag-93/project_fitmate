@@ -1,14 +1,16 @@
 package org.spring.backend.store.product.service.serviceImpl;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.spring.backend.store.product.dto.ProductDto;
 import org.spring.backend.store.product.entity.ProductEntity;
 import org.spring.backend.store.product.repository.ProductRepository;
 import org.spring.backend.store.product.service.ProductService;
+import org.spring.backend.store.product.type.ProductType;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -21,10 +23,21 @@ public class ProductServiceImpl implements ProductService {
   @Override
   public void insertProduct(ProductDto productDto) {
 
+    ProductEntity productEntity = ProductEntity.builder()
+        .productName(productDto.getProductName())
+        .price(productDto.getPrice())
+        .description(productDto.getDescription())
+        .productType(productDto.getProductType())
+        .billingType(productDto.getBillingType())
+        .productStatus(productDto.getProductStatus())
+        .build();
+
+    productRepository.save(productEntity);
   }
 
   @Override
   public void updateProduct(Long productId, ProductDto productDto) {
+
     ProductEntity productEntity = productRepository.findById(productId)
         .orElseThrow(() -> new IllegalArgumentException("상품이 존재하지 않습니다."));
 
@@ -45,27 +58,42 @@ public class ProductServiceImpl implements ProductService {
   }
 
   @Override
+  @Transactional(readOnly = true)
   public List<ProductDto> productList() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'productList'");
+    return productRepository.findAll()
+        .stream()
+        .map(ProductDto::toProductDto)
+        .toList();
   }
 
   @Override
+  @Transactional(readOnly = true)
   public ProductDto productDetail(Long productId) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'productDetail'");
+
+    ProductEntity productEntity = productRepository.findById(productId)
+        .orElseThrow(() -> new IllegalArgumentException("상품이 존재하지 않습니다."));
+
+    return ProductDto.toProductDto(productEntity);
   }
 
   @Override
-  public List<ProductDto> categoryList(String category) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'categoryList'");
+  @Transactional(readOnly = true)
+  public List<ProductDto> categoryList(ProductType productType) {
+
+    return productRepository.findByProductType(productType)
+        .stream()
+        .map(ProductDto::toProductDto)
+        .toList();
   }
 
   @Override
+  @Transactional(readOnly = true)
   public List<ProductDto> searchProduct(String keyword) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'searchProduct'");
+    return productRepository.findByProductNameContaining(keyword)
+        .stream()
+        .map(ProductDto::toProductDto)
+        .toList();
   }
+
 
 }
