@@ -61,7 +61,7 @@ public class PaymentServiceImpl implements PaymentService {
   @Override
   @Transactional(readOnly = true)
   public List<PaymentDto> paymentAllList() {
-    return paymentRepository.findAllWithOrder()
+    return paymentRepository.findAll()
         .stream()
         .map(PaymentDto::toPaymentDto)
         .toList();
