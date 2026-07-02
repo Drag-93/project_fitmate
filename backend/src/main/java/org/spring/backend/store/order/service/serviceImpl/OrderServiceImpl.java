@@ -77,6 +77,7 @@ public class OrderServiceImpl implements OrderService {
 
   @Override
   public List<OrderDto> orderList(Long memberId) {
+
     return orderRepository.findByMemberEntityId(memberId)
         .stream()
         .map(OrderDto::toOrderDto)
