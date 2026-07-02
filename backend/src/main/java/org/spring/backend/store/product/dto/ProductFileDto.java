@@ -2,7 +2,7 @@ package org.spring.backend.store.product.dto;
 
 import java.time.LocalDateTime;
 
-import org.spring.backend.store.product.entity.ProductEntity;
+import org.spring.backend.store.product.entity.ProductFileEntity;
 import org.spring.backend.store.product.type.ImageType;
 
 import lombok.AllArgsConstructor;
@@ -33,4 +33,17 @@ public class ProductFileDto {
   private LocalDateTime createTime;
 
   private LocalDateTime updateTime;
+
+  public static ProductFileDto toProductFileDto(ProductFileEntity productFileEntity){
+    return ProductFileDto.builder()
+    .id(productFileEntity.getId())
+    .newFileName(productFileEntity.getNewFileName())
+    .oldFileName(productFileEntity.getOldFileName())
+    .sortOrder(productFileEntity.getSortOrder())
+    .imageType(productFileEntity.getImageType())
+    .productId(productFileEntity.getProductEntity().getId())
+    .createTime(productFileEntity.getCreateTime())
+    .updateTime(productFileEntity.getUpdateTime())
+    .build();
+  }
 }

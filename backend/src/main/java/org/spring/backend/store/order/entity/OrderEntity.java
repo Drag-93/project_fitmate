@@ -1,5 +1,7 @@
 package org.spring.backend.store.order.entity;
 
+import java.util.List;
+
 import org.spring.backend.common.BasicTime;
 import org.spring.backend.member.entity.MemberEntity;
 import org.spring.backend.store.order.type.DeliveryStatus;
@@ -17,6 +19,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,8 +34,8 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "order_tb")
-public class OrderEntity extends BasicTime{
-  
+public class OrderEntity extends BasicTime {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "order_id")
@@ -41,7 +44,6 @@ public class OrderEntity extends BasicTime{
   @Column(nullable = false)
   private int totalPrice;
 
-  
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
   private OrderStatus orderStatus;
@@ -56,17 +58,19 @@ public class OrderEntity extends BasicTime{
   @Column(nullable = false)
   private String receiverPhone;
 
-  
   @Column(nullable = false)
   private String address;
 
-  
   @Column(nullable = false)
   private String deliveryMemo;
 
-    // //N:1
+  // //N:1
   @JsonIgnore
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "member_id")
   private MemberEntity memberEntity;
+
+  @JsonIgnore
+  @OneToMany(mappedBy = "orderEntity")
+  private List<OrderItemEntity> orderItemEntities;
 }

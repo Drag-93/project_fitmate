@@ -1,5 +1,7 @@
 package org.spring.backend.store.order.dto;
 
+import org.spring.backend.store.order.entity.OrderItemEntity;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,4 +27,16 @@ public class OrderItemDto {
   private Long productId;
 
   private Long orderId;
+
+  public static OrderItemDto toOrderItemDto(OrderItemEntity orderItemEntity) {
+  return OrderItemDto.builder()
+      .id(orderItemEntity.getId())
+      .productName(orderItemEntity.getProductName())
+      .price(orderItemEntity.getPrice())
+      .quantity(orderItemEntity.getQuantity())
+      .productImage(orderItemEntity.getProductImage())
+      .productId(orderItemEntity.getProductEntity().getId())
+      .orderId(orderItemEntity.getOrderEntity().getId())
+      .build();  
+}
 }

@@ -3,6 +3,7 @@ package org.spring.backend.store.order.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.spring.backend.store.order.entity.OrderEntity;
 import org.spring.backend.store.order.type.DeliveryStatus;
 import org.spring.backend.store.order.type.OrderStatus;
 
@@ -37,5 +38,20 @@ public class OrderDto {
   private String deliveryMemo;
 
   private LocalDateTime createTime;
+
+  public static OrderDto tOrderDto(OrderEntity orderEntity){
+    return OrderDto.builder()
+    .id(orderEntity.getId())
+    .totalPrice(orderEntity.getTotalPrice())
+    .orderStatus(orderEntity.getOrderStatus())
+    .deliveryStatus(orderEntity.getDeliveryStatus())
+    .receiverName(orderEntity.getReceiverName())
+    .receiverPhone(orderEntity.getReceiverPhone())
+    .address(orderEntity.getAddress())
+    .orderItemDtos(orderEntity.getOrderItemEntities().stream().map(OrderItemDto::toOrderItemDto).toList())
+    .deliveryMemo(orderEntity.getDeliveryMemo())
+    .createTime(orderEntity.getCreateTime())
+    .build();
+  }
 
 }
