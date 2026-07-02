@@ -2,6 +2,7 @@ package org.spring.backend.store.payment.entity;
 
 import java.time.LocalDateTime;
 
+import org.spring.backend.common.BasicTime;
 import org.spring.backend.store.order.entity.OrderEntity;
 import org.spring.backend.store.payment.type.PaymentMethod;
 import org.spring.backend.store.payment.type.PaymentStatus;
@@ -34,7 +35,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "payment_tb")
-public class PaymentEntity {
+public class PaymentEntity extends BasicTime{
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
