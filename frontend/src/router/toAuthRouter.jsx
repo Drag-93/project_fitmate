@@ -1,8 +1,10 @@
 import React, { lazy, Suspense } from "react";
 import { Navigate } from "react-router-dom";
-import LoginPage from "../page/auth/LoginPage";
-import JoinPage from "../page/auth/JoinPage";
+
 const Loading = <div className="loading">...Loading</div>;
+
+const LoginPage = lazy(() => import("../page/auth/LoginPage"));
+const JoinPage = lazy(() => import("../page/auth/JoinPage"));
 
 const toAuthRouter = () => {
   return [

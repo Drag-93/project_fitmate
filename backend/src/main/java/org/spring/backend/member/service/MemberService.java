@@ -20,4 +20,6 @@ public interface MemberService {
     void memberUpdate(MemberDto memberDto);
 
     void memberDelete(Long id);
+
+    MemberDto memberInit(String userEmail);
 }
