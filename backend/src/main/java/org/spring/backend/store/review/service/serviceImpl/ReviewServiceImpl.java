@@ -2,47 +2,100 @@ package org.spring.backend.store.review.service.serviceImpl;
 
 import java.util.List;
 
+import org.spring.backend.member.entity.MemberEntity;
+import org.spring.backend.member.repository.MemberRepository;
+import org.spring.backend.store.order.entity.OrderEntity;
+import org.spring.backend.store.order.entity.OrderItemEntity;
+import org.spring.backend.store.order.repository.OrderItemRepository;
+import org.spring.backend.store.order.repository.OrderRepository;
+import org.spring.backend.store.product.entity.ProductEntity;
+import org.spring.backend.store.product.repository.ProductRepository;
 import org.spring.backend.store.review.dto.ReviewDto;
+import org.spring.backend.store.review.entity.ReviewEntity;
+import org.spring.backend.store.review.repository.ReviewRepository;
 import org.spring.backend.store.review.service.ReviewService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
-public class ReviewServiceImpl implements ReviewService{
+@RequiredArgsConstructor
+@Transactional
+public class ReviewServiceImpl implements ReviewService {
+
+  private final ReviewRepository reviewRepository;
+  private final MemberRepository memberRepository;
+  private final ProductRepository productRepository;
+  private final OrderRepository orderRepository;
+  private final OrderItemRepository orderItemRepository;
 
   @Override
   public void insertReview(Long memberId, ReviewDto reviewDto, Long orderId) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'insertReview'");
+    MemberEntity member = memberRepository.findById(memberId)
+        .orElseThrow(() -> new IllegalArgumentException("회원이 존재하지 않습니다."));
+
+    OrderItemEntity orderItem = orderItemRepository.findById(reviewDto.getOrderItemId())
+        .orElseThrow(() -> new IllegalArgumentException("주문 상품이 없습니다."));
+
+    // 본인 주문인지 검증
+    if (!orderItem.getOrderEntity().getMemberEntity().getId().equals(memberId)) {
+      throw new IllegalArgumentException("본인이 구매한 상품만 리뷰작성이 가능합니다.");
+    }
+    ReviewEntity review = ReviewEntity.builder()
+        .memberEntity(member)
+        .orderItemEntity(orderItem)
+        .productEntity(orderItem.getProductEntity()) // 필요하면 자동 연결
+        .content(reviewDto.getContent())
+        .rating(reviewDto.getRating())
+        .build();
+
+    reviewRepository.save(review);
   }
 
   @Override
+  @Transactional(readOnly = true)
   public List<ReviewDto> reviewListByProduct(Long productId) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'reviewListByProduct'");
+    return reviewRepository.findByProductEntity_Id(productId)
+        .stream()
+        .map(ReviewDto::toReviewDto)
+        .toList();
   }
 
   @Override
+  @Transactional(readOnly = true)
   public ReviewDto reviewDetail(Long reviewId) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'reviewDetail'");
+
+    ReviewEntity review = reviewRepository.findById(reviewId)
+        .orElseThrow(() -> new IllegalArgumentException("리뷰가 존재하지 않습니다."));
+
+    return ReviewDto.toReviewDto(review);
   }
 
   @Override
   public void updateReview(Long reviewId, ReviewDto reviewDto) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'updateReview'");
+    ReviewEntity review = reviewRepository.findById(reviewId)
+        .orElseThrow(() -> new IllegalArgumentException("리뷰가 존재하지 않습니다."));
+
+    review.setContent(reviewDto.getContent());
+    review.setRating(reviewDto.getRating());
   }
 
   @Override
   public void deleteReview(Long reviewId) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'deleteReview'");
+
+    ReviewEntity review = reviewRepository.findById(reviewId)
+        .orElseThrow(() -> new IllegalArgumentException("리뷰가 존재하지 않습니다."));
+
+    reviewRepository.delete(review);
   }
 
   @Override
+  @Transactional(readOnly = true)
   public List<ReviewDto> myReviewList(Long memberId) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'myReviewList'");
+    return reviewRepository.findByMemberEntity_Id(memberId)
+        .stream()
+        .map(ReviewDto::toReviewDto)
+        .toList();
   }
-  
 }

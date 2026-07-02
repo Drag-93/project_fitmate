@@ -29,7 +29,7 @@ public class PaymentServiceImpl implements PaymentService {
   public void paymentInsert(PaymentDto paymentDto) {
 
     OrderEntity orderEntity = orderRepository.findById(paymentDto.getOrderId())
-        .orElseThrow(() -> new IllegalArgumentException("주문 없음"));
+        .orElseThrow(() -> new IllegalArgumentException("주문이 존재하지 않습니다."));
 
     // 1. Payment 생성 (결제 요청 상태)
     PaymentEntity paymentEntity = PaymentEntity.builder()
@@ -71,7 +71,7 @@ public class PaymentServiceImpl implements PaymentService {
   @Transactional(readOnly = true)
   public PaymentDto findById(Long id) {
     PaymentEntity paymentEntity = paymentRepository.findById(id)
-        .orElseThrow(() -> new IllegalArgumentException("결제 없음"));
+        .orElseThrow(() -> new IllegalArgumentException("결제가 존재하지 않습니다."));
 
     return PaymentDto.toPaymentDto(paymentEntity);
   }
