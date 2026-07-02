@@ -4,6 +4,10 @@ import toStoreRouter from "./toStoreRouter";
 import toCommunityRouter from "./toCommunityRouter";
 import toAdminRouter from "./toAdminRouter";
 import toAuthRouter from "./toAuthRouter";
+import toProductsRouter from "./toProductsRouter";
+import toCartRouter from "./toCartRouter";
+import toOrderRouter from "./toOrderRouter";
+import toPaymentRouter from "./toPaymentRouter";
 
 const Loading = (
   <div className="loading">

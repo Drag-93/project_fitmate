@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.spring.backend.common.BasicTime;
 import org.spring.backend.member.entity.MemberEntity;
+import org.spring.backend.store.product.dto.ProductDto;
 import org.spring.backend.store.product.type.BillingType;
 import org.spring.backend.store.product.type.ProductStatus;
 import org.spring.backend.store.product.type.ProductType;
@@ -36,7 +37,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "product_tb")
-public class ProductEntity extends BasicTime{
+public class ProductEntity extends BasicTime {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -68,10 +69,10 @@ public class ProductEntity extends BasicTime{
   @OneToMany(mappedBy = "productEntity", cascade = CascadeType.REMOVE)
   private List<ProductFileEntity> productFileEntities;
 
-
   // //N:1
   @JsonIgnore
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "member_id")
   private MemberEntity memberEntity;
+
 }
