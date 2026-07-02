@@ -8,7 +8,6 @@ import toProductsRouter from "./toProductsRouter";
 import toCartRouter from "./toCartRouter";
 import toOrderRouter from "./toOrderRouter";
 import toPaymentRouter from "./toPaymentRouter";
-import AuthLayout from "../layout/AuthLayout";
 
 const Loading = (
   <div className="loading">
