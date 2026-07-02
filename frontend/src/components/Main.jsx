@@ -152,7 +152,7 @@ const Main = () => {
                 style={{ display: "flex", justifyContent: "center" }}
               >
                 <a href="/store">
-                  이벤트이미지
+                  <del>이벤트이미지</del>
                   <img src="" alt="이벤트 이미지" />
                 </a>
               </div>
