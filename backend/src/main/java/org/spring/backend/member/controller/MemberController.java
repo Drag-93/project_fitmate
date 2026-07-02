@@ -25,7 +25,4 @@ public class MemberController {
 
         return ResponseEntity.ok("ok");
     }
-
-    @GetMapping("/init/{userEmail}")
-    public ResponseEntity<?>
 }
