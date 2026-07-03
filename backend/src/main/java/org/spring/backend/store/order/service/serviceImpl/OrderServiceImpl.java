@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.spring.backend.member.entity.MemberEntity;
 import org.spring.backend.member.repository.MemberRepository;
+import org.spring.backend.store.cart.entity.CartListEntity;
+import org.spring.backend.store.cart.repository.CartListRepository;
 import org.spring.backend.store.order.dto.OrderDto;
 import org.spring.backend.store.order.dto.OrderItemDto;
 import org.spring.backend.store.order.entity.OrderEntity;
@@ -29,9 +31,10 @@ public class OrderServiceImpl implements OrderService {
   private final OrderItemRepository orderItemRepository;
   private final MemberRepository memberRepository;
   private final ProductRepository productRepository;
+  private final CartListRepository cartListRepository;
 
   @Override
-  public void insertOrder(Long memberId, OrderDto orderDto) {
+  public void insertDirectOrder(Long memberId, OrderDto orderDto) {
     // 회원 조회
     MemberEntity memberEntity = memberRepository.findById(memberId)
         .orElseThrow(() -> new IllegalArgumentException("회원이 존재하지 않습니다."));
@@ -59,11 +62,11 @@ public class OrderServiceImpl implements OrderService {
           .orElseThrow(() -> new IllegalArgumentException("상품이 존재하지 않습니다."));
 
       OrderItemEntity orderItemEntity = OrderItemEntity.builder()
-          .productEntity(productEntity)
           .orderEntity(orderEntity)
+          .productEntity(productEntity)
+          .productName(productEntity.getProductName())
           .price(productEntity.getPrice())
           .quantity(itemDto.getQuantity())
-          .productName(productEntity.getProductName())
           .build();
 
       orderItemRepository.save(orderItemEntity);
@@ -72,6 +75,51 @@ public class OrderServiceImpl implements OrderService {
     }
 
     orderEntity.setTotalPrice(totalPrice);
+
+    orderRepository.save(orderEntity);
+  }
+
+  @Override
+  public void insertCartOrder(Long memberId, List<Long> cartListIds, OrderDto orderDto) {
+    // 회원 조회
+    MemberEntity memberEntity = memberRepository.findById(memberId)
+        .orElseThrow(() -> new IllegalArgumentException("회원이 존재하지 않습니다."));
+
+    // 주문 생성
+    OrderEntity orderEntity = OrderEntity.builder()
+        .totalPrice(0)
+        .orderStatus(OrderStatus.PENDING)
+        .deliveryStatus(DeliveryStatus.READY)
+        .memberEntity(memberEntity)
+        .build();
+
+    orderRepository.save(orderEntity);
+
+    int totalPrice = 0;
+
+    for (Long cartListId : cartListIds) {
+
+      CartListEntity cartListEntity = cartListRepository.findById(cartListId)
+          .orElseThrow(() -> new IllegalArgumentException("장바구니 상품이 존재하지 않습니다."));
+
+      ProductEntity productEntity = cartListEntity.getProductEntity();
+
+      OrderItemEntity orderItemEntity = OrderItemEntity.builder()
+          .orderEntity(orderEntity)
+          .productEntity(productEntity)
+          .productName(productEntity.getProductName())
+          .price(productEntity.getPrice())
+          .quantity(cartListEntity.getQuantity())
+          .build();
+
+      orderItemRepository.save(orderItemEntity);
+
+      totalPrice += productEntity.getPrice() * cartListEntity.getQuantity();
+    }
+
+    orderEntity.setTotalPrice(totalPrice);
+
+    orderRepository.save(orderEntity);
   }
 
 

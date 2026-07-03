@@ -48,6 +48,8 @@ public class ProductDto {
 
   private LocalDateTime updateTime;
 
+  private String category;
+
   public static ProductDto toProductDto(ProductEntity productEntity) {
     return ProductDto.builder()
         .id(productEntity.getId())
