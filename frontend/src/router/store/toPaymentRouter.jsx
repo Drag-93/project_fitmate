@@ -2,12 +2,12 @@ import React, { lazy, Suspense } from "react";
 
 const Loading = <div className="loading">...Loading</div>;
 
-const PaymentPage = lazy(() => import("../page/store/payment/PaymentPage"));
+const PaymentPage = lazy(() => import("../../page/store/payment/PaymentPage"));
 const PaymentFailPage = lazy(
-  () => import("../page/store/payment/PaymentFailPage"),
+  () => import("../../page/store/payment/PaymentFailPage"),
 );
 const PaymentSuccessPage = lazy(
-  () => import("../page/store/payment/PaymentSuccessPage"),
+  () => import("../../page/store/payment/PaymentSuccessPage"),
 );
 
 const toPaymentRouter = () => {

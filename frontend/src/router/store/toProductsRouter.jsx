@@ -3,11 +3,13 @@ import React, { lazy, Suspense } from "react";
 const Loading = <div className="loading">...Loading</div>;
 
 const ProductListPage = lazy(
-  () => import("../page/store/product/ProductListPage"),
+  () => import("../../page/store/product/ProductListPage"),
 );
-const CategoryPage = lazy(() => import("../page/store/product/CategoryPage"));
+const CategoryPage = lazy(
+  () => import("../../page/store/product/CategoryPage"),
+);
 const ProductDetailPage = lazy(
-  () => import("../page/store/product/ProductDetailPage"),
+  () => import("../../page/store/product/ProductDetailPage"),
 );
 
 const toProductsRouter = () => {
