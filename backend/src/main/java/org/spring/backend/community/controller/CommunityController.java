@@ -81,6 +81,16 @@ public class CommunityController {
     return ResponseEntity.status(HttpStatus.OK).body(map);
   }
 
+  @GetMapping("tabList/{id}")
+  public ResponseEntity<?> tabListDetail(@PathVariable("id") Long id){
+    Map<String, List<TabDto>> map = new HashMap<>();
+
+    List<TabDto> tabDto = tabService.tabList();
+    map.put("result", tabDto);
+
+    return ResponseEntity.status(HttpStatus.OK).body(map);
+  }
+
   @PostMapping("/tabInsert")
   public ResponseEntity<?> tabInsert(@RequestBody TabDto tabDto) {
     tabService.insertTab(tabDto);
@@ -121,6 +131,22 @@ public class CommunityController {
     List<CategoryDto> categoryList = tabService.categoryList();
     Map<String , List<CategoryDto>> map = new HashMap<>();
     map.put("result", categoryList);
+    return ResponseEntity.status(HttpStatus.OK).body(map);
+  }
+
+  @GetMapping("/list")
+  public ResponseEntity<?> getList(@RequestParam(value="tabId", required = false) Long tabId,
+                                   @RequestParam(value = "categoryId", required = false) Long categoryId){
+    List<CommunityDto> list;
+    if (categoryId != null){
+      list = communityService.findByCategory(categoryId);
+    }else if(tabId!=null){
+      list = communityService.findByTab(tabId);
+    } else{
+      list = communityService.communityList();
+    }
+    Map<String, Object> map = new HashMap<>();
+    map.put("result", list);
     return ResponseEntity.status(HttpStatus.OK).body(map);
   }
 }

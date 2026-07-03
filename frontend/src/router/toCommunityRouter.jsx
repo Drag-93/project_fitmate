@@ -11,6 +11,7 @@ const CommunityInsertPage = lazy(
 const CommunityListPage = lazy(
   () => import("../page/community/CommunityListPage"),
 );
+const TabInsertPage = lazy(() => import("../page/community/TabInsertPage"));
 
 const toCommunityRouter = () => {
   return [
@@ -35,7 +36,31 @@ const toCommunityRouter = () => {
       ),
     },
     {
+      path: "tabInsert",
+      element: (
+        <Suspense fallback={Loading}>
+          <TabInsertPage />
+        </Suspense>
+      ),
+    },
+    {
       path: "communityList",
+      element: (
+        <Suspense fallback={Loading}>
+          <CommunityListPage />
+        </Suspense>
+      ),
+    },
+    {
+      path: "communityList/category/:categoryId",
+      element: (
+        <Suspense fallback={Loading}>
+          <CommunityListPage />
+        </Suspense>
+      ),
+    },
+    {
+      path: "communityList/tabList/:tabId",
       element: (
         <Suspense fallback={Loading}>
           <CommunityListPage />

@@ -1,29 +1,38 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const CommunityList = () => {
   const navigate = useNavigate();
   const [communityList, setCommunityList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { categoryId, tabId } = useParams();
 
-  const getCommunityList = async () => {
+  // CommunityList.jsx 수정 예시
+  const fetchCommunityData = async () => {
+    setIsLoading(true);
+
+    // URL 주소는 백엔드의 @GetMapping("/list")를 타도록 설정
+    const url = "http://localhost:8090/community/list";
+
     try {
-      setIsLoading(true);
-      const res = await axios.get("http://localhost:8090/community");
-      if (res.data?.result) {
-        setCommunityList(res.data.result);
-      }
+      const res = await axios.get(url, {
+        params: {
+          tabId: tabId, // URL 파라미터가 4라면 4를 전달
+          categoryId: categoryId, // 카테고리 파라미터 전달
+        },
+      });
+      setCommunityList(res.data.result || []);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    getCommunityList();
-  }, []);
+    fetchCommunityData();
+  }, [categoryId, tabId]);
 
   return (
     <>
@@ -32,6 +41,9 @@ const CommunityList = () => {
           <h1>게시글 목록</h1>
           <button onClick={() => navigate("/community/insert")}>
             게시글 작성
+          </button>
+          <button onClick={() => navigate("/community/tabInsert")}>
+            탭 추가
           </button>
           {isLoading ? (
             <p>로딩중...</p>
@@ -46,7 +58,7 @@ const CommunityList = () => {
               </thead>
               <tbody>
                 {communityList.map((community, index) => (
-                  <tr ket={community.id || index}>
+                  <tr key={community.id || index}>
                     <td>{community.id}</td>
                     <td
                       onClick={() =>

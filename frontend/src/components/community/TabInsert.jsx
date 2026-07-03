@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 const TabInsert = () => {
   const navigate = useNavigate();
-  const [tabList, setTabList] = useState([{ tabName: "", categoryList: "" }]);
+  const [tabList, setTabList] = useState([{ tabName: "", categoryList: [""] }]);
 
   const onChangeInput = (index, e) => {
     const { name, value } = e.target;
@@ -13,9 +13,15 @@ const TabInsert = () => {
   };
 
   const onAddInput = () =>
-    setTabList([...tabList, { tabName: "", categoryList: "" }]);
+    setTabList([...tabList, { tabName: "", categoryList: [""] }]);
   const onRemoveInput = (index) =>
     setTabList(tabList.filter((_, i) => i !== index));
+
+  const onChangeCategory = (tabIndex, catIndex, value) => {
+    const newList = [...tabList];
+    newList[tabIndex].categoryList[catIndex] = value;
+    setTabList(newList);
+  };
 
   const onTabFn = async () => {
     try {
@@ -34,37 +40,52 @@ const TabInsert = () => {
   };
 
   return (
-    <>
-      <div className="tabInsert">
-        <h1>탭 생성 페이지</h1>
-        <ul>
-          {tabList.map((item, index) => (
-            <li key={index}>
-              <input
-                name="tabName"
-                value={item.tabName}
-                onChange={(e) => onChangeInput(index, e)}
-                placeholder="탭 이름"
-              />
-              <input
-                name="categoryList"
-                value={item.categoryList}
-                onChange={(e) => onChangeInput(index, e)}
-                placeholder="카테고리명"
-              />
+    <div className="tabInsert">
+      <h1>탭 생성 페이지</h1>
+      {tabList.map((tab, tabIndex) => (
+        <div
+          key={tabIndex}
+          style={{ border: "1px solid #ccc", margin: "10px", padding: "10px" }}
+        >
+          <input
+            name="tabName"
+            value={tab.tabName}
+            onChange={(e) => onChangeInput(tabIndex, e)}
+            placeholder="탭 이름"
+          />
 
-              {tabList.length > 1 && (
-                <button onClick={() => onRemoveInput(index)}>-</button>
-              )}
-              {index === tabList.length - 1 && (
-                <button onClick={onAddInput}>+</button>
-              )}
-            </li>
+          {/* 카테고리 목록 출력 */}
+          {tab.categoryList.map((cat, catIndex) => (
+            <input
+              key={catIndex}
+              value={cat}
+              onChange={(e) =>
+                onChangeCategory(tabIndex, catIndex, e.target.value)
+              }
+              placeholder={`카테고리 ${catIndex + 1}`}
+            />
           ))}
-        </ul>
-        <button onClick={onTabFn}>만들기</button>
-      </div>
-    </>
+
+          <button onClick={() => onAddCategory(tabIndex)}>
+            + 카테고리 추가
+          </button>
+
+          {tabList.length > 1 && (
+            <button
+              onClick={() =>
+                setTabList(tabList.filter((_, i) => i !== tabIndex))
+              }
+            >
+              탭 삭제
+            </button>
+          )}
+          {tabIndex === tabList.length - 1 && (
+            <button onClick={onAddInput}>+ 탭 추가</button>
+          )}
+        </div>
+      ))}
+      <button onClick={onTabFn}>전체 만들기</button>
+    </div>
   );
 };
 

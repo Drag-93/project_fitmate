@@ -9,7 +9,7 @@ const Header = () => {
   const navigate = useNavigate();
 
   //로그인 여부 판단
-  const user = useSelector((state) => state.loginSlice);
+  const user = useSelector((state) => state.loginSlice); //user 정보
   const isLogin = !!user?.userEmail;
   //로그아웃
   const logoutFn = () => {
@@ -45,7 +45,7 @@ const Header = () => {
                   <Link to={`/store`}>스토어</Link>
                 </li>
                 <li onMouseEnter={() => setActiveMenu("community")}>
-                  <Link to={`/community`}>게시판</Link>
+                  <Link to={`/community/communityList`}>게시판</Link>
                 </li>
               </ul>
             </div>
@@ -100,13 +100,21 @@ const Header = () => {
                     </li>
                   </>
                 )}
-                {isLogin &&
-                  // user?.role==="ADMIN" &&(
-                  user?.userEmail === "test@email.com" && (
-                    <li>
-                      <Link to="/admin">관리자</Link>
-                    </li>
-                  )}
+                {isLogin && user?.role === "ADMIN" && (
+                  // user?.userEmail === "test@email.com" && (
+                  <li>
+                    <Link to="/admin">관리자</Link>
+                  </li>
+                )}
+                {isLogin && user?.role !== "ADMIN" && (
+                  // user?.userEmail === "test@email.com" && (
+                  <li>
+                    <Link to="/mypage">
+                      {user?.memberData.result.userName}님
+                    </Link>
+                  </li>
+                )}
+
                 {isLogin && (
                   <>
                     <li>

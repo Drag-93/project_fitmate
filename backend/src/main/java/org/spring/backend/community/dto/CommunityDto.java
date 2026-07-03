@@ -3,7 +3,7 @@ package org.spring.backend.community.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.spring.backend.community.entity.CategoryEntity;
+import org.spring.backend.community.entity.CommunityEntity;
 import org.spring.backend.community.entity.FileEntity;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -46,4 +46,13 @@ public class CommunityDto {
   private String categoryName;
 
   private List<FileEntity> fileEntity;
+
+  public CommunityDto(CommunityEntity entity) {
+        this.id = entity.getId();
+        this.title = entity.getTitle();
+        this.writerName = entity.getWriterName();
+        this.content = entity.getContent();
+        this.createTime = entity.getCreateTime();
+        this.updateTime = entity.getUpdateTime();
+    }
 }
