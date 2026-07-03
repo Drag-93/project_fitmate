@@ -10,7 +10,6 @@ const Header = () => {
 
   //로그인 여부 판단
   const user = useSelector((state) => state.loginSlice); //user 정보
-  console.log(user);
   const isLogin = !!user?.userEmail;
   //로그아웃
   const logoutFn = () => {
