@@ -98,7 +98,12 @@ const Main = () => {
               <div className="main-left">
                 <div className="main-left-con">
                   <div className="main-left-header">
-                    <ul>
+                    <ul
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
                       <li onClick={() => setSelectMenu("notice")}>공지사항</li>
                       <li onClick={() => setSelectMenu("best")}>베스트</li>
                     </ul>
