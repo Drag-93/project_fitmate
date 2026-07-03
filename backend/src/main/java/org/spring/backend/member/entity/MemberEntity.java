@@ -50,9 +50,10 @@ public class MemberEntity extends BasicTime {
   @Column(nullable = false)
   private Role role;
 
-//  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-//  @JoinColumn(name = "member_add_id")
-//  private MemberAddEntity memberAddEntity;
+  //멤버의 추가데이터와 1:1매칭
+  @OneToOne(fetch = FetchType.LAZY, mappedBy = "memberEntity",
+          cascade = CascadeType.ALL)
+  private MemberAddEntity memberAddEntity;
 
   public static MemberEntity toInsertMemberEntity(MemberDto memberDto, String encodePw){
     return MemberEntity.builder()

@@ -8,6 +8,7 @@ import toProductsRouter from "./toProductsRouter";
 import toCartRouter from "./toCartRouter";
 import toOrderRouter from "./toOrderRouter";
 import toPaymentRouter from "./toPaymentRouter";
+import toMemberRouter from "./toMemberRouter";
 
 const Loading = (
   <div className="loading">
@@ -20,6 +21,7 @@ const StoreLayout = lazy(() => import("../layout/StoreLayout"));
 const CommunityLayout = lazy(() => import("../layout/CommunityLayout"));
 const AdminLayout = lazy(() => import("../layout/AdminLayout"));
 const AuthLayout = lazy(() => import("../layout/AuthLayout"));
+const MemberLayout = lazy(() => import("../layout/MemberLayout"));
 
 const root = createBrowserRouter([
   {
@@ -102,6 +104,16 @@ const root = createBrowserRouter([
       </Suspense>
     ),
     children: toAuthRouter(),
+  },
+  //개인페이지
+  {
+    path: "mypage",
+    element: (
+      <Suspense fallback={Loading}>
+        <MemberLayout />
+      </Suspense>
+    ),
+    children: toMemberRouter(),
   },
 ]);
 

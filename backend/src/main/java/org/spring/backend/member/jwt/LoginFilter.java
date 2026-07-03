@@ -3,6 +3,7 @@ package org.spring.backend.member.jwt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
@@ -57,11 +58,15 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         String role = auth.getAuthority();
 
-        String access = jwtUtil.createJwt("access",userEmail, role, 60 * 60 * 100L);
+        String access = jwtUtil.createJwt("access",userEmail, role, 60 * 100L);
         String refresh = jwtUtil.createJwt("refresh",userEmail, role, 86400000L);
 
         //Refresh토큰 저장        
         addRefreshEntity(userEmail, refresh, 86400000L);
+
+        //Refresh쿠키 저장
+        response.addCookie(createCookie("refresh",refresh));
+
         Map<String, Object> claims = new HashMap<>();
         claims.put("userEmail",userEmail);
         claims.put("role",role);
@@ -86,6 +91,15 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                 .expiration(date.toString())
                 .build();
         refreshRepository.save(refreshEntity);
+    }
+    //쿠키 생성
+    private Cookie createCookie(String key, String value){
+        Cookie cookie = new Cookie(key, value);
+        cookie.setMaxAge(24 * 60 * 60);
+
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        return cookie;
     }
 
     //인증 실패시
