@@ -1,6 +1,7 @@
 package org.spring.backend.community.service;
 
 import org.spring.backend.community.dto.CategoryDto;
+import org.spring.backend.community.dto.CommunityDto;
 import org.spring.backend.community.dto.TabDto;
 
 import java.util.List;

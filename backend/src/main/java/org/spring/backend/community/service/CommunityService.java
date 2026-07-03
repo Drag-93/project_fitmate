@@ -14,4 +14,8 @@ public interface CommunityService {
   void communityDelete(Long id);
 
   CommunityDto communityDetail(Long id);
+
+  List<CommunityDto> findByTab(Long tabId);
+
+  List<CommunityDto> findByCategory(Long categoryId);
 }

@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class CommunityServiceimpl implements CommunityService{
+public class CommunityServiceImpl implements CommunityService{
   
 private final CommunityRepository communityRepository;
 private final FileRepository fileRepository;
@@ -166,4 +166,21 @@ public void insertWithFile(CommunityDto communityDto) {
    .updateTime(communityEntity.getUpdateTime())
    .build();
   }
+
+    @Override
+    public List<CommunityDto> findByTab(Long tabId) {
+        // 위에서 만든 findByTabId 메서드를 호출
+    List<CommunityEntity> entities = communityRepository.findByTabId(tabId);
+    
+    // 엔티티 리스트를 DTO 리스트로 변환하는 로직 (예: stream 사용)
+    return entities.stream()
+                   .map(entity -> new CommunityDto(entity)) // DTO 변환 로직
+                   .collect(Collectors.toList());
+
+    }
+
+    @Override
+    public List<CommunityDto> findByCategory(Long categoryId) {
+        return communityRepository.findByCategoryEntity_Id(categoryId);
+    }
 }

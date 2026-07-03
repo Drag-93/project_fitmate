@@ -1,0 +1,54 @@
+/* CommunityList.css */
+.communityList-con {
+  padding: 20px;
+  max-width: 900px;
+}
+
+.communityList-con h1 {
+  margin-bottom: 20px;
+}
+
+.communityList-con button {
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+
+.communityList-con table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* CommunityList.css에 추가 */
+.communityList-con {
+  flex: 1; /* 남은 가로 공간을 모두 채움 */
+  padding: 20px;
+}
+
+.communityList-con th {
+  background-color: #eee;
+  padding: 12px;
+  border-bottom: 2px solid #ccc;
+}
+
+.communityList-con td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+}
+
+.communityList-con td:nth-child(2) {
+  /* 제목 칼럼 */
+  text-align: left;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.communityList-con td:nth-child(2):hover {
+  color: #007bff;
+  text-decoration: underline;
+}
