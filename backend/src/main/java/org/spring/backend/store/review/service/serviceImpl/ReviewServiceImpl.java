@@ -8,6 +8,7 @@ import org.spring.backend.store.order.entity.OrderEntity;
 import org.spring.backend.store.order.entity.OrderItemEntity;
 import org.spring.backend.store.order.repository.OrderItemRepository;
 import org.spring.backend.store.order.repository.OrderRepository;
+import org.spring.backend.store.order.type.OrderStatus;
 import org.spring.backend.store.product.entity.ProductEntity;
 import org.spring.backend.store.product.repository.ProductRepository;
 import org.spring.backend.store.review.dto.ReviewDto;
@@ -31,16 +32,22 @@ public class ReviewServiceImpl implements ReviewService {
   private final OrderItemRepository orderItemRepository;
 
   @Override
-  public void insertReview(Long memberId, ReviewDto reviewDto, Long orderId) {
+  public void insertReview(Long memberId, ReviewDto reviewDto, Long orderItemId) {
     MemberEntity member = memberRepository.findById(memberId)
         .orElseThrow(() -> new IllegalArgumentException("회원이 존재하지 않습니다."));
 
-    OrderItemEntity orderItem = orderItemRepository.findById(reviewDto.getOrderItemId())
+    OrderItemEntity orderItem = orderItemRepository.findById(orderItemId)
         .orElseThrow(() -> new IllegalArgumentException("주문 상품이 없습니다."));
 
     // 본인 주문인지 검증
     if (!orderItem.getOrderEntity().getMemberEntity().getId().equals(memberId)) {
       throw new IllegalArgumentException("본인이 구매한 상품만 리뷰작성이 가능합니다.");
+    }
+    if (reviewRepository.existsByOrderItemEntity_Id(orderItemId)) {
+      throw new IllegalArgumentException("이미 리뷰를 작성한 상품입니다.");
+    }
+    if (orderItem.getOrderEntity().getOrderStatus() != OrderStatus.SUCCESS) {
+      throw new IllegalArgumentException("구매 완료된 상품만 리뷰를 작성할 수 있습니다.");
     }
     ReviewEntity review = ReviewEntity.builder()
         .memberEntity(member)

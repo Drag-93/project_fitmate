@@ -1,13 +1,13 @@
 import React, { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
-import toStoreRouter from "./toStoreRouter";
+import toStoreRouter from "./store/toStoreRouter";
 import toCommunityRouter from "./toCommunityRouter";
 import toAdminRouter from "./toAdminRouter";
 import toAuthRouter from "./toAuthRouter";
-import toProductsRouter from "./toProductsRouter";
-import toCartRouter from "./toCartRouter";
-import toOrderRouter from "./toOrderRouter";
-import toPaymentRouter from "./toPaymentRouter";
+import toProductsRouter from "./store/toProductsRouter";
+import toCartRouter from "./store/toCartRouter";
+import toOrderRouter from "./store/toOrderRouter";
+import toPaymentRouter from "./store/toPaymentRouter";
 
 const Loading = (
   <div className="loading">
