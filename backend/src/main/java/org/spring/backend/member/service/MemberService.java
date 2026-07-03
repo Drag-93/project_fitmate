@@ -17,9 +17,16 @@ public interface MemberService {
 
     MemberDto memberDetail(Long id);
 
+    //멤버 개인페이지 조회 시 사용할 정보 조회
+    MemberDto memberDetail(String userEmail);
+
     void memberUpdate(MemberDto memberDto);
 
     void memberDelete(Long id);
 
+    //이메일을 입력하면 데이터 제거
+    void memberDelete(String userEmail);
+
+    //authSlice에 들어갈 기본적인 정보 조회
     MemberDto memberInit(String userEmail);
 }

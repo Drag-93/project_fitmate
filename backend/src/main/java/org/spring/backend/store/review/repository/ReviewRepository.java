@@ -9,4 +9,6 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> {
   List<ReviewEntity> findByProductEntity_Id(Long productId);
 
   List<ReviewEntity> findByMemberEntity_Id(Long memberId);
+
+  boolean existsByOrderItemEntity_Id(Long orderItemId);
 }

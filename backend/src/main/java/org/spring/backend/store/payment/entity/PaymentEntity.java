@@ -42,7 +42,7 @@ public class PaymentEntity extends BasicTime{
   @Column(name = "payment_id")
   private Long id;
 
-  private Long tid; // 카카오결제ID
+  private String tid; // 카카오결제ID
 
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)

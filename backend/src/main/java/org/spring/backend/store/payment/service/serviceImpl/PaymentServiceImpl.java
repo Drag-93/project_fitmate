@@ -13,6 +13,9 @@ import org.spring.backend.store.payment.repository.PaymentRepository;
 import org.spring.backend.store.payment.service.PaymentService;
 import org.spring.backend.store.payment.type.PaymentMethod;
 import org.spring.backend.store.payment.type.PaymentStatus;
+import org.spring.backend.store.subscription.entity.SubscriptionEntity;
+import org.spring.backend.store.subscription.repository.SubscriptionRepository;
+import org.spring.backend.store.subscription.type.SubscriptionStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,29 +27,60 @@ import lombok.RequiredArgsConstructor;
 public class PaymentServiceImpl implements PaymentService {
   private final OrderRepository orderRepository;
   private final PaymentRepository paymentRepository;
+  private final SubscriptionRepository subscriptionRepository;
 
   @Override
   public void paymentInsert(PaymentDto paymentDto) {
 
-    OrderEntity orderEntity = orderRepository.findById(paymentDto.getOrderId())
-        .orElseThrow(() -> new IllegalArgumentException("주문이 존재하지 않습니다."));
+    // 일반 상품 결제
+    if (paymentDto.getOrderId() != null) {
 
-    // 1. Payment 생성 (결제 요청 상태)
-    PaymentEntity paymentEntity = PaymentEntity.builder()
-        .orderEntity(orderEntity)
-        .amount(paymentDto.getAmount())
-        .paymentMethod(paymentDto.getPaymentMethod())
-        .paymentStatus(PaymentStatus.READY)
-        .build();
-    paymentRepository.save(paymentEntity);
+      OrderEntity orderEntity = orderRepository.findById(paymentDto.getOrderId())
+          .orElseThrow(() -> new IllegalArgumentException("주문이 존재하지 않습니다."));
 
-    // 무조건 성공 처리
-    paymentEntity.setPaymentStatus(PaymentStatus.SUCCESS);
-    paymentEntity.setApproveTime(LocalDateTime.now());
+      PaymentEntity paymentEntity = PaymentEntity.builder()
+          .orderEntity(orderEntity)
+          .amount(paymentDto.getAmount())
+          .paymentMethod(paymentDto.getPaymentMethod())
+          .paymentStatus(PaymentStatus.READY)
+          .build();
 
-    // 주문 상태 변경
-    orderEntity.setOrderStatus(OrderStatus.SUCCESS);
-    orderEntity.setDeliveryStatus(DeliveryStatus.READY);
+      paymentRepository.save(paymentEntity);
+
+      paymentEntity.setPaymentStatus(PaymentStatus.SUCCESS);
+      paymentEntity.setApproveTime(LocalDateTime.now());
+
+      orderEntity.setOrderStatus(OrderStatus.SUCCESS);
+      orderEntity.setDeliveryStatus(DeliveryStatus.READY);
+    }
+
+    // 구독 결제
+    else if (paymentDto.getSubscriptionId() != null) {
+
+      SubscriptionEntity subscriptionEntity = subscriptionRepository.findById(paymentDto.getSubscriptionId())
+          .orElseThrow(() -> new IllegalArgumentException("구독이 존재하지 않습니다."));
+
+      PaymentEntity paymentEntity = PaymentEntity.builder()
+          .subscriptionEntity(subscriptionEntity)
+          .amount(paymentDto.getAmount())
+          .paymentMethod(paymentDto.getPaymentMethod())
+          .paymentStatus(PaymentStatus.READY)
+          .build();
+
+      paymentRepository.save(paymentEntity);
+
+      paymentEntity.setPaymentStatus(PaymentStatus.SUCCESS);
+      paymentEntity.setApproveTime(LocalDateTime.now());
+
+      subscriptionEntity.setSubscriptionStatus(SubscriptionStatus.ACTIVE);
+      subscriptionEntity.setStartDate(LocalDateTime.now());
+      subscriptionEntity.setNextPaymentDate(LocalDateTime.now().plusMonths(1));
+    }
+
+    // 둘 다 없는 경우
+    else {
+      throw new IllegalArgumentException("주문 또는 구독 정보가 필요합니다.");
+    }
   }
 
   @Override

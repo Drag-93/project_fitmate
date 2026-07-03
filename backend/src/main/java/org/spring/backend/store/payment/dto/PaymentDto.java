@@ -21,7 +21,7 @@ public class PaymentDto {
   private Long id;
 
   // 카카오페이 결제 ID
-  private Long tid;
+  private String tid;
 
   // 결제수단
   private PaymentMethod paymentMethod;

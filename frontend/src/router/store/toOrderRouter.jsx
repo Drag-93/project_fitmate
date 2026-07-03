@@ -3,13 +3,13 @@ import { Navigate } from "react-router-dom";
 
 const Loading = <div className="loading">...Loading</div>;
 
-const OrderPage = lazy(() => import("../page/store/order/OrderPage"));
+const OrderPage = lazy(() => import("../../page/store/order/OrderPage"));
 const OrderDetailPage = lazy(
-  () => import("../page/store/order/OrderDetailPage"),
+  () => import("../../page/store/order/OrderDetailPage"),
 );
-const OrderListPage = lazy(() => import("../page/store/order/OrderListPage"));
+const OrderListPage = lazy(() => import("../../page/store/order/OrderListPage"));
 const OrderCompletePage = lazy(
-  () => import("../page/store/order/OrderCompletePage"),
+  () => import("../../page/store/order/OrderCompletePage"),
 );
 
 const toOrderRouter = () => {

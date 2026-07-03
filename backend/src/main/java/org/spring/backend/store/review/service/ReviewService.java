@@ -6,7 +6,7 @@ import org.spring.backend.store.review.dto.ReviewDto;
 
 public interface ReviewService {
       // 리뷰 작성
-    void insertReview(Long memberId, ReviewDto reviewDto, Long orderId);
+    void insertReview(Long memberId, ReviewDto reviewDto, Long orderItemId);
 
     // 상품별 리뷰 조회
     List<ReviewDto> reviewListByProduct(Long productId);

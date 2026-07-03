@@ -65,6 +65,9 @@ public class ProductEntity extends BasicTime {
   @Column(nullable = false)
   private ProductStatus productStatus;
 
+  @Column(nullable = false)
+  private String category;
+
   @JsonIgnore
   @OneToMany(mappedBy = "productEntity", cascade = CascadeType.REMOVE)
   private List<ProductFileEntity> productFileEntities;

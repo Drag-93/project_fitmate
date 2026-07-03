@@ -4,7 +4,6 @@ import { API_SERVER_URL } from "../commonApi";
 
 const jwtAxios = axios.create();
 const host = API_SERVER_URL; //백엔드 서버주소
-
 //액세스토큰 재 발급 함수
 const refreshJWT = async () => {
   const res = await axios.post(
@@ -33,7 +32,11 @@ const beforeReq = (config) => {
 const requestFail = (err) => Promise.reject(err);
 
 const beforeRes = async (res) => {
-  const data = res.data;
+  return res;
+};
+
+const responseFail = async (err) => {
+  const data = err.response?.data;
 
   //JwtFilter에서 걸러지는 error코드 감지시
   if (
@@ -43,31 +46,26 @@ const beforeRes = async (res) => {
   ) {
     try {
       const memberCookieValue = getCookie("member");
-
       //새 액세스 토큰 발급
       const newAccessToken = await refreshJWT();
 
       //'member'쿠키 최신화
       memberCookieValue.access = newAccessToken;
       setCookie("member", JSON.stringify(memberCookieValue), 1);
-
       //실패했던 요청정보를 가져와서 새 토큰으로 교체
-      const originalRequest = res.config;
+      const originalRequest = err.config;
       originalRequest.headers.access = newAccessToken;
-
       //새로운 토큰으로 교체 후 백그라운드 요청 재시도
       return await axios(originalRequest);
     } catch (refreshError) {
       //리프레시 토큰까지 만료 시 만료 응답 처리
-      alert("세션이 만료되었습니다. 다시 로그인해주세요.");
+      if (refreshError.response && refreshError.response.status === 400) {
+        alert("세션이 만료되었습니다. 다시 로그인해주세요.");
+      }
       return Promise.reject(refreshError);
     }
   }
-
-  return res;
 };
-
-const responseFail = (err) => Promise.reject(err);
 
 jwtAxios.interceptors.request.use(beforeReq, requestFail);
 jwtAxios.interceptors.response.use(beforeRes, responseFail);
