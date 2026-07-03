@@ -1,0 +1,166 @@
+@import url("../common/reset.css");
+
+/* 회원가입 전체 */
+.join {
+  width: 100%;
+  min-height: calc(100vh - 78px - 255px - 80px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* 회원가입 박스 */
+.join-con {
+  width: 430px;
+  padding: 40px;
+  border-radius: 15px;
+  border: 1px solid #cccccc;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
+
+/* 리스트 초기화 */
+.join-con ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* 각 항목 */
+.join-con li {
+  padding-bottom: 20px;
+  box-sizing: border-box;
+}
+
+/* 제목 */
+.join-con li:first-child {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 700;
+  color: #333;
+  padding-bottom: 35px;
+  box-sizing: border-box;
+  letter-spacing: 1px;
+}
+
+/* 입력창 */
+.join-con input {
+  width: 100%;
+  height: 50px;
+  padding: 0 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 15px;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+.join-con input:focus {
+  outline: none;
+  border-color: #4b7bec;
+  box-shadow: 0 0 8px rgba(75, 123, 236, 0.2);
+}
+
+/* 성별 */
+.join-con li:nth-child(5) {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.join-con li:nth-child(5) span {
+  width: 60px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #444;
+}
+
+.join-con select {
+  flex: 1;
+  height: 50px;
+  padding: 0 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 15px;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.join-con select:focus {
+  outline: none;
+  border-color: #4b7bec;
+  box-shadow: 0 0 8px rgba(75, 123, 236, 0.2);
+}
+
+/* 버튼 영역 */
+.join-con li:last-child {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 35px;
+  box-sizing: border-box;
+}
+
+/* 회원가입 버튼 */
+.join-con button {
+  width: 70%;
+  height: 50px;
+  border: none;
+  border-radius: 8px;
+  background: #4b7bec;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+  box-sizing: border-box;
+}
+
+.join-con button:hover {
+  background: #3867d6;
+}
+
+/* 로그인 링크 */
+.join-con a {
+  color: #4b7bec;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.join-con a:hover {
+  color: #3867d6;
+  text-decoration: underline;
+}
+
+/* 반응형 */
+@media (max-width: 480px) {
+  .join-con {
+    width: 90%;
+    padding: 30px 20px;
+  }
+
+  .join-con li:nth-child(5) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .join-con span,
+  .join-con select {
+    width: 100%;
+  }
+
+  .join-con li:last-child {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .join-con button {
+    width: 100%;
+  }
+}

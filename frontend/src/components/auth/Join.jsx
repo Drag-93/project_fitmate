@@ -115,7 +115,7 @@ const Join = () => {
             </li>
             <li>
               <button onClick={onJoinFn}>회원가입</button>
-              <Link to="/auth/login">회원가입</Link>
+              <Link to="/auth/login">로그인</Link>
             </li>
           </ul>
         </div>

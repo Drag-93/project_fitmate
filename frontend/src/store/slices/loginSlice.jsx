@@ -25,6 +25,7 @@ const loadMemberCookie = () => {
   if (memberInfo === null) return null;
 };
 
+//멤버의 email을 이용해 정보를 불러오는 비동기청크
 export const loadMemberInit = createAsyncThunk(
   "auth/loadMemberInit",
   async (_, { rejectWithValue }) => {
@@ -33,11 +34,10 @@ export const loadMemberInit = createAsyncThunk(
       if (memberInfo === null) return null;
 
       if (memberInfo && memberInfo.userEmail) {
-        memberInfo.userEmail = decodeURIComponent(memberInfo.userEmail);
         const res = await axios.get(
-          `${API_SERVER_URL}/api/member/init/${encodeURIComponent(memberInfo.userEmail)}`,
+          `${API_SERVER_URL}/api/member/init/${memberInfo.userEmail}`,
         );
-        console.log(res.data);
+        // console.log(res.data);
         return res.data;
       }
       return null;
