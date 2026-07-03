@@ -21,6 +21,24 @@ const AdminLeft = ({ isMobile, show, onClose }) => {
         <ul>
           <li>
             <NavLink
+              to={"/admin/index"}
+              className={linkClass}
+              onClick={onClose}
+            >
+              대시보드
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to={"/admin/calendar"}
+              className={linkClass}
+              onClick={onClose}
+            >
+              캘린더
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
               to={"/admin/member"}
               className={linkClass}
               onClick={onClose}
