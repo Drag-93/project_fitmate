@@ -1,6 +1,6 @@
 import React, { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
-import toStoreRouter from "./store/toStoreRouter";
+import toStoreRouter from "./toStoreRouter";
 import toCommunityRouter from "./toCommunityRouter";
 import toAdminRouter from "./toAdminRouter";
 import toAuthRouter from "./toAuthRouter";
