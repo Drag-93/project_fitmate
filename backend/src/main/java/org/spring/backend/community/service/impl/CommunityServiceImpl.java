@@ -128,18 +128,18 @@ public void insertWithFile(CommunityDto communityDto) {
   }
 
   @Override
-  public void communityUpdate(CommunityDto communityDto) {
-   communityRepository.findById(communityDto.getCategoryId()).orElseThrow(()->new IllegalArgumentException("게시글이 존재하지 않습니다"));
-   communityRepository.save(CommunityEntity.builder()
-   .id(communityDto.getId())
-   .title(communityDto.getTitle())
-   .content(communityDto.getContent())
-   .hasFile(communityDto.getHasFile())
-   .hit(communityDto.getHit())
-                   .reply(communityDto.getReply())
-   .build());
+  @Transactional
+public void communityUpdate(Long id, CommunityDto communityDto) {
+    // DTO의 ID 대신, 매개변수로 명확하게 전달받은 id를 사용합니다.
+    CommunityEntity entity = communityRepository.findById(id)
+        .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다: " + id));
 
-   
+    // 엔티티 업데이트 로직 수행
+    entity.setTitle(communityDto.getTitle());
+    entity.setContent(communityDto.getContent());
+    entity.setCreateTime(communityDto.getCreateTime());
+    entity.setUpdateTime(communityDto.getUpdateTime());
+    entity.setHasFile(communityDto.getHasFile());
   }
 
   @Override

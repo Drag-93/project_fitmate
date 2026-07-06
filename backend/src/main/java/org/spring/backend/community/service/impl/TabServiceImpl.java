@@ -123,21 +123,6 @@ public void insertTab(List<TabDto> tabDtoList) { // 파라미터를 List로 받�
         tabRepository.deleteById(id);
     }
 
-//   @Override
-//   public TabDto tabDetail(Long id) {
-//     TabEntity tabEntity = tabRepository.findById(id)
-//     .orElseThrow(()->new IllegalArgumentException("탭이 존재하지 않습니다"));
-//     return TabDto.builder()
-//     .id(tabEntity.getId())
-//     .tabName(tabEntity.getTabName())
-//     .categoryDtos(tabEntity.getCategoryList().stream().map(cat -> CategoryDto.builder()
-//             .id(cat.getId())
-//             .categoryName(cat.getCategoryName())
-//             .build())
-//         .collect(Collectors.toList()))
-//     .categoryNames(tabEntity.getCategoryList())
-//     .build();
-//  }
 
 @Override
 public TabDto tabDetail(Long id) {
