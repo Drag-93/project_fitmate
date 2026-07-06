@@ -7,8 +7,15 @@ import koLocale from "@fullcalendar/core/locales/ko";
 import "../css/admin/Admin.css";
 
 const AdminCalendar = () => {
+  // 분류별 메뉴 변수 선언
   const [selectMenu, setSelectMenu] = useState("my-schedule");
 
+  const filteredEvents = events.filter((event) => {
+    if (selectMenu === "whole-schedule") return true;
+    return event.type === selectMenu;
+  });
+
+  //기본 일정 추가 -> 변동 가능
   const [events, setEvents] = useState([
     {
       id: "1",
@@ -20,10 +27,7 @@ const AdminCalendar = () => {
     },
   ]);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalMode, setModalMode] = useState("insert"); // insert, detail, update
-  const [selectedEvent, setSelectedEvent] = useState(null);
-
+  //입력 default
   const [form, setForm] = useState({
     title: "",
     start: "",
@@ -31,11 +35,12 @@ const AdminCalendar = () => {
     content: "",
   });
 
-  const filteredEvents = events.filter((event) => {
-    if (selectMenu === "whole-schedule") return true;
-    return event.type === selectMenu;
-  });
+  //모달 관련 변수 선언
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMode, setModalMode] = useState("insert"); // insert, detail, update
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
+  //모달 open
   const openInsertModal = (info) => {
     setModalMode("insert");
     setSelectedEvent(null);
@@ -63,7 +68,7 @@ const AdminCalendar = () => {
     });
     setIsModalOpen(true);
   };
-
+  //모달 close
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedEvent(null);
@@ -76,6 +81,7 @@ const AdminCalendar = () => {
     });
   };
 
+  //onchange -> 입력값 유지
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -85,6 +91,7 @@ const AdminCalendar = () => {
     });
   };
 
+  //모달 crud
   const validateForm = () => {
     if (!form.title.trim()) {
       alert("일정 제목을 입력하세요.");
@@ -100,7 +107,6 @@ const AdminCalendar = () => {
       alert("종료일은 시작일보다 빠를 수 없습니다.");
       return false;
     }
-
     return true;
   };
 
@@ -153,6 +159,7 @@ const AdminCalendar = () => {
   return (
     <div className="admin-main">
       <div className="adminCalendar-wrap">
+        {/* 메뉴  */}
         <div className="adminCalendar-left">
           <ul>
             <li
@@ -175,7 +182,7 @@ const AdminCalendar = () => {
             </li>
           </ul>
         </div>
-
+        {/* 캘린더 메인 */}
         <div className="adminCalendar">
           <div className="adminCalendar-con">
             <div className="adminCalendar-title">
@@ -209,7 +216,7 @@ const AdminCalendar = () => {
           </div>
         </div>
       </div>
-
+      {/* crud 모달 통합 */}
       {isModalOpen && (
         <div className="calendar-modal-bg" onClick={closeModal}>
           <div className="calendar-modal" onClick={(e) => e.stopPropagation()}>
