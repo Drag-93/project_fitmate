@@ -7,14 +7,6 @@ import koLocale from "@fullcalendar/core/locales/ko";
 import "../css/admin/Admin.css";
 
 const AdminCalendar = () => {
-  // 분류별 메뉴 변수 선언
-  const [selectMenu, setSelectMenu] = useState("my-schedule");
-
-  const filteredEvents = events.filter((event) => {
-    if (selectMenu === "whole-schedule") return true;
-    return event.type === selectMenu;
-  });
-
   //기본 일정 추가 -> 변동 가능
   const [events, setEvents] = useState([
     {
@@ -26,6 +18,12 @@ const AdminCalendar = () => {
       type: "my-schedule",
     },
   ]);
+  // 분류별 메뉴 변수 선언
+  const [selectMenu, setSelectMenu] = useState("my-schedule");
+  const filteredEvents = events.filter((event) => {
+    if (selectMenu === "whole-schedule") return true;
+    return event.type === selectMenu;
+  });
 
   //입력 default
   const [form, setForm] = useState({
