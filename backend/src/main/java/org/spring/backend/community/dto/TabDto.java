@@ -18,7 +18,7 @@ public class TabDto {
 
   private String tabName;
 
-  private List<CategoryDto> categoryDtos;
+  private List<CategoryDto> categoryList;
 
-  List<String> categoryNames;
+  private List<String> categoryNames;
 }

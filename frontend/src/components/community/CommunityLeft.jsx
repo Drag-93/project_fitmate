@@ -36,7 +36,7 @@ const CommunityLeft = () => {
   useEffect(() => {
     if (tabId || categoryId) {
       axios
-        .get("http://localhost:8090/community/list", {
+        .get("http://localhost:8090/community/communityList", {
           params: {
             tabId: tabId,
             categoryId: categoryId,
@@ -55,7 +55,7 @@ const CommunityLeft = () => {
         <ul>
           <li>
             {/* 전체 탭 이동 */}
-            <NavLink to={`/communityList`}>전체</NavLink>
+            <NavLink to={`/community/communityList`}>전체</NavLink>
           </li>
           {/* 탭 별 페이지 이동 */}
           {tab.map((tab) => (

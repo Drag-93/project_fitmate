@@ -45,17 +45,17 @@ private final CategoryRepository categoryRepository;
 
 @Transactional // DB 트랜잭션 보장
 public void insertWithFile(CommunityDto communityDto) {
-      CategoryEntity category = categoryRepository.findById(communityDto.getId())
+      CategoryEntity category = categoryRepository.findById(communityDto.getCategoryId())
               .orElseThrow(()->new IllegalArgumentException("존재하지 않는 카테고리입니다"));
     // 1. 엔티티 우선 저장 (게시글 정보)
     CommunityEntity communityEntity = CommunityEntity.builder()
         .title(communityDto.getTitle())
-            .writerName(communityDto.getWriterName())
+        .writerName(communityDto.getWriterName())
         .content(communityDto.getContent())
         .categoryEntity(category)
         .hasFile(1)
         .hit(0)
-            .reply(0)
+        .reply(0)
         .build();
     CommunityEntity saveCommunity = communityRepository.save(communityEntity);
 
@@ -67,8 +67,9 @@ public void insertWithFile(CommunityDto communityDto) {
 
         File fileDir = new File(path);
         if (!fileDir.exists()) fileDir.mkdirs();
+
+        communityDto.getAttachFile().transferTo(new File(filePath));
         
-        saveFile(communityDto.getAttachFile(), filePath);
 
         // 3. 파일 엔티티 저장
         fileRepository.save(FileEntity.builder()

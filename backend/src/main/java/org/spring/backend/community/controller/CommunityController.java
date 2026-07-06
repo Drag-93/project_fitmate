@@ -1,11 +1,13 @@
 package org.spring.backend.community.controller;
 
+import org.springframework.http.MediaType;
 import org.spring.backend.community.dto.CategoryDto;
 import org.spring.backend.community.dto.CommunityDto;
 import org.spring.backend.community.dto.TabDto;
 import org.spring.backend.community.service.CommunityService;
 import org.spring.backend.community.service.TabService;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,13 +39,27 @@ public class CommunityController {
     return ResponseEntity.status(HttpStatus.OK).body(map);
   }
 
-  @PostMapping("/insert")
-  public ResponseEntity<?> communityInsert(@RequestBody CommunityDto communityDto) {
-    Map<String, CommunityDto> map = new HashMap<>();
+  // @PostMapping("/insert")
+  // public ResponseEntity<?> communityInsert(@RequestBody CommunityDto communityDto) {
+  //   Map<String, CommunityDto> map = new HashMap<>();
+  //   communityService.communityInsert(communityDto);
+  //   map.put("community", communityDto);
+  //   return ResponseEntity.status(HttpStatus.OK).body(map);
+  // }
+
+  @PostMapping(value = "/insert", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+public ResponseEntity<?> communityInsert(
+        @RequestPart("data") CommunityDto communityDto, // JSON 데이터
+        @RequestPart(value = "file", required = false) MultipartFile file) { // 파일
+    
+    // 파일이 있다면 DTO에 넣어주기
+    if (file != null && !file.isEmpty()) {
+        communityDto.setAttachFile(file);
+    }
+    
     communityService.communityInsert(communityDto);
-    map.put("community", communityDto);
-    return ResponseEntity.status(HttpStatus.OK).body(map);
-  }
+    return ResponseEntity.ok("작성 성공");
+}
 
   @DeleteMapping("/delete/{id}")
   public ResponseEntity<?> communityDelete(@PathVariable("id") Long id){
@@ -92,9 +108,9 @@ public class CommunityController {
   }
 
   @PostMapping("/tabInsert")
-  public ResponseEntity<?> tabInsert(@RequestBody TabDto tabDto) {
+  public ResponseEntity<?> tabInsert(@RequestBody List<TabDto> tabDto) {
     tabService.insertTab(tabDto);
-    Map<String, TabDto> map = new HashMap<>();
+    Map<String, List<TabDto>> map = new HashMap<>();
     
     map.put("tab", tabDto);
     return ResponseEntity.status(HttpStatus.OK).body(map);
