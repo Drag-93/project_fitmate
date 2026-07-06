@@ -110,7 +110,7 @@ const Header = () => {
                   // user?.userEmail === "test@email.com" && (
                   <li>
                     <Link to="/mypage">
-                      {user?.memberData.result.userName}님
+                      {user?.memberData?.result?.userName}님
                     </Link>
                   </li>
                 )}
