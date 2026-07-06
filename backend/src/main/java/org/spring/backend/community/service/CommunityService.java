@@ -9,7 +9,7 @@ public interface CommunityService {
 
   List<CommunityDto> communityList();
 
-  void communityUpdate(CommunityDto communityDto);
+  void communityUpdate(Long id, CommunityDto communityDto);
 
   void communityDelete(Long id);
 

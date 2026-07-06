@@ -21,10 +21,10 @@ public class CommunityTest {
 
     @Test
     void insert(){
-        CategoryEntity category = categoryRepository.save(CategoryEntity.builder()
-                .categoryName("테스트 카테고리")
-                .build());
         for (int i = 0;i<10;i++){
+        CategoryEntity category = categoryRepository.save(CategoryEntity.builder()
+                .categoryName("CN"+i)
+                .build());
             communityRepository.save(CommunityEntity.builder()
                     .title("Title" + i)
                     .writerName("writer" + i)

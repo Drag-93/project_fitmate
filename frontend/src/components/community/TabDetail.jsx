@@ -2,46 +2,46 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-const CommunityDetail = () => {
+const TabDetail = () => {
   const { id } = useParams();
-  const navigatge = useNavigate();
+  const navigate = useNavigate();
 
-  const [community, setCommunity] = useState(null);
+  const [tab, setTab] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   //상세정보 보기
-  const getCommunityDetail = async () => {
+  const getTabDetail = async () => {
     try {
       setIsLoading(true);
       const res = await axios.get(
-        `http://localhost:8090/community/detail/${id}`,
+        `http://localhost:8090/community/tabDetail/${id}`,
       );
       console.log("상세 데이터 응답 : ", res.data);
-      if (res.data?.community) {
-        setCommunity(res.data.community);
+      if (res.data?.tab) {
+        setTab(res.data.tab);
       }
     } catch (error) {
-      console.error("상세정보 로드 실패 : ", error);
-      alert("존재하지 않는 게시글입니다");
-      navigatge("/community/communityList");
+      console.error("상세 정보 로드 실패 : ", error);
+      alert("탭이 존재하지 않습니다");
+      navigate("/community/tabList");
     } finally {
       setIsLoading(false);
     }
   };
   useEffect(() => {
-    getCommunityDetail();
+    getTabDetail();
   }, [id]);
 
-  //게시글 수정
-  const getCommunityUpdate = async () => {
+  //탭 수정
+  const getTabUpdate = async () => {
     try {
       setIsLoading(true);
       const res = await axios.put(
-        `http://localhost:8090/community/update/${id}`,
+        `http://localhost:8090/community/tabUpdate/${id}`,
         community,
       );
       alert("수정되었습니다.");
-      navigatge("/community/communityList");
+      navigatge("/community/tabList");
       // 2. 수정 후 상세 페이지를 다시 불러오거나 목록으로 이동
     } catch (error) {
       console.error("수정 실패 : ", error);
@@ -51,13 +51,13 @@ const CommunityDetail = () => {
     }
   };
 
-  //게시글 삭제
-  const getCommunityDelete = async () => {
+  //탭 삭제
+  const getTabDelete = async () => {
     if (!window.confirm("정말 삭제하시겠습니까?")) return;
     try {
       setIsLoading(true);
       const res = await axios.delete(
-        `http://localhost:8090/community/delete/${id}`,
+        `http://localhost:8090/community/tabDelete/${id}`,
       );
       console.log("상세 데이터 응답 : ", res.data);
       if (res.data?.result) {
@@ -66,7 +66,7 @@ const CommunityDetail = () => {
     } catch (error) {
       console.error("삭제 실패 : ", error);
       alert("삭제 시도 중 오류가 발생했습니다");
-      navigatge("/community/communityList");
+      navigatge("/community/tabList");
     } finally {
       setIsLoading(false);
     }
@@ -74,61 +74,50 @@ const CommunityDetail = () => {
 
   return (
     <>
-      <div className="communityDetail">
-        <div className="communityDetail-con">
+      <div className="tabDetail">
+        <div className="tabDetail-con">
           <h1>게시글 상세 페이지</h1>
           {isLoading ? (
             <p>데이터를 불러오는 중입니다</p>
-          ) : community ? (
+          ) : tab ? (
             <div className="detailbody">
               <ul>
-                {/* <li>{community.writerName}</li> */}
                 <li>
                   <label htmlFor="title">제목</label>
                   <input
                     type="text"
                     name="title"
-                    value={community.title || ""} // 데이터가 들어오기 전 에러 방지
-                    onChange={(e) =>
-                      setCommunity({ ...community, title: e.target.value })
-                    }
+                    value={tab.title || ""} // 데이터가 들어오기 전 에러 방지
+                    onChange={(e) => setTab({ ...tab, title: e.target.value })}
                   />
                 </li>
                 <li>
                   <label htmlFor="content">내용</label>
                   <textarea
                     name="content"
-                    value={community.content || ""}
+                    value={tab.content || ""}
                     onChange={(e) =>
-                      setCommunity({ ...community, content: e.target.value })
+                      setTab({ ...tab, content: e.target.value })
                     }
                   />
                 </li>
                 <li>
                   <label>날짜</label>
                   <div className="view-box">
-                    {community.updateTime
-                      ? `수정일: ${community.updateTime.split("T")[0]}`
-                      : `작성일: ${community.createTime.split("T")[0] || ""}`}
+                    {tab.updateTime
+                      ? `수정일: ${tab.updateTime.split("T")[0]}`
+                      : `작성일: ${tab.createTime.split("T")[0] || ""}`}
                   </div>
                 </li>
                 <li>
-                  <label htmlFor="file">첨부파일</label>
-                  <div className="file">
-                    {community.attachFile
-                      ? community.attachFile
-                      : "첨부파일 없음"}
-                  </div>
-                </li>
-                <li>
-                  <button onClick={() => getCommunityUpdate()}>수정</button>
+                  <button onClick={() => getTabUpdate()}>수정</button>
                 </li>
               </ul>
               <div className="button">
-                <button onClick={() => navigatge("/community/communityList")}>
+                <button onClick={() => navigatge("/community/tabList")}>
                   목록으로 돌아가기
                 </button>
-                <button onClick={() => getCommunityDelete()}>삭제</button>
+                <button onClick={() => getTabDelete()}>삭제</button>
               </div>
             </div>
           ) : (
@@ -140,4 +129,4 @@ const CommunityDetail = () => {
   );
 };
 
-export default CommunityDetail;
+export default TabDetail;
