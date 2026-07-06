@@ -12,6 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,8 +63,8 @@ public class MemberController {
     }
 
     //회원수정 api
-    @DeleteMapping("/update")
-    public ResponseEntity<?> myPageUpdate(MemberDto memberDto){
+    @PutMapping("/update")
+    public ResponseEntity<?> myPageUpdate(MemberDto memberDto) throws IOException {
         memberService.memberUpdate(memberDto);
         return ResponseEntity.ok("ok");
     }

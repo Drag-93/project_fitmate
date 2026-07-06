@@ -48,6 +48,10 @@ logging:
 
 img.path.item: file:///E:/fitmate/backend/item/
 img.path.community: file:///E:/fitmate/backend/community/
+#파일저장 기본경로
+img.path.common: file:///E:/fitmate/backend/
+#멤버의 파일저장경로
+img.path.member: file:///E:/fitmate/backend/member/
 
 #jwt의 암호화를 위한 시크릿 키
 jwt:

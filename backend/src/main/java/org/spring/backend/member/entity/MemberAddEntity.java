@@ -32,8 +32,7 @@ public class MemberAddEntity extends BasicTime {
     private String badge;
 
     //1:1매칭관계
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "memberAddEntity")
     private MemberEntity memberEntity;
 
     public static MemberAddEntity createDefault() {
