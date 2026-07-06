@@ -39,27 +39,47 @@ const MemberDetail = () => {
   };
 
   const memberUpdateFn = () => {
-    if (isModify) {
-      setModifyData(memberData);
+    if (!isUpdate) {
+      setUpdateData({ ...memberData, userPw: "" });
+    } else {
+      memberUpdate();
     }
-    setIsModify((prev) => !prev);
+    setIsUpdate((prev) => !prev);
   };
 
   const onChangeFn = (e) => {
     const { name, value } = e.target;
-    setModifyData({ ...modifyData, [name]: value });
+    setModifyData({ ...updateData, [name]: value });
   };
 
   const memberUpdate = async () => {
-    if (!confirm("회원탈퇴를 하시겠습니까?")) return;
+    if (!confirm("회원수정을 하시겠습니까?")) return;
     try {
-      const res = await jwtAxios.delete(`${API_URL}/api/member/quit`);
-      if (res.data === "ok") {
+      //이메일 형식에 맞지않는지 체크
+      if (!emailRegex.test(updateData.userEmail.trim())) {
+        alert("이메일 형식이 올바르지 않습니다.");
+        return;
+      }
+      if (!updateData.userPw) {
+        alert("비밀번호 입력해주세요");
+        return;
+      }
+      if (!updateData.userName) {
+        alert("이름을 입력해주세요");
+        return;
+      }
+      const formData = new FormData();
+      formData.append("userEmail", joinData.userEmail);
+      formData.append("userPw", joinData.userPw);
+      formData.append("userName", joinData.userName);
+      formData.append("gender", joinData.gender);
+      const res = await jwtAxios.put(`${API_URL}/api/member/update`);
+      if (updateData.userEmail !== memberData.userEmail) {
         dispatch(logout());
-        alert("회원탈퇴 성공");
+        alert("회원가입에 성공하였습니다.");
         navigate("/");
       } else {
-        alert("회원탈퇴에 실패하였습니다.");
+        navigate("/mypage");
       }
     } catch (err) {
       console.log(err);
@@ -100,7 +120,7 @@ const MemberDetail = () => {
             <ul>
               {memberData === null ? (
                 <>회원님의 정보를 불러오는 중입니다...</>
-              ) : !isModify ? (
+              ) : !isUpdate ? (
                 <>
                   <li>
                     <h1>{memberData.userName}님</h1>
@@ -127,6 +147,17 @@ const MemberDetail = () => {
                   </li>
                   <li>
                     <span>
+                      <button
+                        onClick={() =>
+                          navigate("/mypage/updatepw", {
+                            state: { getData: memberData },
+                          })
+                        }
+                      >
+                        비밀번호변경
+                      </button>
+                    </span>
+                    <span>
                       <button onClick={memberUpdateFn}>개인정보수정</button>
                     </span>
                     <span>
@@ -140,34 +171,53 @@ const MemberDetail = () => {
                     <h1>
                       <input
                         type="text"
-                        value={modifyData.userName}
+                        value={updateData.userName}
                         onChange={onChangeFn}
                       />
                     </h1>
                   </li>
                   <li className="profilePhoto">
                     <span>프로필사진</span>
-                    <span>{memberData.profilePhoto}</span>
+                    <span>{updateData.profilePhoto}</span>
                   </li>
                   <li>
                     <span>이메일</span>
-                    <span>{memberData.userEmail}</span>
+                    <span>
+                      <input
+                        type="email"
+                        value={updateData.userEmail}
+                        onChange={onChangeFn}
+                      />
+                    </span>
                   </li>
                   <li>
                     <span>주소</span>
-                    <span>{memberData.userAddress}</span>
+                    <span>
+                      <input
+                        type="text"
+                        value={updateData.userAddress}
+                        onChange={onChangeFn}
+                      />
+                    </span>
                   </li>
                   <li>
                     <span>전화번호</span>
-                    <span>{memberData.userPhone}</span>
-                  </li>
-                  <li>
-                    <span>구독여부</span>
-                    <span>{memberData.subscribe}</span>
+                    <span>
+                      <input
+                        type="text"
+                        value={updateData.userPhone}
+                        onChange={onChangeFn}
+                      />
+                    </span>
                   </li>
                   <li>
                     <span>
                       <button onClick={memberUpdateFn}>개인정보수정</button>
+                    </span>
+                    <span>
+                      <button onClick={() => setIsUpdate((prev) => !prev)}>
+                        취소
+                      </button>
                     </span>
                     <span>
                       <button onClick={memberDelete}>회원탈퇴</button>

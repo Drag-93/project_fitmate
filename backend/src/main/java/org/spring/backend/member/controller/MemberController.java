@@ -60,4 +60,11 @@ public class MemberController {
         memberService.memberDelete(userEmail);
         return ResponseEntity.ok("ok");
     }
+
+    //회원수정 api
+    @DeleteMapping("/update")
+    public ResponseEntity<?> myPageUpdate(MemberDto memberDto){
+        memberService.memberUpdate(memberDto);
+        return ResponseEntity.ok("ok");
+    }
 }
