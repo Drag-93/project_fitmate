@@ -25,19 +25,6 @@ const loadMemberCookie = () => {
   if (memberInfo === null) return null;
 };
 
-// 멤버리스트를 수정하기 위한 async청크
-export const putMember = createAsyncThunk(
-  "authMember/putMemberList",
-  async (data, { rejectWithValue }) => {
-    try {
-      const dataPut = await axios.put(`${url}/member/${data.id}`, data);
-      return dataPut;
-    } catch (err) {
-      return rejectWithValue(err);
-    }
-  },
-);
-
 //멤버의 email을 이용해 정보를 불러오는 비동기청크
 export const loadMemberInit = createAsyncThunk(
   "auth/loadMemberInit",
@@ -99,11 +86,6 @@ const loginSlice = createSlice({
         return payload;
       })
       .addCase(loadMemberInit.fulfilled, (state, action) => {
-        if (action.payload) {
-          state.memberData = action.payload;
-        }
-      })
-      .addCase(putMember.fulfilled, (state, action) => {
         if (action.payload) {
           state.memberData = action.payload;
         }
