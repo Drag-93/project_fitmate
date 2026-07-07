@@ -20,6 +20,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -106,35 +109,54 @@ public class MemberServiceImpl implements MemberService {
             }
         }
         originMemberEntity.setUserEmail(memberDto.getUserEmail());
-        originMemberEntity.setUserPw(passwordEncoder.encode(memberDto.getUserPw()));
+        if(memberDto.getUserPw() !=null && !memberDto.getUserPw().trim().isEmpty()){
+            originMemberEntity.setUserPw(passwordEncoder.encode(memberDto.getUserPw()));
+        }
         originMemberEntity.setUserName(memberDto.getUserName());
         originMemberEntity.setUserAddress(memberDto.getUserAddress());
         originMemberEntity.setUserPhone(memberDto.getUserPhone());
-        originMemberEntity.setProfilePhoto(memberDto.getProfilePhoto());
-        if(memberDto.getMemberFile().isEmpty()){
+
+        if(memberDto.getMemberFile() == null){
+            originMemberEntity.setProfilePhoto(memberDto.getProfilePhoto());
             memberRepository.save(originMemberEntity);
             return;
         }
         try{
 
-        //기존에 파일있을땐 새파일로 교체, 이전파일은 제거
-        Optional<MemberFileEntity> optionalMemberFileEntity = memberFileRepository.findByMemberEntityId(memberDto.getId());
-        if(optionalMemberFileEntity.isPresent()){
-            // file:///E:/fitmate/backend/member/와 파일명을 조합하여 URI 생성
-            URI fileUri = new URI(filePath + optionalMemberFileEntity.get().getNewFileName());
-            File deleteFile = new File(fileUri);
-            if(deleteFile.exists()) deleteFile.delete();
-            memberFileRepository.delete(optionalMemberFileEntity.get());
-        }
+            //기존에 파일있을땐 새파일로 교체, 이전파일은 제거
+            Optional<MemberFileEntity> optionalMemberFileEntity = memberFileRepository.findByMemberEntityId(memberDto.getId());
+            if(optionalMemberFileEntity.isPresent()){
+                // file:///E:/fitmate/backend/member/와 파일명을 조합하여 URI 생성
+    //            URI fileUri = new URI(filePath + optionalMemberFileEntity.get().getNewFileName());
+                //테스트시에는 경로uri사용할수 없기에 로컬로 사용
+    //            File deleteFile = new File(fileUri);
+                originMemberEntity.setMemberFileEntity(null);
+                memberFileRepository.delete(optionalMemberFileEntity.get());
+                //변경사항 즉시반영
+                memberFileRepository.flush();
+
+                String localPath = filePath.replace("file://", "");
+                Path targetFilePath = Paths.get(localPath).resolve(optionalMemberFileEntity.get().getNewFileName());
+                File deleteFile = targetFilePath.toFile();
+                if(deleteFile.exists()) deleteFile.delete();
+            }
         //새로운 파일 저장
         MultipartFile memberFile = memberDto.getMemberFile();
         String oldFileName = memberFile.getOriginalFilename();
         String newFileName = UUID.randomUUID() + "_" + oldFileName;
         // file:///E:/fitmate/backend/member/와 파일명을 조합하여 URI 생성
-        URI fileUri = new URI(filePath + newFileName);
-        memberFile.transferTo(new File(fileUri));
+//        URI fileUri = new URI(filePath + newFileName);
+//        memberFile.transferTo(new File(fileUri));
+//      테스트시에는 경로uri를 사용할수 없기에 로컬로 사용
+        String localPath = filePath.replace("file://", "");
+        Path targetPath = Paths.get(localPath).resolve(newFileName);
+        //만약 폴더가 없을때 생성
+        if (!Files.exists(targetPath.getParent())) {
+            Files.createDirectories(targetPath.getParent());
+        }
+        memberFile.transferTo(new File(localPath + newFileName));
         //멤버 및 멤버 정보 저장
-        memberDto.setProfilePhoto(1);
+        originMemberEntity.setProfilePhoto(1);
         MemberEntity saveMember = memberRepository.save(originMemberEntity);
         MemberFileEntity memberFileEntity = MemberFileEntity.builder()
                 .oldFileName(oldFileName)
@@ -143,7 +165,10 @@ public class MemberServiceImpl implements MemberService {
                 .build();
         memberFileRepository.save(memberFileEntity);
         }catch (Exception e){
-            System.out.println("error"+e.getMessage());
+            System.out.println("파일 저장 중 에러 발생: " + e.getMessage());
+            e.printStackTrace();
+
+            throw new RuntimeException("회원 정보 수정 중 파일 처리 실패", e);
         }
     }
     @Transactional
@@ -151,6 +176,18 @@ public class MemberServiceImpl implements MemberService {
     public void memberDelete(Long id) {
         MemberEntity memberEntity = memberRepository.findById(id)
                 .orElseThrow(()->new NoSuchElementException("회원아이디 없음"));
+        Optional<MemberFileEntity> optionalMemberFile = memberFileRepository.findByMemberEntityId(id);
+        if(optionalMemberFile.isPresent()){
+            MemberFileEntity fileEntity = optionalMemberFile.get();
+            try{
+                String localPath = filePath.replace("file://", "");
+                Path targetFilePath = Paths.get(localPath).resolve(optionalMemberFile.get().getNewFileName());
+                File deleteFile = targetFilePath.toFile();
+                if(deleteFile.exists()) deleteFile.delete();
+            }catch (Exception e){
+                System.out.println("회원탈퇴 파일 삭제 중 에러 : "+e.getMessage());
+            }
+        }
         memberRepository.deleteById(id);
     }
 
@@ -158,6 +195,18 @@ public class MemberServiceImpl implements MemberService {
     public void memberDelete(String userEmail) {
         MemberEntity memberEntity = memberRepository.findByUserEmail(userEmail)
                 .orElseThrow(()->new NoSuchElementException("회원정보 없음"));
+        Optional<MemberFileEntity> optionalMemberFile = memberFileRepository.findByMemberEntityId(memberEntity.getId());
+        if(optionalMemberFile.isPresent()){
+            MemberFileEntity fileEntity = optionalMemberFile.get();
+            try{
+                String localPath = filePath.replace("file://", "");
+                Path targetFilePath = Paths.get(localPath).resolve(optionalMemberFile.get().getNewFileName());
+                File deleteFile = targetFilePath.toFile();
+                if(deleteFile.exists()) deleteFile.delete();
+            }catch (Exception e){
+                System.out.println("회원탈퇴 파일 삭제 중 에러 : "+e.getMessage());
+            }
+        }
         memberRepository.deleteById(memberEntity.getId());
     }
 

@@ -48,7 +48,7 @@ public class MemberDto {
   private String oldFileName;//원본이름
 
   public static MemberDto toMemberDto(MemberEntity memberEntity){
-    MemberDto memberDto = MemberDto.builder()
+    return MemberDto.builder()
             .id(memberEntity.getId())
             .userEmail(memberEntity.getUserEmail())
             .userPw(memberEntity.getUserPw())
@@ -61,14 +61,9 @@ public class MemberDto {
             .role(memberEntity.getRole())
             .createTime(memberEntity.getCreateTime())
             .updateTime(memberEntity.getUpdateTime())
+            // 파일 엔티티가 존재할 때만 이름을 넣고, 없으면 null 세팅
+            .newFileName(memberEntity.getMemberFileEntity() != null ? memberEntity.getMemberFileEntity().getNewFileName() : null)
+            .oldFileName(memberEntity.getMemberFileEntity() != null ? memberEntity.getMemberFileEntity().getOldFileName() : null)
             .build();
-    memberDto.setProfilePhoto(memberEntity.getProfilePhoto());
-    if(memberEntity.getMemberFileEntity() != null){
-      //새파일(이미지)이름 파일(이미지)
-      memberDto.setNewFileName(memberEntity.getMemberFileEntity().getNewFileName());
-      //원본파일(이미지)이름
-      memberDto.setOldFileName(memberEntity.getMemberFileEntity().getOldFileName());
-    }
-    return memberDto;
   }
 }

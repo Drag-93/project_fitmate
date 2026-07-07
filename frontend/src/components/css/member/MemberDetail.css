@@ -1,0 +1,268 @@
+.memberDetail {
+  width: 100%;
+  min-height: 100vh;
+  background: #f5f6fa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 20px;
+  box-sizing: border-box;
+}
+
+.memberDetail-con {
+  width: 100%;
+  max-width: 700px;
+}
+
+.memberInfo {
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  padding: 50px;
+}
+
+.memberForm {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.memberForm > .memberTitle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: none; /* 필요 없으면 제거 */
+}
+
+.memberTitle h1 {
+  width: 100%;
+  text-align: center;
+  font-size: 32px;
+  color: #333;
+}
+
+/* 제목 */
+
+.memberTitle {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.memberTitle h1 {
+  font-size: 32px;
+  color: #333;
+}
+
+.memberTitle input {
+  width: 250px;
+  text-align: center;
+  font-size: 30px;
+  border: none;
+  border-bottom: 2px solid #3f72af;
+  outline: none;
+  padding: 8px;
+}
+
+/* 프로필 */
+
+.profilePhoto {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 35px;
+  padding: 30px 0;
+}
+
+.profilePhoto > span:first-child {
+  font-size: 18px;
+  font-weight: 600;
+  color: #555;
+}
+
+.profile-preview {
+  width: 180px;
+  height: 180px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profilePhoto img,
+.prev-img {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #ddd;
+}
+
+.prev-img {
+  background: #f8f8f8;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.profilePhoto input[type="file"] {
+  width: 260px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+}
+
+/* 파일 선택 버튼 */
+
+.profilePhoto input[type="file"]::file-selector-button {
+  background: #3f72af;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 15px;
+  margin-right: 12px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.profilePhoto input[type="file"]::file-selector-button:hover {
+  background: #2d5f96;
+}
+
+/* 정보 */
+
+.memberForm > li {
+  display: flex;
+  align-items: center;
+  padding: 18px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.memberForm > li > span:first-child {
+  width: 130px;
+  font-weight: bold;
+  color: #555;
+}
+
+.memberForm > li > span:last-child {
+  flex: 1;
+  color: #333;
+  word-break: break-all;
+}
+
+/* input */
+
+.updateMode input[type="text"],
+.updateMode input[type="email"] {
+  width: 100%;
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: 0.3s;
+  box-sizing: border-box;
+}
+
+.updateMode input:focus {
+  border-color: #3f72af;
+  outline: none;
+  box-shadow: 0 0 5px rgba(63, 114, 175, 0.3);
+}
+
+/* 버튼 */
+
+.buttonArea {
+  display: flex !important;
+  justify-content: center;
+  gap: 15px;
+  border: none !important;
+  margin-top: 35px;
+  padding-top: 25px;
+}
+
+.buttonArea button {
+  min-width: 120px;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  transition: 0.25s;
+}
+
+/* 조회 */
+
+.pwBtn {
+  background: #6c757d;
+  color: #fff;
+}
+
+.pwBtn:hover {
+  background: #5b6268;
+}
+
+.updateBtn {
+  background: #3f72af;
+  color: #fff;
+}
+
+.updateBtn:hover {
+  background: #2d5f96;
+}
+
+/* 수정 */
+
+.saveBtn {
+  background: #28a745;
+  color: #fff;
+}
+
+.saveBtn:hover {
+  background: #1f8a39;
+}
+
+.cancelBtn {
+  background: #ffc107;
+  color: #333;
+}
+
+.cancelBtn:hover {
+  background: #e6ad05;
+}
+
+/* 공통 */
+
+.deleteBtn {
+  background: #dc3545;
+  color: #fff;
+}
+
+.deleteBtn:hover {
+  background: #bb2231;
+}
+
+/* 반응형 */
+
+@media (max-width: 768px) {
+  .memberInfo {
+    padding: 30px 20px;
+  }
+
+  .memberForm > li {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .memberForm > li > span:first-child {
+    width: 100%;
+  }
+
+  .buttonArea {
+    flex-direction: column;
+  }
+
+  .buttonArea button {
+    width: 100%;
+  }
+}
