@@ -8,6 +8,8 @@ import org.spring.backend.store.product.entity.ProductEntity;
 import org.spring.backend.store.product.repository.ProductRepository;
 import org.spring.backend.store.product.service.ProductService;
 import org.spring.backend.store.product.type.ProductType;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,11 +61,17 @@ public class ProductServiceImpl implements ProductService {
 
   @Override
   @Transactional(readOnly = true)
-  public List<ProductDto> productList() {
-    return productRepository.findAll()
-        .stream()
-        .map(ProductDto::toProductDto)
-        .toList();
+  public Page<ProductDto> productList(ProductType productType, Pageable pageable) {
+
+    Page<ProductEntity> page;
+
+    if (productType == null) {
+      page = productRepository.findAll(pageable);
+    } else {
+      page = productRepository.findByProductType(productType, pageable);
+    }
+
+    return page.map(ProductDto::toProductDto);
   }
 
   @Override
@@ -78,22 +86,11 @@ public class ProductServiceImpl implements ProductService {
 
   @Override
   @Transactional(readOnly = true)
-  public List<ProductDto> categoryList(ProductType productType) {
-
-    return productRepository.findByProductType(productType)
-        .stream()
-        .map(ProductDto::toProductDto)
-        .toList();
+  public Page<ProductDto> searchProduct(String keyword, Pageable pageable) {
+  
+      return productRepository
+              .findByProductNameContaining(keyword, pageable)
+              .map(ProductDto::toProductDto);
   }
-
-  @Override
-  @Transactional(readOnly = true)
-  public List<ProductDto> searchProduct(String keyword) {
-    return productRepository.findByProductNameContaining(keyword)
-        .stream()
-        .map(ProductDto::toProductDto)
-        .toList();
-  }
-
 
 }

@@ -7,15 +7,15 @@ import org.spring.backend.store.cart.dto.CartListDto;
 
 public interface CartService {
 
-  void insertCart(Long memberId, CartListDto carListDto);
+  void insertCart(String userEmail, CartListDto carListDto);
 
-  List<CartListDto> cartList(Long memberId);
+  List<CartListDto> cartList(String userEmail);
 
-  int countCartItems(Long memberId);
+  int countCartItems(String userEmail);
 
   void updateQuantity(Long cartItemId, CartListDto carListDto);
 
   void deleteCartItem(Long cartItemId);
 
-  void clearCart(Long memberId);
+  void clearCart(String userEmail);
 }

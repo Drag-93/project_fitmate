@@ -1,9 +1,25 @@
-import React from 'react'
+import { useNavigate } from "react-router-dom";
 
-const ProductCard = () => {
+import "../../../components/css/store/ProductCard.css"
+
+const ProductCard = ({ product }) => {
+
+  const navigate = useNavigate();
+
+  const thumbnail = product.productFileDtos?.find(
+    file => file.imageType === "THUMBNAIL"
+  );
   return (
-    <div>ProductCard</div>
-  )
-}
+    <div
+      onClick={() => navigate(`/products/detail/${product.id}`)}
+    >
+      <img src={thumbnail?.newFileName} alt={product.productName} />
 
-export default ProductCard
+      <h3>{product.productName}</h3>
+
+      <p>{product.price.toLocaleString()}원</p>
+    </div>
+  );
+};
+
+export default ProductCard;

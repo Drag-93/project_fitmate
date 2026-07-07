@@ -137,16 +137,16 @@ const Header = () => {
             {activeMenu === "store" && (
               <ul>
                 <li>
-                  <Link to={`/store`}>스토어</Link>
-                  <Link to={`/store`}>운동기구</Link>
-                  <Link to={`/store`}>식품</Link>
-                  <Link to={`/store`}>스토어3</Link>
+                  <Link to={`/store/index`}>스토어</Link>
+                  <Link to="/products?productType=GOODS">운동기구</Link>
+                  <Link to="/products?productType=GOODS">식품</Link>
+                  <Link to="/products?productType=GOODS">스토어3</Link>
                 </li>
                 <li>
-                  <Link to={`/store`}>구독상품</Link>
-                  <Link to={`/store`}>헬스장</Link>
-                  <Link to={`/store`}>식단</Link>
-                  <Link to={`/store`}>구독3</Link>
+                  <Link to={`/store/index`}>구독상품</Link>
+                  <Link to="/products?productType=PREMIUM">프리미엄</Link>
+                  <Link to="/products?productType=GYM">헬스장</Link>
+                  <Link to="/products?productType=PT">PT</Link>
                 </li>
               </ul>
             )}
