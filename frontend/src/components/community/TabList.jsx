@@ -20,7 +20,7 @@ const TabList = () => {
       });
       setTabList(res.data.result || []);
     } catch (error) {
-      console.error(error);
+      alert(error);
     } finally {
       setIsLoading(false);
     }

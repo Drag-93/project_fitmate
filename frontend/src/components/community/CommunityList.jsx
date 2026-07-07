@@ -2,40 +2,35 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-const CommunityList = () => {
+const CommunityList = ({ params, tabName }) => {
   const navigate = useNavigate();
   const [communityList, setCommunityList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { categoryId, tabId } = useParams();
 
-  const fetchCommunityData = async () => {
-    setIsLoading(true);
-    const url = "http://localhost:8090/community/communityList";
-
-    try {
-      const res = await axios.get(url, {
-        params: {
-          tabId: tabId, // URL 파라미터가 4라면 4를 전달
-          categoryId: categoryId, // 카테고리 파라미터 전달
-        },
-      });
-      setCommunityList(res.data.result || []);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchCommunityData = async () => {
+      setIsLoading(true);
+      try {
+        // params가 {tabId: 1, categoryId: null} 이런 형태여야 함
+        const res = await axios.get("http://localhost:8090/community/list", {
+          params,
+        });
+        setCommunityList(res.data.result || []);
+      } catch (error) {
+        alert(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
     fetchCommunityData();
-  }, [categoryId, tabId]);
+  }, [params]);
 
   return (
     <>
       <div className="communityList">
         <div className="communityList-con">
-          <h1>게시글 목록</h1>
+          <h1>{tabName}</h1>
           <button onClick={() => navigate("/community/insert")}>
             게시글 작성
           </button>

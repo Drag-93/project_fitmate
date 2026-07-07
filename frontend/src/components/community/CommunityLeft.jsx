@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
 import "../css/Community/CommunityLeft.css";
 
-const CommunityLeft = () => {
+const CommunityLeft = ({ onSelect }) => {
   const [tab, setTab] = useState([]);
   const [list, setList] = useState([]);
   const navigate = useNavigate();
@@ -55,27 +55,18 @@ const CommunityLeft = () => {
         <ul>
           <li>
             {/* 전체 탭 이동 */}
-            <NavLink to={`/communityList`}>전체</NavLink>
+            {/* <NavLink to={`/community/communityList`}>전체</NavLink> */}
+            <button onClick={() => onSelect(null, null, "전체게시판")}>
+              전체게시판
+            </button>
           </li>
           {/* 탭 별 페이지 이동 */}
           {tab.map((tab) => (
             <li key={tab.id}>
-              <NavLink to={`/community/communityList/${tab.id}`}>
+              {/* <NavLink to={`/community/list/${tab.id}`}>{tab.tabName}</NavLink> */}
+              <button onClick={() => onSelect(tab.id, null, tab.tabName)}>
                 {tab.tabName}
-              </NavLink>
-
-              {/* 카테고리별 조회 */}
-              {tab.categoryDtos && tab.categoryDtos.length > 0 && (
-                <ul>
-                  {tab.categoryDtos.map((cat) => (
-                    <li key={cat.id}>
-                      <NavLink to={`/community/category/${cat.id}`}>
-                        {cat.categoryName}
-                      </NavLink>
-                    </li>
-                  ))}
-                </ul>
-              )}
+              </button>
             </li>
           ))}
         </ul>

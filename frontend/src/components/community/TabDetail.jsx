@@ -16,12 +16,10 @@ const TabDetail = () => {
       const res = await axios.get(
         `http://localhost:8090/community/tabDetail/${id}`,
       );
-      console.log("상세 데이터 응답 : ", res.data);
       if (res.data?.tab) {
         setTab(res.data.tab);
       }
     } catch (error) {
-      console.error("상세 정보 로드 실패 : ", error);
       alert("탭이 존재하지 않습니다");
       navigate("/community/tabList");
     } finally {
@@ -29,7 +27,9 @@ const TabDetail = () => {
     }
   };
   useEffect(() => {
-    getTabDetail();
+    if (id) {
+      getTabDetail();
+    }
   }, [id]);
 
   //탭 수정
@@ -38,13 +38,12 @@ const TabDetail = () => {
       setIsLoading(true);
       const res = await axios.put(
         `http://localhost:8090/community/tabUpdate/${id}`,
-        community,
+        tab,
       );
       alert("수정되었습니다.");
-      navigatge("/community/tabList");
+      navigate("/community/tabList");
       // 2. 수정 후 상세 페이지를 다시 불러오거나 목록으로 이동
     } catch (error) {
-      console.error("수정 실패 : ", error);
       alert("수정 실패");
     } finally {
       setIsLoading(false);
@@ -59,14 +58,13 @@ const TabDetail = () => {
       const res = await axios.delete(
         `http://localhost:8090/community/tabDelete/${id}`,
       );
-      console.log("상세 데이터 응답 : ", res.data);
       if (res.data?.result) {
-        setCommunity(res.data.result);
+        setTab(res.data.result);
+        navigate("/community/tabList");
       }
     } catch (error) {
-      console.error("삭제 실패 : ", error);
       alert("삭제 시도 중 오류가 발생했습니다");
-      navigatge("/community/tabList");
+      navigate("/community/tabList");
     } finally {
       setIsLoading(false);
     }
@@ -76,37 +74,60 @@ const TabDetail = () => {
     <>
       <div className="tabDetail">
         <div className="tabDetail-con">
-          <h1>게시글 상세 페이지</h1>
+          <h1>탭 상세 페이지</h1>
           {isLoading ? (
             <p>데이터를 불러오는 중입니다</p>
           ) : tab ? (
             <div className="detailbody">
               <ul>
                 <li>
-                  <label htmlFor="title">제목</label>
+                  <label htmlFor="tabName">이름</label>
                   <input
                     type="text"
-                    name="title"
-                    value={tab.title || ""} // 데이터가 들어오기 전 에러 방지
-                    onChange={(e) => setTab({ ...tab, title: e.target.value })}
-                  />
-                </li>
-                <li>
-                  <label htmlFor="content">내용</label>
-                  <textarea
-                    name="content"
-                    value={tab.content || ""}
+                    name="tabName"
+                    value={tab.tabName || ""} // 데이터가 들어오기 전 에러 방지
                     onChange={(e) =>
-                      setTab({ ...tab, content: e.target.value })
+                      setTab({ ...tab, tabName: e.target.value })
                     }
                   />
                 </li>
                 <li>
-                  <label>날짜</label>
+                  <label>카테고리</label>
+                  <div className="checkbox-group">
+                    {/* 1. 서버에서 가져온 전체 카테고리 목록(categoryList)을 매핑 */}
+                    {tab.categoryList?.map((cat) => (
+                      <label key={cat.id}>
+                        <input
+                          type="checkbox"
+                          value={cat.categoryName}
+                          // 2. 현재 선택된 목록(categoryNames)에 이 이름이 포함되어 있으면 체크
+                          checked={tab.categoryNames?.includes(
+                            cat.categoryName,
+                          )}
+                          onChange={(e) => {
+                            const { checked, value } = e.target;
+
+                            // 기존 선택 목록을 가져와서 업데이트
+                            const currentNames = tab.categoryNames || [];
+
+                            const newNames = checked
+                              ? [...currentNames, value] // 체크 시 추가
+                              : currentNames.filter((name) => name !== value); // 해제 시 제거
+
+                            setTab({ ...tab, categoryNames: newNames });
+                          }}
+                        />
+                        {cat.categoryName}
+                      </label>
+                    ))}
+                  </div>
+                </li>
+                <li>
+                  <label>생성일</label>
                   <div className="view-box">
-                    {tab.updateTime
-                      ? `수정일: ${tab.updateTime.split("T")[0]}`
-                      : `작성일: ${tab.createTime.split("T")[0] || ""}`}
+                    {tab?.updateTime
+                      ? `수정일: ${tab.updateTime?.split("T")[0]}`
+                      : `생성일: ${tab?.createTime?.split("T")[0] || ""}`}
                   </div>
                 </li>
                 <li>
@@ -114,7 +135,7 @@ const TabDetail = () => {
                 </li>
               </ul>
               <div className="button">
-                <button onClick={() => navigatge("/community/tabList")}>
+                <button onClick={() => navigate("/community/tabList")}>
                   목록으로 돌아가기
                 </button>
                 <button onClick={() => getTabDelete()}>삭제</button>

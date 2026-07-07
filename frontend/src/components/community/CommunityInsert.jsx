@@ -14,12 +14,9 @@ const CommunityInsert = () => {
   const [category, setCategory] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:8090/community/category")
-      .then((res) => {
-        setCategory(res.data.result);
-      })
-      .catch((err) => console.error("카테고리 로딩 실패", err));
+    axios.get("http://localhost:8090/community/category").then((res) => {
+      setCategory(res.data.result);
+    });
   }, []);
 
   const onCommunityInsert = (e) => {
@@ -45,7 +42,6 @@ const CommunityInsert = () => {
         navigate("/community/communityList");
       }
     } catch (error) {
-      console.error("게시글 작성 실패", error);
       alert("게시글 작성 중 오류 발생");
     }
   };
