@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getCookie, setCookie, removeCookie } from "../../apis/util/cookieUtil";
 import { loginFn } from "../../apis/auth/login";
 import { API_SERVER_URL } from "../../apis/commonApi";
-import axios from "axios";
+import jwtAxios from "../../apis/util/jwtUtil";
 const initState = {
   memberData: [],
 };
@@ -34,7 +34,7 @@ export const loadMemberInit = createAsyncThunk(
       if (memberInfo === null) return null;
 
       if (memberInfo && memberInfo.userEmail) {
-        const res = await axios.get(
+        const res = await jwtAxios.get(
           `${API_SERVER_URL}/api/member/init/${memberInfo.userEmail}`,
         );
         // console.log(res.data);

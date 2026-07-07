@@ -29,17 +29,14 @@ const MemberUpdatePw = () => {
         const res = await jwtAxios.put(
           `${API_SERVER_URL}/api/member/update`,
           formData,
-          {
-            headers: { "Content-Type": "multipart/form-data" },
-          },
         );
-        if (res === "ok") {
-          alert("회원가입 성공!");
+        if (res.data === "ok") {
+          alert("비밀번호 변경에 성공하였습니다. 다시 로그인해주세요.");
+          dispatch(logout());
           navigate("/auth/login");
+        } else {
+          alert("비밀번호 변경에 실패하였습니다. 다시입력해주세요.");
         }
-        alert("비밀번호 변경에 성공하였습니다. 다시 로그인해주세요.");
-        dispatch(logout());
-        navigate("/auth/login");
       }
     } catch (err) {
       console.error("회원가입 통신 에러:", err);
@@ -56,6 +53,8 @@ const MemberUpdatePw = () => {
               <input
                 type="password"
                 value={modalPwData}
+                id="userPw"
+                name="userPw"
                 onChange={(e) => setModalPwData(e.target.value)}
               />
             </li>
@@ -64,6 +63,8 @@ const MemberUpdatePw = () => {
               <input
                 type="password"
                 value={checkPwData}
+                id="checkPw"
+                name="checkPw"
                 onChange={(e) => setCheckPwData(e.target.value)}
               />
             </li>
