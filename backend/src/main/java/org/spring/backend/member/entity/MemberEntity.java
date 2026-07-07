@@ -59,7 +59,7 @@ public class MemberEntity extends BasicTime {
   private MemberAddEntity memberAddEntity;
 
   @OneToOne(mappedBy = "memberEntity",
-          fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+          fetch = FetchType.LAZY, orphanRemoval = true)
   private MemberFileEntity memberFileEntity;
 
   public static MemberEntity toInsertMemberEntity(MemberDto memberDto, String encodePw){

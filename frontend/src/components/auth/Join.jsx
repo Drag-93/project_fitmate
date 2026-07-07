@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import Header from "../common/Header";
-import Footer from "../common/Footer";
+import { useState } from "react";
 import axios from "axios";
 import { API_SERVER_URL } from "../../apis/commonApi";
 import { Link, useNavigate } from "react-router-dom";

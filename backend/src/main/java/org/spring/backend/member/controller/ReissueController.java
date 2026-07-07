@@ -29,10 +29,12 @@ public class ReissueController {
         //Refresh토큰 가져오기
         String refresh = null;
         Cookie[] cookies = request.getCookies();
-        for(Cookie cookie: cookies){
-            //쿠키중 refresh이름이 달린 쿠키 찾기
-            if(cookie.getName().equals("refresh")){
-                refresh = cookie.getValue();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                //쿠키중 refresh이름이 달린 쿠키 찾기
+                if (cookie.getName().equals("refresh")) {
+                    refresh = cookie.getValue();
+                }
             }
         }
 
@@ -64,8 +66,11 @@ public class ReissueController {
         String newAccess = jwtUtil.createJwt("access",userEmail, role, 60* 60 *100L);
         String newRefresh = jwtUtil.createJwt("refresh",userEmail,role,84600000L);
         //Refresh 토큰 저장, 기존의 Refresh토큰이 있었다면 제거 후 새 Refresh토큰으로 저장
-        if (refreshRepository.existsByRefresh(refresh)) {
+        try {
             refreshRepository.deleteByRefresh(refresh);
+            refreshRepository.flush();
+        } catch (Exception e) {
+            System.out.println("이미 다른 요청에 의해 삭제된 토큰입니다: " + e.getMessage());
         }
         addRefreshEntity(userEmail, newRefresh, 86400000L);
 

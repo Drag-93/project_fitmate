@@ -3,9 +3,10 @@ import React, { useEffect, useState } from "react";
 import jwtAxios from "../../apis/util/jwtUtil";
 import { API_SERVER_URL } from "../../apis/commonApi";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../store/slices/loginSlice";
+
+import "../css/member/MemberDetail.css";
 
 const API_URL = API_SERVER_URL;
 
@@ -27,6 +28,10 @@ const MemberDetail = () => {
   //멤버데이터를 수정할 때 따로 수정데이터를 조작할 수 있게 설정
   const [updateData, setUpdateData] = useState(null);
 
+  //이미지 수정 시 미리보기url과 상태값을 변경하기 위한 상수선언
+  const [file, setFile] = useState(null);
+  const [prevUrl, setPrevUrl] = useState("");
+
   //이메일 정규식
   const emailRegex =
     /^[a-zA-Z0-9_+&*-]+(?:\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/;
@@ -38,20 +43,32 @@ const MemberDetail = () => {
     return res.data;
   };
 
+  //멤버 수정버튼 클릭시 상태값이 서로 반전되고, 수정를 실행하는 함수
   const memberUpdateFn = () => {
     if (!isUpdate) {
+      setIsUpdate((prev) => !prev);
       setUpdateData({ ...memberData, userPw: "" });
     } else {
       memberUpdate();
     }
-    setIsUpdate((prev) => !prev);
   };
 
+  //기본 데이터 onChange함수
   const onChangeFn = (e) => {
     const { name, value } = e.target;
-    setModifyData({ ...updateData, [name]: value });
+    setUpdateData({ ...updateData, [name]: value });
+  };
+  //파일 데이터 onChange함수
+  const onChangeFileFn = (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      //선택된 파일로 임시 미리보기 URL 생성 후 세팅
+      setPrevUrl(URL.createObjectURL(selectedFile));
+    }
   };
 
+  //멤버수정 비동기 함수
   const memberUpdate = async () => {
     if (!confirm("회원수정을 하시겠습니까?")) return;
     try {
@@ -60,33 +77,61 @@ const MemberDetail = () => {
         alert("이메일 형식이 올바르지 않습니다.");
         return;
       }
-      if (!updateData.userPw) {
-        alert("비밀번호 입력해주세요");
-        return;
-      }
       if (!updateData.userName) {
         alert("이름을 입력해주세요");
         return;
       }
-      const formData = new FormData();
-      formData.append("userEmail", joinData.userEmail);
-      formData.append("userPw", joinData.userPw);
-      formData.append("userName", joinData.userName);
-      formData.append("gender", joinData.gender);
-      const res = await jwtAxios.put(`${API_URL}/api/member/update`);
-      if (updateData.userEmail !== memberData.userEmail) {
-        dispatch(logout());
-        alert("회원가입에 성공하였습니다.");
-        navigate("/");
+
+      //file정보 가져오기
+      const fileInput = document.getElementById("memberFile");
+      const file = fileInput?.files[0];
+
+      const sendData = new FormData();
+
+      Object.keys(updateData).forEach((key) => {
+        // 값의 유무 체크 후 추가 (null 반환 방지)
+        if (updateData[key] !== null && updateData[key] !== undefined) {
+          sendData.append(key, updateData[key]);
+        }
+      });
+      //파일이 존재할때만 FormData에 memberFile이름으로 추가
+      if (file) {
+        sendData.append("memberFile", file);
+      }
+
+      const res = await jwtAxios.put(`${API_URL}/api/member/update`, sendData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      // console.log(res);
+      if (res.status === 200) {
+        try {
+          const newData = await getMemberDetail();
+          if (newData && newData.result) {
+            setMemberData(newData.result);
+          }
+        } catch (err) {
+          console.error("최신 회원 정보 가져오기 실패:", err);
+        }
+        if (updateData.userEmail !== memberData.userEmail) {
+          dispatch(logout());
+          alert("이메일 변경확인. 다시 로그인 해주시기 바랍니다.");
+          navigate("/auth/login");
+        } else {
+          alert("회원수정에 성공하였습니다.");
+          setIsUpdate((prev) => !prev);
+        }
       } else {
-        navigate("/mypage");
+        alert("회원수정 실패");
       }
     } catch (err) {
       console.log(err);
-      alert("회원탈퇴중 오류가 발생했습니다.");
+      alert("회원수정중 오류가 발생했습니다.");
     }
   };
 
+  //멤버 삭제 비동기 함수
   const memberDelete = async () => {
     if (!confirm("회원탈퇴를 하시겠습니까?")) return;
     try {
@@ -108,7 +153,10 @@ const MemberDetail = () => {
   useEffect(() => {
     if (isLogin) {
       getMemberDetail()
-        .then((data) => setMemberData(data.result))
+        .then((data) => {
+          setMemberData(data.result);
+          console.log(data);
+        })
         .catch((err) => console.error(err));
     }
   }, [isLogin]);
@@ -117,17 +165,33 @@ const MemberDetail = () => {
       <div className="memberDetail">
         <div className="memberDetail-con">
           <div className="memberInfo">
-            <ul>
+            <ul
+              className={
+                isUpdate ? "memberForm updateMode" : "memberForm viewMode"
+              }
+            >
               {memberData === null ? (
                 <>회원님의 정보를 불러오는 중입니다...</>
               ) : !isUpdate ? (
                 <>
-                  <li>
+                  <li className="memberTitle">
                     <h1>{memberData.userName}님</h1>
                   </li>
                   <li className="profilePhoto">
                     <span>프로필사진</span>
-                    <span>{memberData.profilePhoto}</span>
+                    <span>
+                      {memberData && memberData.newFileName ? (
+                        <img
+                          src={`${API_URL}/upload/member/${memberData.newFileName}`}
+                          alt="프로필 사진"
+                        />
+                      ) : (
+                        <img
+                          src="/images/member/wanderercreative-blank-profile-picture-973460.svg"
+                          alt="기본 프로필 사진"
+                        />
+                      )}
+                    </span>
                   </li>
                   <li>
                     <span>이메일</span>
@@ -135,50 +199,83 @@ const MemberDetail = () => {
                   </li>
                   <li>
                     <span>주소</span>
-                    <span>{memberData.userAddress}</span>
+                    <span>{memberData.userAddress || ""}</span>
                   </li>
                   <li>
                     <span>전화번호</span>
-                    <span>{memberData.userPhone}</span>
+                    <span>{memberData.userPhone || ""}</span>
                   </li>
                   <li>
                     <span>구독여부</span>
                     <span>{memberData.subscribe}</span>
                   </li>
-                  <li>
-                    <span>
-                      <button
-                        onClick={() =>
-                          navigate("/mypage/updatepw", {
-                            state: { getData: memberData },
-                          })
-                        }
-                      >
-                        비밀번호변경
-                      </button>
-                    </span>
-                    <span>
-                      <button onClick={memberUpdateFn}>개인정보수정</button>
-                    </span>
-                    <span>
-                      <button onClick={memberDelete}>회원탈퇴</button>
-                    </span>
+                  <li className="buttonArea">
+                    <button
+                      className="pwBtn"
+                      onClick={() =>
+                        navigate("/mypage/updatepw", {
+                          state: { getData: memberData },
+                        })
+                      }
+                    >
+                      비밀번호변경
+                    </button>
+                    <button className="updateBtn" onClick={memberUpdateFn}>
+                      개인정보수정
+                    </button>
+                    <button className="deleteBtn" onClick={memberDelete}>
+                      회원탈퇴
+                    </button>
                   </li>
                 </>
               ) : (
                 <>
+                  <li className="profilePhoto">
+                    <span>프로필사진</span>
+                    <span className="profile-preview">
+                      {prevUrl ? (
+                        // 유저가 방금 새로운 파일을 선택한 경우(이미지 미리보기)
+                        <img
+                          src={prevUrl}
+                          alt="새 이미지 미리보기"
+                          className="prev-img"
+                        />
+                      ) : memberData && memberData.newFileName ? (
+                        //파일을 아직 고르지 않았을때 & 기존에 저장된 이미지가 있을경우(기존 이미지)
+                        <img
+                          src={`${API_URL}/upload/member/${memberData.newFileName}`}
+                          alt="프로필 사진"
+                          className="prev-img"
+                        />
+                      ) : (
+                        //기존이미지도 없고 선택도 안했을경우(기본 이미지 추가)
+                        <img
+                          src="/images/member/wanderercreative-blank-profile-picture-973460.svg"
+                          alt="기본이미지"
+                          className="prev-img"
+                        />
+                      )}
+                    </span>
+                    <span>
+                      <input
+                        type="file"
+                        name="memberFile"
+                        id="memberFile"
+                        onChange={onChangeFileFn}
+                      />
+                    </span>
+                  </li>
                   <li>
-                    <h1>
+                    <span>유저명</span>
+                    <span>
                       <input
                         type="text"
                         value={updateData.userName}
+                        id="userName"
+                        name="userName"
                         onChange={onChangeFn}
                       />
-                    </h1>
-                  </li>
-                  <li className="profilePhoto">
-                    <span>프로필사진</span>
-                    <span>{updateData.profilePhoto}</span>
+                    </span>
                   </li>
                   <li>
                     <span>이메일</span>
@@ -186,6 +283,8 @@ const MemberDetail = () => {
                       <input
                         type="email"
                         value={updateData.userEmail}
+                        id="userEmail"
+                        name="userEmail"
                         onChange={onChangeFn}
                       />
                     </span>
@@ -195,7 +294,9 @@ const MemberDetail = () => {
                     <span>
                       <input
                         type="text"
-                        value={updateData.userAddress}
+                        value={updateData.userAddress || ""}
+                        id="userAddress"
+                        name="userAddress"
                         onChange={onChangeFn}
                       />
                     </span>
@@ -205,22 +306,35 @@ const MemberDetail = () => {
                     <span>
                       <input
                         type="text"
-                        value={updateData.userPhone}
+                        value={updateData.userPhone || ""}
+                        id="userPhone"
+                        name="userPhone"
                         onChange={onChangeFn}
                       />
                     </span>
                   </li>
-                  <li>
+                  <li className="buttonArea">
                     <span>
-                      <button onClick={memberUpdateFn}>개인정보수정</button>
+                      <button className="saveBtn" onClick={memberUpdateFn}>
+                        개인정보수정
+                      </button>
                     </span>
                     <span>
-                      <button onClick={() => setIsUpdate((prev) => !prev)}>
+                      <button
+                        className="cancelBtn"
+                        onClick={() => {
+                          setIsUpdate((prev) => !prev);
+                          setPrevUrl("");
+                          setFile(null);
+                        }}
+                      >
                         취소
                       </button>
                     </span>
                     <span>
-                      <button onClick={memberDelete}>회원탈퇴</button>
+                      <button onClick={memberDelete} className="deleteBtn">
+                        회원탈퇴
+                      </button>
                     </span>
                   </li>
                 </>

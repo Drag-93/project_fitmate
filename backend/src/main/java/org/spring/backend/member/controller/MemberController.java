@@ -64,7 +64,7 @@ public class MemberController {
 
     //회원수정 api
     @PutMapping("/update")
-    public ResponseEntity<?> myPageUpdate(MemberDto memberDto) throws IOException {
+    public ResponseEntity<?> myPageUpdate(@ModelAttribute MemberDto memberDto) throws IOException {
         memberService.memberUpdate(memberDto);
         return ResponseEntity.ok("ok");
     }
