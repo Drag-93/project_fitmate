@@ -3,8 +3,12 @@ import React, { useEffect, useState } from "react";
 import { API_SERVER_URL } from "../apis/commonApi";
 import { jsx } from "react/jsx-runtime";
 import jwtAxios from "../apis/util/jwtUtil";
+import { useSelector } from "react-redux";
 
 const Main = () => {
+  //로그인 여부 판단
+  const user = useSelector((state) => state.loginSlice); //user 정보
+  const isLogin = !!user?.userEmail;
   const API_URL = API_SERVER_URL;
   // 게시글 리스트 변수
   const [selectMenu, setSelectMenu] = useState("notice");
@@ -24,7 +28,9 @@ const Main = () => {
   // 추천 리스트 가져오는 함수
   const getMainData = async () => {
     try {
-      const res = await jwtAxios.get(`${API_URL}/main`);
+      const res = isLogin
+        ? await jwtAxios.get(`${API_URL}/main`) //로그인 상태일때 jwtAxios 사용
+        : await axios.get(`${API_URL}/main`); //비로그인 상태일때 그냥 axios 사용
 
       setCommunityList(res.data.communityList || []);
       setProductList(res.data.productList || []);
