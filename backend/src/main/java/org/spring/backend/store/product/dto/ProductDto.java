@@ -66,6 +66,7 @@ public class ProductDto {
                 .map(ProductFileDto::toProductFileDto).toList())
         .createTime(productEntity.getCreateTime())
         .updateTime(productEntity.getUpdateTime())
+        .category(productEntity.getCategory())
         .build();
   }
 }

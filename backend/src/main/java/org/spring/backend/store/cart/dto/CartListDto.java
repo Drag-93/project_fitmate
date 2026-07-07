@@ -3,6 +3,7 @@ package org.spring.backend.store.cart.dto;
 import java.time.LocalDateTime;
 
 import org.spring.backend.store.cart.entity.CartListEntity;
+import org.spring.backend.store.product.type.ImageType;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -46,6 +47,15 @@ public class CartListDto {
             : null)
         .productName(cartListEntity.getProductEntity().getProductName())
         .price(cartListEntity.getProductEntity().getPrice())
+        .productImage(
+          cartListEntity.getProductEntity()
+          .getProductFileEntities()
+          .stream()
+          .filter(file -> file.getImageType() == ImageType.THUMBNAIL)
+          .findFirst()
+          .map(file -> file.getNewFileName())
+          .orElse(null)
+      )
         .createTime(cartListEntity.getCreateTime())
         .updateTime(cartListEntity.getUpdateTime())
         .build();

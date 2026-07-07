@@ -1,0 +1,33 @@
+@import url("../../common/reset.css");
+
+.product-list-con {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  width: 1200px;
+  margin: 40px auto;
+}
+
+
+/* 반응형 */
+@media (max-width: 1200px) {
+  .product-list {
+    width: 90%;
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+
+@media (max-width: 768px) {
+  .product-list {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+
+@media (max-width: 480px) {
+  .product-list {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}

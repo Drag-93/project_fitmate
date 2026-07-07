@@ -6,10 +6,13 @@ import org.spring.backend.store.product.dto.ProductDto;
 import org.spring.backend.store.product.service.ProductService;
 import org.spring.backend.store.product.type.ProductType;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,15 +27,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class ProductController {
   private final ProductService productService;
 
-  // 상품 전체 조회
-  @GetMapping
-  public ResponseEntity<List<ProductDto>> productList() {
-    return ResponseEntity.ok(productService.productList());
-  }
-
   // 상품 상세 조회
   @GetMapping("/{productId}")
-  public ResponseEntity<ProductDto> productDetail(@PathVariable Long productId) {
+  public ResponseEntity<ProductDto> productDetail(@PathVariable("productId") Long productId) {
     return ResponseEntity.ok(productService.productDetail(productId));
   }
 
@@ -46,7 +43,7 @@ public class ProductController {
   // 상품수정
   @PutMapping("/{productId}")
   public ResponseEntity<Void> updateProduct(
-      @PathVariable Long productId,
+      @PathVariable("productId") Long productId,
       @RequestBody ProductDto productDto) {
 
     productService.updateProduct(productId, productDto);
@@ -55,14 +52,18 @@ public class ProductController {
 
   // 상품삭제
   @DeleteMapping("/{productId}")
-  public ResponseEntity<Void> deleteProduct(@PathVariable Long productId) {
+  public ResponseEntity<Void> deleteProduct(@PathVariable("productId") Long productId) {
     productService.deleteProduct(productId);
     return ResponseEntity.ok().build();
   }
 
-  // 카테고리별 상품 조회
-  @GetMapping("/category/{categoryId}")
-  public ResponseEntity<List<ProductDto>> productByCategory(@PathVariable ProductType category) {
-    return ResponseEntity.ok(productService.categoryList(category));
+  // 카테고리별 상품 조회, 전체조회
+  @GetMapping
+  public ResponseEntity<Page<ProductDto>> productList(
+      @RequestParam(value = "productType",required = false) ProductType productType,
+      Pageable pageable) {
+
+    return ResponseEntity.ok(
+        productService.productList(productType, pageable));
   }
 }

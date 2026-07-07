@@ -1,9 +1,64 @@
-import React from 'react'
+import React, { useState } from "react";
+import ConfirmModal from "./ConfirmModal";
 
-const CartItem = () => {
+const CartItem = ({
+  item,
+  changeQuantity,
+  removeItem
+}) => {
+  const [showModal, setShowModal] = useState(false);
+
   return (
-    <div>CartItem</div>
-  )
-}
+    <div className="cart-item">
+      <img className="productImage"
+        src={item.productImage}
+        alt={item.productName} />
+      <div>
+        <h3 className="productName">
+          {item.productName}
+        </h3>
+        <p className="price">
+          {item.price.toLocaleString()}원
+        </p>
+        <div>
+          <button className="minus"
+            onClick={() =>
+              changeQuantity(
+                item.id,
+                item.quantity - 1)}> - </button>
 
-export default CartItem
+          <span className="quantity">
+            {item.quantity}
+          </span>
+
+          <button className="plus"
+            onClick={() =>
+              changeQuantity(
+                item.id,
+                item.quantity + 1)}> + </button>
+        </div>
+        <button className="delete"
+          onClick={() => setShowModal(true)}> 삭제 </button>
+      </div>
+      {
+        showModal &&
+        <ConfirmModal
+          message="상품을 삭제하시겠습니까?"
+
+          onConfirm={() => {
+            removeItem(item.id);
+            setShowModal(false);
+          }}
+
+          onCancel={() => {
+            setShowModal(false);
+          }}
+        />
+      }
+
+    </div>
+  );
+};
+
+
+export default CartItem;
