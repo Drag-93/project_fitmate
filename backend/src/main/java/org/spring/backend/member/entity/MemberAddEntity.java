@@ -3,6 +3,7 @@ package org.spring.backend.member.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.spring.backend.common.BasicTime;
+import org.spring.backend.common.Interest;
 import org.spring.backend.member.dto.MemberAddDto;
 
 @Getter
@@ -19,7 +20,9 @@ public class MemberAddEntity extends BasicTime {
     private Long id;
 
     //유저 관심사
-    private String interest;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "interest")
+    private Interest interest;
 
     private float height;
 

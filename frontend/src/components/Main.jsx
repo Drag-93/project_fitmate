@@ -1,8 +1,47 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { API_SERVER_URL } from "../apis/commonApi";
+import { jsx } from "react/jsx-runtime";
+import jwtAxios from "../apis/util/jwtUtil";
+import { useSelector } from "react-redux";
 
 const Main = () => {
+  //로그인 여부 판단
+  const user = useSelector((state) => state.loginSlice); //user 정보
+  const isLogin = !!user?.userEmail;
+  const API_URL = API_SERVER_URL;
   // 게시글 리스트 변수
   const [selectMenu, setSelectMenu] = useState("notice");
+
+  // 추천기능 변수
+  const [communityList, setCommunityList] = useState("");
+  const [productList, setProductList] = useState("");
+
+  //베스트 상품
+  const bestProduct = productList[0];
+  //top 2~5
+  const otherProducts = productList.slice(1);
+
+  //공지사항 변수
+  const [noticeList, setNoticeList] = useState("");
+
+  // 추천 리스트 가져오는 함수
+  const getMainData = async () => {
+    try {
+      const res = isLogin
+        ? await jwtAxios.get(`${API_URL}/main`) //로그인 상태일때 jwtAxios 사용
+        : await axios.get(`${API_URL}/main`); //비로그인 상태일때 그냥 axios 사용
+
+      setCommunityList(res.data.communityList || []);
+      setProductList(res.data.productList || []);
+      setNoticeList(res.data.noticeList || []);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  useEffect(() => {
+    getMainData();
+  }, []);
 
   //스크롤 버튼 -> scroll y ->300이면 top버튼 show
   const [showTopBtn, setShowTopBtn] = useState(false);
@@ -110,12 +149,26 @@ const Main = () => {
                     <div className="main-left-depth">
                       {selectMenu === "notice" && (
                         <ul>
-                          <li>공지사항 리스트</li>
+                          {Array.isArray(noticeList) &&
+                            noticeList.map((notice) => (
+                              <li key={notice.id}>
+                                <a href={`/community/notice/${notice.id}`}>
+                                  <p>{notice.title}</p>
+                                </a>
+                              </li>
+                            ))}
                         </ul>
                       )}
                       {selectMenu === "best" && (
                         <ul>
-                          <li>베스트 게시글 리스트</li>
+                          {Array.isArray(communityList) &&
+                            communityList.map((community) => (
+                              <li key={community.id}>
+                                <a href={`/community/${community.id}`}>
+                                  <p>{community.title}</p>
+                                </a>
+                              </li>
+                            ))}
                         </ul>
                       )}
                     </div>
@@ -127,22 +180,31 @@ const Main = () => {
                 <div className="main-right-con">
                   <div className="main-right-slide">
                     <ul>
-                      <li style={{ display: `flex`, justifyContent: `end` }}>
-                        <a
-                          href="/store"
-                          style={{ display: "flex", flexDirection: "column" }}
+                      {bestProduct && (
+                        <li
+                          key={bestProduct.id}
+                          // style={{ display: `flex`, justifyContent: `end` }}
                         >
-                          <img
-                            src="/images/test2.jpg"
-                            alt="테스트이미지"
-                            style={{
-                              width: `30vh`,
-                              height: `30vh`,
-                            }}
-                          />
-                          <del>베스트 상품 위치(delete)</del>
-                        </a>
-                      </li>
+                          <a
+                            href={`/store/detail/${bestProduct.id}`}
+                            style={{ display: "flex", flexDirection: "column" }}
+                          >
+                            <img
+                              src="/images/test2.jpg"
+                              alt="테스트이미지"
+                              style={{
+                                width: `30vh`,
+                                height: `30vh`,
+                              }}
+                            />
+                          </a>
+                          <p>{bestProduct.productName}</p>
+                          <span>{bestProduct.price.toLocaleString()}원</span>
+                          <p>
+                            <del>베스트 상품 </del>
+                          </p>
+                        </li>
+                      )}
                     </ul>
                   </div>
                 </div>
@@ -171,58 +233,21 @@ const Main = () => {
                     gap: "3rem",
                   }}
                 >
-                  <li style={{ display: "flex", flexDirection: "column" }}>
-                    <a href="/store">
-                      <img
-                        src="/images/test1.jpg"
-                        alt="테스트이미지"
-                        style={{
-                          width: `10vh`,
-                          height: `10vh`,
-                        }}
-                      />
-                    </a>
-                    <del>상품 목록1</del>
-                  </li>
-                  <li style={{ display: "flex", flexDirection: "column" }}>
-                    <a href="/store">
-                      <img
-                        src="/images/test2.jpg"
-                        alt="테스트이미지"
-                        style={{
-                          width: `10vh`,
-                          height: `10vh`,
-                        }}
-                      />
-                    </a>
-                    <del>상품 목록2</del>
-                  </li>
-                  <li style={{ display: "flex", flexDirection: "column" }}>
-                    <a href="/store">
-                      <img
-                        src="/images/test3.jpg"
-                        alt="테스트이미지"
-                        style={{
-                          width: `10vh`,
-                          height: `10vh`,
-                        }}
-                      />
-                    </a>
-                    <del>상품 목록3</del>
-                  </li>
-                  <li style={{ display: "flex", flexDirection: "column" }}>
-                    <a href="/store">
-                      <img
-                        src="/images/test4.jpg"
-                        alt="테스트이미지"
-                        style={{
-                          width: `10vh`,
-                          height: `10vh`,
-                        }}
-                      />
-                    </a>
-                    <del>상품 목록4</del>
-                  </li>
+                  {Array.isArray(otherProducts) &&
+                    otherProducts.map((product) => (
+                      <li key={product.id}>
+                        <a href={`/store/detail/${product.id}`}>
+                          {/* <img src={product.productImage} alt={product.productName} /> */}
+                          <img src="" alt="베스트상품" />
+                        </a>
+                        <p>{product.productName}</p>
+                        <span>{product.price.toLocaleString()}원</span>
+                        <p>
+                          <del>베스트상품</del>
+                        </p>
+                      </li>
+                    ))}
+
                   <li style={{ display: "flex", flexDirection: "column" }}>
                     <a href="/store">
                       <img
