@@ -3,14 +3,16 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getProductDetail } from "../../../apis/store/productApi";
 import { addCart } from "../../../apis/store/cartApi";
 import { getCookie } from "../../../apis/util/cookieUtil";
+import CartModal from "../../../components/store/cart/CartModal";
 
-import "../../../components/css/store/ProductDetailPage.css";
+import "../../../components/css/store/product/ProductDetailPage.css";
 
 const ProductDetailPage = () => {
 
   const { productId } = useParams();
   const navigate = useNavigate();
 
+  const [showCartModal, setShowCartModal] = useState(false);
   const [product, setProduct] = useState(null);
 
   // 수량 상태
@@ -45,7 +47,7 @@ const ProductDetailPage = () => {
         productId: product.id,
         quantity: quantity
       });
-      alert("장바구니에 추가되었습니다.");
+      setShowCartModal(true);
     } catch (e) {
       console.error(e);
     }
@@ -95,7 +97,6 @@ const ProductDetailPage = () => {
             src={thumbnail.newFileName}
             alt="썸네일"
             className="thumbnail-image"
-            width={150}
           />
         )}
 
@@ -105,7 +106,6 @@ const ProductDetailPage = () => {
             src={main.newFileName}
             alt={product.productName}
             className="main-image"
-            width={400}
           />
         )}
 
@@ -138,7 +138,20 @@ const ProductDetailPage = () => {
           <button className="buy-button"
             onClick={handleBuy}>바로 구매</button>
         </div>
+        {
+          showCartModal &&
+          <CartModal
 
+            onContinue={() => {
+              setShowCartModal(false);
+            }}
+
+            onCart={() => {
+              navigate("/cart");
+            }}
+
+          />
+        }
         {/* 상세 이미지 */}
         {details.map(detail => (
           <img
@@ -146,7 +159,6 @@ const ProductDetailPage = () => {
             src={detail.newFileName}
             alt="상세"
             className="detail-image"
-            width={600}
           />
         ))}
       </div>

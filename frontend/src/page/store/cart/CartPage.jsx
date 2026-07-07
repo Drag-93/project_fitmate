@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import CartItem from "../../../components/store/cart/CartItem";
 import CartSummary from "../../../components/store/cart/CartSummary";
-import "../../../components/css/store/Cart.css";
+import "../../../components/css/store/cart/Cart.css";
 
 import {
   getCartList,

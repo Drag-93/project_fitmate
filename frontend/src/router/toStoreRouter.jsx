@@ -12,7 +12,7 @@ const toStoreRouter = () => {
     },
     {
       path: "index",
-      element: <ProductListPage />,
+      element: <StoreIndexPage />,
     },
   ];
 };

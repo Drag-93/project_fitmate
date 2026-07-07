@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
+import ConfirmModal from "./ConfirmModal";
 
 const CartItem = ({
   item,
   changeQuantity,
   removeItem
 }) => {
+  const [showModal, setShowModal] = useState(false);
 
   return (
     <div className="cart-item">
@@ -36,9 +38,24 @@ const CartItem = ({
                 item.quantity + 1)}> + </button>
         </div>
         <button className="delete"
-          onClick={() =>
-            removeItem(item.id)}> 삭제 </button>
+          onClick={() => setShowModal(true)}> 삭제 </button>
       </div>
+      {
+        showModal &&
+        <ConfirmModal
+          message="상품을 삭제하시겠습니까?"
+
+          onConfirm={() => {
+            removeItem(item.id);
+            setShowModal(false);
+          }}
+
+          onCancel={() => {
+            setShowModal(false);
+          }}
+        />
+      }
+
     </div>
   );
 };

@@ -4,7 +4,7 @@ import { getProductList } from "../../../apis/store/productApi";
 import CategoryMenu from "../../../components/store/product/CategoryMenu";
 import ProductCard from "../../../components/store/product/ProductCard";
 
-import "../../../components/css/store/ProductListPage.css";
+import "../../../components/css/store/product/ProductListPage.css";
 
 const ProductListPage = () => {
 
