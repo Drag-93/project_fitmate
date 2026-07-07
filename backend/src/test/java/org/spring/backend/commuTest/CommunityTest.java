@@ -23,7 +23,7 @@ public class CommunityTest {
     void insert(){
         for (int i = 0;i<10;i++){
         CategoryEntity category = categoryRepository.save(CategoryEntity.builder()
-                .categoryName("CN"+i)
+                .categoryName("다이어트")
                 .build());
             communityRepository.save(CommunityEntity.builder()
                     .title("Title" + i)

@@ -26,6 +26,7 @@ public class ProductsTest {
           .productType(ProductType.GOODS)
           .billingType(BillingType.ONE_TIME)
           .productStatus(ProductStatus.ACTIVE)
+          .category("다이어트")
           .build();
 
       productRepository.save(productEntity);

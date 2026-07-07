@@ -1,5 +1,6 @@
 package org.spring.backend.member.jwt;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.spring.backend.member.entity.MemberEntity;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,6 +12,7 @@ import java.util.List;
 
 
 @RequiredArgsConstructor
+@Getter
 public class CustomUserDetails implements UserDetails {
     private final MemberEntity memberEntity;
 

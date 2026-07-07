@@ -1,8 +1,8 @@
 package org.spring.backend.main.dto;
 
 import lombok.*;
-import org.spring.backend.community.entity.CommunityEntity;
-import org.spring.backend.store.product.entity.ProductEntity;
+import org.spring.backend.community.dto.CommunityDto;
+import org.spring.backend.store.product.dto.ProductDto;
 
 import java.util.List;
 
@@ -12,9 +12,11 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class MainResponseDto {
-
-    List<CommunityEntity> communityList;
-
-    List<ProductEntity> productList;
+    //공지사항 리스트
+    List<CommunityDto> noticeList;
+    //공지사항 제외 리스트
+    List<CommunityDto> communityList;
+    //상품리스트
+    List<ProductDto> productList;
 
 }
