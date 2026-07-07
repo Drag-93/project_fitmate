@@ -86,7 +86,6 @@ const loginSlice = createSlice({
         return payload;
       })
       .addCase(loadMemberInit.fulfilled, (state, action) => {
-        // 추가사항이므로 기존 data배열의 길이에 맞춰 추가
         if (action.payload) {
           state.memberData = action.payload;
         }

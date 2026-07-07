@@ -45,17 +45,17 @@ private final CategoryRepository categoryRepository;
 
 @Transactional // DB 트랜잭션 보장
 public void insertWithFile(CommunityDto communityDto) {
-      CategoryEntity category = categoryRepository.findById(communityDto.getId())
+      CategoryEntity category = categoryRepository.findById(communityDto.getCategoryId())
               .orElseThrow(()->new IllegalArgumentException("존재하지 않는 카테고리입니다"));
     // 1. 엔티티 우선 저장 (게시글 정보)
     CommunityEntity communityEntity = CommunityEntity.builder()
         .title(communityDto.getTitle())
-            .writerName(communityDto.getWriterName())
+        .writerName(communityDto.getWriterName())
         .content(communityDto.getContent())
         .categoryEntity(category)
         .hasFile(1)
         .hit(0)
-            .reply(0)
+        .reply(0)
         .build();
     CommunityEntity saveCommunity = communityRepository.save(communityEntity);
 
@@ -67,8 +67,9 @@ public void insertWithFile(CommunityDto communityDto) {
 
         File fileDir = new File(path);
         if (!fileDir.exists()) fileDir.mkdirs();
+
+        communityDto.getAttachFile().transferTo(new File(filePath));
         
-        saveFile(communityDto.getAttachFile(), filePath);
 
         // 3. 파일 엔티티 저장
         fileRepository.save(FileEntity.builder()
@@ -127,18 +128,18 @@ public void insertWithFile(CommunityDto communityDto) {
   }
 
   @Override
-  public void communityUpdate(CommunityDto communityDto) {
-   communityRepository.findById(communityDto.getCategoryId()).orElseThrow(()->new IllegalArgumentException("게시글이 존재하지 않습니다"));
-   communityRepository.save(CommunityEntity.builder()
-   .id(communityDto.getId())
-   .title(communityDto.getTitle())
-   .content(communityDto.getContent())
-   .hasFile(communityDto.getHasFile())
-   .hit(communityDto.getHit())
-                   .reply(communityDto.getReply())
-   .build());
+  @Transactional
+public void communityUpdate(Long id, CommunityDto communityDto) {
+    // DTO의 ID 대신, 매개변수로 명확하게 전달받은 id를 사용합니다.
+    CommunityEntity entity = communityRepository.findById(id)
+        .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다: " + id));
 
-   
+    // 엔티티 업데이트 로직 수행
+    entity.setTitle(communityDto.getTitle());
+    entity.setContent(communityDto.getContent());
+    entity.setCreateTime(communityDto.getCreateTime());
+    entity.setUpdateTime(communityDto.getUpdateTime());
+    entity.setHasFile(communityDto.getHasFile());
   }
 
   @Override

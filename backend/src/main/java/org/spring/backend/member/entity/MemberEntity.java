@@ -12,6 +12,8 @@ import lombok.Setter;
 import org.spring.backend.common.Role;
 import org.spring.backend.member.dto.MemberDto;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -44,6 +46,7 @@ public class MemberEntity extends BasicTime {
 
   private int subscribe;
 
+  @Column(nullable = false)
   private int profilePhoto;
 
   @Enumerated(EnumType.STRING)
@@ -51,9 +54,13 @@ public class MemberEntity extends BasicTime {
   private Role role;
 
   //멤버의 추가데이터와 1:1매칭
-  @OneToOne(fetch = FetchType.LAZY, mappedBy = "memberEntity",
-          cascade = CascadeType.ALL)
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @JoinColumn(name = "member_add_id")
   private MemberAddEntity memberAddEntity;
+
+  @OneToOne(mappedBy = "memberEntity",
+          fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  private MemberFileEntity memberFileEntity;
 
   public static MemberEntity toInsertMemberEntity(MemberDto memberDto, String encodePw){
     return MemberEntity.builder()

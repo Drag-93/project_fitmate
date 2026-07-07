@@ -4,6 +4,7 @@ import org.spring.backend.member.dto.MemberDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface MemberService {
@@ -20,7 +21,7 @@ public interface MemberService {
     //멤버 개인페이지 조회 시 사용할 정보 조회
     MemberDto memberDetail(String userEmail);
 
-    void memberUpdate(MemberDto memberDto);
+    void memberUpdate(MemberDto memberDto) throws IOException;
 
     void memberDelete(Long id);
 

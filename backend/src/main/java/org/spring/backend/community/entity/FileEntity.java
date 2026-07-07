@@ -28,6 +28,7 @@ public class FileEntity extends BasicTime {
 
     @Column(nullable = false)
     private String newFileName;
+    
     @Column(nullable = false)
     private String oldFileName;
 

@@ -5,7 +5,7 @@ import "../css/admin/AdminHeader.css";
 const AdminHeader = () => {
   return (
     <>
-      <div className="admin-header" onMouseLeave={() => setActiveMenu(null)}>
+      <div className="admin-header">
         <div className="admin-header-con">
           <div className="admin-nav-wrap">
             <div className="admin-gnb-right">

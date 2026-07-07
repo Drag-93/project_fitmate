@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.spring.backend.common.Role;
 import org.spring.backend.member.entity.MemberEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @NoArgsConstructor
@@ -40,8 +41,14 @@ public class MemberDto {
 
   private LocalDateTime updateTime;
 
+  private MultipartFile memberFile; //실제 파일
+
+  private String newFileName; //새이름 -> DB, 로컬 저장 이름
+
+  private String oldFileName;//원본이름
+
   public static MemberDto toMemberDto(MemberEntity memberEntity){
-    return MemberDto.builder()
+    MemberDto memberDto = MemberDto.builder()
             .id(memberEntity.getId())
             .userEmail(memberEntity.getUserEmail())
             .userPw(memberEntity.getUserPw())
@@ -55,5 +62,13 @@ public class MemberDto {
             .createTime(memberEntity.getCreateTime())
             .updateTime(memberEntity.getUpdateTime())
             .build();
+    memberDto.setProfilePhoto(memberEntity.getProfilePhoto());
+    if(memberEntity.getMemberFileEntity() != null){
+      //새파일(이미지)이름 파일(이미지)
+      memberDto.setNewFileName(memberEntity.getMemberFileEntity().getNewFileName());
+      //원본파일(이미지)이름
+      memberDto.setOldFileName(memberEntity.getMemberFileEntity().getOldFileName());
+    }
+    return memberDto;
   }
 }

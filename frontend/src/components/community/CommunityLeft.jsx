@@ -60,7 +60,7 @@ const CommunityLeft = () => {
           {/* 탭 별 페이지 이동 */}
           {tab.map((tab) => (
             <li key={tab.id}>
-              <NavLink to={`/community/communityList/tabList/${tab.id}`}>
+              <NavLink to={`/community/communityList/${tab.id}`}>
                 {tab.tabName}
               </NavLink>
 
@@ -69,9 +69,7 @@ const CommunityLeft = () => {
                 <ul>
                   {tab.categoryDtos.map((cat) => (
                     <li key={cat.id}>
-                      <NavLink
-                        to={`/community/communityList/category/${cat.id}`}
-                      >
+                      <NavLink to={`/community/category/${cat.id}`}>
                         {cat.categoryName}
                       </NavLink>
                     </li>

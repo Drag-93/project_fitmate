@@ -84,7 +84,7 @@ const CommunityInsert = () => {
             <li>
               <label htmlFor="content">내용</label>
               <input
-                type="text"
+                type="textarea"
                 id="content"
                 name="content"
                 value={insert.content}

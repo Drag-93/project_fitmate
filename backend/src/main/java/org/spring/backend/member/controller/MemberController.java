@@ -12,6 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,6 +59,13 @@ public class MemberController {
     public ResponseEntity<?> myPageDelete(@AuthenticationPrincipal CustomUserDetails userDetails){
         String userEmail = userDetails.getUsername();
         memberService.memberDelete(userEmail);
+        return ResponseEntity.ok("ok");
+    }
+
+    //회원수정 api
+    @PutMapping("/update")
+    public ResponseEntity<?> myPageUpdate(MemberDto memberDto) throws IOException {
+        memberService.memberUpdate(memberDto);
         return ResponseEntity.ok("ok");
     }
 }

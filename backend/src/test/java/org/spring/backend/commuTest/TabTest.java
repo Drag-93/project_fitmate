@@ -1,9 +1,7 @@
 package org.spring.backend.commuTest;
 
 import org.junit.jupiter.api.Test;
-import org.spring.backend.community.dto.CategoryDto;
 import org.spring.backend.community.entity.CategoryEntity;
-import org.spring.backend.community.entity.CommunityEntity;
 import org.spring.backend.community.entity.TabEntity;
 import org.spring.backend.community.repository.CategoryRepository;
 import org.spring.backend.community.repository.TabRepository;
