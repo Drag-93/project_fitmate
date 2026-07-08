@@ -37,7 +37,7 @@ public class ProductFileDto {
   public static ProductFileDto toProductFileDto(ProductFileEntity productFileEntity) {
     return ProductFileDto.builder()
         .id(productFileEntity.getId())
-        .newFileName(productFileEntity.getNewFileName())
+        .newFileName("/upload/item/" + productFileEntity.getNewFileName())
         .oldFileName(productFileEntity.getOldFileName())
         .sortOrder(productFileEntity.getSortOrder())
         .imageType(productFileEntity.getImageType())
