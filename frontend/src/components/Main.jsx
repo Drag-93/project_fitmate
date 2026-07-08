@@ -25,6 +25,13 @@ const Main = () => {
   //공지사항 변수
   const [noticeList, setNoticeList] = useState("");
 
+  //모달
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const closeModal = () => {
+    setModalOpen = false;
+  };
+
   // 추천 리스트 가져오는 함수
   const getMainData = async () => {
     try {
