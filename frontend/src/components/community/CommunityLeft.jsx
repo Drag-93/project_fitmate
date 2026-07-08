@@ -5,49 +5,26 @@ import "../css/Community/CommunityLeft.css";
 
 const CommunityLeft = ({ onSelect }) => {
   const [tab, setTab] = useState([]);
-  const [list, setList] = useState([]);
+  const [categoryList, setCategoryList] = useState([]);
   const navigate = useNavigate();
-  const { categoryId, tabId } = useParams();
 
   useEffect(() => {
-    const setTabListFn = async (e) => {
+    const fetchData = async () => {
       try {
-        const res = await axios.get(`http://localhost:8090/community/tabList`);
-        setTab(res.data.result);
+        const tabRes = await axios.get(
+          "http://localhost:8090/community/tabList",
+        );
+        const catRes = await axios.get(
+          "http://localhost:8090/community/category",
+        );
+        setTab(tabRes.data.result);
+        setCategoryList(catRes.data.result);
       } catch (err) {
-        alert(err);
+        console.error(err);
       }
     };
-    setTabListFn();
+    fetchData();
   }, []);
-
-  useEffect(() => {
-    const setCategoryListFn = async (e) => {
-      try {
-        const res = await axios.get(`http://localhost:8090/community/category`);
-        setList(res.data.result);
-      } catch (err) {
-        alert(err);
-      }
-    };
-    setCategoryListFn();
-  }, []);
-
-  useEffect(() => {
-    if (tabId || categoryId) {
-      axios
-        .get("http://localhost:8090/community/list", {
-          params: {
-            tabId: tabId,
-            categoryId: categoryId,
-          },
-        })
-        .then((res) => {
-          setList(res.data.result);
-        })
-        .catch((err) => console.error(err));
-    }
-  }, [tabId, categoryId]);
 
   return (
     <>
@@ -64,7 +41,9 @@ const CommunityLeft = ({ onSelect }) => {
           {tab.map((tab) => (
             <li key={tab.id}>
               {/* <NavLink to={`/community/list/${tab.id}`}>{tab.tabName}</NavLink> */}
-              <button onClick={() => onSelect(tab.id, null, tab.tabName)}>
+              <button
+                onClick={() => onSelect(tab.id, categoryList.id, tab.tabName)}
+              >
                 {tab.tabName}
               </button>
             </li>

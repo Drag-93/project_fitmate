@@ -3,27 +3,14 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 const CommunityList = ({ params, tabName }) => {
+  const [list, setList] = useState([]);
   const navigate = useNavigate();
-  const [communityList, setCommunityList] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const { categoryId, tabId } = useParams();
 
   useEffect(() => {
-    const fetchCommunityData = async () => {
-      setIsLoading(true);
-      try {
-        // params가 {tabId: 1, categoryId: null} 이런 형태여야 함
-        const res = await axios.get("http://localhost:8090/community/list", {
-          params,
-        });
-        setCommunityList(res.data.result || []);
-      } catch (error) {
-        alert(error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchCommunityData();
+    axios
+      .get("http://localhost:8090/community/list", { params })
+      .then((res) => setList(res.data.result))
+      .catch((err) => console.error(err));
   }, [params]);
 
   return (
@@ -34,34 +21,28 @@ const CommunityList = ({ params, tabName }) => {
           <button onClick={() => navigate("/community/insert")}>
             게시글 작성
           </button>
-          {isLoading ? (
-            <p>로딩중...</p>
-          ) : (
-            <table>
-              <thead>
-                <tr>
-                  <th>번호</th>
-                  <th>제목</th>
-                  <th>조회수</th>
+          <table>
+            <thead>
+              <tr>
+                <th>번호</th>
+                <th>카테고리</th>
+                <th>제목</th>
+                <th>조회수</th>
+              </tr>
+            </thead>
+            <tbody>
+              {list.map((list, index) => (
+                <tr key={list.id || index}>
+                  <td>{list.id}</td>
+                  <td>{list.categoryName}</td>
+                  <td onClick={() => navigate(`/community/detail/${list.id}`)}>
+                    {list.title}
+                  </td>
+                  <td>{list.hit}</td>
                 </tr>
-              </thead>
-              <tbody>
-                {communityList.map((community, index) => (
-                  <tr key={community.id || index}>
-                    <td>{community.id}</td>
-                    <td
-                      onClick={() =>
-                        navigate(`/community/detail/${community.id}`)
-                      }
-                    >
-                      {community.title}
-                    </td>
-                    <td>{community.hit}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </>

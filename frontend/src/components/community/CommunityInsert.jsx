@@ -1,107 +1,96 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 
-const initState = {
-  title: "",
-  content: "",
-  writerName: "",
-  categoryId: "",
-};
 const CommunityInsert = () => {
-  const navigate = useNavigate();
-  const [insert, setInsert] = useState(initState);
-  const [category, setCategory] = useState([]);
+  const [tabs, setTabs] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [selectedTabId, setSelectedTabId] = useState("");
+  const [formData, setFormData] = useState({
+    tabId: "",
+    categoryId: "",
+    title: "",
+    content: "",
+    writerName: "",
+  });
 
+  // 1. 초기 데이터 로드 (탭과 카테고리)
   useEffect(() => {
-    axios.get("http://localhost:8090/community/category").then((res) => {
-      setCategory(res.data.result);
-    });
+    const fetchData = async () => {
+      try {
+        const [tabRes, catRes] = await Promise.all([
+          axios.get("http://localhost:8090/community/tabList"),
+          axios.get("http://localhost:8090/community/category"),
+        ]);
+        setTabs(tabRes.data.result);
+        setCategories(catRes.data.result); // [핵심] tabId가 포함된 카테고리 리스트
+      } catch (err) {
+        console.error("데이터 로딩 실패", err);
+      }
+    };
+    fetchData();
   }, []);
 
-  const onCommunityInsert = (e) => {
+  // 2. 탭 선택 시 하위 카테고리 필터링
+  const filteredCategories = useMemo(() => {
+    if (!selectedTabId) return [];
+    return categories.filter(
+      (cat) => String(cat.tabId) === String(selectedTabId),
+    );
+  }, [selectedTabId, categories]);
+
+  // 3. 입력값 변경 처리
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setInsert((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    if (name === "tabId") {
+      setSelectedTabId(value);
+      setFormData({ ...formData, [name]: value, categoryId: "" }); // 탭 바뀌면 카테고리 초기화
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
-  //
-  const onInsertFn = async () => {
+
+  // 4. 작성 완료 (제출)
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
-      const res = await axios.post(
-        "http://localhost:8090/community/insert",
-        insert,
-      );
-      console.log("서버응답", res.data);
-
-      if (res.status === 200) {
-        alert("게시글 작성 성공");
-        setInsert({ ...initState });
-
-        navigate("/community/communityList");
-      }
-    } catch (error) {
-      alert("게시글 작성 중 오류 발생");
+      await axios.post("http://localhost:8090/community/insert", formData);
+      alert("작성 완료!");
+    } catch (err) {
+      alert("작성 실패");
     }
   };
 
   return (
-    <>
-      <div className="cominsert">
-        <div className="cominsert-con">
-          <h1>게시글 작성</h1>
-          <ul>
-            <li>
-              <label htmlFor="categoryId">카테고리</label>
-              <select
-                name="categoryId"
-                value={insert.categoryId}
-                onChange={onCommunityInsert}
-              >
-                <option value="">카테고리를 선택하세요</option>
-                {category.map((cat) => (
-                  <option key={cat.id} value={cat.id}>
-                    {cat.categoryName}
-                  </option>
-                ))}
-              </select>
-            </li>
-            <li>
-              <label htmlFor="title">제목</label>
-              <input
-                type="text"
-                id="title"
-                name="title"
-                value={insert.title}
-                onChange={onCommunityInsert}
-              />
-            </li>
-            <li>
-              <label htmlFor="content">내용</label>
-              <input
-                type="textarea"
-                id="content"
-                name="content"
-                value={insert.content}
-                onChange={onCommunityInsert}
-              />
-            </li>
-            <li>
-              <label htmlFor="writerName">작성자</label>
-              <input
-                type="text"
-                id="writerName"
-                name="writerName"
-                value={insert.writerName}
-                onChange={onCommunityInsert}
-              />
-            </li>
-          </ul>
-          <button onClick={onInsertFn}>글작성</button>
-        </div>
-      </div>
-    </>
+    <form onSubmit={handleSubmit}>
+      {/* 탭 선택 */}
+      <select name="tabId" value={formData.tabId} onChange={handleChange}>
+        <option value="">탭을 선택하세요</option>
+        {tabs.map((tab) => (
+          <option key={tab.id} value={tab.id}>
+            {tab.tabName}
+          </option>
+        ))}
+      </select>
+
+      {/* 카테고리 선택 (필터링된 목록만 보여줌) */}
+      <select
+        name="categoryId"
+        value={formData.categoryId}
+        onChange={handleChange}
+      >
+        <option value="">카테고리를 선택하세요</option>
+        {filteredCategories.map((cat) => (
+          <option key={cat.id} value={cat.id}>
+            {cat.categoryName}
+          </option>
+        ))}
+      </select>
+
+      <input name="title" placeholder="제목" onChange={handleChange} />
+      <textarea name="content" placeholder="내용" onChange={handleChange} />
+      <input name="writerName" placeholder="작성자" onChange={handleChange} />
+      <button type="submit">글작성</button>
+    </form>
   );
 };
 

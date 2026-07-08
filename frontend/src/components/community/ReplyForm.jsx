@@ -30,7 +30,9 @@ const ReplyForm = ({ communityId, onReplyAdd }) => {
             onChange={(e) => setReply({ ...reply, content: e.target.value })}
             placeholder="댓글을 입력하세요"
           />
-          <button type="button" onClick={saveReply}></button>
+          <button type="button" onClick={saveReply}>
+            댓글 작성
+          </button>
         </li>
       </ul>
     </div>

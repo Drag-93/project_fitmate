@@ -7,7 +7,9 @@ import org.spring.backend.store.product.service.ProductService;
 import org.spring.backend.store.product.type.ProductType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 
@@ -35,8 +37,12 @@ public class ProductController {
 
   // 상품 등록
   @PostMapping
-  public ResponseEntity<Void> insertProduct(@RequestBody ProductDto productDto) {
-    productService.insertProduct(productDto);
+  public ResponseEntity<Void> insertProduct(
+      @RequestPart("productDto") ProductDto productDto,
+      @RequestPart(value="thumbnail", required=false) MultipartFile thumbnail,
+      @RequestPart(value="main", required=false) List<MultipartFile> main,
+      @RequestPart(value="details", required = false) List<MultipartFile> details) {
+    productService.insertProduct(productDto, thumbnail, main, details);
     return ResponseEntity.ok().build();
   }
 
@@ -44,23 +50,45 @@ public class ProductController {
   @PutMapping("/{productId}")
   public ResponseEntity<Void> updateProduct(
       @PathVariable("productId") Long productId,
-      @RequestBody ProductDto productDto) {
-
-    productService.updateProduct(productId, productDto);
+      @RequestPart("productDto") ProductDto productDto,
+      @RequestPart(value="thumbnail", required=false) MultipartFile thumbnail,
+      @RequestPart(value="main", required=false) List<MultipartFile> main,
+      @RequestPart(value="details", required = false) List<MultipartFile> details) {
+    productService.updateProduct(productId, productDto, thumbnail, main, details);
     return ResponseEntity.ok().build();
   }
 
-  // 상품삭제
+  // 상품 자체를 삭제
   @DeleteMapping("/{productId}")
   public ResponseEntity<Void> deleteProduct(@PathVariable("productId") Long productId) {
     productService.deleteProduct(productId);
     return ResponseEntity.ok().build();
   }
 
+  // 상품사진 전체 삭제
+  @DeleteMapping("/{productId}/images")
+  public ResponseEntity<Void> deleteAllImages(
+      @PathVariable("productId") Long productId) {
+
+    productService.deleteAllImages(productId);
+
+    return ResponseEntity.ok().build();
+  }
+
+  // 상품 한장만 삭제
+  @DeleteMapping("/image/{productFileId}")
+  public ResponseEntity<Void> deleteImage(
+      @PathVariable("productFileId") Long productFileId) {
+
+    productService.deleteImage(productFileId);
+
+    return ResponseEntity.ok().build();
+  }
+
   // 카테고리별 상품 조회, 전체조회
   @GetMapping
   public ResponseEntity<Page<ProductDto>> productList(
-      @RequestParam(value = "productType",required = false) ProductType productType,
+      @RequestParam(value = "productType", required = false) ProductType productType,
       Pageable pageable) {
 
     return ResponseEntity.ok(

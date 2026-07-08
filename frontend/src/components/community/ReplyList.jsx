@@ -65,6 +65,22 @@ const ReplyList = ({ communityId, refreshKey }) => {
     }
   };
 
+  // 댓글 삭제
+  const deleteEdit = async (reply) => {
+    if (!window.confirm("정말 삭제하시겠습니까?")) return;
+    try {
+      await axios.delete(`http://localhost:8090/reply/delete/${reply.id}`, {
+        communityId: reply.communityId,
+        // memberId: reply.memberId,
+      });
+      setReplies((prev) => prev.filter((item) => item.id !== reply.id));
+      alert("삭제되었습니다");
+    } catch (error) {
+      console.error(error);
+      alert("댓글 삭제 실패");
+    }
+  };
+
   if (isLoading) {
     return <p>댓글을 불러오는 중입니다</p>;
   }
@@ -100,6 +116,9 @@ const ReplyList = ({ communityId, refreshKey }) => {
                 {reply.createTime && <span>{reply.createTime.split("T")[0]}</span>} */}
                 <button type="button" onClick={() => startEdit(reply)}>
                   수정
+                </button>
+                <button type="button" onClick={() => deleteEdit(reply)}>
+                  삭제
                 </button>
               </div>
             </>

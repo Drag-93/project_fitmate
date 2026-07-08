@@ -36,16 +36,21 @@ const TabInsert = () => {
     setTabList(newList);
   };
 
+  // 카테고리 삭제 함수
+  const onRemoveCategory = (tabIndex, categoryIndex) => {
+    const newList = [...tabList];
+    newList[tabIndex].categoryList.splice(categoryIndex, 1);
+    setTabList(newList);
+  };
+
   const onTabFn = async () => {
     try {
       const res = await axios.post(
         "http://localhost:8090/community/tabInsert",
         tabList,
       );
-      if (res.status === 200) {
-        alert("탭 생성 성공");
-        navigate("/community");
-      }
+      alert("탭 생성 성공");
+      navigate("/community");
     } catch (error) {
       alert("탭 생성 중 오류 발생");
     }
@@ -77,6 +82,9 @@ const TabInsert = () => {
 
           <button onClick={() => onAddCategory(tabIndex)}>
             + 카테고리 추가
+          </button>
+          <button onClick={() => onRemoveCategory(tabIndex)}>
+            - 카테고리 삭제
           </button>
 
           {tabList.length > 1 && (

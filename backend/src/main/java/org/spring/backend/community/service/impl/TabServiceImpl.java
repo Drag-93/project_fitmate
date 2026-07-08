@@ -1,6 +1,7 @@
 package org.spring.backend.community.service.impl;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -97,7 +98,7 @@ public void insertTab(List<TabDto> tabDtoList) { // 파라미터를 List로 받�
                         CategoryEntity existing = existingCategories.stream()
                                 .filter(c -> c.getId().equals(dto.getId()))
                                 .findFirst()
-                                .orElseThrow(() -> new IllegalArgumentException("카테고리를 찾을 수 없습니다."));
+                                .orElseThrow(() -> new NoSuchElementException("카테고리를 찾을 수 없습니다."));
                         existing.setCategoryName(dto.getCategoryName());
                         return existing;
                     } else {
@@ -127,9 +128,8 @@ public void insertTab(List<TabDto> tabDtoList) { // 파라미터를 List로 받�
 @Override
 public TabDto tabDetail(Long id) {
     TabEntity tabEntity = tabRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("탭이 존재하지 않습니다"));
+            .orElseThrow(() -> new NoSuchElementException("탭이 존재하지 않습니다"));
 
-    // 1. 카테고리 DTO 리스트
     List<CategoryDto> dtos = tabEntity.getCategoryList().stream()
             .map(cat -> CategoryDto.builder()
                     .id(cat.getId())
@@ -137,27 +137,28 @@ public TabDto tabDetail(Long id) {
                     .build())
             .collect(Collectors.toList());
 
-    // 2. 카테고리 이름 리스트 (String)
     List<String> names = tabEntity.getCategoryList().stream()
-            .map(CategoryEntity::getCategoryName) // 여기서 이름만 추출!
+            .map(CategoryEntity::getCategoryName)
             .toList();
 
     return TabDto.builder()
             .id(tabEntity.getId())
             .tabName(tabEntity.getTabName())
             .categoryList(dtos)
-            .categoryNames(names) // 이제 올바른 List<String>이 들어갑니다.
+            .categoryNames(names)
             .build();
 }
 
 @Override
 public List<CategoryDto> categoryList() {
-        List<CategoryEntity> categoryEntity = categoryRepository.findAll();
-        return categoryEntity.stream().map(el->
-                CategoryDto.builder()
-                .id(el.getId())
-                .categoryName(el.getCategoryName())
-                .build()
-        ).toList();
+    return categoryRepository.findAll().stream().map(c -> {
+        CategoryDto dto = new CategoryDto();
+        dto.setId(c.getId());
+        dto.setCategoryName(c.getCategoryName());
+        if (c.getTabEntity() != null) {
+            dto.setTabId(c.getTabEntity().getId());
+        }
+        return dto;
+    }).toList();
 }
 }

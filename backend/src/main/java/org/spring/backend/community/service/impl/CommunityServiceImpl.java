@@ -42,8 +42,7 @@ private final CategoryRepository categoryRepository;
         UUID uuid = UUID.randomUUID();
         return uuid + "-" + originalFileName;
     }
-
-@Transactional // DB 트랜잭션 보장
+@Transactional
 public void insertWithFile(CommunityDto communityDto) {
       CategoryEntity category = categoryRepository.findById(communityDto.getCategoryId())
               .orElseThrow(()->new IllegalArgumentException("존재하지 않는 카테고리입니다"));
@@ -82,7 +81,6 @@ public void insertWithFile(CommunityDto communityDto) {
         throw new RuntimeException("파일 저장 중 오류 발생", e);
     }
 }
-
     @Transactional
     public void insertWithOutFile(CommunityDto communityDto) {
         // 1. 카테고리 조회 (존재 여부 확인 및 객체 획득)
@@ -120,9 +118,10 @@ public void insertWithFile(CommunityDto communityDto) {
       .title(el.getTitle())
       .content(el.getContent())
       .hasFile(el.getHasFile())
-      .categoryName(el.getCategoryEntity().getCategoryName())
       .createTime(el.getCreateTime())
       .updateTime(el.getUpdateTime())
+      .categoryName(el.getCategoryEntity().getCategoryName())
+      .categoryId(el.getCategoryEntity().getId())
       .build()
     ).collect(Collectors.toList());
   }
@@ -137,8 +136,6 @@ public void communityUpdate(Long id, CommunityDto communityDto) {
     // 엔티티 업데이트 로직 수행
     entity.setTitle(communityDto.getTitle());
     entity.setContent(communityDto.getContent());
-    entity.setCreateTime(communityDto.getCreateTime());
-    entity.setUpdateTime(communityDto.getUpdateTime());
     entity.setHasFile(communityDto.getHasFile());
   }
 
@@ -170,14 +167,17 @@ public void communityUpdate(Long id, CommunityDto communityDto) {
 
     @Override
     public List<CommunityDto> findByTab(Long tabId) {
-        // 위에서 만든 findByTabId 메서드를 호출
-    List<CommunityEntity> entities = communityRepository.findByTabId(tabId);
-    
-    // 엔티티 리스트를 DTO 리스트로 변환하는 로직 (예: stream 사용)
-    return entities.stream()
-                   .map(entity -> new CommunityDto(entity)) // DTO 변환 로직
-                   .collect(Collectors.toList());
+        List<CommunityEntity> entities = communityRepository.findByTabId(tabId);
 
+        return entities.stream().map(el ->
+                CommunityDto.builder()
+                        .id(el.getId())
+                        .title(el.getTitle())
+                        .content(el.getContent())
+                        .categoryName(el.getCategoryEntity().getCategoryName())
+                        .createTime(el.getCreateTime())
+                        .build()
+        ).collect(Collectors.toList());
     }
 
     @Override

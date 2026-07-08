@@ -1,15 +1,20 @@
 package org.spring.backend.store.product.service;
 
+import java.util.List;
+
 import org.spring.backend.store.product.dto.ProductDto;
+import org.spring.backend.store.product.entity.ProductEntity;
+import org.spring.backend.store.product.type.ImageType;
 import org.spring.backend.store.product.type.ProductType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface ProductService {
 
-  void insertProduct(ProductDto productDto);
+  void insertProduct(ProductDto productDto, MultipartFile thumbnail, List<MultipartFile> main, List<MultipartFile> details);
 
-  void updateProduct(Long productId, ProductDto productDto);
+  void updateProduct(Long productId, ProductDto productDto, MultipartFile thumbnail, List<MultipartFile> main, List<MultipartFile> details);
 
   void deleteProduct(Long productId);
 
@@ -22,4 +27,9 @@ public interface ProductService {
   // 상품 검색
   Page<ProductDto> searchProduct(String keyword, Pageable pageable);
 
+  // 이미지 한장만 삭제
+  void deleteImage(Long productFileId);
+
+  // 이미지 전체 삭제
+  void deleteAllImages(Long productId);
 }
