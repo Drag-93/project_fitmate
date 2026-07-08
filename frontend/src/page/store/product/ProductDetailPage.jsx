@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { getProductDetail } from "../../../apis/store/productApi";
 import { addCart } from "../../../apis/store/cartApi";
 import { getCookie } from "../../../apis/util/cookieUtil";
@@ -11,6 +11,7 @@ const ProductDetailPage = () => {
 
   const { productId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [showCartModal, setShowCartModal] = useState(false);
   const [product, setProduct] = useState(null);
@@ -38,7 +39,13 @@ const ProductDetailPage = () => {
 
     if (!member) {
       alert("로그인이 필요합니다.");
-      navigate("/auth/login");
+  
+      navigate("/auth/login", {
+        state: {
+          from: location.pathname + location.search,
+        },
+      });
+  
       return;
     }
 
@@ -60,7 +67,13 @@ const ProductDetailPage = () => {
 
     if (!member) {
       alert("로그인이 필요합니다.");
-      navigate("/auth/login");
+  
+      navigate("/auth/login", {
+        state: {
+          from: location.pathname + location.search,
+        },
+      });
+  
       return;
     }
 

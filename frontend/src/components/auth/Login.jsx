@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { loginPostAsync, logout } from "../../store/slices/loginSlice";
 import { useDispatch, useSelector } from "react-redux";
 import "../css/auth/login.css";
@@ -7,6 +7,8 @@ import "../css/auth/login.css";
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  // product
+  const location = useLocation();
 
   const member = useSelector((state) => state.loginSlice);
   //이메일의 존재유무에 따라 true, false
@@ -42,7 +44,10 @@ const Login = () => {
 
       if (resultAction) {
         alert("로그인 성공");
-        navigate("/");
+        
+        const from = location.state?.from || "/";
+
+        navigate(from, { replace: true });
       }
     } catch (err) {
       console.error("로그인 실패:", err);
