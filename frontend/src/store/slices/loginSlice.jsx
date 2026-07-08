@@ -1,11 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getCookie, setCookie, removeCookie } from "../../apis/util/cookieUtil";
-import { loginFn } from "../../apis/auth/login";
+import { loginFn, loginOAuth2Fn } from "../../apis/auth/login";
 import { API_SERVER_URL } from "../../apis/commonApi";
 import jwtAxios from "../../apis/util/jwtUtil";
+//멤버 초기화값
 const initState = {
   memberData: [],
 };
+//일반 로그인용 비동기청크
 export const loginPostAsync = createAsyncThunk(
   "loginPostAsync",
   ({ userEmail, userPw }) => {
@@ -16,13 +18,22 @@ export const loginPostAsync = createAsyncThunk(
 const loadMemberCookie = () => {
   const memberInfo = getCookie("member");
 
-  if (memberInfo && memberInfo.userEmail) {
-    memberInfo.userEmail = decodeURIComponent(memberInfo.userEmail);
-  }
-  if (memberInfo !== null) {
-    return memberInfo;
-  }
   if (memberInfo === null) return null;
+  try {
+    //쿠키가 문자열 상태일때만 객체로 파싱
+    const parsedMember =
+      typeof memberInfo === "string" ? JSON.parse(memberInfo) : memberInfo;
+
+    //이메일 데이터가 있고 인코딩 되어있을땐 디코딩처리
+    if (parsedMember && parsedMember.userEmail) {
+      parsedMember.userEmail = decodeURIComponent(parsedMember.userEmail);
+    }
+    //파싱된데이터 or memberInfo데이터 반환
+    return parsedMember;
+  } catch (err) {
+    console.error("멤버쿠키 파싱 실패", err);
+    return null;
+  }
 };
 
 //멤버의 email을 이용해 정보를 불러오는 비동기청크
@@ -47,6 +58,21 @@ export const loadMemberInit = createAsyncThunk(
   },
 );
 
+//일반, 소셜로그인 공통으로 들어가는 로그인 성공시 함수
+const handleLoginSuccess = (state, action) => {
+  const payload = action.payload;
+  //정상적인 로그인 확인
+  if (payload && !payload.error) {
+    const cookiePayload = { ...payload };
+    if (cookiePayload.userEmail) {
+      //이메일의 한글 처리
+      cookiePayload.userEmail = encodeURIComponent(cookiePayload.userEmail);
+    }
+    //쿠키 저장
+    setCookie("member", JSON.stringify(cookiePayload), 1);
+  }
+};
+
 //로그인 관련 슬라이스 설정
 const loginSlice = createSlice({
   name: "loginSlice",
@@ -63,28 +89,21 @@ const loginSlice = createSlice({
       removeCookie("member"); //쿠키삭제
       return { ...initState }; //초기상태로
     },
+    socialLoginSuccess: (state, action) => {
+      const payload = action.payload;
+      const cookiePayload = { ...payload };
+      if (cookiePayload.userEmail) {
+        cookiePayload.userEmail = encodeURIComponent(cookiePayload.userEmail);
+      }
+      //기존 로그인 방식과 동일하게 쿠키 설정
+      setCookie("member", JSON.stringify(cookiePayload), 1);
+
+      return payload;
+    },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(loginPostAsync.fulfilled, (state, action) => {
-        const payload = action.payload;
-
-        //정상적인 로그인 확인
-        if (payload && !payload.error) {
-          const cookiePayload = { ...payload };
-
-          //이메일의 한글 처리
-          if (cookiePayload.userEmail) {
-            cookiePayload.userEmail = encodeURIComponent(
-              cookiePayload.userEmail,
-            );
-          }
-          //쿠키 저장
-          setCookie("member", JSON.stringify(cookiePayload), 1);
-        }
-
-        return payload;
-      })
+      .addCase(loginPostAsync.fulfilled, handleLoginSuccess)
       .addCase(loadMemberInit.fulfilled, (state, action) => {
         if (action.payload) {
           state.memberData = action.payload;
@@ -99,6 +118,6 @@ const loginSlice = createSlice({
   },
 });
 
-export const { login, logout } = loginSlice.actions;
+export const { login, logout, socialLoginSuccess } = loginSlice.actions;
 
 export default loginSlice;

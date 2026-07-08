@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../store/slices/loginSlice";
 
-import "../css/member/MemberDetail.css";
+import "../css/member/memberDetail.css";
 
 const API_URL = API_SERVER_URL;
 

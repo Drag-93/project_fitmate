@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { loginPostAsync, logout } from "../../store/slices/loginSlice";
 import { useDispatch, useSelector } from "react-redux";
 import "../css/auth/login.css";
+import { API_SERVER_URL } from "../../apis/commonApi";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -92,6 +93,17 @@ const Login = () => {
                 <li>
                   <button onClick={onLoginFn}>로그인</button>
                   <Link to="/auth/join">회원가입</Link>
+                </li>
+                <li>
+                  <Link to={`${API_SERVER_URL}/oauth2/authorization/google`}>
+                    <img src="" alt="구글로그인" />
+                  </Link>
+                  <Link to={`${API_SERVER_URL}/oauth2/authorization/naver`}>
+                    <img src="" alt="네이버로그인" />
+                  </Link>
+                  <Link to={`${API_SERVER_URL}/oauth2/authorization/kakao`}>
+                    <img src="" alt="카카오로그인" />
+                  </Link>
                 </li>
               </>
             )}

@@ -2,19 +2,42 @@ package org.spring.backend.member.jwt;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.spring.backend.member.entity.MemberEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 @Getter
-public class CustomUserDetails implements UserDetails {
+@Setter
+public class CustomUserDetails implements OAuth2User, UserDetails {
     private final MemberEntity memberEntity;
+
+    //oauth2 관리
+    private Map<String, Object> getAttributes;
+
+    //일반 로그인용 생성자
+    public CustomUserDetails(MemberEntity memberEntity){
+        this.memberEntity = memberEntity;
+    }
+
+    //oauth2 로그인용 생성자
+    public CustomUserDetails(MemberEntity memberEntity, Map<String,Object> getAttributes){
+        this.memberEntity = memberEntity;
+        this.getAttributes = getAttributes;
+    }
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return this.getAttributes;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -56,5 +79,10 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String getName() {
+        return memberEntity.getUserName();
     }
 }

@@ -40,8 +40,9 @@ public class MemberEntity extends BasicTime {
 
   private String userPhone;
 
+  //성별은 공란일시 UNKNOWN으로 자동저장
   @Enumerated(EnumType.STRING)
-  @Column(nullable = false)
+  @Column(columnDefinition = "VARCHAR(25) DEFAULT 'UNKNOWN'")
   private Gender gender;
 
   private int subscribe;

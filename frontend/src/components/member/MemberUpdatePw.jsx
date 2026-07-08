@@ -5,6 +5,8 @@ import { useDispatch } from "react-redux";
 import jwtAxios from "../../apis/util/jwtUtil";
 import { API_SERVER_URL } from "../../apis/commonApi";
 
+import "../css/member/memberUpdatePw.css";
+
 const MemberUpdatePw = () => {
   const location = useLocation();
   const getData = location.state?.getData;
@@ -29,6 +31,11 @@ const MemberUpdatePw = () => {
         const res = await jwtAxios.put(
           `${API_SERVER_URL}/api/member/update`,
           formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          },
         );
         if (res.data === "ok") {
           alert("비밀번호 변경에 성공하였습니다. 다시 로그인해주세요.");
@@ -45,8 +52,11 @@ const MemberUpdatePw = () => {
   };
   return (
     <>
-      <div className="memberPwModal">
-        <div className="memberPwModal-con">
+      <div className="memberUpdatePw">
+        <div className="memberUpdatePw-con">
+          <div className="memberTitle">
+            <h1>비밀번호 변경</h1>
+          </div>
           <ul>
             <li>
               <span>새 비밀번호</span>

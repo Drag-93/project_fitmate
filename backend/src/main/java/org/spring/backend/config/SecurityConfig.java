@@ -2,10 +2,7 @@ package org.spring.backend.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.spring.backend.member.jwt.CustomLogoutFilter;
-import org.spring.backend.member.jwt.JWTFilter;
-import org.spring.backend.member.jwt.JWTUtil;
-import org.spring.backend.member.jwt.LoginFilter;
+import org.spring.backend.member.jwt.*;
 import org.spring.backend.member.repository.RefreshRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,6 +25,7 @@ import java.util.Arrays;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+    private String frontServerURL = "http://localhost:3000";
     private final JWTUtil jwtUtil;
 
     private final AuthenticationConfiguration authenticationConfiguration;
@@ -36,15 +34,17 @@ public class SecurityConfig {
 
     private final ObjectMapper objectMapper;
 
+    private final CustomDefaultOAuth2UserService customDefaultOAuth2UserService;
+
+    //oauth2의 계정로그인에 성공 시 일반로그인과 동일하게 토큰발급 및 refresh토큰 저장을 위한 핸들러
+    private final CustomOAuth2SuccessHandler customOAuth2SuccessHandler;
+
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception{
         return configuration.getAuthenticationManager();
     }
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authenticationManager)throws Exception{
@@ -61,6 +61,11 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSoruce()))
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .oauth2Login(oauth2 ->
+                        oauth2.loginPage("/auth/login").userInfoEndpoint(userInfo ->
+                                userInfo.userService(customDefaultOAuth2UserService))
+                                .successHandler(customOAuth2SuccessHandler)
+                                .failureUrl(frontServerURL+"/login?error"))
                 .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class) //기본 로그인 필터 이전에 실행
                 .addFilterAt(new LoginFilter(authenticationManager, jwtUtil,
                         refreshRepository, objectMapper), UsernamePasswordAuthenticationFilter.class) //Spring 기본 로그인 필터대신 사용
