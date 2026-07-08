@@ -19,5 +19,5 @@ public class CategoryDto {
 
   private String categoryName;
 
-  private TabEntity tabEntity;
+  private Long tabId;
 }

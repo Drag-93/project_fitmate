@@ -1,0 +1,105 @@
+/* 전체 레이아웃 */
+.communityDetail {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.communityDetail-con h1 {
+  border-bottom: 2px solid #333;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+/* 폼 스타일 */
+.detailbody ul {
+  list-style: none;
+  padding: 0;
+}
+
+.detailbody li {
+  margin-bottom: 15px;
+}
+
+.detailbody label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.detailbody input[type="text"],
+.detailbody textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.detailbody textarea {
+  height: 200px;
+  resize: vertical;
+}
+
+/* 버튼 스타일 */
+.button {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+button {
+  padding: 8px 16px;
+  cursor: pointer;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button:hover {
+  background-color: #e0e0e0;
+}
+
+/* 댓글 영역 스타일 */
+.reply-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 30px;
+  border-top: 1px solid #eee;
+}
+
+.reply-list li {
+  padding: 15px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.reply-edit {
+  display: flex;
+  gap: 10px;
+}
+
+.reply-meta {
+  margin-top: 5px;
+  font-size: 0.85em;
+  color: #666;
+}
+
+/* 댓글 작성 폼 */
+.reply-write {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+
+.reply-write li {
+  display: flex;
+  gap: 10px;
+}
+
+.reply-write input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
