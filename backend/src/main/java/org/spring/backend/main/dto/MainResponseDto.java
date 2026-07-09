@@ -18,5 +18,7 @@ public class MainResponseDto {
     List<CommunityDto> communityList;
     //상품리스트
     List<ProductDto> productList;
+    //팝업리스트
+    List<PopupDto> popupList;
 
 }
