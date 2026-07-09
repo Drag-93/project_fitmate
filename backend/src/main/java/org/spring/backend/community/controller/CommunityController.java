@@ -1,13 +1,16 @@
 package org.spring.backend.community.controller;
 
-import org.springframework.http.MediaType;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.spring.backend.community.dto.CategoryDto;
 import org.spring.backend.community.dto.CommunityDto;
 import org.spring.backend.community.dto.TabDto;
 import org.spring.backend.community.service.CommunityService;
 import org.spring.backend.community.service.TabService;
+import org.spring.backend.member.jwt.CustomUserDetails;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,16 +43,6 @@ public class CommunityController {
     return ResponseEntity.status(HttpStatus.OK).body(map);
   }
 
-        @GetMapping("communityList/{id}")
-      public ResponseEntity<?> communityListDetail(@PathVariable("id") Long id){
-        Map<String, List<CommunityDto>> map = new HashMap<>();
-    
-        List<CommunityDto> communityList = communityService.communityList();
-        map.put("result", communityList);
-    
-        return ResponseEntity.status(HttpStatus.OK).body(map);
-      }
-
   //게시글 작성
   @PostMapping("/insert")
   public ResponseEntity<?> communityInsert(@RequestBody CommunityDto communityDto) {
@@ -80,14 +73,44 @@ public class CommunityController {
     return ResponseEntity.status(HttpStatus.OK).body(map);
 }
 
-  //게시글 상세보기
   @GetMapping("/detail/{id}")
-  public ResponseEntity<?> communityDetail(@PathVariable("id") Long id){
-        Map<String, CommunityDto> map = new HashMap<>();
+  public ResponseEntity<?> communityDetail(
+          @PathVariable("id") Long id,
+          @RequestParam(value = "count", defaultValue = "false") boolean count, // 명시적 선언
+          @AuthenticationPrincipal CustomUserDetails customUserDetails,
+          HttpServletRequest request,
+          HttpServletResponse response) {
 
-    CommunityDto communityDto = communityService.communityDetail(id);
+    // 게시글 상세에 true, 댓글에 false
+    if (count) {
+      // 쿠키 확인 로직
+      boolean isVisited = false;
+      Cookie[] cookies = request.getCookies();
+      if (cookies != null) {
+        for (Cookie cookie : cookies) {
+          if (cookie.getName().equals("postView" + id)) {
+            isVisited = true;
+            break;
+          }
+        }
+      }
+
+      // 쿠키가 없으면 조회수 증가 및 쿠키 생성
+      if (!isVisited) {
+        communityService.updateHit(id);
+        Cookie newCookie = new Cookie("postView" + id, "visited");
+        newCookie.setMaxAge(60 * 60 * 24);
+        response.addCookie(newCookie);
+      }
+    }
+
+    // 2. 데이터 조회
+    String userEmail = (customUserDetails != null) ? customUserDetails.getUsername() : null;
+    CommunityDto communityDto = communityService.communityDetail(id, userEmail);
+
+    Map<String, CommunityDto> map = new HashMap<>();
     map.put("community", communityDto);
-      return ResponseEntity.status(HttpStatus.OK).body(map);
+    return ResponseEntity.status(HttpStatus.OK).body(map);
   }
 
   //탭 목록
@@ -165,14 +188,8 @@ public class CommunityController {
       @GetMapping("/list")
       public ResponseEntity<?> getList(@RequestParam(value="tabId", required = false) Long tabId,
                                    @RequestParam(value = "categoryId", required = false) Long categoryId){
-        List<CommunityDto> list;
-        if (categoryId != null){
-          list = communityService.findByCategory(categoryId);
-        }else if(tabId!=null){
-          list = communityService.findByTab(tabId);
-        } else{
-          list = communityService.communityList();
-        }
+        List<CommunityDto> list = communityService.findCommunityList(tabId, categoryId);
+
         Map<String, Object> map = new HashMap<>();
         map.put("result", list);
         return ResponseEntity.status(HttpStatus.OK).body(map);

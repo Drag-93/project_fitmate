@@ -49,7 +49,7 @@ public void insertWithFile(CommunityDto communityDto) {
     // 1. 엔티티 우선 저장 (게시글 정보)
     CommunityEntity communityEntity = CommunityEntity.builder()
         .title(communityDto.getTitle())
-        .writerName(communityDto.getWriterName())
+        .memberEmail(communityDto.getMemberEmail())
         .content(communityDto.getContent())
         .categoryEntity(category)
         .hasFile(1)
@@ -90,7 +90,7 @@ public void insertWithFile(CommunityDto communityDto) {
         // 2. 조회한 category 객체를 Builder에 연결
         CommunityEntity communityEntity = CommunityEntity.builder()
                 .title(communityDto.getTitle())
-                .writerName(communityDto.getWriterName())
+                .memberEmail(communityDto.getMemberEmail())
                 .content(communityDto.getContent())
                 .categoryEntity(category) // ★ 이 부분을 넣어줘야 귀속됩니다!
                 .hasFile(0)
@@ -118,6 +118,8 @@ public void insertWithFile(CommunityDto communityDto) {
       .title(el.getTitle())
       .content(el.getContent())
       .hasFile(el.getHasFile())
+              .memberEmail(el.getMemberEmail())
+      .hit(el.getHit())
       .createTime(el.getCreateTime())
       .updateTime(el.getUpdateTime())
       .categoryName(el.getCategoryEntity().getCategoryName())
@@ -149,39 +151,59 @@ public void communityUpdate(Long id, CommunityDto communityDto) {
   }
 
   @Override
-  public CommunityDto communityDetail(Long id) {
+  @Transactional
+  public CommunityDto communityDetail(Long id, String userEmail) {
    CommunityEntity communityEntity = communityRepository.findById(id)
    .orElseThrow(()->new IllegalArgumentException("게시글이 존재하지 않습니다"));
+
    return CommunityDto.builder()
    .id(communityEntity.getId())
    .title(communityEntity.getTitle())
    .content(communityEntity.getContent())
    .categoryName(communityEntity.getCategoryEntity().getCategoryName())
    .hasFile(communityEntity.getHasFile())
+           .tabName(communityEntity.getCategoryEntity().getTabEntity().getTabName())
    .hit(communityEntity.getHit())
    .reply(communityEntity.getReply())
    .createTime(communityEntity.getCreateTime())
    .updateTime(communityEntity.getUpdateTime())
    .build();
   }
-
+    @Transactional
     @Override
-    public List<CommunityDto> findByTab(Long tabId) {
-        List<CommunityEntity> entities = communityRepository.findByTabId(tabId);
-
-        return entities.stream().map(el ->
-                CommunityDto.builder()
-                        .id(el.getId())
-                        .title(el.getTitle())
-                        .content(el.getContent())
-                        .categoryName(el.getCategoryEntity().getCategoryName())
-                        .createTime(el.getCreateTime())
-                        .build()
-        ).collect(Collectors.toList());
+    public void updateHit(Long id) {
+        CommunityEntity entity = communityRepository.findById(id).orElseThrow();
+        entity.setHit(entity.getHit() + 1);
     }
 
     @Override
-    public List<CommunityDto> findByCategory(Long categoryId) {
-        return communityRepository.findByCategoryEntity_Id(categoryId);
+    @Transactional
+    public List<CommunityDto> findCommunityList(Long tabId, Long categoryId) {
+        List<CommunityEntity> entities;
+
+        // 1. 카테고리 ID가 있으면 카테고리 우선 조회
+        if (categoryId != null) {
+            entities = communityRepository.findByCategoryEntity_Id(categoryId);
+        }
+        // 2. 탭 ID만 있으면 탭으로 조회
+        else if (tabId != null) {
+            entities = communityRepository.findByTabId(tabId);
+        }
+        // 3. 둘 다 없으면 전체 조회
+        else {
+            entities = communityRepository.findAll();
+        }
+
+        // 4. DTO 변환 (중복 로직 제거)
+        return entities.stream().map(el -> CommunityDto.builder()
+                .id(el.getId())
+                .title(el.getTitle())
+                .content(el.getContent())
+                .categoryName(el.getCategoryEntity().getCategoryName())
+                .tabName(el.getCategoryEntity().getTabEntity().getTabName()) // 탭 이름 추가
+                .createTime(el.getCreateTime())
+                .hit(el.getHit())
+                .build()
+        ).collect(Collectors.toList());
     }
 }

@@ -21,6 +21,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.spring.backend.common.BasicTime;
+import org.spring.backend.member.entity.MemberEntity;
 
 @Entity
 @AllArgsConstructor
@@ -35,7 +36,7 @@ public class CommunityEntity extends BasicTime {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String writerName;
+    private String memberEmail;
 
     private String title;
 
@@ -56,9 +57,14 @@ public class CommunityEntity extends BasicTime {
     @JoinColumn(name="category_id")
     private CategoryEntity categoryEntity;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="member_id")
+    private MemberEntity memberEntity;
+
     @OneToMany(mappedBy = "communityEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FileEntity> fileEntity = new ArrayList<>();
 
     @OneToMany(mappedBy = "communityEntity",cascade = CascadeType.ALL,orphanRemoval= true)
     private List<CommunityReplyEntity> communityReplyEntity = new ArrayList<>();
+
 }

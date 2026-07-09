@@ -12,7 +12,7 @@ const ReplyList = ({ communityId, refreshKey }) => {
     try {
       setIsLoading(true);
       const res = await axios.get(
-        `http://localhost:8090/reply/list/${communityId}`,
+        `http://localhost:8090/reply/list/${communityId}?count=false`,
       );
       setReplies(res.data?.replies || res.data?.result || []);
     } catch (error) {

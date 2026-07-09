@@ -13,9 +13,9 @@ public interface CommunityService {
 
   void communityDelete(Long id);
 
-  CommunityDto communityDetail(Long id);
+  CommunityDto communityDetail(Long id, String userEmail);
 
-  List<CommunityDto> findByTab(Long tabId);
+  void updateHit(Long id);
 
-  List<CommunityDto> findByCategory(Long categoryId);
+  List<CommunityDto> findCommunityList(Long tabId, Long categoryId);
 }

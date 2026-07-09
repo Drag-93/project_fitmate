@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const CommunityInsert = () => {
   const [tabs, setTabs] = useState([]);
+  const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
   const [selectedTabId, setSelectedTabId] = useState("");
   const [formData, setFormData] = useState({
@@ -55,42 +57,65 @@ const CommunityInsert = () => {
     try {
       await axios.post("http://localhost:8090/community/insert", formData);
       alert("작성 완료!");
+      navigate("/community/communityList");
     } catch (err) {
       alert("작성 실패");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      {/* 탭 선택 */}
-      <select name="tabId" value={formData.tabId} onChange={handleChange}>
-        <option value="">탭을 선택하세요</option>
-        {tabs.map((tab) => (
-          <option key={tab.id} value={tab.id}>
-            {tab.tabName}
-          </option>
-        ))}
-      </select>
+    <div className="community-insert-container">
+      <h2>게시글 작성</h2>
+      <form onSubmit={handleSubmit} className="insert-form">
+        <div className="form-group">
+          <label>탭 선택</label>
+          <select name="tabId" value={formData.tabId} onChange={handleChange}>
+            <option value="">탭을 선택하세요</option>
+            {tabs.map((tab) => (
+              <option key={tab.id} value={tab.id}>
+                {tab.tabName}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      {/* 카테고리 선택 (필터링된 목록만 보여줌) */}
-      <select
-        name="categoryId"
-        value={formData.categoryId}
-        onChange={handleChange}
-      >
-        <option value="">카테고리를 선택하세요</option>
-        {filteredCategories.map((cat) => (
-          <option key={cat.id} value={cat.id}>
-            {cat.categoryName}
-          </option>
-        ))}
-      </select>
+        <div className="form-group">
+          <label>카테고리 선택</label>
+          <select
+            name="categoryId"
+            value={formData.categoryId}
+            onChange={handleChange}
+          >
+            <option value="">카테고리를 선택하세요</option>
+            {filteredCategories.map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {cat.categoryName}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      <input name="title" placeholder="제목" onChange={handleChange} />
-      <textarea name="content" placeholder="내용" onChange={handleChange} />
-      <input name="writerName" placeholder="작성자" onChange={handleChange} />
-      <button type="submit">글작성</button>
-    </form>
+        <input
+          name="title"
+          placeholder="제목을 입력하세요"
+          onChange={handleChange}
+        />
+        <textarea
+          name="content"
+          placeholder="내용을 입력하세요"
+          onChange={handleChange}
+        />
+        <input
+          name="writerName"
+          placeholder="작성자 이름"
+          onChange={handleChange}
+        />
+
+        <button type="submit" className="submit-btn">
+          글 작성하기
+        </button>
+      </form>
+    </div>
   );
 };
 

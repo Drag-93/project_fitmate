@@ -1,54 +1,91 @@
-/* CommunityList.css */
-.communityList-con {
-  padding: 20px;
-  max-width: 900px;
+/* 전체 레이아웃 */
+.communityList {
+  width: 100%;
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 0 20px;
 }
 
 .communityList-con h1 {
+  font-size: 24px;
   margin-bottom: 20px;
+  color: #333;
 }
 
+/* 게시글 작성 버튼 */
 .communityList-con button {
   padding: 10px 20px;
-  background-color: #28a745;
+  background-color: #007bff;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 4px;
   cursor: pointer;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  transition: background 0.3s;
 }
 
-.communityList-con table {
+.communityList-con button:hover {
+  background-color: #0056b3;
+}
+
+/* 테이블 스타일 */
+table {
   width: 100%;
   border-collapse: collapse;
+  margin-top: 10px;
 }
 
-/* CommunityList.css에 추가 */
-.communityList-con {
-  flex: 1; /* 남은 가로 공간을 모두 채움 */
-  padding: 20px;
-}
-
-.communityList-con th {
-  background-color: #eee;
-  padding: 12px;
-  border-bottom: 2px solid #ccc;
-}
-
-.communityList-con td {
-  padding: 12px;
-  border-bottom: 1px solid #eee;
+th,
+td {
+  padding: 15px;
   text-align: center;
+  border-bottom: 1px solid #ddd;
 }
 
-.communityList-con td:nth-child(2) {
-  /* 제목 칼럼 */
+th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: #555;
+}
+
+/* 제목 스타일 (클릭 가능) */
+td:nth-child(3) {
   text-align: left;
   cursor: pointer;
-  font-weight: bold;
+  color: #007bff;
+  font-weight: 500;
 }
 
-.communityList-con td:nth-child(2):hover {
-  color: #007bff;
+td:nth-child(3):hover {
   text-decoration: underline;
+}
+
+/* 번호 및 기타 컬럼 너비 조정 */
+th:nth-child(1),
+td:nth-child(1) {
+  width: 80px;
+}
+th:nth-child(2),
+td:nth-child(2) {
+  width: 150px;
+}
+th:nth-child(4),
+td:nth-child(4) {
+  width: 120px;
+}
+th:nth-child(5),
+td:nth-child(5) {
+  width: 100px;
+}
+
+/* 반응형 처리 */
+@media (max-width: 768px) {
+  .communityList {
+    padding: 0 10px;
+  }
+  th,
+  td {
+    padding: 10px;
+    font-size: 14px;
+  }
 }

@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface CommunityRepository extends JpaRepository<CommunityEntity, Long>{
 
-List<CommunityDto> findByCategoryEntity_Id(Long categoryId);
+List<CommunityEntity> findByCategoryEntity_Id(Long categoryId);
 
     @Query("SELECT c FROM CommunityEntity c WHERE c.categoryEntity.tabEntity.id = :tabId")
     List<CommunityEntity> findByTabId(@Param("tabId") Long tabId);

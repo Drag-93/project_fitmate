@@ -61,11 +61,11 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSoruce()))
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .oauth2Login(oauth2 ->
-                        oauth2.loginPage("/auth/login").userInfoEndpoint(userInfo ->
-                                userInfo.userService(customDefaultOAuth2UserService))
-                                .successHandler(customOAuth2SuccessHandler)
-                                .failureUrl(frontServerURL+"/login?error"))
+//                .oauth2Login(oauth2 ->
+//                        oauth2.loginPage("/auth/login").userInfoEndpoint(userInfo ->
+//                                userInfo.userService(customDefaultOAuth2UserService))
+//                                .successHandler(customOAuth2SuccessHandler)
+//                                .failureUrl(frontServerURL+"/login?error"))
                 .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class) //기본 로그인 필터 이전에 실행
                 .addFilterAt(new LoginFilter(authenticationManager, jwtUtil,
                         refreshRepository, objectMapper), UsernamePasswordAuthenticationFilter.class) //Spring 기본 로그인 필터대신 사용

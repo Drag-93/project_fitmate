@@ -6,6 +6,7 @@ import "../css/Community/CommunityLeft.css";
 const CommunityLeft = ({ onSelect }) => {
   const [tab, setTab] = useState([]);
   const [categoryList, setCategoryList] = useState([]);
+  const [overTab, setOverTab] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,30 +28,42 @@ const CommunityLeft = ({ onSelect }) => {
   }, []);
 
   return (
-    <>
-      <div className="community-left">
-        <ul>
-          <li>
-            {/* 전체 탭 이동 */}
-            {/* <NavLink to={`/community/communityList`}>전체</NavLink> */}
-            <button onClick={() => onSelect(null, null, "전체게시판")}>
-              전체게시판
-            </button>
+    <div className="community-left">
+      <ul>
+        <li>
+          <span onClick={() => onSelect(null, null, "전체게시판")}>
+            전체게시판
+          </span>
+        </li>
+        {tab.map((tab) => (
+          <li
+            key={tab.id}
+            onMouseEnter={() => setOverTab(tab.id)}
+            onMouseLeave={() => setOverTab(null)}
+          >
+            <span onClick={() => onSelect(tab.id, null, tab.tabName)}>
+              {tab.tabName}
+            </span>
+
+            {/* 탭에 마우스가 올라갔을 때만 보여지는 카테고리 리스트 */}
+            {overTab === tab.id && (
+              <ul className="overTab">
+                {categoryList
+                  .filter((cat) => cat.tabId === tab.id)
+                  .map((cat) => (
+                    <li
+                      key={cat.id}
+                      onClick={() => onSelect(tab.id, cat.id, cat.categoryName)}
+                    >
+                      {cat.categoryName}
+                    </li>
+                  ))}
+              </ul>
+            )}
           </li>
-          {/* 탭 별 페이지 이동 */}
-          {tab.map((tab) => (
-            <li key={tab.id}>
-              {/* <NavLink to={`/community/list/${tab.id}`}>{tab.tabName}</NavLink> */}
-              <button
-                onClick={() => onSelect(tab.id, categoryList.id, tab.tabName)}
-              >
-                {tab.tabName}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </>
+        ))}
+      </ul>
+    </div>
   );
 };
 

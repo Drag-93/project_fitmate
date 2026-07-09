@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Reply from "./Reply";
 import "../css/Community/CommunityDetail.css";
+import jwtAxios from "../../apis/util/jwtUtil";
 
 const CommunityDetail = () => {
   const { id } = useParams();
@@ -16,7 +17,7 @@ const CommunityDetail = () => {
     try {
       setIsLoading(true);
       const res = await axios.get(
-        `http://localhost:8090/community/detail/${id}`,
+        `http://localhost:8090/community/detail/${id}?count=true`,
       );
       if (res.data?.community) {
         setCommunity(res.data.community);
@@ -37,7 +38,7 @@ const CommunityDetail = () => {
     if (!window.confirm("정말 삭제하시겠습니까?")) return;
     try {
       setIsLoading(true);
-      const res = await axios.delete(
+      const res = await jwtAxios.delete(
         `http://localhost:8090/community/delete/${id}`,
       );
       if (res.data?.result) {
@@ -71,6 +72,56 @@ const CommunityDetail = () => {
                     value={community.title || ""} // 데이터가 들어오기 전 에러 방지
                     onChange={(e) =>
                       setCommunity({ ...community, title: e.target.value })
+                    }
+                  />
+                </li>
+                <li>
+                  <label htmlFor="memberEmail">작성자</label>
+                  <input
+                    type="text"
+                    name="memberEmail"
+                    value={community.memberEmail || ""} // 데이터가 들어오기 전 에러 방지
+                    onChange={(e) =>
+                      setCommunity({
+                        ...community,
+                        memberEmail: e.target.value,
+                      })
+                    }
+                  />
+                </li>
+                <li>
+                  <label htmlFor="title">조회수</label>
+                  <input
+                    type="text"
+                    name="hit"
+                    value={community.hit || ""} // 데이터가 들어오기 전 에러 방지
+                    onChange={(e) =>
+                      setCommunity({ ...community, hit: e.target.value })
+                    }
+                  />
+                </li>
+                <li>
+                  <label htmlFor="title">탭 이름</label>
+                  <input
+                    type="text"
+                    name="tab"
+                    value={community.tabName || ""} // 데이터가 들어오기 전 에러 방지
+                    onChange={(e) =>
+                      setCommunity({ ...community, tabName: e.target.value })
+                    }
+                  />
+                </li>
+                <li>
+                  <label htmlFor="title">카테고리 이름</label>
+                  <input
+                    type="text"
+                    name="categoryName"
+                    value={community.categoryName || ""} // 데이터가 들어오기 전 에러 방지
+                    onChange={(e) =>
+                      setCommunity({
+                        ...community,
+                        categoryName: e.target.value,
+                      })
                     }
                   />
                 </li>

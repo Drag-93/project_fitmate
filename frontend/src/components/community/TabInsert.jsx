@@ -83,10 +83,11 @@ const TabInsert = () => {
           <button onClick={() => onAddCategory(tabIndex)}>
             + 카테고리 추가
           </button>
-          <button onClick={() => onRemoveCategory(tabIndex)}>
-            - 카테고리 삭제
-          </button>
-
+          {tab.categoryList.length > 1 && (
+            <button onClick={() => onRemoveCategory(tabIndex)}>
+              - 카테고리 삭제
+            </button>
+          )}
           {tabList.length > 1 && (
             <button
               onClick={() =>

@@ -7,10 +7,20 @@ const CommunityList = ({ params, tabName }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .get("http://localhost:8090/community/list", { params })
-      .then((res) => setList(res.data.result))
-      .catch((err) => console.error(err));
+    const fetchData = async () => {
+      try {
+        const res = await axios.get("http://localhost:8090/community/list", {
+          params: {
+            tabId: params?.tabId,
+            categoryId: params?.categoryId,
+          },
+        });
+        setList(res.data.result);
+      } catch (error) {
+        alert(error);
+      }
+    };
+    fetchData();
   }, [params]);
 
   return (
@@ -27,6 +37,7 @@ const CommunityList = ({ params, tabName }) => {
                 <th>번호</th>
                 <th>카테고리</th>
                 <th>제목</th>
+                <th>작성자</th>
                 <th>조회수</th>
               </tr>
             </thead>
@@ -38,6 +49,7 @@ const CommunityList = ({ params, tabName }) => {
                   <td onClick={() => navigate(`/community/detail/${list.id}`)}>
                     {list.title}
                   </td>
+                  <td>{list.userName}</td>
                   <td>{list.hit}</td>
                 </tr>
               ))}

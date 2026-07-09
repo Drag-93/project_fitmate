@@ -1,7 +1,5 @@
 package org.spring.backend.community.dto;
 
-import org.spring.backend.community.entity.TabEntity;
-import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

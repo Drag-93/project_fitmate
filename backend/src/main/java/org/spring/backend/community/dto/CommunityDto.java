@@ -21,7 +21,7 @@ import lombok.Setter;
 public class CommunityDto {
   private Long id;
 
-  private String writerName;
+  private String memberEmail;
 
   private String title;
 
@@ -45,12 +45,14 @@ public class CommunityDto {
 
   private String categoryName;
 
+  private String tabName;
+
   private List<FileEntity> fileEntity;
 
   public CommunityDto(CommunityEntity entity) {
         this.id = entity.getId();
         this.title = entity.getTitle();
-        this.writerName = entity.getWriterName();
+        this.memberEmail = entity.getMemberEmail();
         this.content = entity.getContent();
         this.createTime = entity.getCreateTime();
         this.updateTime = entity.getUpdateTime();
