@@ -3,6 +3,7 @@ package org.spring.backend.main.controller;
 import lombok.RequiredArgsConstructor;
 import org.spring.backend.common.Interest;
 import org.spring.backend.main.dto.MainResponseDto;
+import org.spring.backend.main.repository.PopupRepository;
 import org.spring.backend.main.service.MainService;
 import org.spring.backend.member.entity.MemberEntity;
 import org.spring.backend.member.jwt.CustomUserDetails;
@@ -64,4 +65,5 @@ public class MainController {
 
         return ResponseEntity.ok(response);
     }
+
 }

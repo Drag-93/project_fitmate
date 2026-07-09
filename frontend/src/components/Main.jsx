@@ -1,9 +1,15 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { API_SERVER_URL } from "../apis/commonApi";
-import { jsx } from "react/jsx-runtime";
 import jwtAxios from "../apis/util/jwtUtil";
 import { useSelector } from "react-redux";
+import "../components/css/main/Main.css";
+//배너 swiper 관련
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Pagination, Navigation } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
 
 const Main = () => {
   //로그인 여부 판단
@@ -14,8 +20,8 @@ const Main = () => {
   const [selectMenu, setSelectMenu] = useState("notice");
 
   // 추천기능 변수
-  const [communityList, setCommunityList] = useState("");
-  const [productList, setProductList] = useState("");
+  const [communityList, setCommunityList] = useState([]);
+  const [productList, setProductList] = useState([]);
 
   //베스트 상품
   const bestProduct = productList[0];
@@ -23,13 +29,21 @@ const Main = () => {
   const otherProducts = productList.slice(1);
 
   //공지사항 변수
-  const [noticeList, setNoticeList] = useState("");
+  const [noticeList, setNoticeList] = useState([]);
 
-  //모달
-  const [modalOpen, setModalOpen] = useState(false);
+  //팝업 변수
+  const [popupList, setPopupList] = useState([]);
 
-  const closeModal = () => {
-    setModalOpen = false;
+  //오늘 하루 그만 보기
+  const closeToday = (popupId) => {
+    const today = new Date().toISOString().slice(0, 10);
+    localStorage.setItem(`mainPopupHideDate_${popupId}`, today);
+
+    setPopupList((prev) => prev.filter((popup) => popup.id !== popupId));
+  };
+  //팝업 닫기
+  const closePopup = (popupId) => {
+    setPopupList((prev) => prev.filter((popup) => popup.id !== popupId));
   };
 
   // 추천 리스트 가져오는 함수
@@ -42,6 +56,18 @@ const Main = () => {
       setCommunityList(res.data.communityList || []);
       setProductList(res.data.productList || []);
       setNoticeList(res.data.noticeList || []);
+
+      //팝업
+      const today = new Date().toISOString().slice(0, 10);
+
+      const visiblePopupList = (res.data.popupList || []).filter((popup) => {
+        const today = new Date().toISOString().slice(0, 10);
+        const hideDate = localStorage.getItem(`mainPopupHideDate_${popup.id}`);
+
+        return hideDate !== today;
+      });
+
+      setPopupList(visiblePopupList.slice(0, 2));
     } catch (err) {
       console.error(err);
     }
@@ -75,63 +101,82 @@ const Main = () => {
 
   return (
     <>
+      {/* 팝업 모달 */}
+      {popupList.length > 0 && (
+        <div className="main-popup-area">
+          {popupList.map((popup, index) => (
+            <div
+              className="main-popup"
+              key={popup.id}
+              style={{
+                left: `${80 + index * 360}px`,
+              }}
+            >
+              <button
+                className="main-popup-close"
+                onClick={() => closePopup(popup.id)}
+              >
+                ×
+              </button>
+
+              <a href={popup.linkUrl || "#"}>
+                {popup.newFileName && (
+                  <img
+                    src={`${API_SERVER_URL}/backend/popup/${popup.newFileName}`}
+                    alt={popup.title}
+                  />
+                )}
+              </a>
+
+              <h3>{popup.title}</h3>
+              <p>{popup.content}</p>
+
+              <div className="main-popup-bottom">
+                <button onClick={() => closeToday(popup.id)}>
+                  오늘 그만보기
+                </button>
+                <button onClick={() => closePopup(popup.id)}>닫기</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
       <div className="main">
         <div className="main-wrap">
           <div className="main-top">
             <div className="main-top-con">
               <div className="slides-container">
-                {/* swipe 라이브러리 사용할지, 그냥 배너 한장만 넣을지 선택 */}
-                <ul className="slides-list">
-                  <li style={{ display: `flex`, justifyContent: `center` }}>
+                <Swiper
+                  modules={[Autoplay, Pagination, Navigation]}
+                  spaceBetween={0}
+                  slidesPerView={1}
+                  loop={true}
+                  autoplay={{
+                    delay: 3000,
+                    disableOnInteraction: false,
+                  }}
+                  pagination={{ clickable: true }}
+                  navigation={true}
+                  className="main-banner-swiper"
+                >
+                  <SwiperSlide>
                     <a href="/store">
                       <img
-                        src="/images/test1.jpg"
-                        alt="테스트이미지"
-                        style={{
-                          width: `40vh`,
-                          height: `40vh`,
-                        }}
+                        src="/images/test/banner1.jpg"
+                        alt="메인 배너 테스트1"
                       />
-                      <del>배너 위치(delete)</del>
                     </a>
-                  </li>
-                  <li style={{ display: `none`, justifyContent: `center` }}>
+                  </SwiperSlide>
+
+                  <SwiperSlide>
                     <a href="/store">
                       <img
-                        src="/images/test2.jpg"
-                        alt="테스트이미지2"
-                        style={{
-                          width: `40vh`,
-                          height: `40vh`,
-                        }}
+                        src="/images/test/banner2.jpg"
+                        alt="메인 배너 테스트1"
                       />
                     </a>
-                  </li>
-                  <li style={{ display: `none`, justifyContent: `center` }}>
-                    <a href="/store">
-                      <img
-                        src="/images/test3.jpg"
-                        alt="테스트이미지3"
-                        style={{
-                          width: `40vh`,
-                          height: `40vh`,
-                        }}
-                      />
-                    </a>
-                  </li>
-                  <li style={{ display: `none`, justifyContent: `center` }}>
-                    <a href="/store">
-                      <img
-                        src="/images/test4.jpg"
-                        alt="테스트이미지4"
-                        style={{
-                          width: `40vh`,
-                          height: `40vh`,
-                        }}
-                      />
-                    </a>
-                  </li>
-                </ul>
+                  </SwiperSlide>
+                </Swiper>
               </div>
             </div>
           </div>
@@ -197,7 +242,7 @@ const Main = () => {
                             style={{ display: "flex", flexDirection: "column" }}
                           >
                             <img
-                              src="/images/test2.jpg"
+                              src={`/images/test/test${bestProduct.id}.jpg`}
                               alt="테스트이미지"
                               style={{
                                 width: `30vh`,
@@ -206,7 +251,7 @@ const Main = () => {
                             />
                           </a>
                           <p>{bestProduct.productName}</p>
-                          <span>{bestProduct.price.toLocaleString()}원</span>
+                          <span>{bestProduct.price?.toLocaleString()}원</span>
                           <p>
                             <del>베스트 상품 </del>
                           </p>
@@ -245,10 +290,17 @@ const Main = () => {
                       <li key={product.id}>
                         <a href={`/store/detail/${product.id}`}>
                           {/* <img src={product.productImage} alt={product.productName} /> */}
-                          <img src="" alt="베스트상품" />
+                          <img
+                            src={`/images/test/test${product.id}.jpg`}
+                            alt="테스트용 이미지"
+                            style={{
+                              width: `10vh`,
+                              height: `10vh`,
+                            }}
+                          />
                         </a>
                         <p>{product.productName}</p>
-                        <span>{product.price.toLocaleString()}원</span>
+                        <span>{product.price?.toLocaleString()}원</span>
                         <p>
                           <del>베스트상품</del>
                         </p>
