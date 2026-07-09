@@ -3,6 +3,7 @@ package org.spring.backend.member.jwt;
 import lombok.RequiredArgsConstructor;
 import org.spring.backend.common.Gender;
 import org.spring.backend.common.Role;
+import org.spring.backend.member.entity.MemberAddEntity;
 import org.spring.backend.member.entity.MemberEntity;
 import org.spring.backend.member.repository.MemberRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -49,7 +50,7 @@ public class CustomDefaultOAuth2UserService extends DefaultOAuth2UserService {
             userName = (String) response.get("name");
         }else if(registrationId.equals("kakao")){
             Map<String, Object> kakaoAccount = (Map<String, Object>) oAuth2User.getAttributes().get("kakao_account");
-            Map<String, Object> kakaoProfile = (Map<String, Object>) oAuth2User.getAttributes().get("profile");
+            Map<String, Object> kakaoProfile = (Map<String, Object>) kakaoAccount.get("profile");
             userEmail = (String) kakaoAccount.get("email");
             userName = (String) kakaoProfile.get("nickname");
         }
@@ -67,8 +68,17 @@ public class CustomDefaultOAuth2UserService extends DefaultOAuth2UserService {
                 .userName(userName)
                 .gender(Gender.UNKNOWN)
                 .role(Role.MEMBER)
+                .subscribe(0)
+                .profilePhoto(0)
                 .build();
-        //신규 가입
+
+
+        //저장과 동시에 저장용 데이터 생성
+        MemberEntity member = memberRepository.save(memberEntity);
+        //추가 멤버데이터 저장을 위해 더미데이터 생성
+        MemberAddEntity memberAdd = MemberAddEntity.createDefault();
+        member.setMemberAddEntity(memberAdd);
+        //추가 멤버데이터까지 새로 저장
         memberRepository.save(memberEntity);
         return new CustomUserDetails(memberEntity, oAuth2User.getAttributes());
     }

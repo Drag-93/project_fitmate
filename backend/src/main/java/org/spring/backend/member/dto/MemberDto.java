@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.spring.backend.common.Role;
+import org.spring.backend.member.entity.MemberAddEntity;
 import org.spring.backend.member.entity.MemberEntity;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -47,6 +48,8 @@ public class MemberDto {
 
   private String oldFileName;//원본이름
 
+  private Long memberAddId;
+
   public static MemberDto toMemberDto(MemberEntity memberEntity){
     return MemberDto.builder()
             .id(memberEntity.getId())
@@ -61,9 +64,21 @@ public class MemberDto {
             .role(memberEntity.getRole())
             .createTime(memberEntity.getCreateTime())
             .updateTime(memberEntity.getUpdateTime())
+            .memberAddId(memberEntity.getMemberAddEntity().getId())
             // 파일 엔티티가 존재할 때만 이름을 넣고, 없으면 null 세팅
             .newFileName(memberEntity.getMemberFileEntity() != null ? memberEntity.getMemberFileEntity().getNewFileName() : null)
             .oldFileName(memberEntity.getMemberFileEntity() != null ? memberEntity.getMemberFileEntity().getOldFileName() : null)
+            .build();
+  }
+
+  public static MemberDto toInitMemberDto(MemberEntity memberEntity){
+    return MemberDto.builder()
+            .userEmail(memberEntity.getUserEmail())
+            .userName(memberEntity.getUserName())
+            .gender(memberEntity.getGender())
+            .subscribe(memberEntity.getSubscribe())
+            .role(memberEntity.getRole())
+            .memberAddId(memberEntity.getMemberAddEntity().getId())
             .build();
   }
 }

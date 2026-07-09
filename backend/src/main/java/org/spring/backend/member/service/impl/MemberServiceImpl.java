@@ -215,6 +215,6 @@ public class MemberServiceImpl implements MemberService {
         MemberEntity memberEntity = memberRepository.findByUserEmail(userEmail)
         .orElseThrow(()->new NoSuchElementException("이메일이 존재하지 않습니다."));
 
-        return MemberDto.toMemberDto(memberEntity);
+        return MemberDto.toInitMemberDto(memberEntity);
     }
 }

@@ -46,7 +46,7 @@ public class MemberController {
     public ResponseEntity<?> memberDetail(@AuthenticationPrincipal CustomUserDetails userDetails){
         String userEmail = userDetails.getUsername();
 
-        MemberDto memberDto = memberService.memberInit(userEmail);
+        MemberDto memberDto = memberService.memberDetail(userEmail);
 
         Map<String, MemberDto> map = new HashMap<>();
         map.put("result", memberDto);
