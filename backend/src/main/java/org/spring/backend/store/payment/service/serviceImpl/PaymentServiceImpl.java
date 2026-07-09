@@ -110,4 +110,35 @@ public class PaymentServiceImpl implements PaymentService {
     return PaymentDto.toPaymentDto(paymentEntity);
   }
 
+  @Override
+  public void paymentApproval(String pgToken, Long paymentId, Long productPrice, String productName, Long memberId) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'paymentApproval'");
+  }
+
+  @Override
+  public void paymentApproveKakao(PaymentEntity paymentEntity, String tid, Long productPrice, String productName,
+      Long memberId) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'paymentApproveKakao'");
+  }
+
+  @Override
+  public String getJsonDb() {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'getJsonDb'");
+  }
+
+  @Override
+  public String extractTidFromJson(String jsonString) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'extractTidFromJson'");
+  }
+
+  @Override
+  public String pgRequest(String pg, Long productId, Long memberId, Long productPrice, String productName) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'pgRequest'");
+  }
+
 }
