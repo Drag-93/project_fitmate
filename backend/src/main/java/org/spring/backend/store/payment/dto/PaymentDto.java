@@ -23,8 +23,14 @@ public class PaymentDto {
   // 카카오페이 결제 ID
   private String tid;
 
+  // 토큰
+  private String pgToken;
+
   // 결제수단
   private PaymentMethod paymentMethod;
+
+  // 결체 업체 타입
+  private String paymentType;
 
   // 결제금액
   private int amount;
@@ -33,6 +39,8 @@ public class PaymentDto {
   private LocalDateTime approveTime;
 
   private PaymentStatus paymentStatus;
+
+  private String paymentReadyJson;
 
   // 주문 ID
   private Long orderId;

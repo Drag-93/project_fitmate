@@ -38,6 +38,7 @@ const ProductListPage = () => {
       >
         관리자 상품 관리
       </button>
+      
       <CategoryMenu />
 
       <div className="product-list">

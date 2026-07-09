@@ -19,6 +19,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -35,7 +36,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "payment_tb")
-public class PaymentEntity extends BasicTime{
+public class PaymentEntity extends BasicTime {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,11 +52,25 @@ public class PaymentEntity extends BasicTime{
   @Column(nullable = false)
   private int amount; // 결제금액
 
+  @Column(nullable = false)
+  private String pgToken; // 토큰
+
+  @Column(nullable = false)
+  private String paymentType; // 결체 업체 타입
+
   private LocalDateTime approveTime; // 결제 승인 시간
 
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
   private PaymentStatus paymentStatus;
+
+  @Lob
+  @Column(columnDefinition = "TEXT")
+  private String paymentReadyJson;
+
+  @Lob
+  @Column(columnDefinition = "TEXT")
+  private String paymentApproveJson;
 
   // N:1
   @JsonIgnore
