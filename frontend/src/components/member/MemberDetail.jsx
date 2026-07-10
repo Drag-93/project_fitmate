@@ -12,16 +12,16 @@ const API_URL = API_SERVER_URL;
 
 const MemberDetail = () => {
   //authSlice에 저장된 멤버데이터를 가져옴
-  const member = useSelector((state) => state.loginSlice);
+  const { memberData } = useSelector((state) => state.loginSlice);
 
   //member의 userEmail여부로 로그인이 되었는지 확인
-  const isLogin = !!member?.userEmail;
+  const isLogin = !!memberData?.result?.userEmail;
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   //처음 멤버데이터를 집어넣고, 마이페이지에 보여줄 데이터
-  const [memberData, setMemberData] = useState(null);
+  const [member, setMember] = useState(null);
 
   //멤버데이터 수정 여부
   const [isUpdate, setIsUpdate] = useState(false);
@@ -47,7 +47,7 @@ const MemberDetail = () => {
   const memberUpdateFn = () => {
     if (!isUpdate) {
       setIsUpdate((prev) => !prev);
-      setUpdateData({ ...memberData, userPw: "" });
+      setUpdateData({ ...member, userPw: "" });
     } else {
       memberUpdate();
     }
@@ -109,12 +109,12 @@ const MemberDetail = () => {
         try {
           const newData = await getMemberDetail();
           if (newData && newData.result) {
-            setMemberData(newData.result);
+            setMember(newData.result);
           }
         } catch (err) {
           console.error("최신 회원 정보 가져오기 실패:", err);
         }
-        if (updateData.userEmail !== memberData.userEmail) {
+        if (updateData.userEmail !== member.userEmail) {
           dispatch(logout());
           alert("이메일 변경확인. 다시 로그인 해주시기 바랍니다.");
           navigate("/auth/login");
@@ -154,7 +154,7 @@ const MemberDetail = () => {
     if (isLogin) {
       getMemberDetail()
         .then((data) => {
-          setMemberData(data.result);
+          setMember(data.result);
           console.log(data);
         })
         .catch((err) => console.error(err));
@@ -170,19 +170,19 @@ const MemberDetail = () => {
                 isUpdate ? "memberForm updateMode" : "memberForm viewMode"
               }
             >
-              {memberData === null ? (
+              {member === null ? (
                 <>회원님의 정보를 불러오는 중입니다...</>
               ) : !isUpdate ? (
                 <>
                   <li className="memberTitle">
-                    <h1>{memberData.userName}님</h1>
+                    <h1>{member.userName}님</h1>
                   </li>
                   <li className="profilePhoto">
                     <span>프로필사진</span>
                     <span>
-                      {memberData && memberData.newFileName ? (
+                      {member && member.newFileName ? (
                         <img
-                          src={`${API_URL}/upload/member/${memberData.newFileName}`}
+                          src={`${API_URL}/upload/member/${member.newFileName}`}
                           alt="프로필 사진"
                         />
                       ) : (
@@ -195,26 +195,26 @@ const MemberDetail = () => {
                   </li>
                   <li>
                     <span>이메일</span>
-                    <span>{memberData.userEmail}</span>
+                    <span>{member.userEmail}</span>
                   </li>
                   <li>
                     <span>주소</span>
-                    <span>{memberData.userAddress || ""}</span>
+                    <span>{member.userAddress || ""}</span>
                   </li>
                   <li>
                     <span>전화번호</span>
-                    <span>{memberData.userPhone || ""}</span>
+                    <span>{member.userPhone || ""}</span>
                   </li>
                   <li>
                     <span>구독여부</span>
-                    <span>{memberData.subscribe}</span>
+                    <span>{member.subscribe}</span>
                   </li>
                   <li className="buttonArea">
                     <button
                       className="pwBtn"
                       onClick={() =>
                         navigate("/mypage/updatepw", {
-                          state: { getData: memberData },
+                          state: { getData: member },
                         })
                       }
                     >
@@ -240,10 +240,10 @@ const MemberDetail = () => {
                           alt="새 이미지 미리보기"
                           className="prev-img"
                         />
-                      ) : memberData && memberData.newFileName ? (
+                      ) : member && member.newFileName ? (
                         //파일을 아직 고르지 않았을때 & 기존에 저장된 이미지가 있을경우(기존 이미지)
                         <img
-                          src={`${API_URL}/upload/member/${memberData.newFileName}`}
+                          src={`${API_URL}/upload/member/${member.newFileName}`}
                           alt="프로필 사진"
                           className="prev-img"
                         />
