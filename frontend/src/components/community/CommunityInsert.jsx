@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import jwtAxios from "../../apis/util/jwtUtil";
 
 const CommunityInsert = () => {
   const [tabs, setTabs] = useState([]);
@@ -12,7 +13,7 @@ const CommunityInsert = () => {
     categoryId: "",
     title: "",
     content: "",
-    writerName: "",
+    userName: "",
   });
 
   // 1. 초기 데이터 로드 (탭과 카테고리)
@@ -25,12 +26,27 @@ const CommunityInsert = () => {
         ]);
         setTabs(tabRes.data.result);
         setCategories(catRes.data.result); // [핵심] tabId가 포함된 카테고리 리스트
+        await getUser();
       } catch (err) {
         console.error("데이터 로딩 실패", err);
       }
     };
     fetchData();
   }, []);
+
+  const getUser = async () => {
+    try {
+      const res = await jwtAxios.get("http://localhost:8090/api/member/detail");
+      if (res.data?.result) {
+        setFormData((prev) => ({
+          ...prev,
+          userName: res.data.result.userName,
+        }));
+      }
+    } catch (error) {
+      console.error("회원 정보를 불러올 수 없습니다.", error);
+    }
+  };
 
   // 2. 탭 선택 시 하위 카테고리 필터링
   const filteredCategories = useMemo(() => {
@@ -105,11 +121,7 @@ const CommunityInsert = () => {
           placeholder="내용을 입력하세요"
           onChange={handleChange}
         />
-        <input
-          name="writerName"
-          placeholder="작성자 이름"
-          onChange={handleChange}
-        />
+        <input name="userName" value={formData.userName} readOnly />
 
         <button type="submit" className="submit-btn">
           글 작성하기

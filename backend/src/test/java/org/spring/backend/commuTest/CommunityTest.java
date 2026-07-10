@@ -27,7 +27,7 @@ public class CommunityTest {
                 .build());
             communityRepository.save(CommunityEntity.builder()
                     .title("Title" + i)
-                    .writerName("writer" + i)
+                    .userName("writer" + i)
                     .content("content" + i)
                     .categoryEntity(category)
                     .hasFile(0)

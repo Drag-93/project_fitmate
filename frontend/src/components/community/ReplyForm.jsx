@@ -1,8 +1,30 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import jwtAxios from "../../apis/util/jwtUtil";
 
 const ReplyForm = ({ communityId, onReplyAdd }) => {
-  const [reply, setReply] = useState({ content: "", communityId });
+  const [reply, setReply] = useState({
+    content: "",
+    communityId,
+    userName: "",
+  });
+  useEffect(() => {
+    getUser();
+  }, []);
+
+  const getUser = async () => {
+    try {
+      const res = await jwtAxios.get("http://localhost:8090/api/member/detail");
+      if (res.data?.result) {
+        setReply((prev) => ({
+          ...prev,
+          userName: res.data.result.userName,
+        }));
+      }
+    } catch (error) {
+      console.error("회원 정보를 불러올 수 없습니다.", error);
+    }
+  };
 
   const saveReply = async () => {
     if (!reply.content.trim()) {
@@ -20,6 +42,7 @@ const ReplyForm = ({ communityId, onReplyAdd }) => {
       alert("댓글 작성 실패");
     }
   };
+
   return (
     <div className="reply-write">
       <ul>
@@ -30,6 +53,7 @@ const ReplyForm = ({ communityId, onReplyAdd }) => {
             onChange={(e) => setReply({ ...reply, content: e.target.value })}
             placeholder="댓글을 입력하세요"
           />
+          <input name="userName" value={reply.userName} readOnly />
           <button type="button" onClick={saveReply}>
             댓글 작성
           </button>

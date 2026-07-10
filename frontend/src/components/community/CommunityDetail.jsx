@@ -76,17 +76,12 @@ const CommunityDetail = () => {
                   />
                 </li>
                 <li>
-                  <label htmlFor="memberEmail">작성자</label>
+                  <label htmlFor="userName">작성자</label>
                   <input
                     type="text"
-                    name="memberEmail"
-                    value={community.memberEmail || ""} // 데이터가 들어오기 전 에러 방지
-                    onChange={(e) =>
-                      setCommunity({
-                        ...community,
-                        memberEmail: e.target.value,
-                      })
-                    }
+                    name="userName"
+                    value={community.userName || ""} // 데이터가 들어오기 전 에러 방지
+                    readOnly
                   />
                 </li>
                 <li>
@@ -95,9 +90,7 @@ const CommunityDetail = () => {
                     type="text"
                     name="hit"
                     value={community.hit || ""} // 데이터가 들어오기 전 에러 방지
-                    onChange={(e) =>
-                      setCommunity({ ...community, hit: e.target.value })
-                    }
+                    readOnly
                   />
                 </li>
                 <li>
@@ -106,9 +99,7 @@ const CommunityDetail = () => {
                     type="text"
                     name="tab"
                     value={community.tabName || ""} // 데이터가 들어오기 전 에러 방지
-                    onChange={(e) =>
-                      setCommunity({ ...community, tabName: e.target.value })
-                    }
+                    readOnly
                   />
                 </li>
                 <li>
@@ -117,12 +108,7 @@ const CommunityDetail = () => {
                     type="text"
                     name="categoryName"
                     value={community.categoryName || ""} // 데이터가 들어오기 전 에러 방지
-                    onChange={(e) =>
-                      setCommunity({
-                        ...community,
-                        categoryName: e.target.value,
-                      })
-                    }
+                    readOnly
                   />
                 </li>
                 <li>
@@ -130,9 +116,7 @@ const CommunityDetail = () => {
                   <textarea
                     name="content"
                     value={community.content || ""}
-                    onChange={(e) =>
-                      setCommunity({ ...community, content: e.target.value })
-                    }
+                    readOnly
                   />
                 </li>
                 <li>

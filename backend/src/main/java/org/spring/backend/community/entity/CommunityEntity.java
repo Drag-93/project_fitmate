@@ -36,7 +36,7 @@ public class CommunityEntity extends BasicTime {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String memberEmail;
+    private String userName;
 
     private String title;
 

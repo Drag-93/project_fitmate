@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import jwtAxios from "../../apis/util/jwtUtil";
 
 const ReplyList = ({ communityId, refreshKey }) => {
   const [replies, setReplies] = useState([]);
@@ -7,6 +8,24 @@ const ReplyList = ({ communityId, refreshKey }) => {
 
   const [editingId, setEditingId] = useState(null);
   const [editContent, setEditContent] = useState("");
+
+  useEffect(() => {
+    getUser();
+  }, []);
+
+  const getUser = async () => {
+    try {
+      const res = await jwtAxios.get("http://localhost:8090/api/member/detail");
+      if (res.data?.result) {
+        setReplies((prev) => ({
+          ...prev,
+          userName: res.data.result.userName,
+        }));
+      }
+    } catch (error) {
+      console.error("회원 정보를 불러올 수 없습니다.", error);
+    }
+  };
 
   const getReplyList = async () => {
     try {
@@ -112,8 +131,7 @@ const ReplyList = ({ communityId, refreshKey }) => {
             <>
               <div className="reply-content">{reply.content}</div>
               <div className="reply-meta">
-                {/* {reply.writerName && <span>{reply.writerName}</span>}
-                {reply.createTime && <span>{reply.createTime.split("T")[0]}</span>} */}
+                <input name="userName" value={reply.userName} readOnly />
                 <button type="button" onClick={() => startEdit(reply)}>
                   수정
                 </button>

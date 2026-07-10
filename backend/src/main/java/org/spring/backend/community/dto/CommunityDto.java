@@ -21,7 +21,7 @@ import lombok.Setter;
 public class CommunityDto {
   private Long id;
 
-  private String memberEmail;
+  private String userName;
 
   private String title;
 
@@ -52,7 +52,7 @@ public class CommunityDto {
   public CommunityDto(CommunityEntity entity) {
         this.id = entity.getId();
         this.title = entity.getTitle();
-        this.memberEmail = entity.getMemberEmail();
+        this.userName = entity.getUserName();
         this.content = entity.getContent();
         this.createTime = entity.getCreateTime();
         this.updateTime = entity.getUpdateTime();

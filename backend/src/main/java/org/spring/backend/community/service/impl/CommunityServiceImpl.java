@@ -49,7 +49,7 @@ public void insertWithFile(CommunityDto communityDto) {
     // 1. 엔티티 우선 저장 (게시글 정보)
     CommunityEntity communityEntity = CommunityEntity.builder()
         .title(communityDto.getTitle())
-        .memberEmail(communityDto.getMemberEmail())
+        .userName(communityDto.getUserName())
         .content(communityDto.getContent())
         .categoryEntity(category)
         .hasFile(1)
@@ -90,7 +90,7 @@ public void insertWithFile(CommunityDto communityDto) {
         // 2. 조회한 category 객체를 Builder에 연결
         CommunityEntity communityEntity = CommunityEntity.builder()
                 .title(communityDto.getTitle())
-                .memberEmail(communityDto.getMemberEmail())
+                .userName(communityDto.getUserName())
                 .content(communityDto.getContent())
                 .categoryEntity(category) // ★ 이 부분을 넣어줘야 귀속됩니다!
                 .hasFile(0)
@@ -118,7 +118,7 @@ public void insertWithFile(CommunityDto communityDto) {
       .title(el.getTitle())
       .content(el.getContent())
       .hasFile(el.getHasFile())
-              .memberEmail(el.getMemberEmail())
+              .userName(el.getUserName())
       .hit(el.getHit())
       .createTime(el.getCreateTime())
       .updateTime(el.getUpdateTime())
@@ -158,6 +158,7 @@ public void communityUpdate(Long id, CommunityDto communityDto) {
 
    return CommunityDto.builder()
    .id(communityEntity.getId())
+           .userName(communityEntity.getUserName())
    .title(communityEntity.getTitle())
    .content(communityEntity.getContent())
    .categoryName(communityEntity.getCategoryEntity().getCategoryName())
@@ -197,6 +198,7 @@ public void communityUpdate(Long id, CommunityDto communityDto) {
         // 4. DTO 변환 (중복 로직 제거)
         return entities.stream().map(el -> CommunityDto.builder()
                 .id(el.getId())
+                .userName(el.getUserName())
                 .title(el.getTitle())
                 .content(el.getContent())
                 .categoryName(el.getCategoryEntity().getCategoryName())
