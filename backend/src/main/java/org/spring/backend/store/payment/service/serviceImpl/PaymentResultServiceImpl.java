@@ -10,7 +10,9 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class PaymentResultServiceImpl implements PaymentResultService{@Override
+public class PaymentResultServiceImpl implements PaymentResultService{
+  
+  @Override
   public PaymentResultDto dbInsert(PaymentResultDto dto) {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'dbInsert'");
