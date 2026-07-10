@@ -44,6 +44,7 @@ public class ProductsTest {
           .productType(ProductType.GYM)
           .billingType(BillingType.ONE_TIME)
           .productStatus(ProductStatus.ACTIVE)
+          .category("헬스장")
           .build();
 
       productRepository.save(productEntity);
@@ -61,6 +62,7 @@ public class ProductsTest {
           .productType(ProductType.PT)
           .billingType(BillingType.ONE_TIME)
           .productStatus(ProductStatus.ACTIVE)
+          .category("PT")
           .build();
 
       productRepository.save(productEntity);
@@ -77,6 +79,7 @@ public class ProductsTest {
           .productType(ProductType.PREMIUM)
           .billingType(BillingType.SUBSCRIPTION)
           .productStatus(ProductStatus.ACTIVE)
+          .category("Premium")
           .build();
 
       productRepository.save(productEntity);

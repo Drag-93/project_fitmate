@@ -18,17 +18,18 @@ public interface PaymentService {
   // 단일 결제상세 조회
   PaymentDto findById(Long id);
 
-  void paymentApproval(String pgToken, Long paymentId, Long productPrice, String productName, Long memberId);
+  // 최종 결제 승인 프로세스 (변경 감지 적용)
+  void paymentApproval(String pgToken, Long paymentId);
 
-  void paymentApproveKakao(PaymentEntity paymentEntity, String tid, Long productPrice, String productName,
-      Long memberId);
+  // 카카오 결제 승인 요청 (v1/payment/approve)
+  void paymentApproveKakao(PaymentEntity paymentEntity);
 
+  // DB의 JSON 목록 조회 유틸
   String getJsonDb();
 
-  String pgRequest(String pg, Long productId, Long memberId, Long productPrice, String productName);
+  // 카카오 결제 준비 요청 (v1/payment/ready)
+  String pgRequest(String pg, Long orderId);
 
-  String extractTidFromJson(String jsonString); 
 
-  
 
 }

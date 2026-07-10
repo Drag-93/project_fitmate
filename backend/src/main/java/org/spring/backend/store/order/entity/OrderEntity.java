@@ -61,7 +61,6 @@ public class OrderEntity extends BasicTime {
   @Column(nullable = false)
   private String address;
 
-  @Column(nullable = false)
   private String deliveryMemo;
 
   // //N:1

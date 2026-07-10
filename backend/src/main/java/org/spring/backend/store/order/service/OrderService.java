@@ -8,10 +8,10 @@ import org.spring.backend.store.order.type.DeliveryStatus;
 public interface OrderService {
 
       // 상품 상세에서 바로 주문
-      void insertDirectOrder(Long memberId, OrderDto orderDto);
+      Long insertDirectOrder(Long memberId, OrderDto orderDto);
 
       // 장바구니에서 주문
-      void insertCartOrder(Long memberId,List<Long> cartListIds, OrderDto orderDto);
+      Long insertCartOrder(Long memberId,List<Long> cartIds, OrderDto orderDto);
 
       // 주문 목록 조회
       List<OrderDto> orderList(Long memberId);

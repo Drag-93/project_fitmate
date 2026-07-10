@@ -47,17 +47,15 @@ public class PaymentEntity extends BasicTime {
 
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
-  private PaymentMethod paymentMethod;// 결제수단
+  private PaymentMethod paymentMethod;// 결제업체, 수단
 
   @Column(nullable = false)
   private int amount; // 결제금액
 
-  @Column(nullable = false)
+  @Column
   private String pgToken; // 토큰
 
-  @Column(nullable = false)
-  private String paymentType; // 결체 업체 타입
-
+  @Column
   private LocalDateTime approveTime; // 결제 승인 시간
 
   @Enumerated(EnumType.STRING)

@@ -3,6 +3,8 @@ import ConfirmModal from "./ConfirmModal";
 
 const CartItem = ({
   item,
+  checked,
+  onSelect,
   changeQuantity,
   removeItem
 }) => {
@@ -10,6 +12,13 @@ const CartItem = ({
 
   return (
     <div className="cart-item">
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={(e) =>
+          onSelect(item.id, e.target.checked)
+        }
+      />
       <img className="productImage"
         src={item.productImage}
         alt={item.productName} />
