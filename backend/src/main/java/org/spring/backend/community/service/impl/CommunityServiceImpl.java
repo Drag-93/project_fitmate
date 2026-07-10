@@ -3,6 +3,7 @@ package org.spring.backend.community.service.impl;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -15,6 +16,8 @@ import org.spring.backend.community.repository.CategoryRepository;
 import org.spring.backend.community.repository.CommunityRepository;
 import org.spring.backend.community.repository.FileRepository;
 import org.spring.backend.community.service.CommunityService;
+import org.spring.backend.member.entity.MemberEntity;
+import org.spring.backend.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,6 +33,7 @@ public class CommunityServiceImpl implements CommunityService{
 private final CommunityRepository communityRepository;
 private final FileRepository fileRepository;
 private final CategoryRepository categoryRepository;
+private final MemberRepository memberRepository;
 
   String path = "file:///E:/backend/community/";
 
@@ -43,15 +47,26 @@ private final CategoryRepository categoryRepository;
         return uuid + "-" + originalFileName;
     }
 @Transactional
-public void insertWithFile(CommunityDto communityDto) {
-      CategoryEntity category = categoryRepository.findById(communityDto.getCategoryId())
+public void insertWithFile(CommunityDto communityDto, String  userEmail) {
+      //회원조회
+      MemberEntity memberEntity = memberRepository.findByUserEmail(userEmail)
+              .orElseThrow(()->new NoSuchElementException("회원이 존재하지 않습니다"));
+
+      Long categoryId = communityDto.getCategoryId();
+        //카테고리 조회
+      CategoryEntity category = categoryRepository.findById(categoryId)
               .orElseThrow(()->new IllegalArgumentException("존재하지 않는 카테고리입니다"));
     // 1. 엔티티 우선 저장 (게시글 정보)
     CommunityEntity communityEntity = CommunityEntity.builder()
+            .memberEntity(memberEntity)
         .title(communityDto.getTitle())
         .userName(communityDto.getUserName())
         .content(communityDto.getContent())
         .categoryEntity(category)
+            .categoryName(category.getCategoryName())
+            .tabId(category.getTabEntity().getId())
+            .tabName(category.getTabEntity().getTabName())
+            .userEmail(communityDto.getMemberEntity().getUserEmail())
         .hasFile(1)
         .hit(0)
         .reply(0)
@@ -82,31 +97,39 @@ public void insertWithFile(CommunityDto communityDto) {
     }
 }
     @Transactional
-    public void insertWithOutFile(CommunityDto communityDto) {
+    public void insertWithOutFile(CommunityDto communityDto, String  userEmail) {
+        //회원조회
+        MemberEntity memberEntity = memberRepository.findByUserEmail(userEmail)
+                .orElseThrow(()->new NoSuchElementException("회원이 존재하지 않습니다"));
         // 1. 카테고리 조회 (존재 여부 확인 및 객체 획득)
-        CategoryEntity category = categoryRepository.findById(communityDto.getCategoryId())
+        Long categoryId = communityDto.getCategoryId();
+        CategoryEntity category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 카테고리입니다"));
-
         // 2. 조회한 category 객체를 Builder에 연결
         CommunityEntity communityEntity = CommunityEntity.builder()
+                .memberEntity(memberEntity)
+                .tabName(category.getTabEntity().getTabName())
+                .tabId(category.getTabEntity().getId())
                 .title(communityDto.getTitle())
                 .userName(communityDto.getUserName())
                 .content(communityDto.getContent())
                 .categoryEntity(category) // ★ 이 부분을 넣어줘야 귀속됩니다!
+                .categoryName(category.getCategoryName())
                 .hasFile(0)
                 .hit(0)
                 .reply(0)
+                .userEmail(communityDto.getMemberEntity().getUserEmail())
                 .build();
 
         communityRepository.save(communityEntity);
     }
 
     @Override
-    public void communityInsert(CommunityDto communityDto) {
+    public void communityInsert(CommunityDto communityDto, String userEmail) {
       if (communityDto.getAttachFile() == null || communityDto.getAttachFile().isEmpty()){
-          insertWithOutFile(communityDto);
+          insertWithOutFile(communityDto, userEmail);
       }else{
-          insertWithFile(communityDto);
+          insertWithFile(communityDto, userEmail);
       }
     }
 
@@ -122,7 +145,6 @@ public void insertWithFile(CommunityDto communityDto) {
       .hit(el.getHit())
       .createTime(el.getCreateTime())
       .updateTime(el.getUpdateTime())
-      .categoryName(el.getCategoryEntity().getCategoryName())
       .categoryId(el.getCategoryEntity().getId())
       .build()
     ).collect(Collectors.toList());
@@ -130,15 +152,25 @@ public void insertWithFile(CommunityDto communityDto) {
 
   @Override
   @Transactional
-public void communityUpdate(Long id, CommunityDto communityDto) {
-    // DTO의 ID 대신, 매개변수로 명확하게 전달받은 id를 사용합니다.
+public void communityUpdate(Long id, CommunityDto communityDto, String userEmail ) {
+      MemberEntity memberEntity = memberRepository.findByUserEmail(userEmail)
+              .orElseThrow(()->new NoSuchElementException("회원이 존재하지 않습니다"));
+    // 게시글 찾기
     CommunityEntity entity = communityRepository.findById(id)
-        .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다: " + id));
+        .orElseThrow(() -> new NoSuchElementException("게시글을 찾을 수 없습니다: " + id));
 
     // 엔티티 업데이트 로직 수행
     entity.setTitle(communityDto.getTitle());
     entity.setContent(communityDto.getContent());
     entity.setHasFile(communityDto.getHasFile());
+
+    CategoryEntity categoryEntity = categoryRepository.findById(communityDto.getCategoryId())
+                    .orElseThrow(()-> new NoSuchElementException("존재하지 않는 카테고리입니다."));
+    entity.setCategoryEntity(categoryEntity);
+    entity.setCategoryName(categoryEntity.getCategoryName());
+    entity.setTabId(communityDto.getTabId());
+    entity.setTabName(communityDto.getTabName());
+    entity.setUserName(memberEntity.getUserName());
   }
 
   @Override
@@ -161,8 +193,10 @@ public void communityUpdate(Long id, CommunityDto communityDto) {
            .userName(communityEntity.getUserName())
    .title(communityEntity.getTitle())
    .content(communityEntity.getContent())
-   .categoryName(communityEntity.getCategoryEntity().getCategoryName())
+   .categoryId(communityEntity.getCategoryEntity().getId())
+           .categoryName(communityEntity.getCategoryEntity().getCategoryName())
    .hasFile(communityEntity.getHasFile())
+           .tabId(communityEntity.getCategoryEntity().getTabEntity().getId())
            .tabName(communityEntity.getCategoryEntity().getTabEntity().getTabName())
    .hit(communityEntity.getHit())
    .reply(communityEntity.getReply())
@@ -201,8 +235,9 @@ public void communityUpdate(Long id, CommunityDto communityDto) {
                 .userName(el.getUserName())
                 .title(el.getTitle())
                 .content(el.getContent())
+                .categoryId(el.getCategoryEntity().getId())
                 .categoryName(el.getCategoryEntity().getCategoryName())
-                .tabName(el.getCategoryEntity().getTabEntity().getTabName()) // 탭 이름 추가
+                .tabId(el.getCategoryEntity().getTabEntity().getId()) // 탭 이름 추가
                 .createTime(el.getCreateTime())
                 .hit(el.getHit())
                 .build()

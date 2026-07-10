@@ -1,11 +1,13 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import jwtAxios from "../../apis/util/jwtUtil";
 
 const CommunityUpdate = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [tab, setTab] = useState([]);
+  const [selectedTab, setSelectedTab] = useState([]);
   const [category, setCategory] = useState([]);
   const [selectCategory, setSelectCategory] = useState();
 
@@ -13,18 +15,41 @@ const CommunityUpdate = () => {
     title: "",
     content: "",
     attachFile: "",
+    userName: "",
+    tabName: "",
+    categoryName: "",
   });
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    axios.get("http://localhost:8090/community/category").then((res) => {
-      setCategory(res.data.result);
-    });
+    const fetchData = async () => {
+      try {
+        const tabRes = await axios.get(
+          "http://localhost:8090/community/tabList",
+        );
+        const catRes = await axios.get(
+          "http://localhost:8090/community/category",
+        );
+        setTab(tabRes.data.result);
+        setCategory(catRes.data.result);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchData();
   }, []);
 
-  const select = (e) => {
+  const selectCat = (e) => {
     const { name, value } = e.target;
-    selectCategory((prev) => ({
+    setCommunity((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const selectTab = (e) => {
+    const { name, value } = e.target;
+    setCommunity((prev) => ({
       ...prev,
       [name]: value,
     }));
@@ -34,7 +59,7 @@ const CommunityUpdate = () => {
   useEffect(() => {
     const fetchDetail = async () => {
       try {
-        const res = await axios.get(
+        const res = await jwtAxios.get(
           `http://localhost:8090/community/detail/${id}`,
         );
         if (res.data?.community) {
@@ -54,13 +79,14 @@ const CommunityUpdate = () => {
   const getCommunityUpdate = async () => {
     try {
       setIsLoading(true);
-      const res = await axios.put(
+      const res = await jwtAxios.put(
         `http://localhost:8090/community/update/${id}`,
         community,
       );
       alert("수정되었습니다.");
       navigate(`/community/detail/${id}`);
-      // 2. 수정 후 상세 페이지를 다시 불러오거나 목록으로 이동
+      setCommunity(res.data.community);
+      // 수정 후 상세 페이지를 다시 불러오거나 목록으로 이동
     } catch (error) {
       alert("수정 실패");
     } finally {
@@ -76,11 +102,26 @@ const CommunityUpdate = () => {
           <div className="detailbody">
             <ul>
               <li>
+                <label htmlFor="tabId">카테고리</label>
+                <select
+                  name="tabId"
+                  value={community.tabId || ""}
+                  onChange={selectTab}
+                >
+                  <option value="">카테고리를 선택하세요</option>
+                  {tab.map((tab) => (
+                    <option key={tab.id} value={tab.id}>
+                      {tab.tabName}
+                    </option>
+                  ))}
+                </select>
+              </li>
+              <li>
                 <label htmlFor="categoryId">카테고리</label>
                 <select
                   name="categoryId"
-                  value={category.categoryId}
-                  onChange={select}
+                  value={community.categoryId || ""}
+                  onChange={selectCat}
                 >
                   <option value="">카테고리를 선택하세요</option>
                   {category.map((cat) => (
