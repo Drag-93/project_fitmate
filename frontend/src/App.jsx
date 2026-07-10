@@ -11,6 +11,7 @@ function App() {
 
   const { memberData } = useSelector((state) => state.loginSlice);
 
+  //소셜로그인전용
   useEffect(() => {
     //백엔드의 소셜로그인 성공 핸들러가 구운 임시 쿠키 확인
     const socialMemberInfo = getCookie("memberInfo");
@@ -30,7 +31,15 @@ function App() {
         console.error("소셜 로그인 데이터 파싱 중 에러 발생:", err);
       }
     }
-    if (!memberData || memberData.length === 0) {
+  }, [dispatch]);
+  //일반로그인전용
+  useEffect(() => {
+    const socialMemberInfo = getCookie("memberInfo");
+
+    if (
+      !socialMemberInfo &&
+      (!memberData || Object.keys(memberData).length === 0)
+    ) {
       dispatch(loadMemberInit());
     }
   }, [dispatch, memberData]);

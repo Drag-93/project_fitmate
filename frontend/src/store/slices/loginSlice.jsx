@@ -5,7 +5,7 @@ import { API_SERVER_URL } from "../../apis/commonApi";
 import jwtAxios from "../../apis/util/jwtUtil";
 //멤버 초기화값
 const initState = {
-  memberData: [],
+  memberData: null,
 };
 //일반 로그인용 비동기청크
 export const loginPostAsync = createAsyncThunk(
@@ -58,21 +58,6 @@ export const loadMemberInit = createAsyncThunk(
   },
 );
 
-//일반, 소셜로그인 공통으로 들어가는 로그인 성공시 함수
-const handleLoginSuccess = (state, action) => {
-  const payload = action.payload;
-  //정상적인 로그인 확인
-  if (payload && !payload.error) {
-    const cookiePayload = { ...payload };
-    if (cookiePayload.userEmail) {
-      //이메일의 한글 처리
-      cookiePayload.userEmail = encodeURIComponent(cookiePayload.userEmail);
-    }
-    //쿠키 저장
-    setCookie("member", JSON.stringify(cookiePayload), 1);
-  }
-};
-
 //로그인 관련 슬라이스 설정
 const loginSlice = createSlice({
   name: "loginSlice",
@@ -103,7 +88,21 @@ const loginSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(loginPostAsync.fulfilled, handleLoginSuccess)
+      .addCase(loginPostAsync.fulfilled, (state, action) => {
+        const payload = action.payload;
+        //정상적인 로그인 확인
+        if (payload && !payload.error) {
+          const cookiePayload = { ...payload };
+          if (cookiePayload.userEmail) {
+            //이메일의 한글 처리
+            cookiePayload.userEmail = encodeURIComponent(
+              cookiePayload.userEmail,
+            );
+          }
+          //쿠키 저장
+          setCookie("member", JSON.stringify(cookiePayload), 1);
+        }
+      })
       .addCase(loadMemberInit.fulfilled, (state, action) => {
         if (action.payload) {
           state.memberData = action.payload;

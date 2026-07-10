@@ -9,8 +9,8 @@ const Header = () => {
   const navigate = useNavigate();
 
   //로그인 여부 판단
-  const user = useSelector((state) => state.loginSlice); //user 정보
-  const isLogin = !!user?.userEmail;
+  const { memberData } = useSelector((state) => state.loginSlice); //user 정보
+  const isLogin = !!memberData?.result?.userEmail;
   //로그아웃
   const logoutFn = () => {
     dispatch(logout());
@@ -100,18 +100,16 @@ const Header = () => {
                     </li>
                   </>
                 )}
-                {isLogin && user?.role === "ADMIN" && (
+                {isLogin && memberData?.result?.role === "ADMIN" && (
                   // user?.userEmail === "test@email.com" && (
                   <li>
                     <Link to="/admin">관리자</Link>
                   </li>
                 )}
-                {isLogin && user?.role !== "ADMIN" && (
+                {isLogin && memberData?.result?.role !== "ADMIN" && (
                   // user?.userEmail === "test@email.com" && (
                   <li>
-                    <Link to="/mypage">
-                      {user?.memberData?.result?.userName}님
-                    </Link>
+                    <Link to="/mypage">{memberData?.result?.userName}님</Link>
                   </li>
                 )}
 

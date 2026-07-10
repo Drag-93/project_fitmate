@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { loginPostAsync, logout } from "../../store/slices/loginSlice";
+import {
+  loadMemberInit,
+  loginPostAsync,
+  logout,
+} from "../../store/slices/loginSlice";
 import { useDispatch, useSelector } from "react-redux";
 import "../css/auth/login.css";
 import { API_SERVER_URL } from "../../apis/commonApi";
@@ -11,9 +15,9 @@ const Login = () => {
   // product
   const location = useLocation();
 
-  const member = useSelector((state) => state.loginSlice);
+  const { memberData } = useSelector((state) => state.loginSlice);
   //이메일의 존재유무에 따라 true, false
-  const isLogin = !!member?.userEmail;
+  const isLogin = !!memberData?.result?.userEmail;
 
   const [userEmail, setUserEmail] = useState("");
   const [userPw, setuserPw] = useState("");
@@ -45,7 +49,7 @@ const Login = () => {
 
       if (resultAction) {
         alert("로그인 성공");
-        
+        await dispatch(loadMemberInit()).unwrap();
         const from = location.state?.from || "/";
 
         navigate(from, { replace: true });
