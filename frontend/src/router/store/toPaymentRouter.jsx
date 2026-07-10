@@ -2,6 +2,7 @@ import React, { lazy, Suspense } from "react";
 
 const Loading = <div className="loading">...Loading</div>;
 
+const KakaoPaySuccessPage = lazy(() => import("../../page/store/payment/KakaoPaySuccessPage"));
 const PaymentPage = lazy(() => import("../../page/store/payment/PaymentPage"));
 const PaymentFailPage = lazy(
   () => import("../../page/store/payment/PaymentFailPage"),
@@ -35,6 +36,16 @@ const toPaymentRouter = () => {
           <PaymentFailPage />
         </Suspense>
       ),
+      
+    },
+    {
+      path: "/payment/approval/:paymentId",
+      element: (
+        <Suspense fallback={Loading}>
+          <KakaoPaySuccessPage />
+        </Suspense>
+      ),
+      
     },
   ];
 };

@@ -30,7 +30,7 @@ public class WebConfigMvcClass implements WebMvcConfigurer {
                 .addResourceLocations(memberLoc);
 
         // 아이템 이미지 경로 매핑
-        registry.addResourceHandler("/upload/item/**")
+        registry.addResourceHandler("/upload/product/**")
                 .addResourceLocations(itemLoc);
 
         // 커뮤니티 이미지 경로 매핑

@@ -21,6 +21,7 @@ spring:
     include:
       - open #application-open.yml
       - oauth2 #application-oauth2.yml
+      - paymentkey #application-paymentkey.yml
 
   # JSON 직렬화 설정
   jackson:
@@ -46,7 +47,7 @@ logging:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
 
-img.path.item: file:///E:/fitmate/backend/item/
+img.path.item: file:///E:/fitmate/backend/product/
 img.path.community: file:///E:/fitmate/backend/community/
 #멤버의 파일저장경로
 img.path.member: file://E:/fitmate/backend/member/
@@ -55,3 +56,5 @@ img.path.member: file://E:/fitmate/backend/member/
 jwt:
   secret:
     key: 9FyI8s5wSrqBkG5Xl2DUsb3F3JZ3bd9ACx6CluuxyUw=
+
+    

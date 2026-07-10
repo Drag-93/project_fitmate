@@ -14,6 +14,7 @@ import {
 const CartPage = () => {
 
   const [cartItems, setCartItems] = useState([]);
+  const [selectedItems, setSelectedItems] = useState([]);
 
   useEffect(() => {
     loadCart();
@@ -23,9 +24,34 @@ const CartPage = () => {
     try {
       const res = await getCartList();
       setCartItems(res.data);
+
+      // 기본이 전체 선택
+      setSelectedItems(res.data.map(item => item.id));
     } catch (e) {
       console.error(e);
     }
+  };
+
+  // 전체선택
+  const handleSelectAll = (checked) => {
+    if (checked) {
+      setSelectedItems(cartItems.map(item => item.id));
+    } else {
+      setSelectedItems([]);
+    }
+  };
+
+  // 개별선택
+  const handleSelectItem = (cartId, checked) => {
+
+    if (checked) {
+      setSelectedItems(prev => [...prev, cartId]);
+    } else {
+      setSelectedItems(prev =>
+        prev.filter(id => id !== cartId)
+      );
+    }
+
   };
 
   // 수량 변경
@@ -52,14 +78,34 @@ const CartPage = () => {
           <CartItem
             key={item.id}
             item={item}
+            checked={selectedItems.includes(item.id)}
+            onSelect={handleSelectItem}
             changeQuantity={changeQuantity}
             removeItem={removeItem}
           />
+
         ))
         }
+        <div className="cart-select-all">
+
+          <input
+            type="checkbox"
+            checked={
+              cartItems.length > 0 &&
+              selectedItems.length === cartItems.length
+            }
+            onChange={(e) =>
+              handleSelectAll(e.target.checked)
+            }
+          />
+
+          <span>전체 선택</span>
+
+        </div>
       </div>
       <CartSummary
-        cartItems={cartItems}/>
+        cartItems={cartItems} 
+        selectedItems={selectedItems}/>
     </div>
   );
 };

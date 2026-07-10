@@ -34,7 +34,7 @@ public class OrderServiceImpl implements OrderService {
   private final CartListRepository cartListRepository;
 
   @Override
-  public void insertDirectOrder(Long memberId, OrderDto orderDto) {
+  public Long insertDirectOrder(Long memberId, OrderDto orderDto) {
     // 회원 조회
     MemberEntity memberEntity = memberRepository.findById(memberId)
         .orElseThrow(() -> new IllegalArgumentException("회원이 존재하지 않습니다."));
@@ -76,11 +76,18 @@ public class OrderServiceImpl implements OrderService {
 
     orderEntity.setTotalPrice(totalPrice);
 
-    orderRepository.save(orderEntity);
+    return orderEntity.getId();
+
   }
 
   @Override
-  public void insertCartOrder(Long memberId, List<Long> cartListIds, OrderDto orderDto) {
+  public Long insertCartOrder(Long memberId, List<Long> cartListIds, OrderDto orderDto) {
+
+    System.out.println("memberId = " + memberId);
+    System.out.println("cartIds = " + cartListIds);
+    System.out.println("address = " + orderDto.getAddress());
+    System.out.println("receiverName = " + orderDto.getReceiverName());
+    System.out.println(orderDto);
     // 회원 조회
     MemberEntity memberEntity = memberRepository.findById(memberId)
         .orElseThrow(() -> new IllegalArgumentException("회원이 존재하지 않습니다."));
@@ -90,6 +97,10 @@ public class OrderServiceImpl implements OrderService {
         .totalPrice(0)
         .orderStatus(OrderStatus.PENDING)
         .deliveryStatus(DeliveryStatus.READY)
+        .receiverName(orderDto.getReceiverName())
+        .receiverPhone(orderDto.getReceiverPhone())
+        .address(orderDto.getAddress())
+        .deliveryMemo(orderDto.getDeliveryMemo())
         .memberEntity(memberEntity)
         .build();
 
@@ -119,9 +130,8 @@ public class OrderServiceImpl implements OrderService {
 
     orderEntity.setTotalPrice(totalPrice);
 
-    orderRepository.save(orderEntity);
+    return orderEntity.getId();
   }
-
 
   @Override
   public List<OrderDto> orderList(Long memberId) {

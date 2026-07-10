@@ -2,10 +2,15 @@ package org.spring.backend.store.order.controller;
 
 import java.util.List;
 
+import org.spring.backend.member.entity.MemberEntity;
+import org.spring.backend.member.jwt.CustomUserDetails;
+import org.spring.backend.member.repository.MemberRepository;
+import org.spring.backend.store.order.dto.CartOrderRequestDto;
 import org.spring.backend.store.order.dto.OrderDto;
 import org.spring.backend.store.order.service.OrderService;
 import org.spring.backend.store.order.type.DeliveryStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -23,34 +28,43 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/order")
 public class OrderController {
   private final OrderService orderService;
+  private final MemberRepository memberRepository;
 
   // 상품 상세에서 바로 주문
-  @PostMapping("/direct/{memberId}")
-  public ResponseEntity<Void> directOrder(
-      @PathVariable Long memberId,
+  @PostMapping("/direct")
+  public ResponseEntity<Long> directOrder(
+      @AuthenticationPrincipal CustomUserDetails user,
       @RequestBody OrderDto orderDto) {
 
-    orderService.insertDirectOrder(memberId, orderDto);
-    return ResponseEntity.ok().build();
+    Long orderId = orderService.insertDirectOrder(
+        user.getMemberEntity().getId(),
+        orderDto);
+    return ResponseEntity.ok(orderId);
   }
 
   // 장바구니 주문
-  @PostMapping("/cart/{memberId}")
-  public ResponseEntity<Void> cartOrder(
-      @PathVariable Long memberId,
-      @RequestBody List<Long> cartListIds,
-      @RequestBody OrderDto orderDto) {
+  @PostMapping("/cart")
+  public ResponseEntity<Long> cartOrder(
+      @AuthenticationPrincipal CustomUserDetails user,
+      @RequestBody CartOrderRequestDto request) {
+    MemberEntity member = memberRepository
+        .findByUserEmail(user.getUsername())
+        .orElseThrow(() -> new IllegalArgumentException("회원이 없습니다."));
 
-    orderService.insertCartOrder(memberId, cartListIds, orderDto);
-    return ResponseEntity.ok().build();
+    Long orderId = orderService.insertCartOrder(
+        member.getId(),
+        request.getCartIds(),
+        request.getOrder());
+
+    return ResponseEntity.ok(orderId);
   }
 
   // 주문 목록
-  @GetMapping("/{memberId}")
+  @GetMapping
   public ResponseEntity<List<OrderDto>> orderList(
-      @PathVariable Long memberId) {
+      @AuthenticationPrincipal CustomUserDetails user) {
 
-    return ResponseEntity.ok(orderService.orderList(memberId));
+    return ResponseEntity.ok(orderService.orderList(user.getMemberEntity().getId()));
   }
 
   // 주문 상세
