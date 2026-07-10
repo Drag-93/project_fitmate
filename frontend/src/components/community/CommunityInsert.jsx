@@ -71,7 +71,7 @@ const CommunityInsert = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:8090/community/insert", formData);
+      await jwtAxios.post("http://localhost:8090/community/insert", formData);
       alert("작성 완료!");
       navigate("/community/communityList");
     } catch (err) {
@@ -110,7 +110,10 @@ const CommunityInsert = () => {
             ))}
           </select>
         </div>
-
+        <div className="form-group">
+          <label>작성자</label>
+          <input name="userName" value={formData.userName} readOnly />
+        </div>
         <input
           name="title"
           placeholder="제목을 입력하세요"
@@ -121,7 +124,10 @@ const CommunityInsert = () => {
           placeholder="내용을 입력하세요"
           onChange={handleChange}
         />
-        <input name="userName" value={formData.userName} readOnly />
+        <div className="file">
+          <span>파일첨부</span>
+          <input type="file" name="communityFile" />
+        </div>
 
         <button type="submit" className="submit-btn">
           글 작성하기

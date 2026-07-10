@@ -21,7 +21,7 @@ public class CommunityReplyDto {
 
   private String content;
 
-  private String writerName;
+  private String userName;
 
   private Long communityId;
 
@@ -32,10 +32,18 @@ public class CommunityReplyDto {
   private LocalDateTime updateTime;
 
   public static CommunityReplyDto toReplyDto(CommunityReplyEntity replyEntity) {
+    String userName = "탈퇴한 사용자입니다";
+
+    if (replyEntity.getUserName() != null && !replyEntity.getUserName().isEmpty()) {
+      userName = replyEntity.getUserName();
+    } else if (replyEntity.getMemberEntity() != null && replyEntity.getMemberEntity().getUserName() != null) {
+      userName = replyEntity.getMemberEntity().getUserName();
+    }
+
     return CommunityReplyDto.builder()
             .id(replyEntity.getId())
             .content(replyEntity.getContent())
-            .writerName(replyEntity.getWriterName())
+            .userName(userName) // 수정된 로직 적용
             .communityId(replyEntity.getCommunityId())
             .memberId(replyEntity.getMemberId())
             .createTime(replyEntity.getCreateTime())

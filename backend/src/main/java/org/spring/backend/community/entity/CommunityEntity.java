@@ -42,7 +42,13 @@ public class CommunityEntity extends BasicTime {
 
     private String content;
 
+    private Long tabId;
+
     private String categoryName;
+
+    private String tabName;
+
+    private String userEmail;
 
     private int reply;
 

@@ -5,7 +5,7 @@ import jwtAxios from "../../apis/util/jwtUtil";
 const ReplyList = ({ communityId, refreshKey }) => {
   const [replies, setReplies] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
+  const [userName, setUserName] = useState("");
   const [editingId, setEditingId] = useState(null);
   const [editContent, setEditContent] = useState("");
 
@@ -17,13 +17,10 @@ const ReplyList = ({ communityId, refreshKey }) => {
     try {
       const res = await jwtAxios.get("http://localhost:8090/api/member/detail");
       if (res.data?.result) {
-        setReplies((prev) => ({
-          ...prev,
-          userName: res.data.result.userName,
-        }));
+        setUserName(res.data.result.userName);
       }
     } catch (error) {
-      console.error("회원 정보를 불러올 수 없습니다.", error);
+      console.error("비로그인 상태입니다..");
     }
   };
 
@@ -67,7 +64,7 @@ const ReplyList = ({ communityId, refreshKey }) => {
       return;
     }
     try {
-      await axios.put(`http://localhost:8090/reply/update/${reply.id}`, {
+      await jwtAxios.put(`http://localhost:8090/reply/update/${reply.id}`, {
         content: editContent,
         communityId: reply.communityId,
         // memberId: reply.memberId,
@@ -88,7 +85,7 @@ const ReplyList = ({ communityId, refreshKey }) => {
   const deleteEdit = async (reply) => {
     if (!window.confirm("정말 삭제하시겠습니까?")) return;
     try {
-      await axios.delete(`http://localhost:8090/reply/delete/${reply.id}`, {
+      await jwtAxios.delete(`http://localhost:8090/reply/delete/${reply.id}`, {
         communityId: reply.communityId,
         // memberId: reply.memberId,
       });
@@ -109,9 +106,9 @@ const ReplyList = ({ communityId, refreshKey }) => {
   }
 
   return (
-    <ul className="reply-list">
+    <div className="reply-list">
       {replies.map((reply) => (
-        <li key={reply.id}>
+        <div key={reply.id}>
           {editingId === reply.id ? (
             <div className="reply-edit">
               <input
@@ -141,9 +138,9 @@ const ReplyList = ({ communityId, refreshKey }) => {
               </div>
             </>
           )}
-        </li>
+        </div>
       ))}
-    </ul>
+    </div>
   );
 };
 

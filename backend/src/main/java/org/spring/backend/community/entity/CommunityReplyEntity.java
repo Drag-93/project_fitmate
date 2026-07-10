@@ -32,7 +32,7 @@ public class CommunityReplyEntity extends BasicTime {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String writerName;
+    private String userName;
 
     private String content;
 

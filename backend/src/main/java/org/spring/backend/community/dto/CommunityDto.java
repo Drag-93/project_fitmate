@@ -3,8 +3,10 @@ package org.spring.backend.community.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.spring.backend.community.entity.CategoryEntity;
 import org.spring.backend.community.entity.CommunityEntity;
 import org.spring.backend.community.entity.FileEntity;
+import org.spring.backend.member.entity.MemberEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;
@@ -29,7 +31,13 @@ public class CommunityDto {
 
   private Long categoryId;
 
+  private String categoryName;
+
+  private String tabName;
+
   private int reply;
+
+    private String userEmail;
 
   private MultipartFile attachFile;
 
@@ -43,11 +51,13 @@ public class CommunityDto {
 
   private String originalFileName;
 
-  private String categoryName;
-
-  private String tabName;
+  private Long tabId;
 
   private List<FileEntity> fileEntity;
+
+  private MemberEntity memberEntity;
+
+  private CategoryEntity categoryEntity;
 
   public CommunityDto(CommunityEntity entity) {
         this.id = entity.getId();
@@ -56,5 +66,12 @@ public class CommunityDto {
         this.content = entity.getContent();
         this.createTime = entity.getCreateTime();
         this.updateTime = entity.getUpdateTime();
+        this.categoryId=entity.getCategoryEntity().getId();
+        this.categoryName=entity.getCategoryEntity().getCategoryName();
+        this.hit= entity.getHit();
+        this.tabId=entity.getCategoryEntity().getTabEntity().getId();
+        this.tabName=entity.getCategoryEntity().getTabEntity().getTabName();
+        this.reply= entity.getReply();
+        this.memberEntity=entity.getMemberEntity();
     }
 }

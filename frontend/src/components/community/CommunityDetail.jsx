@@ -94,10 +94,10 @@ const CommunityDetail = () => {
                   />
                 </li>
                 <li>
-                  <label htmlFor="title">탭 이름</label>
+                  <label htmlFor="tabName">탭 이름</label>
                   <input
                     type="text"
-                    name="tab"
+                    name="tabName"
                     value={community.tabName || ""} // 데이터가 들어오기 전 에러 방지
                     readOnly
                   />
@@ -138,15 +138,13 @@ const CommunityDetail = () => {
                   </div>
                 </li>
                 <li>
-                  <li>
-                    <button
-                      onClick={() =>
-                        navigate(`/community/update/${community.id}`)
-                      }
-                    >
-                      수정
-                    </button>
-                  </li>
+                  <button
+                    onClick={() =>
+                      navigate(`/community/update/${community.id}`)
+                    }
+                  >
+                    수정
+                  </button>
                 </li>
               </ul>
               <div className="button">
