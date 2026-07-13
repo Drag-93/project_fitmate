@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.spring.backend.community.entity.CommunityEntity;
-import org.spring.backend.community.entity.FileEntity;
+import org.spring.backend.file.entity.FileEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;

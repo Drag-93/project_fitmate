@@ -21,6 +21,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.spring.backend.common.BasicTime;
+import org.spring.backend.file.entity.FileEntity;
 import org.spring.backend.member.entity.MemberEntity;
 
 @Entity

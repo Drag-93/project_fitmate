@@ -2,12 +2,12 @@ package org.spring.backend.member.service.impl;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.spring.backend.common.TableType;
+import org.spring.backend.file.handler.FileHandler;
 import org.spring.backend.member.dto.MemberDto;
 import org.spring.backend.member.entity.MemberAddEntity;
 import org.spring.backend.member.entity.MemberEntity;
-import org.spring.backend.member.entity.MemberFileEntity;
 import org.spring.backend.member.repository.MemberAddRepository;
-import org.spring.backend.member.repository.MemberFileRepository;
 import org.spring.backend.member.repository.MemberRepository;
 import org.spring.backend.member.service.MemberService;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,18 +15,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,7 +28,7 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final MemberAddRepository memberAddRepository;
-    private final MemberFileRepository memberFileRepository;
+    private final FileHandler fileHandler;
 
     @Value("${img.path.member}")
     private String filePath;
@@ -122,48 +115,9 @@ public class MemberServiceImpl implements MemberService {
             return;
         }
         try{
-
-            //기존에 파일있을땐 새파일로 교체, 이전파일은 제거
-            Optional<MemberFileEntity> optionalMemberFileEntity = memberFileRepository.findByMemberEntityId(memberDto.getId());
-            if(optionalMemberFileEntity.isPresent()){
-                // file:///E:/fitmate/backend/member/와 파일명을 조합하여 URI 생성
-    //            URI fileUri = new URI(filePath + optionalMemberFileEntity.get().getNewFileName());
-                //테스트시에는 경로uri사용할수 없기에 로컬로 사용
-    //            File deleteFile = new File(fileUri);
-                originMemberEntity.setMemberFileEntity(null);
-                memberFileRepository.delete(optionalMemberFileEntity.get());
-                //변경사항 즉시반영
-                memberFileRepository.flush();
-
-                String localPath = filePath.replace("file://", "");
-                Path targetFilePath = Paths.get(localPath).resolve(optionalMemberFileEntity.get().getNewFileName());
-                File deleteFile = targetFilePath.toFile();
-                if(deleteFile.exists()) deleteFile.delete();
-            }
-        //새로운 파일 저장
-        MultipartFile memberFile = memberDto.getMemberFile();
-        String oldFileName = memberFile.getOriginalFilename();
-        String newFileName = UUID.randomUUID() + "_" + oldFileName;
-        // file:///E:/fitmate/backend/member/와 파일명을 조합하여 URI 생성
-//        URI fileUri = new URI(filePath + newFileName);
-//        memberFile.transferTo(new File(fileUri));
-//      테스트시에는 경로uri를 사용할수 없기에 로컬로 사용
-        String localPath = filePath.replace("file://", "");
-        Path targetPath = Paths.get(localPath).resolve(newFileName);
-        //만약 폴더가 없을때 생성
-        if (!Files.exists(targetPath.getParent())) {
-            Files.createDirectories(targetPath.getParent());
-        }
-        memberFile.transferTo(new File(localPath + newFileName));
-        //멤버 및 멤버 정보 저장
         originMemberEntity.setProfilePhoto(1);
         MemberEntity saveMember = memberRepository.save(originMemberEntity);
-        MemberFileEntity memberFileEntity = MemberFileEntity.builder()
-                .oldFileName(oldFileName)
-                .newFileName(newFileName)
-                .memberEntity(saveMember)
-                .build();
-        memberFileRepository.save(memberFileEntity);
+         fileHandler.insertFile(filePath,TableType.MEMBER, saveMember.getId(), memberDto.getMemberFile());
         }catch (Exception e){
             System.out.println("파일 저장 중 에러 발생: " + e.getMessage());
             e.printStackTrace();
@@ -173,41 +127,39 @@ public class MemberServiceImpl implements MemberService {
     }
     @Transactional
     @Override
-    public void memberDelete(Long id) {
+    public void memberDelete(Long id) throws IOException{
         MemberEntity memberEntity = memberRepository.findById(id)
                 .orElseThrow(()->new NoSuchElementException("회원아이디 없음"));
-        Optional<MemberFileEntity> optionalMemberFile = memberFileRepository.findByMemberEntityId(id);
-        if(optionalMemberFile.isPresent()){
-            MemberFileEntity fileEntity = optionalMemberFile.get();
-            try{
-                String localPath = filePath.replace("file://", "");
-                Path targetFilePath = Paths.get(localPath).resolve(optionalMemberFile.get().getNewFileName());
-                File deleteFile = targetFilePath.toFile();
-                if(deleteFile.exists()) deleteFile.delete();
-            }catch (Exception e){
-                System.out.println("회원탈퇴 파일 삭제 중 에러 : "+e.getMessage());
-            }
+        if (memberEntity.getMemberAddEntity() != null) {
+            MemberAddEntity addEntity = memberEntity.getMemberAddEntity();
+
+            // 부모 객체에서 자식으로 가는 연결 고리를 null로 끊음
+            memberEntity.setMemberAddEntity(null);
+
+            // 자식(MemberAdd) 데이터를 먼저 직접 삭제
+            memberAddRepository.delete(addEntity);
         }
+        fileHandler.deleteFile(filePath, TableType.MEMBER,memberEntity.getId());
         memberRepository.deleteById(id);
     }
 
+    @Transactional
     @Override
-    public void memberDelete(String userEmail) {
+    public void memberDelete(String userEmail) throws IOException{
         MemberEntity memberEntity = memberRepository.findByUserEmail(userEmail)
                 .orElseThrow(()->new NoSuchElementException("회원정보 없음"));
-        Optional<MemberFileEntity> optionalMemberFile = memberFileRepository.findByMemberEntityId(memberEntity.getId());
-        if(optionalMemberFile.isPresent()){
-            MemberFileEntity fileEntity = optionalMemberFile.get();
-            try{
-                String localPath = filePath.replace("file://", "");
-                Path targetFilePath = Paths.get(localPath).resolve(optionalMemberFile.get().getNewFileName());
-                File deleteFile = targetFilePath.toFile();
-                if(deleteFile.exists()) deleteFile.delete();
-            }catch (Exception e){
-                System.out.println("회원탈퇴 파일 삭제 중 에러 : "+e.getMessage());
-            }
+        if (memberEntity.getMemberAddEntity() != null) {
+            MemberAddEntity addEntity = memberEntity.getMemberAddEntity();
+
+            // 부모 객체에서 자식으로 가는 연결 고리를 null로 끊음
+            memberEntity.setMemberAddEntity(null);
+
+            // 자식(MemberAdd) 데이터를 먼저 직접 삭제
+            memberAddRepository.delete(addEntity);
         }
-        memberRepository.deleteById(memberEntity.getId());
+        fileHandler.deleteFile(filePath, TableType.MEMBER,memberEntity.getId());
+        memberRepository.delete(memberEntity);
+        memberRepository.flush();
     }
 
     @Override

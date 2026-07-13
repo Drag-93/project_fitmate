@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.spring.backend.common.Role;
+import org.spring.backend.file.entity.FileEntity;
 import org.spring.backend.member.dto.MemberDto;
 
 import java.util.List;
@@ -59,9 +60,14 @@ public class MemberEntity extends BasicTime {
   @JoinColumn(name = "member_add_id")
   private MemberAddEntity memberAddEntity;
 
-  @OneToOne(mappedBy = "memberEntity",
-          fetch = FetchType.LAZY, orphanRemoval = true)
-  private MemberFileEntity memberFileEntity;
+  //이전 멤버파일엔티티와의 1:1매핑
+//  @OneToOne(mappedBy = "memberEntity",
+//          fetch = FetchType.LAZY, orphanRemoval = true)
+//  private MemberFileEntity memberFileEntity;
+  //파일엔티티와 1:N 매핑
+  @OneToMany(mappedBy = "memberEntity",
+          fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+  private List<FileEntity> fileEntities;
 
   public static MemberEntity toInsertMemberEntity(MemberDto memberDto, String encodePw){
     return MemberEntity.builder()

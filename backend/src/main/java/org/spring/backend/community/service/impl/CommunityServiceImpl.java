@@ -10,11 +10,11 @@ import java.util.stream.Collectors;
 import org.spring.backend.community.dto.CommunityDto;
 import org.spring.backend.community.entity.CategoryEntity;
 import org.spring.backend.community.entity.CommunityEntity;
-import org.spring.backend.community.entity.FileEntity;
 import org.spring.backend.community.repository.CategoryRepository;
 import org.spring.backend.community.repository.CommunityRepository;
-import org.spring.backend.community.repository.FileRepository;
 import org.spring.backend.community.service.CommunityService;
+import org.spring.backend.file.entity.FileEntity;
+import org.spring.backend.file.repository.FileRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
