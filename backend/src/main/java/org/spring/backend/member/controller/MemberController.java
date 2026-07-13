@@ -72,4 +72,14 @@ public class MemberController {
         memberService.memberUpdate(memberDto);
         return ResponseEntity.ok("ok");
     }
+
+    //이메일체크 api
+    @PostMapping("/email")
+    public ResponseEntity<?> emailCheck(MemberDto memberDto){
+        if(memberService.emailCheck(memberDto.getUserEmail())){
+            return ResponseEntity.ok("no");
+        }else{
+            return ResponseEntity.ok("ok");
+        }
+    }
 }
