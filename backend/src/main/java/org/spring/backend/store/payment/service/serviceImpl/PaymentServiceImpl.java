@@ -106,7 +106,7 @@ public class PaymentServiceImpl implements PaymentService {
   @Override
   @Transactional(readOnly = true)
   public List<PaymentDto> paymentListFn(Long memberId) {
-    return paymentRepository.findByOrderEntity_MemberEntity_Id(memberId)
+    return paymentRepository.findPaymentListByMemberId(memberId)
         .stream()
         .map(PaymentDto::toPaymentDto)
         .toList();
@@ -303,7 +303,7 @@ public class PaymentServiceImpl implements PaymentService {
     SubscriptionEntity subscription = SubscriptionEntity.builder()
         .memberEntity(order.getMemberEntity())
         .productEntity(product)
-        .paymentEntity(paymentEntity)
+        .productEntity(product)
         .subscriptionStatus(SubscriptionStatus.ACTIVE)
         .startDate(LocalDateTime.now())
         .endDate(

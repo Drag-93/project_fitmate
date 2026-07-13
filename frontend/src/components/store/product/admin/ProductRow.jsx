@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
 const ProductRow = ({ product, onEdit, onDelete }) => {
@@ -14,6 +14,7 @@ const ProductRow = ({ product, onEdit, onDelete }) => {
       <td className="productId">{product.id}</td>
       <td className="thumbnail">
         {thumbnail ? (
+          <Link to={`/products/detail/${product.id}`}>
           <img
             src={`http://localhost:8090${thumbnail?.newFileName}`} 
             alt={product.productName}
@@ -24,6 +25,7 @@ const ProductRow = ({ product, onEdit, onDelete }) => {
               borderRadius: "6px"
             }}
           />
+          </Link>
         ) : (
           <span>이미지 없음</span>
         )}

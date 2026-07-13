@@ -46,6 +46,8 @@ public class PaymentDto {
 
   private Long subscriptionId;
 
+  private String productName;
+
   private LocalDateTime createTime;
 
   public static PaymentDto toPaymentDto(PaymentEntity paymentEntity) {
@@ -65,6 +67,17 @@ public class PaymentDto {
         .subscriptionId(paymentEntity.getSubscriptionEntity() != null
             ? paymentEntity.getSubscriptionEntity().getId()
             : null)
+        .productName(
+            paymentEntity.getOrderEntity() != null
+                ? paymentEntity.getOrderEntity()
+                    .getOrderItemEntities()
+                    .get(0)
+                    .getProductName()
+                : paymentEntity.getSubscriptionEntity() != null
+                    ? paymentEntity.getSubscriptionEntity()
+                        .getProductEntity()
+                        .getProductName()
+                    : null)
         .createTime(paymentEntity.getCreateTime())
         .build();
   }
