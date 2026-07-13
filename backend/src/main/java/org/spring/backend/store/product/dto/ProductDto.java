@@ -40,7 +40,7 @@ public class ProductDto {
 
   private MultipartFile thumbnail;
 
-  private MultipartFile main;
+  private List<MultipartFile> main;
 
   private List<MultipartFile> detailImages;
 

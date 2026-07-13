@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class ProductServiceImpl implements ProductService {
 
-  @Value("${img.path.item}")
+  @Value("${img.path.product}")
   private String itemPath;
 
   private final ProductRepository productRepository;

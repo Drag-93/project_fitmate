@@ -7,13 +7,14 @@ const ProductCard = ({ product }) => {
   const navigate = useNavigate();
 
   const thumbnail = product.productFileDtos?.find(
-    file => file.imageType === "THUMBNAIL"
+    file => file.imageType === "THUMBNAIL"  
   );
+  console.log(product.productFileDtos);
   return (
-    <div
+    <div  className="product-card"
       onClick={() => navigate(`/products/detail/${product.id}`)}
     >
-      <img src={thumbnail?.newFileName} alt={product.productName} />
+      <img src={`http://localhost:8090${thumbnail?.newFileName}`} alt={product.productName} />
 
       <h3>{product.productName}</h3>
 
