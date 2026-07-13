@@ -43,8 +43,8 @@ public class FileEntity extends BasicTime {
     private CommunityEntity communityEntity;
 
     //N:1 상품
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
-    private Product productEntity;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "product_id")
+//    private Product productEntity;
 
 }

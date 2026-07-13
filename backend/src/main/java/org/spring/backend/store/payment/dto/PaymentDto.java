@@ -26,11 +26,8 @@ public class PaymentDto {
   // 토큰
   private String pgToken;
 
-  // 결제수단
+  // 결제수단, 업체
   private PaymentMethod paymentMethod;
-
-  // 결체 업체 타입
-  private String paymentType;
 
   // 결제금액
   private int amount;
@@ -41,6 +38,8 @@ public class PaymentDto {
   private PaymentStatus paymentStatus;
 
   private String paymentReadyJson;
+
+  private String paymentApproveJson;
 
   // 주문 ID
   private Long orderId;
@@ -53,10 +52,13 @@ public class PaymentDto {
     return PaymentDto.builder()
         .id(paymentEntity.getId())
         .tid(paymentEntity.getTid())
+        .pgToken(paymentEntity.getPgToken())
         .paymentMethod(paymentEntity.getPaymentMethod())
         .amount(paymentEntity.getAmount())
         .approveTime(paymentEntity.getApproveTime())
         .paymentStatus(paymentEntity.getPaymentStatus())
+        .paymentReadyJson(paymentEntity.getPaymentReadyJson())
+        .paymentApproveJson(paymentEntity.getPaymentApproveJson())
         .orderId(paymentEntity.getOrderEntity() != null
             ? paymentEntity.getOrderEntity().getId()
             : null)

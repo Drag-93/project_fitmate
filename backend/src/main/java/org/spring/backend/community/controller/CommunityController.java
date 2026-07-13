@@ -9,6 +9,7 @@ import org.spring.backend.community.dto.TabDto;
 import org.spring.backend.community.service.CommunityService;
 import org.spring.backend.community.service.TabService;
 import org.spring.backend.member.jwt.CustomUserDetails;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,9 +46,16 @@ public class CommunityController {
 
   //게시글 작성
   @PostMapping("/insert")
-  public ResponseEntity<?> communityInsert(@RequestBody CommunityDto communityDto) {
+  public ResponseEntity<?> communityInsert(@ModelAttribute CommunityDto communityDto,Authentication authentication) {
+    if (authentication == null || !authentication.isAuthenticated() || "anonymousUser".equals(authentication.getPrincipal())) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요한 서비스입니다.");
+    }
+    CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+    String userEmail = customUserDetails.getMemberEntity().getUserEmail();
+
+
     Map<String, CommunityDto> map = new HashMap<>();
-    communityService.communityInsert(communityDto);
+    communityService.communityInsert(communityDto, userEmail);
     map.put("community", communityDto);
     return ResponseEntity.status(HttpStatus.OK).body(map);
   }
@@ -64,9 +72,11 @@ public class CommunityController {
 
   //게시글 수정
   @PutMapping("/update/{id}")
-  public ResponseEntity<?> communityUpdate(@PathVariable("id") Long id, @RequestBody CommunityDto communityDto){
+  public ResponseEntity<?> communityUpdate(@PathVariable("id") Long id, @RequestBody CommunityDto communityDto, Authentication authentication){
     // 컨트롤러가 받은 id를 서비스로 확실하게 전달합니다.
-    communityService.communityUpdate(id, communityDto);
+    CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+    String userEmail = userDetails.getMemberEntity().getUserEmail();
+    communityService.communityUpdate(id, communityDto, userEmail);
     
     Map<String, CommunityDto> map = new HashMap<>();
     map.put("result", communityDto);

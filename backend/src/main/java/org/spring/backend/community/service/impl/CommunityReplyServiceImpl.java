@@ -22,8 +22,8 @@ public class CommunityReplyServiceImpl implements CommunityReplyService {
 @Override
 public void insertReply(CommunityReplyDto dto) {
     //회원 조회
-    // MemberEntity memberEntity = memberRepository.findById(dto.getMemberId())
-    //         .orElseThrow(() -> new IllegalArgumentException("회원이 존재하지 않습니다"));
+     MemberEntity memberEntity = memberRepository.findById(dto.getMemberId())
+             .orElseThrow(() -> new IllegalArgumentException("회원이 존재하지 않습니다"));
 
             //게시글 조회
     CommunityEntity communityEntity = communityRepository.findById(dto.getCommunityId())
@@ -31,9 +31,9 @@ public void insertReply(CommunityReplyDto dto) {
 
     CommunityReplyEntity replyEntity = CommunityReplyEntity.builder()
             .content(dto.getContent())
-            // .writerName(memberEntity.getUserName())
+            .userName(dto.getUserName())
             .communityEntity(communityEntity)
-            // .memberEntity(memberEntity)
+             .memberEntity(memberEntity)
             .build();
 
     communityReplyRepository.save(replyEntity);
@@ -41,7 +41,7 @@ public void insertReply(CommunityReplyDto dto) {
 
     @Override
     public List<CommunityReplyDto> replyList(Long communityId) {
-        return communityReplyRepository.findByCommunityEntity_id(communityId)
+        return communityReplyRepository.findAllByCommunityId(communityId)
                 .stream().map(CommunityReplyDto::toReplyDto).toList();
     }
 

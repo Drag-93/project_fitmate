@@ -43,7 +43,13 @@ public class CommunityEntity extends BasicTime {
 
     private String content;
 
+    private Long tabId;
+
     private String categoryName;
+
+    private String tabName;
+
+    private String userEmail;
 
     private int reply;
 
@@ -61,9 +67,6 @@ public class CommunityEntity extends BasicTime {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="member_id")
     private MemberEntity memberEntity;
-
-    @OneToMany(mappedBy = "communityEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<FileEntity> fileEntity = new ArrayList<>();
 
     @OneToMany(mappedBy = "communityEntity",cascade = CascadeType.ALL,orphanRemoval= true)
     private List<CommunityReplyEntity> communityReplyEntity = new ArrayList<>();

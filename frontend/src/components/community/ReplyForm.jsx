@@ -15,7 +15,7 @@ const ReplyForm = ({ communityId, onReplyAdd }) => {
   const getUser = async () => {
     try {
       const res = await jwtAxios.get("http://localhost:8090/api/member/detail");
-      if (res.data?.result) {
+      if (res && res.data && res.data.result) {
         setReply((prev) => ({
           ...prev,
           userName: res.data.result.userName,
@@ -23,6 +23,7 @@ const ReplyForm = ({ communityId, onReplyAdd }) => {
       }
     } catch (error) {
       console.error("회원 정보를 불러올 수 없습니다.", error);
+      setReply((prev) => ({ ...prev, userName: "비회원" }));
     }
   };
 
@@ -32,7 +33,10 @@ const ReplyForm = ({ communityId, onReplyAdd }) => {
       return;
     }
     try {
-      const res = await axios.post("http://localhost:8090/reply/insert", reply);
+      const res = await jwtAxios.post(
+        "http://localhost:8090/reply/insert",
+        reply,
+      );
       alert("댓글이 작성되었습니다");
       setReply({ ...reply, content: "" });
       if (onReplyAdd) {
