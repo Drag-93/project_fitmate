@@ -9,6 +9,7 @@ import org.spring.backend.store.product.type.ProductStatus;
 import org.spring.backend.store.product.type.ProductType;
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,7 +41,7 @@ public class ProductDto {
 
   private MultipartFile thumbnail;
 
-  private MultipartFile main;
+  private List<MultipartFile> main;
 
   private List<MultipartFile> detailImages;
 
@@ -49,6 +50,10 @@ public class ProductDto {
   private LocalDateTime updateTime;
 
   private String category;
+
+  private int duration; // 이용기간(일)
+
+  private int sessionCount; // PT 횟수
 
   public static ProductDto toProductDto(ProductEntity productEntity) {
     return ProductDto.builder()
@@ -67,6 +72,8 @@ public class ProductDto {
         .createTime(productEntity.getCreateTime())
         .updateTime(productEntity.getUpdateTime())
         .category(productEntity.getCategory())
+        .duration(productEntity.getDuration())
+        .sessionCount(productEntity.getSessionCount())
         .build();
   }
 }

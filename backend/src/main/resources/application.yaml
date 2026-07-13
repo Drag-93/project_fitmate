@@ -47,7 +47,7 @@ logging:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
 
-img.path.item: file:///E:/fitmate/backend/product/
+img.path.product: file:///E:/fitmate/backend/product/
 img.path.community: file:///E:/fitmate/backend/community/
 #멤버의 파일저장경로
 img.path.member: file://E:/fitmate/backend/member/

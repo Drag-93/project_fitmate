@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.spring.backend.store.order.entity.OrderEntity;
+import org.spring.backend.store.order.entity.OrderItemEntity;
 import org.spring.backend.store.order.repository.OrderRepository;
 import org.spring.backend.store.order.type.DeliveryStatus;
 import org.spring.backend.store.order.type.OrderStatus;
@@ -16,6 +17,8 @@ import org.spring.backend.store.payment.repository.PaymentRepository;
 import org.spring.backend.store.payment.service.PaymentService;
 import org.spring.backend.store.payment.type.PaymentMethod;
 import org.spring.backend.store.payment.type.PaymentStatus;
+import org.spring.backend.store.product.entity.ProductEntity;
+import org.spring.backend.store.product.type.BillingType;
 import org.spring.backend.store.subscription.entity.SubscriptionEntity;
 import org.spring.backend.store.subscription.repository.SubscriptionRepository;
 import org.spring.backend.store.subscription.type.SubscriptionStatus;
@@ -31,7 +34,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -134,6 +136,9 @@ public class PaymentServiceImpl implements PaymentService {
     PaymentEntity paymentEntity = paymentRepository.findById(paymentId)
         .orElseThrow(() -> new IllegalArgumentException("해당 결제 건이 존재하지 않습니다. ID: " + paymentId));
 
+    if (paymentEntity.getPaymentStatus() == PaymentStatus.SUCCESS) {
+      return;
+    }
     // pg_token 세팅 (Dirty CHecking에 의해 자동 업데이트)
     paymentEntity.setPgToken(pgToken);
     paymentEntity.setPaymentStatus(PaymentStatus.PROCESSING);
@@ -188,6 +193,7 @@ public class PaymentServiceImpl implements PaymentService {
       paymentEntity.setPaymentStatus(PaymentStatus.SUCCESS);
       order.setOrderStatus(OrderStatus.SUCCESS);
       order.setDeliveryStatus(DeliveryStatus.READY);
+      createSubscription(paymentEntity);
 
     } catch (Exception e) {
       paymentEntity.setPaymentStatus(PaymentStatus.FAILED); // 실패 상태 기록
@@ -250,10 +256,9 @@ public class PaymentServiceImpl implements PaymentService {
         .queryParam("quantity", "1")
         .queryParam("total_amount", amount)
         .queryParam("tax_free_amount", "0")
-        .queryParam("approval_url", "http://localhost:3000/payment/approval/"
-            + paymentEntity.getId())
-        .queryParam("cancel_url", "http://localhost:8095/payment/cancel")
-        .queryParam("fail_url", "http://localhost:8095/payment/fail")
+        .queryParam("approval_url", "http://localhost:3000/payment/approval/" + paymentEntity.getId())
+        .queryParam("cancel_url", "http://localhost:3000/payment/cancel")
+        .queryParam("fail_url", "http://localhost:3000/payment/fail")
         .encode()
         .build()
         .toUri();
@@ -278,5 +283,37 @@ public class PaymentServiceImpl implements PaymentService {
     } catch (Exception e) {
       throw new RuntimeException("카카오페이 Ready 요청 실패", e);
     }
+  }
+
+
+  // 구독 생성 메서드
+  private void createSubscription(PaymentEntity paymentEntity) {
+
+    OrderEntity order = paymentEntity.getOrderEntity();
+
+    OrderItemEntity orderItem = order.getOrderItemEntities().get(0);
+
+    ProductEntity product = orderItem.getProductEntity();
+
+    // 구독 상품 아니면 종료
+    if (product.getBillingType() != BillingType.SUBSCRIPTION) {
+      return;
+    }
+
+    SubscriptionEntity subscription = SubscriptionEntity.builder()
+        .memberEntity(order.getMemberEntity())
+        .productEntity(product)
+        .paymentEntity(paymentEntity)
+        .subscriptionStatus(SubscriptionStatus.ACTIVE)
+        .startDate(LocalDateTime.now())
+        .endDate(
+            LocalDateTime.now()
+                .plusDays(product.getDuration()))
+        .nextPaymentDate(
+            LocalDateTime.now()
+                .plusMonths(1))
+        .build();
+
+    subscriptionRepository.save(subscription);
   }
 }

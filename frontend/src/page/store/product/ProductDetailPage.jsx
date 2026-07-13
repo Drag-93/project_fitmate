@@ -104,19 +104,11 @@ const ProductDetailPage = () => {
     <div className="product-detail">
       <div className="product-detail-con">
 
-        {/* 썸네일 */}
-        {thumbnail && (
-          <img
-            src={thumbnail.newFileName}
-            alt="썸네일"
-            className="thumbnail-image"
-          />
-        )}
 
         {/* 메인 이미지 */}
         {main && (
           <img
-            src={main.newFileName}
+            src={`http://localhost:8090${thumbnail?.newFileName}`}
             alt={product.productName}
             className="main-image"
           />
@@ -169,7 +161,7 @@ const ProductDetailPage = () => {
         {details.map(detail => (
           <img
             key={detail.id}
-            src={detail.newFileName}
+            src={`http://localhost:8090${thumbnail?.newFileName}`}
             alt="상세"
             className="detail-image"
           />

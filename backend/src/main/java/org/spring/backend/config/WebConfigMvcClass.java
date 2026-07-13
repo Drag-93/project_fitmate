@@ -11,7 +11,7 @@ public class WebConfigMvcClass implements WebMvcConfigurer {
     @Value("${img.path.member}")
     private String memberPath;
 
-    @Value("${img.path.item}")
+    @Value("${img.path.product}")
     private String itemPath;
 
     @Value("${img.path.community}")
@@ -22,7 +22,7 @@ public class WebConfigMvcClass implements WebMvcConfigurer {
 
         //각각 사용하는 파일 경로 변환
         String memberLoc = ensureTrailingSlash(memberPath);
-        String itemLoc = ensureTrailingSlash(itemPath);
+        String itemLoc = itemPath;
         String communityLoc = ensureTrailingSlash(communityPath);
 
         // 멤버 프로필 이미지 경로 매핑

@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class ProductServiceImpl implements ProductService {
 
-  @Value("${img.path.item}")
+  @Value("${img.path.product}")
   private String itemPath;
 
   private final ProductRepository productRepository;
@@ -44,6 +44,8 @@ public class ProductServiceImpl implements ProductService {
         .billingType(productDto.getBillingType())
         .productStatus(productDto.getProductStatus())
         .category(productDto.getCategory())
+        .duration(productDto.getDuration())
+        .sessionCount(productDto.getSessionCount())
         .build();
 
     productRepository.save(productEntity);
@@ -77,6 +79,8 @@ public class ProductServiceImpl implements ProductService {
     productEntity.setBillingType(productDto.getBillingType());
     productEntity.setProductStatus(productDto.getProductStatus());
     productEntity.setCategory(productDto.getCategory());
+    productEntity.setDuration(productDto.getDuration());
+    productEntity.setSessionCount(productDto.getSessionCount());
 
     productRepository.save(productEntity);
     if (thumbnail != null && !thumbnail.isEmpty()) {
@@ -144,7 +148,7 @@ public class ProductServiceImpl implements ProductService {
 
     File file = new File(
         itemPath.replace("file:///", ""),
-            fileEntity.getNewFileName());
+        fileEntity.getNewFileName());
 
     if (file.exists()) {
       file.delete();
@@ -165,7 +169,7 @@ public class ProductServiceImpl implements ProductService {
 
       File file = new File(
           itemPath.replace("file:///", ""),
-              fileEntity.getNewFileName());
+          fileEntity.getNewFileName());
 
       if (file.exists()) {
         file.delete();

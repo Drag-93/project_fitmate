@@ -7,10 +7,14 @@ const ProductForm = ({ product, onSubmit }) => {
     productName: "",
     description: "",
     price: "",
+
     productType: "PT",
     billingType: "ONE_TIME",
     productStatus: "ACTIVE",
     category: "",
+
+    duration: "",
+    sessionCount: "",
   });
 
   useEffect(() => {
@@ -23,6 +27,9 @@ const ProductForm = ({ product, onSubmit }) => {
         billingType: product.billingType,
         productStatus: product.productStatus,
         category: product.category,
+
+        duration: product.duration ?? "",
+        sessionCount: product.sessionCount ?? "",
       });
     }
   }, [product]);
@@ -43,7 +50,7 @@ const ProductForm = ({ product, onSubmit }) => {
   };
 
   return (
-    <form onSubmit={submitHandler}>
+    <form onSubmit={submitHandler} className="product-form">
 
       <div>
         <label>상품명</label>
@@ -87,6 +94,33 @@ const ProductForm = ({ product, onSubmit }) => {
           <option value="SUBSCRIPTION">SUBSCRIPTION</option>
         </select>
       </div>
+
+      {/* PT / GYM 기간 */}
+      {(formData.productType === "PT" ||
+        formData.productType === "GYM") && (
+          <div>
+            <label>이용기간(일)</label>
+            <input
+              type="number"
+              name="duration"
+              value={formData.duration}
+              onChange={changeHandler}
+            />
+          </div>
+        )}
+
+      {/* PT 횟수 */}
+      {formData.productType === "PT" && (
+        <div>
+          <label>PT 횟수</label>
+          <input
+            type="number"
+            name="sessionCount"
+            value={formData.sessionCount}
+            onChange={changeHandler}
+          />
+        </div>
+      )}
 
       <div>
         <label>결제방식</label>

@@ -51,7 +51,7 @@ const BuyerInfo = ({ orderInfo, setOrderInfo }) => {
       <div className="inputBox">
         <label>배송 요청사항</label>
         <input
-          name="delibetyMemo"
+          name="deliveryMemo"
           value={orderInfo.delibetyMemo}
           onChange={handleChange}
           placeholder="배송 요청사항"

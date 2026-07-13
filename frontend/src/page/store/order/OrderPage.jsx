@@ -5,6 +5,7 @@ import BuyerInfo from "../../../components/store/order/BuyerInfo";
 import PaymentMethod from "../../../components/store/order/PaymentMethod";
 import OrderRight from "../../../components/store/order/OrderRight";
 import { useLocation } from 'react-router-dom';
+import "../../../components/css/store/order/OrderPage.css"
 
 const OrderPage = () => {
   const location = useLocation();

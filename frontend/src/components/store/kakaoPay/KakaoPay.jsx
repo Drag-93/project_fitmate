@@ -24,7 +24,7 @@ const KakaoPay = () => {
       return;
     }
 
-    fetch(`http://localhost:8095/payment/kakao/pg?productId=${productId}&memberId=${memberId}&productPrice=${productPrice}&productName=${productName}`)
+    fetch(`http://localhost:8090/payment/kakao/pg?productId=${productId}&memberId=${memberId}&productPrice=${productPrice}&productName=${productName}`)
       .then(res => res.json())
       .then(json => {
         if (json.approvalUrl) {

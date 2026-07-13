@@ -3,42 +3,35 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 const KakaoPaySuccess = () => {
   const navigate = useNavigate();
-  const payData = useParams(); // URL 경로 변수 {paymentId, productPrice, productName, memberId}
+  const { paymentId } = useParams();
   const [searchParams] = useSearchParams();
   const [loading, setLoading] = useState(true);
+  const [paymentInfo, setPaymentInfo] = useState(null);
 
   useEffect(() => {
     // 카카오페이가 인증 성공 후 우리 approval_url 뒤에 붙여주는 pg_token 획득
     const pgToken = searchParams.get("pg_token");
-
+    console.log("approval 호출");
     const finalApproval = async () => {
       try {
         // 백엔드 엔드포인트와 데이터 규격 바인딩 안정화
-        const response = await fetch("http://localhost:8095/payment/insert", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            paymentId: payData.paymentId,
-            productPrice: payData.productPrice,
-            productName: payData.productName,
-            memberId: payData.memberId,
-            pgToken: pgToken // 파라미터로 받은 토큰도 함께 전송 가능하도록 구성
-          })
-        });
+        const response = await fetch(
+          `http://localhost:8090/api/payment/approval/${paymentId}?pg_token=${pgToken}`
+        );
 
-        const result = await response.json();
-        console.log("최종 결제 승인 결과 DB 반영:", result);
+        const result = await response.text();
+        console.log("최종 결제 승인 결과 DB 반영");
+        setPaymentInfo(result);
       } catch (error) {
-        console.error("결제 승인 처리 중 에러 발생:", error);
+        console.error("결제 승인 처리 중 에러 발생");
       } finally {
         setLoading(false);
       }
     };
 
     finalApproval();
-  }, [payData, searchParams]);
+  }, [paymentId, searchParams]);
+
 
   return (
     <div className="kakaoPay-success">
@@ -51,8 +44,8 @@ const KakaoPaySuccess = () => {
             ) : (
               <>
                 <li>고객님이 주문하신 상품의 결제가 정상 완료되었습니다.</li>
-                <li>주문 상품명: {decodeURIComponent(payData.productName)}</li>
-                <li>결제 금액: {Number(payData.productPrice).toLocaleString()}원</li>
+                <li>주문 상품명: {paymentInfo?.productName}</li>
+                <li>결제 금액: {paymentInfo?.amount?.toLocaleString()}원</li>
                 <li>스마트 오더 시스템을 이용해 주셔서 감사합니다.</li>
               </>
             )}
