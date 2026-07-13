@@ -11,10 +11,8 @@ import java.util.stream.Collectors;
 import org.spring.backend.community.dto.CommunityDto;
 import org.spring.backend.community.entity.CategoryEntity;
 import org.spring.backend.community.entity.CommunityEntity;
-import org.spring.backend.community.entity.FileEntity;
 import org.spring.backend.community.repository.CategoryRepository;
 import org.spring.backend.community.repository.CommunityRepository;
-import org.spring.backend.community.repository.FileRepository;
 import org.spring.backend.community.service.CommunityService;
 import org.spring.backend.member.entity.MemberEntity;
 import org.spring.backend.member.repository.MemberRepository;
@@ -31,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CommunityServiceImpl implements CommunityService{
   
 private final CommunityRepository communityRepository;
-private final FileRepository fileRepository;
+//private final FileRepository fileRepository;
 private final CategoryRepository categoryRepository;
 private final MemberRepository memberRepository;
 
@@ -85,12 +83,12 @@ public void insertWithFile(CommunityDto communityDto, String  userEmail) {
         communityDto.getAttachFile().transferTo(new File(filePath));
         
 
-        // 3. 파일 엔티티 저장
-        fileRepository.save(FileEntity.builder()
-            .newFileName(newFileName)
-            .oldFileName(originalFilename)
-            .communityEntity(saveCommunity)
-            .build());
+//        // 3. 파일 엔티티 저장
+//        fileRepository.save(FileEntity.builder()
+//            .newFileName(newFileName)
+//            .oldFileName(originalFilename)
+//            .communityEntity(saveCommunity)
+//            .build());
     } catch (IOException e) {
         // 파일 저장 실패 시 예외 처리 (트랜잭션에 의해 게시글도 롤백됨)
         throw new RuntimeException("파일 저장 중 오류 발생", e);

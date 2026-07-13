@@ -67,9 +67,6 @@ public class CommunityEntity extends BasicTime {
     @JoinColumn(name="member_id")
     private MemberEntity memberEntity;
 
-    @OneToMany(mappedBy = "communityEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<FileEntity> fileEntity = new ArrayList<>();
-
     @OneToMany(mappedBy = "communityEntity",cascade = CascadeType.ALL,orphanRemoval= true)
     private List<CommunityReplyEntity> communityReplyEntity = new ArrayList<>();
 

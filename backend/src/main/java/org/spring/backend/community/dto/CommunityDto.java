@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.spring.backend.community.entity.CategoryEntity;
 import org.spring.backend.community.entity.CommunityEntity;
-import org.spring.backend.community.entity.FileEntity;
 import org.spring.backend.member.entity.MemberEntity;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -53,7 +52,7 @@ public class CommunityDto {
 
   private Long tabId;
 
-  private List<FileEntity> fileEntity;
+
 
   private MemberEntity memberEntity;
 
