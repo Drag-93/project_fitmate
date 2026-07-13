@@ -21,15 +21,14 @@ public class CommunityTest {
 
     @Test
     void insert(){
-        for (int i = 0;i<10;i++){
-        CategoryEntity category = categoryRepository.save(CategoryEntity.builder()
-                .categoryName("다이어트")
-                .build());
+        CategoryEntity fixedCategory = categoryRepository.findById(Long.valueOf(61))
+                .orElseThrow(() -> new RuntimeException("구매 카테고리가 없습니다."));
+        for (int i = 0; i < 10; i++) {
             communityRepository.save(CommunityEntity.builder()
-                    .title("Title" + i)
+                    .title("구매" + i)
                     .userName("writer" + i)
-                    .content("content" + i)
-                    .categoryEntity(category)
+                    .content("구매" + i)
+                    .categoryEntity(fixedCategory)
                     .hasFile(0)
                     .hit(0)
                     .reply(0)

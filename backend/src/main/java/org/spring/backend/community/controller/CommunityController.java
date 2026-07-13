@@ -9,6 +9,7 @@ import org.spring.backend.community.dto.TabDto;
 import org.spring.backend.community.service.CommunityService;
 import org.spring.backend.community.service.TabService;
 import org.spring.backend.member.jwt.CustomUserDetails;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,8 @@ import org.springframework.http.ResponseEntity;
 @Slf4j
 public class CommunityController {
 
+
+
   private final CommunityService communityService;
   private final TabService tabService;
 
@@ -46,7 +49,7 @@ public class CommunityController {
 
   //게시글 작성
   @PostMapping("/insert")
-  public ResponseEntity<?> communityInsert(@ModelAttribute CommunityDto communityDto,Authentication authentication) {
+  public ResponseEntity<?> communityInsert(@RequestBody CommunityDto communityDto,Authentication authentication) {
     if (authentication == null || !authentication.isAuthenticated() || "anonymousUser".equals(authentication.getPrincipal())) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요한 서비스입니다.");
     }

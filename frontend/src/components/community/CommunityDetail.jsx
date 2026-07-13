@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Reply from "./Reply";
 import "../css/Community/CommunityDetail.css";
 import jwtAxios from "../../apis/util/jwtUtil";
+import { API_SERVER_URL } from "../../apis/commonApi";
 
 const CommunityDetail = () => {
   const { id } = useParams();
@@ -17,7 +18,7 @@ const CommunityDetail = () => {
     try {
       setIsLoading(true);
       const res = await axios.get(
-        `http://localhost:8090/community/detail/${id}?count=true`,
+        `${API_SERVER_URL}/community/detail/${id}?count=true`,
       );
       if (res.data?.community) {
         setCommunity(res.data.community);
@@ -39,7 +40,7 @@ const CommunityDetail = () => {
     try {
       setIsLoading(true);
       const res = await jwtAxios.delete(
-        `http://localhost:8090/community/delete/${id}`,
+        `${API_SERVER_URL}/community/delete/${id}`,
       );
       if (res.data?.result) {
         setCommunity(res.data.result);
@@ -53,6 +54,13 @@ const CommunityDetail = () => {
     }
   };
 
+  // content 안의 상대경로 이미지(src="/upload/...")를
+  // 백엔드 서버 주소 기준 절대경로로 보정
+  const renderableContent = (community?.content || "").replace(
+    /src="\/upload\//g,
+    `src="${API_SERVER_URL}/upload/`,
+  );
+
   return (
     <>
       <div className="communityDetail">
@@ -62,92 +70,71 @@ const CommunityDetail = () => {
             <p>데이터를 불러오는 중입니다</p>
           ) : community ? (
             <div className="detailbody">
-              <ul>
-                {/* <li>{community.writerName}</li> */}
-                <li>
-                  <label htmlFor="title">제목</label>
+              {/* 제목 (1줄 배치) */}
+              <div className="form-row">
+                <label>제목</label>
+                <input type="text" value={community.title || ""} readOnly />
+              </div>
+
+              {/* 탭 + 카테고리 (같은 줄 배치) */}
+              <div className="form-group-row">
+                <div className="flex-item">
+                  <label>탭 이름</label>
+                  <input type="text" value={community.tabName || ""} readOnly />
+                </div>
+                <div className="flex-item">
+                  <label>카테고리 이름</label>
                   <input
                     type="text"
-                    name="title"
-                    value={community.title || ""} // 데이터가 들어오기 전 에러 방지
-                    onChange={(e) =>
-                      setCommunity({ ...community, title: e.target.value })
-                    }
+                    value={community.categoryName || ""}
+                    readOnly
                   />
-                </li>
-                <li>
-                  <label htmlFor="userName">작성자</label>
+                </div>
+              </div>
+
+              {/* 작성자 + 조회수 (같은 줄 배치) */}
+              <div className="form-group-row">
+                <div className="flex-item">
+                  <label>작성자</label>
                   <input
                     type="text"
-                    name="userName"
-                    value={community.userName || ""} // 데이터가 들어오기 전 에러 방지
+                    value={community.userName || ""}
                     readOnly
                   />
-                </li>
-                <li>
-                  <label htmlFor="title">조회수</label>
-                  <input
-                    type="text"
-                    name="hit"
-                    value={community.hit || ""} // 데이터가 들어오기 전 에러 방지
-                    readOnly
-                  />
-                </li>
-                <li>
-                  <label htmlFor="tabName">탭 이름</label>
-                  <input
-                    type="text"
-                    name="tabName"
-                    value={community.tabName || ""} // 데이터가 들어오기 전 에러 방지
-                    readOnly
-                  />
-                </li>
-                <li>
-                  <label htmlFor="title">카테고리 이름</label>
-                  <input
-                    type="text"
-                    name="categoryName"
-                    value={community.categoryName || ""} // 데이터가 들어오기 전 에러 방지
-                    readOnly
-                  />
-                </li>
-                <li>
-                  <label htmlFor="content">내용</label>
-                  <textarea
-                    name="content"
-                    value={community.content || ""}
-                    readOnly
-                  />
-                </li>
-                <li>
-                  <label>날짜</label>
-                  <div className="view-box">
-                    {community.updateTime
-                      ? `수정일: ${community.updateTime?.split("T")[0] || ""}`
-                      : community.createTime
-                        ? `작성일: ${community.createTime?.split("T")[0] || ""}`
-                        : "날짜 정보 없음"}
-                  </div>
-                </li>
-                <li>
-                  <label htmlFor="file">첨부파일</label>
-                  <div className="file">
-                    {community.attachFile
-                      ? community.attachFile
-                      : "첨부파일 없음"}
-                  </div>
-                </li>
-                <li>
-                  <button
-                    onClick={() =>
-                      navigate(`/community/update/${community.id}`)
-                    }
-                  >
-                    수정
-                  </button>
-                </li>
-              </ul>
-              <div className="button">
+                </div>
+                <div className="flex-item">
+                  <label>조회수</label>
+                  <input type="text" value={community.hit || ""} readOnly />
+                </div>
+              </div>
+
+              {/* 내용 (보더라인 적용) */}
+              <div className="form-row">
+                <label>내용</label>
+                <div
+                  className="content-view"
+                  dangerouslySetInnerHTML={{ __html: renderableContent }}
+                />
+              </div>
+
+              {/* 날짜 및 버튼 영역 */}
+              <div className="form-row">
+                <label>날짜</label>
+                <div className="view-box">
+                  {community.updateTime
+                    ? `수정일: ${community.updateTime?.split("T")[0] || ""}`
+                    : community.createTime
+                      ? `작성일: ${community.createTime?.split("T")[0] || ""}`
+                      : "날짜 정보 없음"}
+                </div>
+              </div>
+
+              <div className="button-group">
+                <button
+                  onClick={() => navigate(`/community/update/${community.id}`)}
+                >
+                  수정
+                </button>
                 <button onClick={() => navigate("/community/communityList")}>
                   목록으로 돌아가기
                 </button>

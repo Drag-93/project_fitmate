@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { API_SERVER_URL } from "../../apis/commonApi";
 
 const CommunityList = ({ params, tabName }) => {
   const [list, setList] = useState([]);
@@ -9,7 +10,7 @@ const CommunityList = ({ params, tabName }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("http://localhost:8090/community/list", {
+        const res = await axios.get(`${API_SERVER_URL}/community/list`, {
           params: {
             tabId: params?.tabId,
             categoryId: params?.categoryId,

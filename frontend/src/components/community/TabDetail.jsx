@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { API_SERVER_URL } from "../../apis/commonApi";
 
 const TabDetail = () => {
   const { id } = useParams();
@@ -14,7 +15,7 @@ const TabDetail = () => {
     try {
       setIsLoading(true);
       const res = await axios.get(
-        `http://localhost:8090/community/tabDetail/${id}`,
+        `${API_SERVER_URL}/community/tabDetail/${id}`,
       );
       if (res.data?.tab) {
         setTab(res.data.tab);
@@ -37,7 +38,7 @@ const TabDetail = () => {
     try {
       setIsLoading(true);
       const res = await axios.put(
-        `http://localhost:8090/community/tabUpdate/${id}`,
+        `${API_SERVER_URL}/community/tabUpdate/${id}`,
         tab,
       );
       alert("수정되었습니다.");
@@ -56,7 +57,7 @@ const TabDetail = () => {
     try {
       setIsLoading(true);
       const res = await axios.delete(
-        `http://localhost:8090/community/tabDelete/${id}`,
+        `${API_SERVER_URL}/community/tabDelete/${id}`,
       );
       if (res.data?.result) {
         setTab(res.data.result);

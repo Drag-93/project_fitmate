@@ -40,12 +40,19 @@ public class CommunityReplyDto {
       userName = replyEntity.getMemberEntity().getUserName();
     }
 
+    Long memberId = null;
+    if (replyEntity.getMemberId() != null){
+      memberId = replyEntity.getMemberId();
+    } else if (replyEntity.getMemberEntity()!=null) {
+      memberId = replyEntity.getMemberEntity().getId();
+    }
+
     return CommunityReplyDto.builder()
             .id(replyEntity.getId())
             .content(replyEntity.getContent())
             .userName(userName) // 수정된 로직 적용
             .communityId(replyEntity.getCommunityId())
-            .memberId(replyEntity.getMemberId())
+            .memberId(memberId)
             .createTime(replyEntity.getCreateTime())
             .updateTime(replyEntity.getUpdateTime())
             .build();
