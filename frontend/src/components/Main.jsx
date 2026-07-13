@@ -68,6 +68,8 @@ const Main = () => {
       });
 
       setPopupList(visiblePopupList.slice(0, 2));
+      console.log(res.data);
+      console.log(popupList);
     } catch (err) {
       console.error(err);
     }
