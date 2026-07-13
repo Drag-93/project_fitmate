@@ -12,13 +12,13 @@ public interface SubscriptionService {
     List<SubscriptionDto> subscriptionList(Long memberId);
 
     // 구독 상세
-    SubscriptionDto subscriptionDetail(Long subscriptionId);
+    SubscriptionDto subscriptionDetail(Long memberId,Long subscriptionId);
 
     // 구독 상태 변경 (ACTIVE / CANCEL / PAUSED 등)
-    void updateSubscriptionStatus(Long subscriptionId, SubscriptionDto subscriptionDto);
+    void updateSubscriptionStatus(Long memberId, Long subscriptionId, SubscriptionDto subscriptionDto);
 
     // 구독 취소
-    void cancelSubscription(Long subscriptionId);
+    void cancelSubscription(Long memberId, Long subscriptionId);
 
     // 다음 결제일 갱신 (자동결제용)
     void updateNextPaymentDate(Long subscriptionId);

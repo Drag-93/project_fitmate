@@ -1,6 +1,8 @@
 package org.spring.backend.store.subscription.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.spring.backend.common.BasicTime;
 import org.spring.backend.member.entity.MemberEntity;
@@ -20,6 +22,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -51,6 +54,7 @@ public class SubscriptionEntity extends BasicTime {
 
   @Column(nullable = false)
   private LocalDateTime endDate;
+
   private LocalDateTime nextPaymentDate;
 
   // N:1
@@ -66,7 +70,6 @@ public class SubscriptionEntity extends BasicTime {
   private MemberEntity memberEntity;
 
   @JsonIgnore
-  @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "payment_id")
-  private PaymentEntity paymentEntity;
+  @OneToMany(mappedBy = "subscriptionEntity")
+    private List<PaymentEntity> paymentEntityList = new ArrayList<>();
 }

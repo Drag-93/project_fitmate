@@ -60,7 +60,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
   @Override
   @Transactional(readOnly = true)
-  public SubscriptionDto subscriptionDetail(Long subscriptionId) {
+  public SubscriptionDto subscriptionDetail(Long memberId, Long subscriptionId) {
 
     SubscriptionEntity subscription = subscriptionRepository.findById(subscriptionId)
         .orElseThrow(() -> new IllegalArgumentException("구독 상품이 존재하지 않습니다."));
@@ -69,7 +69,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
   }
 
   @Override
-  public void updateSubscriptionStatus(Long subscriptionId, SubscriptionDto subscriptionDto) {
+  public void updateSubscriptionStatus(Long memberId, Long subscriptionId, SubscriptionDto subscriptionDto) {
 
     SubscriptionEntity subscription = subscriptionRepository.findById(subscriptionId)
         .orElseThrow(() -> new IllegalArgumentException("구독 상품이 존재하지 않습니다."));
@@ -78,7 +78,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
   }
 
   @Override
-  public void cancelSubscription(Long subscriptionId) {
+  public void cancelSubscription(Long memberId, Long subscriptionId) {
     SubscriptionEntity subscription = subscriptionRepository.findById(subscriptionId)
         .orElseThrow(() -> new IllegalArgumentException("구독 상품이 존재하지 않습니다."));
 
