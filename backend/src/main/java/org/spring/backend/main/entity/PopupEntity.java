@@ -3,9 +3,11 @@ package org.spring.backend.main.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.spring.backend.common.BasicTime;
+import org.spring.backend.file.entity.FileEntity;
 import org.spring.backend.main.dto.PopupDto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -18,6 +20,7 @@ public class PopupEntity extends BasicTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "popup_id")
     private Long id;
     //팝업 제목
     private String title;
@@ -37,6 +40,10 @@ public class PopupEntity extends BasicTime {
     private String attachFile;
     //서버 저장 파일명
     private String newFileName;
+    //파일엔티티와 1:N 매핑
+    @OneToMany(mappedBy = "popupEntity",
+            fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<FileEntity> fileEntities;
 
     public static PopupEntity toInsertPopupEntity(PopupDto popupDto) {
         return PopupEntity.builder()

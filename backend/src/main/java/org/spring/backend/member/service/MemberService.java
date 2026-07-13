@@ -23,10 +23,10 @@ public interface MemberService {
 
     void memberUpdate(MemberDto memberDto) throws IOException;
 
-    void memberDelete(Long id);
+    void memberDelete(Long id) throws IOException;
 
     //이메일을 입력하면 데이터 제거
-    void memberDelete(String userEmail);
+    void memberDelete(String userEmail) throws IOException;
 
     //authSlice에 들어갈 기본적인 정보 조회
     MemberDto memberInit(String userEmail);

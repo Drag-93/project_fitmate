@@ -21,6 +21,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.spring.backend.common.BasicTime;
+import org.spring.backend.file.entity.FileEntity;
 import org.spring.backend.member.entity.MemberEntity;
 
 @Entity
@@ -70,4 +71,8 @@ public class CommunityEntity extends BasicTime {
     @OneToMany(mappedBy = "communityEntity",cascade = CascadeType.ALL,orphanRemoval= true)
     private List<CommunityReplyEntity> communityReplyEntity = new ArrayList<>();
 
+    //파일엔티티와 1:N 매핑
+    @OneToMany(mappedBy = "communityEntity",
+    fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<FileEntity> fileEntities;
 }

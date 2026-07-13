@@ -66,8 +66,8 @@ public class MemberDto {
             .updateTime(memberEntity.getUpdateTime())
             .memberAddId(memberEntity.getMemberAddEntity().getId())
             // 파일 엔티티가 존재할 때만 이름을 넣고, 없으면 null 세팅
-            .newFileName(memberEntity.getMemberFileEntity() != null ? memberEntity.getMemberFileEntity().getNewFileName() : null)
-            .oldFileName(memberEntity.getMemberFileEntity() != null ? memberEntity.getMemberFileEntity().getOldFileName() : null)
+            .newFileName(memberEntity.getFileEntities() != null && !memberEntity.getFileEntities().isEmpty() ? memberEntity.getFileEntities().get(0).getNewFileName() : null)
+            .oldFileName(memberEntity.getFileEntities() != null && !memberEntity.getFileEntities().isEmpty() ? memberEntity.getFileEntities().get(0).getOldFileName() : null)
             .build();
   }
 

@@ -3,6 +3,7 @@ package org.spring.backend.store.product.entity;
 import java.util.List;
 
 import org.spring.backend.common.BasicTime;
+import org.spring.backend.file.entity.FileEntity;
 import org.spring.backend.member.entity.MemberEntity;
 import org.spring.backend.store.product.dto.ProductDto;
 import org.spring.backend.store.product.type.BillingType;
@@ -83,5 +84,10 @@ public class ProductEntity extends BasicTime {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "member_id")
   private MemberEntity memberEntity;
+
+  //파일엔티티와 1:N 매핑
+  @OneToMany(mappedBy = "productEntity",
+          fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+  private List<FileEntity> fileEntities;
 
 }

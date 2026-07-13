@@ -58,7 +58,11 @@ public class MemberController {
     @DeleteMapping("/quit")
     public ResponseEntity<?> myPageDelete(@AuthenticationPrincipal CustomUserDetails userDetails){
         String userEmail = userDetails.getUsername();
+        try{
         memberService.memberDelete(userEmail);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
         return ResponseEntity.ok("ok");
     }
 
