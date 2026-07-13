@@ -6,7 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.spring.backend.common.TableType;
 import org.spring.backend.community.entity.CommunityEntity;
+import org.spring.backend.main.entity.PopupEntity;
 import org.spring.backend.member.entity.MemberEntity;
+import org.spring.backend.store.product.entity.ProductEntity;
 
 import java.time.LocalDateTime;
 
@@ -23,20 +25,26 @@ public class FileDto {
 
     private String oldFileName;
 
+    private String category;
+
+    private LocalDateTime createTime;
+
+    private LocalDateTime updateTime;
+
+    //각자 매핑했던 id, entity 불러오는용도
     private Long memberId;
 
     private Long communityId;
 
     private Long productId;
 
-    private String category;
+    private Long popupId;
 
     private MemberEntity memberEntity;
 
     private CommunityEntity communityEntity;
 
-//    private ProductEntity productEntity;
-    private LocalDateTime createTime;
+    private ProductEntity productEntity;
 
-    private LocalDateTime updateTime;
+    private PopupEntity popupEntity;
 }

@@ -2,5 +2,5 @@ package org.spring.backend.common;
 
 
 public enum TableType {
-    MEMBER,COMMUNITY,PRODUCT
+    MEMBER,COMMUNITY,PRODUCT, POPUP
 }

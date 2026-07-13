@@ -5,7 +5,10 @@ import lombok.*;
 import org.spring.backend.common.BasicTime;
 import org.spring.backend.common.TableType;
 import org.spring.backend.community.entity.CommunityEntity;
+import org.spring.backend.main.entity.PopupEntity;
 import org.spring.backend.member.entity.MemberEntity;
+import org.spring.backend.store.product.entity.ProductEntity;
+import org.spring.backend.store.product.type.ImageType;
 
 @Getter
 @Setter
@@ -43,8 +46,18 @@ public class FileEntity extends BasicTime {
     private CommunityEntity communityEntity;
 
     //N:1 상품
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "product_id")
-//    private Product productEntity;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
+    private ProductEntity productEntity;
 
+    //상품에서 필요한 요소들 추가
+    private int sortOrder; //이미지 순서
+
+    @Enumerated(EnumType.STRING)
+    private ImageType imageType;
+
+    //N:1 팝업
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "popup_id")
+    private PopupEntity popupEntity;
 }

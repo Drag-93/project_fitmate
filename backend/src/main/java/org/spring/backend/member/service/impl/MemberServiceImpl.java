@@ -114,16 +114,9 @@ public class MemberServiceImpl implements MemberService {
             memberRepository.save(originMemberEntity);
             return;
         }
-        try{
         originMemberEntity.setProfilePhoto(1);
         MemberEntity saveMember = memberRepository.save(originMemberEntity);
-         fileHandler.insertFile(filePath,TableType.MEMBER, saveMember.getId(), memberDto.getMemberFile());
-        }catch (Exception e){
-            System.out.println("파일 저장 중 에러 발생: " + e.getMessage());
-            e.printStackTrace();
-
-            throw new RuntimeException("회원 정보 수정 중 파일 처리 실패", e);
-        }
+        fileHandler.insertFile(filePath,TableType.MEMBER, saveMember.getId(), memberDto.getMemberFile());
     }
     @Transactional
     @Override
