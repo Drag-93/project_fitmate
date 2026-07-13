@@ -9,7 +9,7 @@ const CartItem = ({
   removeItem
 }) => {
   const [showModal, setShowModal] = useState(false);
-
+  
   return (
     <div className="cart-item">
       <input
@@ -20,7 +20,7 @@ const CartItem = ({
         }
       />
       <img className="productImage"
-        src={item.productImage}
+        src={`http://localhost:8090/upload/product/${item.productImage}`}
         alt={item.productName} />
       <div>
         <h3 className="productName">

@@ -9,7 +9,7 @@ const ProductList = ({ cartItems }) => {
         <div className="productItem" key={item.id}>
 
           <img
-            src={item.productImage}
+            src={`http://localhost:8090/upload/product/${item.productImage}`}
             alt={item.productName}
           />
 

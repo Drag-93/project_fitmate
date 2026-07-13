@@ -1,9 +1,9 @@
-package org.spring.backend.store.product.dto;
+package org.spring.backend.store.MemberProduct.dto;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import org.spring.backend.store.product.entity.MemberProductEntity;
+import org.spring.backend.store.MemberProduct.entity.MemberProductEntity;
 import org.spring.backend.store.product.entity.ProductEntity;
 import org.spring.backend.store.product.entity.ProductFileEntity;
 

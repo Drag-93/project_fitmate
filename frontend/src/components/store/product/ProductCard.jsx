@@ -9,7 +9,7 @@ const ProductCard = ({ product }) => {
   const thumbnail = product.productFileDtos?.find(
     file => file.imageType === "THUMBNAIL"  
   );
-  console.log(product.productFileDtos);
+
   return (
     <div  className="product-card"
       onClick={() => navigate(`/products/detail/${product.id}`)}

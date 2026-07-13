@@ -6,13 +6,20 @@ const KakaoPayList = () => {
 
   useEffect(() => {
 
-    const fn1 = async (e) => {
-      const response = await fetch("http://localhost:8095/payment/list")
-      const result = await response.json();
-      setData(result.payRsList)
-    }
-
-    fn1()
+    const fetchPaymentList = async (e) => {
+      try {
+        const response = await fetch("http://localhost:8090/api/payment/list",
+          {
+            credentials: "include"
+          }
+        );
+        const result = await response.json();
+        setData(result);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchPaymentList()
   }, [])
 
 
