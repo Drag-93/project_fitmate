@@ -15,14 +15,14 @@ public class PopupTest {
 
     @Test
     void insertPopup(){
-        for(int i=1; i<10; i++){
+        for(int i=11; i<15; i++){
             PopupDto popupDto = PopupDto.builder()
                     .active(true)
                     .title("팝업 테스트 " + i)
                     .content("팝업 내용 테스트 " + i)
                     .linkUrl("/store")
                     .startDate(LocalDateTime.now())
-                    .endDate(LocalDateTime.now().plusDays(1))
+                    .endDate(LocalDateTime.now().plusDays(10))
                     .sortOrder(i)
                     .build();
 
