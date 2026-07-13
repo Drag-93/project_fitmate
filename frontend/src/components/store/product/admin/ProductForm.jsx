@@ -43,7 +43,7 @@ const ProductForm = ({ product, onSubmit }) => {
   };
 
   return (
-    <form onSubmit={submitHandler}>
+    <form onSubmit={submitHandler} className="product-form">
 
       <div>
         <label>상품명</label>

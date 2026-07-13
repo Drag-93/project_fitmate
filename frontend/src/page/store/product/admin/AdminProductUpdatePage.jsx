@@ -10,6 +10,8 @@ import {
 
 import ProductForm from "../../../../components/store/product/admin/ProductForm";
 import ImageUpload from "../../../../components/store/product/admin/ImageUpload";
+import "../../../../components/css/store/product/admin/ProductAdmin.css";
+
 
 
 const AdminProductUpdatePage = () => {

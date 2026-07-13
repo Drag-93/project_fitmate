@@ -1,5 +1,6 @@
 import ProductRow from "./ProductRow";
 
+
 const ProductTable = ({ products, onEdit, onDelete }) => {
   return (
     <table className="product-table">

@@ -1,4 +1,6 @@
 import React from 'react'
+import "../../../../components/css/store/product/admin/ProductAdmin.css";
+
 
 const AdminProductDetailPage = () => {
   return (
