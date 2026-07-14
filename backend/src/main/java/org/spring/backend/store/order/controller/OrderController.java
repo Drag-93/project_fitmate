@@ -65,8 +65,12 @@ public class OrderController {
   @GetMapping("/list")
   public ResponseEntity<List<OrderDto>> orderList(
       @AuthenticationPrincipal CustomUserDetails user) {
+    MemberEntity member = memberRepository
+        .findByUserEmail(user.getUsername())
+        .orElseThrow(() -> new IllegalArgumentException("회원이 없습니다."));
+    List<OrderDto> orders = orderService.orderList(member.getId());
 
-    return ResponseEntity.ok(orderService.orderList(user.getMemberEntity().getId()));
+    return ResponseEntity.ok(orders);
   }
 
   // 주문 상세

@@ -6,6 +6,7 @@ import org.spring.backend.main.service.MainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 @SpringBootTest
@@ -14,7 +15,7 @@ public class PopupTest {
     MainService mainService;
 
     @Test
-    void insertPopup(){
+    void insertPopup() throws IOException{
         for(int i=1; i<5; i++){
             PopupDto popupDto = PopupDto.builder()
                     .active(true)

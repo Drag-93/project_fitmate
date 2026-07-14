@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import jwtAxios from "../../apis/util/jwtUtil";
 import { API_SERVER_URL } from "../../apis/commonApi";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../../store/slices/loginSlice";
 
 import "../css/member/memberDetail.css";
@@ -208,6 +208,15 @@ const MemberDetail = () => {
                   <li>
                     <span>구독여부</span>
                     <span>{member.subscribe}</span>
+                  </li>
+                  <li>
+                    <span><Link to="/order/list">주문/결제</Link></span>
+                  </li>
+                  <li>
+                    <span><Link to="/mypage/">구독 관리</Link></span>
+                  </li>
+                  <li>
+                  <span><Link to="/mypage/">운동 관리</Link></span>
                   </li>
                   <li className="buttonArea">
                     <button

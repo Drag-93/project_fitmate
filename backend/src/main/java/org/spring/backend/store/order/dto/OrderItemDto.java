@@ -29,14 +29,22 @@ public class OrderItemDto {
   private Long orderId;
 
   public static OrderItemDto toOrderItemDto(OrderItemEntity orderItemEntity) {
-  return OrderItemDto.builder()
-      .id(orderItemEntity.getId())
-      .productName(orderItemEntity.getProductName())
-      .price(orderItemEntity.getPrice())
-      .quantity(orderItemEntity.getQuantity())
-      .productImage(orderItemEntity.getProductImage())
-      .productId(orderItemEntity.getProductEntity().getId())
-      .orderId(orderItemEntity.getOrderEntity().getId())
-      .build();  
-}
+    return OrderItemDto.builder()
+        .id(orderItemEntity.getId())
+        .productName(orderItemEntity.getProductName())
+        .price(orderItemEntity.getPrice())
+        .quantity(orderItemEntity.getQuantity())
+        .productImage(
+            orderItemEntity.getProductEntity()
+                .getProductFileEntities()
+                .isEmpty()
+                    ? null
+                    : orderItemEntity.getProductEntity()
+                        .getProductFileEntities()
+                        .get(0)
+                        .getNewFileName())
+        .productId(orderItemEntity.getProductEntity().getId())
+        .orderId(orderItemEntity.getOrderEntity().getId())
+        .build();
+  }
 }
