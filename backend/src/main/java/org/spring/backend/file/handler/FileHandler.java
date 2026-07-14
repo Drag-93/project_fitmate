@@ -215,8 +215,13 @@ public class    FileHandler {
         String newFileName = UUID.randomUUID() + "_" + oldFileName;
         //URI fileUri = new URI(filePath + optionalFileEntity.get().getNewFileName());
         //File deleteFile = new File(fileUri);
-        //테스트시에는 경로uri사용할수 없기에 로컬로 사용
-        String localPath = filePath.replace("file://", "");
+        //URI기반으로 경로 변환
+        Path baseDirPath;
+        try{
+            baseDirPath = Paths.get(URI.create(filePath));
+        }catch (Exception e){
+            baseDirPath = Paths.get(filePath);
+        }
 
         //테이블 타입별로 나눠서 엔티티 생성
         switch (tableType){
@@ -286,7 +291,7 @@ public class    FileHandler {
         if(optionalFileEntity.isPresent()){
             try {
                 //파일이 최종저장되어있는 절대 경로 생성
-                Path targetFilePath = Paths.get(localPath).resolve(optionalFileEntity.get().getNewFileName());
+                Path targetFilePath = baseDirPath.resolve(optionalFileEntity.get().getNewFileName());
                 //파일로 변경
                 File deleteFile = targetFilePath.toFile();
                 //해당하는 파일이 있을 경우 삭제
@@ -305,7 +310,7 @@ public class    FileHandler {
 //            URI fileUri = new URI(filePath + newFileName);
 //            File deleteFile = new File(fileUri);
             //파일이 최종저장되어있는 절대 경로 생성
-            Path targetPath = Paths.get(localPath).resolve(newFileName);
+            Path targetPath = baseDirPath.resolve(newFileName);
             //만약 폴더가 없을때는 생성
             if(!Files.exists(targetPath.getParent())) Files.createDirectories(targetPath.getParent());
             //파일 저장
