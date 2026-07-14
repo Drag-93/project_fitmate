@@ -1,6 +1,5 @@
 import CommonCalendar from "../common/calendar/CommonCalendar";
 import { useState } from "react";
-import "../css/admin/Admin.css";
 
 const AdminCalendar = () => {
   // 일정 목록

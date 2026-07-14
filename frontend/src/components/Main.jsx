@@ -123,7 +123,7 @@ const Main = () => {
               <a href={popup.linkUrl || "#"}>
                 {popup.newFileName && (
                   <img
-                    src={`${API_SERVER_URL}/backend/popup/${popup.newFileName}`}
+                    src={`${API_SERVER_URL}/upload/popup/${popup.newFileName}`}
                     alt={popup.title}
                   />
                 )}
