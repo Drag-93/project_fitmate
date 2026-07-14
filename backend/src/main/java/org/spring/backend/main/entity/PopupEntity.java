@@ -19,8 +19,8 @@ import java.util.List;
 public class PopupEntity extends BasicTime {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "popup_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     //팝업 제목
     private String title;

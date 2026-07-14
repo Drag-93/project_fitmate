@@ -50,8 +50,8 @@ const Main = () => {
   const getMainData = async () => {
     try {
       const res = isLogin
-        ? await jwtAxios.get(`${API_URL}/main`) //로그인 상태일때 jwtAxios 사용
-        : await axios.get(`${API_URL}/main`); //비로그인 상태일때 그냥 axios 사용
+        ? await jwtAxios.get(`${API_URL}/api/main`) //로그인 상태일때 jwtAxios 사용
+        : await axios.get(`${API_URL}/api/main`); //비로그인 상태일때 그냥 axios 사용
 
       setCommunityList(res.data.communityList || []);
       setProductList(res.data.productList || []);
@@ -68,8 +68,7 @@ const Main = () => {
       });
 
       setPopupList(visiblePopupList.slice(0, 2));
-      console.log(res.data);
-      console.log(popupList);
+      // console.log(res.data);
     } catch (err) {
       console.error(err);
     }
@@ -206,7 +205,7 @@ const Main = () => {
                           {Array.isArray(noticeList) &&
                             noticeList.map((notice) => (
                               <li key={notice.id}>
-                                <a href={`/community/notice/${notice.id}`}>
+                                <a href={`/community/detail/${notice.id}`}>
                                   <p>{notice.title}</p>
                                 </a>
                               </li>
@@ -218,7 +217,7 @@ const Main = () => {
                           {Array.isArray(communityList) &&
                             communityList.map((community) => (
                               <li key={community.id}>
-                                <a href={`/community/${community.id}`}>
+                                <a href={`/community/detail/${community.id}`}>
                                   <p>{community.title}</p>
                                 </a>
                               </li>
