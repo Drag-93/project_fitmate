@@ -37,6 +37,11 @@ spring:
     username: admin #docker run 의 default user
     password: 1234 #docker run 의 default password
 
+  data:
+    redis:
+      port: 6379
+      host: localhost
+
 rabbitmq.queue.name: ec2.queue
 rabbitmq.exchange.name: ec2.exchange
 rabbitmq.question.routing.key: ec2.routing.#
@@ -50,11 +55,11 @@ logging:
 img.path.product: file:///E:/fitmate/backend/product/
 img.path.community: file:///E:/fitmate/backend/community/
 #멤버의 파일저장경로
-img.path.member: file://E:/fitmate/backend/member/
+img.path.member: file:///E:/fitmate/backend/member/
+#팝업 파일저장경로
+img.path.popup: file:///E:/fitmate/backend/popup/
 
 #jwt의 암호화를 위한 시크릿 키
 jwt:
   secret:
     key: 9FyI8s5wSrqBkG5Xl2DUsb3F3JZ3bd9ACx6CluuxyUw=
-
-    

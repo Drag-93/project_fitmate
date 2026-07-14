@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.spring.backend.member.repository.RefreshRepository;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.filter.GenericFilterBean;
 
 import java.io.IOException;
@@ -17,8 +18,8 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class CustomLogoutFilter extends GenericFilterBean {
     private final JWTUtil jwtUtil;
-    private final RefreshRepository refreshRepository;
-
+//    private final RefreshRepository refreshRepository;
+    private final RedisTemplate<String, String> redisTemplate;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -43,13 +44,14 @@ public class CustomLogoutFilter extends GenericFilterBean {
         //Refresh토큰 가져오기
         String refresh = null;
         Cookie[] cookies = request.getCookies();
-        for(Cookie cookie: cookies){
-            //쿠키중 refresh이름이 달린 쿠키 찾기
-            if(cookie.getName().equals("refresh")){
-                refresh = cookie.getValue();
+        if (cookies != null) {
+            for(Cookie cookie: cookies){
+                //쿠키중 refresh이름이 달린 쿠키 찾기
+                if(cookie.getName().equals("refresh")){
+                    refresh = cookie.getValue();
+                }
             }
         }
-
         //Refresh토큰 유효성 검사
         if(refresh == null){
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -71,19 +73,29 @@ public class CustomLogoutFilter extends GenericFilterBean {
         }
 
         //Refresh테이블에 저장되어있는지 확인
-        Boolean isExist = refreshRepository.existsByRefresh(refresh);
+//        Boolean isExist = refreshRepository.existsByRefresh(refresh);
+//        if(!isExist){
+//            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+//            return;
+//        }
+
+        //Refresh토큰 DB에서 제거
+//        refreshRepository.deleteByRefresh(refresh);
+
+        String userEmail = jwtUtil.getUserEmail(refresh);
+
+        Boolean isExist = redisTemplate.hasKey(userEmail);
         if(!isExist){
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
-
-        //Refresh토큰 DB에서 제거
-        refreshRepository.deleteByRefresh(refresh);
+        redisTemplate.delete(userEmail);
 
         //Refresh 토큰 Cookie값 초기화
         Cookie cookie = new Cookie("refresh", null);
         cookie.setMaxAge(0);
         cookie.setPath("/");
+        cookie.setHttpOnly(true);
 
         response.addCookie(cookie);
         response.setStatus(HttpServletResponse.SC_OK);

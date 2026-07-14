@@ -3,6 +3,7 @@ import { getCookie, setCookie, removeCookie } from "../../apis/util/cookieUtil";
 import { loginFn, loginOAuth2Fn } from "../../apis/auth/login";
 import { API_SERVER_URL } from "../../apis/commonApi";
 import jwtAxios from "../../apis/util/jwtUtil";
+import axios from "axios";
 //멤버 초기화값
 const initState = {
   memberData: null,
@@ -12,6 +13,23 @@ export const loginPostAsync = createAsyncThunk(
   "loginPostAsync",
   ({ userEmail, userPw }) => {
     return loginFn(userEmail, userPw);
+  },
+);
+//로그아웃용 비동기 청크
+export const logoutAsync = createAsyncThunk(
+  "auth/logoutAsync",
+  async (_, { rejectWithValue }) => {
+    try {
+      // 백엔드의 CustomLogoutFilter가 동작하도록 POST 요청을 보냄
+      const res = await axios.post(
+        `${API_SERVER_URL}/logout`,
+        {},
+        { withCredentials: true },
+      );
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err);
+    }
   },
 );
 
@@ -88,6 +106,17 @@ const loginSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      //로그아웃 성공유무에따라 에러로그 생성
+      .addCase(logoutAsync.fulfilled, (state, action) => {
+        removeCookie("member"); // 일반 member 쿠키 제거
+        return { ...initState }; // 상태 초기화
+      })
+      .addCase(logoutAsync.rejected, (state, action) => {
+        console.error("백엔드 로그아웃 실패: ", action.payload);
+        // 에러가 나더라도 클라이언트 쿠키는 지워주는 것이 안전합니다.
+        removeCookie("member");
+        return { ...initState };
+      })
       .addCase(loginPostAsync.fulfilled, (state, action) => {
         const payload = action.payload;
         //정상적인 로그인 확인

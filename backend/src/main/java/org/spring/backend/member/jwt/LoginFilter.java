@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.spring.backend.common.Role;
 import org.spring.backend.member.entity.RefreshEntity;
 import org.spring.backend.member.repository.RefreshRepository;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,6 +22,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
@@ -29,9 +31,11 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     //JWT토큰 생성 및 검증 유틸리티
     private final JWTUtil jwtUtil;
     //Refresh토큰 저장 레포지토리
-    private final RefreshRepository refreshRepository;
+//    private final RefreshRepository refreshRepository;
 
     private final ObjectMapper objectMapper;
+
+    private final RedisTemplate<String, String> redisTemplate;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
@@ -50,7 +54,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         String userEmail = customUserDetails.getUsername();
         //재 로그인시에 refresh토큰이 쌓이는걸 방지하기 위해 제거
-        refreshRepository.deleteByUserEmail(userEmail);
+//        refreshRepository.deleteByUserEmail(userEmail);
+        redisTemplate.delete(userEmail);
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
@@ -62,7 +67,10 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String refresh = jwtUtil.createJwt("refresh",userEmail, role, 86400000L);
 
         //Refresh토큰 저장        
-        addRefreshEntity(userEmail, refresh, 86400000L);
+//        addRefreshEntity(userEmail, refresh, 86400000L);
+        addRefreshToRedis(userEmail, refresh, 86400L);
+
+
 
         //Refresh쿠키 저장
         response.addCookie(createCookie("refresh",refresh));
@@ -71,7 +79,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         claims.put("userEmail",userEmail);
         claims.put("role",role);
         claims.put("access",access);
-        claims.put("refresh",refresh);
 
         String jsonStr = objectMapper.writeValueAsString(claims);
         response.setContentType("application/json");
@@ -81,17 +88,27 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         printWriter.close();
     }
 
-    //Refresh토큰 DB서버에 저장
-    private void addRefreshEntity(String userEmail, String refresh, Long expireMs){
-        Date date = new Date(System.currentTimeMillis() + expireMs);
-
-        RefreshEntity refreshEntity = RefreshEntity.builder()
-                .userEmail(userEmail)
-                .refresh(refresh)
-                .expiration(date.toString())
-                .build();
-        refreshRepository.save(refreshEntity);
+    private void addRefreshToRedis(String userEmail, String refresh, long expireS) {
+        // opsForValue().set(key, value, timeout, timeunit)을 사용해 만료시간 자동관리
+        redisTemplate.opsForValue().set(
+                userEmail,
+                refresh,
+                expireS,
+                TimeUnit.SECONDS
+        );
     }
+
+    //Refresh토큰 DB서버에 저장
+//    private void addRefreshEntity(String userEmail, String refresh, Long expireMs){
+//        Date date = new Date(System.currentTimeMillis() + expireMs);
+//
+//        RefreshEntity refreshEntity = RefreshEntity.builder()
+//                .userEmail(userEmail)
+//                .refresh(refresh)
+//                .expiration(date.toString())
+//                .build();
+//        refreshRepository.save(refreshEntity);
+//    }
     //쿠키 생성
     private Cookie createCookie(String key, String value){
         Cookie cookie = new Cookie(key, value);

@@ -1,11 +1,17 @@
 package org.spring.backend.member.controller;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.spring.backend.member.dto.MemberDto;
 import org.spring.backend.member.jwt.CustomUserDetails;
 import org.spring.backend.member.service.MemberService;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,6 +27,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
+    private final RedisTemplate<String, String> redisTemplate;
 
     @PostMapping("/join")
     public ResponseEntity<?> join(MemberDto memberDto){
@@ -71,5 +78,15 @@ public class MemberController {
     public ResponseEntity<?> myPageUpdate(@ModelAttribute MemberDto memberDto) throws IOException {
         memberService.memberUpdate(memberDto);
         return ResponseEntity.ok("ok");
+    }
+
+    //이메일체크 api
+    @PostMapping("/email")
+    public ResponseEntity<?> emailCheck(MemberDto memberDto){
+        if(memberService.emailCheck(memberDto.getUserEmail())){
+            return ResponseEntity.ok("no");
+        }else{
+            return ResponseEntity.ok("ok");
+        }
     }
 }
