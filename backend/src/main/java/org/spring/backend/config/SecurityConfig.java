@@ -6,6 +6,7 @@ import org.spring.backend.member.jwt.*;
 import org.spring.backend.member.repository.RefreshRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,7 +31,9 @@ public class SecurityConfig {
 
         private final AuthenticationConfiguration authenticationConfiguration;
 
-        private final RefreshRepository refreshRepository;
+//        private final RefreshRepository refreshRepository;
+
+        private final RedisTemplate<String, String> redisTemplate;
 
         private final ObjectMapper objectMapper;
 
@@ -45,7 +48,7 @@ public class SecurityConfig {
         }
 
         @Bean
-        public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authenticationManager)
+        public SecurityFilterChain filterChain(HttpSecurity http)
                         throws Exception {
                 http.csrf(
                                 csrf -> csrf.disable())
@@ -59,21 +62,18 @@ public class SecurityConfig {
                                 .formLogin(form -> form.disable())
                                 .httpBasic(httpBasic -> httpBasic.disable())
                                 .cors(cors -> cors.configurationSource(corsConfigurationSoruce()))
+                                .logout(logout -> logout.disable()) //기존 로그아웃방식 비활성화
                                 .sessionManagement(session -> session
                                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                                 .oauth2Login(oauth2 -> oauth2.loginPage("/auth/login").userInfoEndpoint(
                                                 userInfo -> userInfo.userService(customDefaultOAuth2UserService))
                                                 .successHandler(customOAuth2SuccessHandler)
                                                 .failureUrl(frontServerURL + "/login?error"))
-                                .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class) // 기본
-                                                                                                                     // 로그인
-                                                                                                                     // 필터
-                                                                                                                     // 이전에
-                                                                                                                     // 실행
-                                .addFilterAt(new LoginFilter(authenticationManager, jwtUtil,
-                                                refreshRepository, objectMapper),
+                                .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
+                                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil,
+                                                objectMapper, redisTemplate),
                                                 UsernamePasswordAuthenticationFilter.class) // Spring 기본 로그인 필터대신 사용
-                                .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository),
+                                .addFilterBefore(new CustomLogoutFilter(jwtUtil, redisTemplate),
                                                 LogoutFilter.class); // 로그아웃 처리
 
                 return http.build();

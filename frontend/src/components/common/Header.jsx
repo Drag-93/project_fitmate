@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../css/common/Header.css";
 import { useDispatch, useSelector } from "react-redux";
-import loginSlice, { logout } from "../../store/slices/loginSlice";
+import loginSlice, { logout, logoutAsync } from "../../store/slices/loginSlice";
 const Header = () => {
   //변수 선언
   const dispatch = useDispatch();
@@ -12,10 +12,19 @@ const Header = () => {
   const { memberData } = useSelector((state) => state.loginSlice); //user 정보
   const isLogin = !!memberData?.result?.userEmail;
   //로그아웃
-  const logoutFn = () => {
-    dispatch(logout());
-    alert("로그아웃 되었습니다.");
-    navigate("/");
+  const logoutFn = async () => {
+    //기존 그냥 로그아웃함수만 불러오던것 -> 비동기청크로 실제 customLogoutFilter를 거칠수있게 설정
+    try {
+      //로그아웃이 될때까지 기다림
+      await dispatch(logoutAsync()).unwrap();
+      alert("로그아웃 되었습니다.");
+      navigate("/");
+    } catch (error) {
+      //로그아웃api가 실패하거나 서버가 다운되어있으면 로그를 남기고, 멤버쿠키만 제거하는 기존 로그아웃으로 진행
+      console.error("로그아웃 처리 중 에러 발생:", error);
+      dispatch(logout());
+      navigate("/");
+    }
   };
 
   // 검색기능변수
