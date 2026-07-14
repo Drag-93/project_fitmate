@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -282,17 +283,22 @@ public class MainServiceImpl implements MainService {
     @Transactional
     @Override
     public void deletePopup(Long id) throws IOException {
+        System.out.println("백엔드 팝업 삭제 실행");
         PopupEntity popupEntity =
                 popupRepository
                         .findById(id)
                         .orElseThrow(() ->
                                 new IllegalArgumentException("해당 팝업이 없습니다. id=" + id));
         //실제 저장 파일과 FileEntity 삭제
-        fileHandler.deleteFile(
-                popupPath,
-                TableType.POPUP,
-                id
-        );
+        Optional<FileEntity> fileEntity=fileRepository.findByPopupEntity(popupEntity);
+        if(fileEntity.isPresent()){
+
+            fileHandler.deleteFile(
+                    popupPath,
+                    TableType.POPUP,
+                    id);
+        }
+
         // 팝업 정보 삭제
         popupRepository.delete(popupEntity);
     }

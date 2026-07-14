@@ -68,7 +68,7 @@ public class    FileHandler {
 //            URI fileUri = new URI(filePath + optionalFileEntity.get().getNewFileName());
 //            File deleteFile = new File(fileUri);
             //테스트시에는 경로uri사용할수 없기에 로컬로 사용
-            String localPath = filePath.replace("file://", "");
+            String localPath = filePath.replace("file:///", "");
             //파일이 최종저장되어있는 절대 경로 생성
             Path targetFilePath = Paths.get(localPath).resolve(optionalFileEntity.get().getNewFileName());
             //파일로 변경
