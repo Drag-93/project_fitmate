@@ -24,25 +24,26 @@ import java.util.Optional;
 public class MainController {
     private final MainService mainService;
     private final MemberRepository memberRepository;
-    @GetMapping("/main")
+    @GetMapping("/api/main")
     public ResponseEntity<MainResponseDto> getMainData(
             @AuthenticationPrincipal CustomUserDetails user       //backend 기준 user 정보가 담기는곳
     ) {
-//        System.out.println("===== /main 요청 들어옴 =====");
-//        System.out.println("user = " + user);
+        System.out.println("===== /main 요청 들어옴 =====");
+        System.out.println("user = " + user);
 
         //response 변수 선언
         MainResponseDto response;
 
         //비로그인 상태일때
         if (user == null) {
-//            System.out.println("비회원 메인 실행");
+            System.out.println("비회원 메인 실행");
             response = mainService.getDefaultMainData();
         //로그인 상태일때
         } else {
-            //CustomUserDetails 에서 userEmail 가져옴
+            System.out.println("회원 메인 실행");
+//            CustomUserDetails 에서 userEmail 가져옴
             String userEmail = user.getUsername();
-
+            System.out.println("이메일"+userEmail);
             //userEmail로 memberEntity조회
             Optional<MemberEntity> optionalMemberEntity =
                     memberRepository.findByUserEmail(userEmail);

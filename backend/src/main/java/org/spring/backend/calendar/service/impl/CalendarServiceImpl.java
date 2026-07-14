@@ -14,18 +14,14 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CalendarServiceImpl implements CalendarService {
-
     private final MemberRepository memberRepository;
-
     @Override
     @Transactional(readOnly = true)
     public List<CalendarDto> getCalendar(Long memberId, String eventType){
-
         // 회원 존재 여부 확인
         MemberEntity memberEntity = memberRepository.findById(memberId)
                 .orElseThrow(() ->
                         new IllegalArgumentException("회원 정보가 없습니다."));
-
         // eventType에 따라 조회할 일정 분기
         switch (eventType.toUpperCase()) {
             // 전체 일정 조회

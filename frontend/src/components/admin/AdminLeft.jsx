@@ -73,6 +73,15 @@ const AdminLeft = ({ isMobile, show, onClose }) => {
               게시판
             </NavLink>
           </li>
+          <li>
+            <NavLink
+              to={"/admin/popup"}
+              className={linkClass}
+              onClick={onClose}
+            >
+              팝업
+            </NavLink>
+          </li>
         </ul>
       </div>
     </div>

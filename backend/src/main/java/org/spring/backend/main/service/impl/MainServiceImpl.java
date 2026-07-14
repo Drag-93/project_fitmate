@@ -34,14 +34,20 @@ public class MainServiceImpl implements MainService {
                 communityRepository
                         .findTop5ByCategoryNameOrderByCreateTimeDesc("notice")
                         .stream()
-                        .map(CommunityDto::new)
+                        .map(entity -> CommunityDto.builder()
+                                .id(entity.getId())
+                                .title(entity.getTitle())
+                                .build())
                         .toList();
 
         List<CommunityDto> communityList =
                 communityRepository
                         .findTop5ByCategoryNameNotOrderByHitDesc("notice")
                         .stream()
-                        .map(CommunityDto::new)
+                        .map(entity -> CommunityDto.builder()
+                                .id(entity.getId())
+                                .title(entity.getTitle())
+                                .build())
                         .toList();
 
         // 비회원용: 전체 상품 중 판매량 높은 TOP 5
@@ -50,7 +56,12 @@ public class MainServiceImpl implements MainService {
         List<ProductDto> productList =
                 orderItemRepository.findPopularProducts(pageable)
                         .stream()
-                        .map(ProductDto::toProductDto)
+                        .map(entity -> ProductDto.builder()
+                                .id(entity.getId())
+                                .productName(entity.getProductName())
+                                .price(entity.getPrice())
+//                    썸네일            .thumbnail(entity.getProductFileEntities().get().getNewFileName())
+                                .build())
                         .toList();
 
         //현재일 기준 활성화된 팝업리스트
@@ -62,13 +73,13 @@ public class MainServiceImpl implements MainService {
                         .map(PopupDto::toPopupDto)
                         .toList();
 
-
         return MainResponseDto.builder()
                 .communityList(communityList)
                 .productList(productList)
                 .noticeList(noticeList)
                 .popupList(popupList)
                 .build();
+
     }
 
     @Override
@@ -81,7 +92,10 @@ public class MainServiceImpl implements MainService {
                 communityRepository
                         .findTop5ByCategoryNameOrderByCreateTimeDesc("notice")
                         .stream()
-                        .map(CommunityDto::new)
+                        .map(entity -> CommunityDto.builder()
+                                .id(entity.getId())
+                                .title(entity.getTitle())
+                                .build())
                         .toList();
 
         // Interest 기반 커뮤니티 TOP 5
@@ -89,7 +103,10 @@ public class MainServiceImpl implements MainService {
                 communityRepository
                         .findTop5ByCategoryNameOrderByHitDesc(communityCategory)
                         .stream()
-                        .map(CommunityDto::new)
+                        .map(entity -> CommunityDto.builder()
+                                .id(entity.getId())
+                                .title(entity.getTitle())
+                                .build())
                         .toList();
 
         // Interest 기반 상품 판매량 TOP 5
@@ -99,7 +116,12 @@ public class MainServiceImpl implements MainService {
                 orderItemRepository
                         .findPopularProductsByCategory(productCategory, pageable)
                         .stream()
-                        .map(ProductDto::toProductDto)
+                        .map(entity -> ProductDto.builder()
+                                .id(entity.getId())
+                                .productName(entity.getProductName())
+                                .price(entity.getPrice())
+//                    썸네일            .thumbnail(entity.getProductFileEntities().get().getNewFileName())
+                                .build())
                         .toList();
 
         //현재일 기준 활성화된 팝업리스트
