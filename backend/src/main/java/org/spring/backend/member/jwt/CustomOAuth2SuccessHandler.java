@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.spring.backend.member.entity.RefreshEntity;
 import org.spring.backend.member.repository.RefreshRepository;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -19,13 +20,15 @@ import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Component
 @RequiredArgsConstructor
 //소셜로그인 oauth2 성공시의 핸들러
 public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final JWTUtil jwtUtil;
-    private final RefreshRepository refreshRepository;
+//    private final RefreshRepository refreshRepository;
+    private final RedisTemplate<String, String> redisTemplate;
     private final ObjectMapper objectMapper;
 
     //프론트 페이지 리다이렉트를 위한 서버주소(프론트서버주소)
@@ -38,7 +41,8 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
         String userEmail = customUserDetails.getUsername();
         //재 로그인시 리프레쉬 토큰 쌓이는것을 방지
-        refreshRepository.deleteByUserEmail(userEmail);
+//        refreshRepository.deleteByUserEmail(userEmail);
+        redisTemplate.delete(userEmail);
 
         //권한정보 가져오기
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
@@ -51,7 +55,8 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         String refresh = jwtUtil.createJwt("refresh",userEmail, role, 86400000L);
 
         //Refresh토큰 저장
-        addRefreshEntity(userEmail, refresh, 86400000L);
+//        addRefreshEntity(userEmail, refresh, 86400000L);
+        addRefreshToRedis(userEmail, refresh, 86400000L);
 
         //Refresh쿠키 저장
         response.addCookie(createCookie("refresh",refresh));
@@ -60,7 +65,6 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         claims.put("userEmail",userEmail);
         claims.put("role",role);
         claims.put("access",access);
-        claims.put("refresh",refresh);
 
         String jsonStr = objectMapper.writeValueAsString(claims);
         //쿠키값에 공백이나 특수문자가 들어가지않게 URL인코딩
@@ -78,17 +82,28 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         getRedirectStrategy().sendRedirect(request, response, redirectURL);
     }
 
-    //Refresh토큰 DB서버에 저장
-    private void addRefreshEntity(String userEmail, String refresh, Long expireMs){
-        Date date = new Date(System.currentTimeMillis() + expireMs);
-
-        RefreshEntity refreshEntity = RefreshEntity.builder()
-                .userEmail(userEmail)
-                .refresh(refresh)
-                .expiration(date.toString())
-                .build();
-        refreshRepository.save(refreshEntity);
+    private void addRefreshToRedis(String userEmail, String refresh, long expireMs) {
+        // opsForValue().set(key, value, timeout, timeunit)을 사용해 만료시간 자동관리
+        redisTemplate.opsForValue().set(
+                userEmail,
+                refresh,
+                expireMs,
+                TimeUnit.MILLISECONDS
+        );
     }
+
+    //Refresh토큰 DB서버에 저장
+//    private void addRefreshEntity(String userEmail, String refresh, Long expireMs){
+//        Date date = new Date(System.currentTimeMillis() + expireMs);
+//
+//        RefreshEntity refreshEntity = RefreshEntity.builder()
+//                .userEmail(userEmail)
+//                .refresh(refresh)
+//                .expiration(date.toString())
+//                .build();
+//        refreshRepository.save(refreshEntity);
+//    }
+
     //쿠키 생성
     private Cookie createCookie(String key, String value){
         Cookie cookie = new Cookie(key, value);

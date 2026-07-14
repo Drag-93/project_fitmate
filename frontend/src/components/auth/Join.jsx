@@ -15,25 +15,24 @@ const Join = () => {
   const [joinData, setJoinData] = useState(initUserData);
   const onChangeFn = (e) => {
     const { name, value } = e.target;
+    if (name === "userEmail") setEmailCheck(false);
     setJoinData({ ...joinData, [name]: value });
   };
+
+  //이메일 중복체크 여부 확인 변수
+  const [emailCheck, setEmailCheck] = useState(false);
 
   //이메일 형식 체크를 위한 정규식 선언
   const emailRegex =
     /^[a-zA-Z0-9_+&*-]+(?:\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/;
 
   const onJoinFn = async () => {
-    if (!joinData.userEmail) {
-      alert("이메일을 입력해주세요");
-      return;
-    }
-    //이메일 형식에 맞지않는지 체크
-    if (!emailRegex.test(joinData.userEmail.trim())) {
-      alert("이메일 형식이 올바르지 않습니다.");
+    if (!emailCheck) {
+      alert("이메일 중복을 체크해주세요.");
       return;
     }
     if (!joinData.userPw) {
-      alert("비밀번호 입력해주세요");
+      alert("비밀번호를 입력해주세요");
       return;
     }
     if (!joinData.userName) {
@@ -63,6 +62,37 @@ const Join = () => {
       alert("서버 연결에 실패하였습니다.");
     }
   };
+  const emailCheckFn = async () => {
+    if (!joinData.userEmail) {
+      alert("이메일을 입력해주세요");
+      return;
+    }
+    //이메일 형식에 맞지않는지 체크
+    if (!emailRegex.test(joinData.userEmail.trim())) {
+      alert("이메일 형식이 올바르지 않습니다.");
+      return;
+    }
+    const formData = new FormData();
+    formData.append("userEmail", joinData.userEmail);
+    try {
+      const res = await axios.post(
+        `${API_SERVER_URL}/api/member/email`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        },
+      );
+      if (res.data === "ok") {
+        setEmailCheck(true);
+      } else if (res.data === "no") {
+        alert("이메일이 중복되었습니다.");
+        setEmailCheck(false);
+      }
+    } catch (err) {
+      console.error("통신 에러:", err);
+      alert("서버 연결에 실패하였습니다.");
+    }
+  };
   return (
     <>
       <div className="join">
@@ -78,7 +108,17 @@ const Join = () => {
                 value={joinData.userEmail}
                 onChange={onChangeFn}
               />
+              <button onClick={emailCheckFn}>중복확인</button>
             </li>
+            {emailCheck ? (
+              <li>
+                <span>이메일 중복확인이 완료되었습니다.</span>
+              </li>
+            ) : (
+              <li>
+                <span>이메일 중복체크를 해주세요.</span>
+              </li>
+            )}
             <li>
               <input
                 type="password"
