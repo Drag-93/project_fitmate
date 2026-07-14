@@ -9,6 +9,7 @@ import org.spring.backend.community.repository.CommunityRepository;
 import org.spring.backend.community.service.CommunityReplyService;
 import org.spring.backend.member.entity.MemberEntity;
 import org.spring.backend.member.repository.MemberRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,25 +20,31 @@ public class CommunityReplyServiceImpl implements CommunityReplyService {
     private final CommunityReplyRepository communityReplyRepository;
     private final MemberRepository memberRepository;
 
-@Override
-public void insertReply(CommunityReplyDto dto) {
-    //회원 조회
-     MemberEntity memberEntity = memberRepository.findById(dto.getMemberId())
-             .orElseThrow(() -> new IllegalArgumentException("회원이 존재하지 않습니다"));
+    @Override
+    public void insertReply(CommunityReplyDto dto) {
+        // 1. SecurityContext에서 현재 인증된 유저의 정보를 가져옵니다.
+        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
 
-            //게시글 조회
-    CommunityEntity communityEntity = communityRepository.findById(dto.getCommunityId())
-            .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다"));
+        // 2. 해당 username을 기반으로 DB에서 Member를 찾습니다.
+        // (만약 findByUsername이 없다면 memberRepository에 추가해주세요)
+        MemberEntity memberEntity = memberRepository.findByUserEmail(currentUsername)
+                .orElseThrow(() -> new IllegalArgumentException("로그인한 회원을 찾을 수 없습니다."));
 
-    CommunityReplyEntity replyEntity = CommunityReplyEntity.builder()
-            .content(dto.getContent())
-            .userName(dto.getUserName())
-            .communityEntity(communityEntity)
-             .memberEntity(memberEntity)
-            .build();
+        // 3. 게시글 정보 조회 (dto에 들어있는 communityId 사용)
+        Long communityId = Long.parseLong(String.valueOf(dto.getCommunityId()));
+        CommunityEntity communityEntity = communityRepository.findById(communityId)
+                .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
 
-    communityReplyRepository.save(replyEntity);
-}
+        // 4. 엔티티 생성 시 조회한 memberEntity를 직접 사용
+        CommunityReplyEntity replyEntity = CommunityReplyEntity.builder()
+                .content(dto.getContent())
+                .userName(memberEntity.getUserName()) // 로그인한 유저의 이름을 사용
+                .communityEntity(communityEntity)
+                .memberEntity(memberEntity) // null이 아닌 실제 엔티티 객체 전달
+                .build();
+
+        communityReplyRepository.save(replyEntity);
+    }
 
     @Override
     public List<CommunityReplyDto> replyList(Long communityId) {

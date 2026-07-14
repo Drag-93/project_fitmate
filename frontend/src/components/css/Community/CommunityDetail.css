@@ -1,34 +1,41 @@
-/* 전체 레이아웃 */
+/* 전체 레이아웃 (이전 스타일 유지) */
 .communityDetail {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
 }
 
-.communityDetail-con h1 {
-  border-bottom: 2px solid #333;
-  padding-bottom: 10px;
-  margin-bottom: 20px;
+.detailbody {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* 항목 간 간격 */
 }
 
-/* 폼 스타일 */
-.detailbody ul {
-  list-style: none;
-  padding: 0;
+/* 1줄짜리 항목 (제목 등) */
+.form-row {
+  display: flex;
+  flex-direction: column;
 }
 
-.detailbody li {
-  margin-bottom: 15px;
+/* 2개씩 묶인 항목 (탭+카테고리, 작성자+조회수) */
+.form-group-row {
+  display: flex;
+  gap: 20px;
 }
 
-.detailbody label {
+.flex-item {
+  flex: 1;
+}
+
+/* 라벨 스타일 */
+label {
   display: block;
   font-weight: bold;
   margin-bottom: 5px;
 }
 
-.detailbody input[type="text"],
-.detailbody textarea {
+/* 입력창 스타일 */
+input {
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
@@ -36,70 +43,36 @@
   box-sizing: border-box;
 }
 
-.detailbody textarea {
-  height: 200px;
-  resize: vertical;
+/* 내용 칸: 보더라인 적용 및 이미지 제어 (중요) */
+.content-view {
+  min-height: 300px;
+  padding: 15px;
+  border: 1px solid #ccc; /* 보더라인 */
+  border-radius: 4px;
+  background-color: #fff;
+  margin-top: 5px;
+  overflow: hidden; /* 영역 밖으로 넘침 방지 */
 }
 
-/* 버튼 스타일 */
-.button {
-  margin-top: 20px;
+/* 내용 칸 안의 이미지 크기 제어 */
+.content-view img {
+  max-width: 100%; /* 박스 너비를 절대 넘지 않음 */
+  height: auto; /* 비율 유지 */
+  display: block;
+  margin: 10px auto; /* 중앙 정렬 */
+}
+
+/* 버튼 그룹 */
+.button-group {
   display: flex;
   gap: 10px;
+  margin-top: 20px;
 }
 
 button {
   padding: 8px 16px;
   cursor: pointer;
   background-color: #f0f0f0;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-button:hover {
-  background-color: #e0e0e0;
-}
-
-/* 댓글 영역 스타일 */
-.reply-list {
-  list-style: none;
-  padding: 0;
-  margin-top: 30px;
-  border-top: 1px solid #eee;
-}
-
-.reply-list li {
-  padding: 15px 0;
-  border-bottom: 1px solid #eee;
-}
-
-.reply-edit {
-  display: flex;
-  gap: 10px;
-}
-
-.reply-meta {
-  margin-top: 5px;
-  font-size: 0.85em;
-  color: #666;
-}
-
-/* 댓글 작성 폼 */
-.reply-write {
-  margin-top: 20px;
-  padding: 15px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-}
-
-.reply-write li {
-  display: flex;
-  gap: 10px;
-}
-
-.reply-write input {
-  flex: 1;
-  padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
 }

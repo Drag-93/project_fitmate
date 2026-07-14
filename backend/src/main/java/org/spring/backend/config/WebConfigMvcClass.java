@@ -11,7 +11,7 @@ public class WebConfigMvcClass implements WebMvcConfigurer {
     @Value("${img.path.member}")
     private String memberPath;
 
-    @Value("${img.path.item}")
+    @Value("${img.path.product}")
     private String itemPath;
 
     @Value("${img.path.community}")
@@ -22,7 +22,7 @@ public class WebConfigMvcClass implements WebMvcConfigurer {
 
         //각각 사용하는 파일 경로 변환
         String memberLoc = ensureTrailingSlash(memberPath);
-        String itemLoc = ensureTrailingSlash(itemPath);
+        String itemLoc = itemPath;
         String communityLoc = ensureTrailingSlash(communityPath);
 
         // 멤버 프로필 이미지 경로 매핑
@@ -39,21 +39,19 @@ public class WebConfigMvcClass implements WebMvcConfigurer {
     }
     //경로 끝에 / 경로로 변경해주고, 윈도우 프로토콜 형식을 맞춰주는 메서드
     private String ensureTrailingSlash(String path) {
-        if (path == null) return "";
+        if (path == null || path.isEmpty()) return "";
 
-        // 만약 file: 로 시작하지 않는다면 붙여줌
+        // 1. 이미 'file:'로 시작한다면 유지, 아니면 추가
         if (!path.startsWith("file:")) {
-            path = "file:" + path;
+            path = "file:/" + path; // 로컬 경로일 경우 file:/로 시작
         }
 
-        // 윈도우기준 포맷인 file:/E:/.../ 구조로 통일 (슬래시 1개)
-        path = path.replace("file://", "file:/");
-        path = path.replace("file:///", "file:/");
-
-        // 맨 끝에 슬래시가 없다면 붙여줌
+        // 2. 슬래시 개수를 강제로 1개로 줄이는 로직 제거 (이게 문제였음)
+        // 3. 맨 끝에 슬래시가 없다면 붙여줌
         if (!path.endsWith("/")) {
             path = path + "/";
         }
+
         return path;
     }
 }

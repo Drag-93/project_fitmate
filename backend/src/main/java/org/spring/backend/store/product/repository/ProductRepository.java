@@ -12,13 +12,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 
+  @EntityGraph(attributePaths = "productFileEntities")
   Page<ProductEntity> findByProductType(ProductType productType, Pageable pageable);
 
+  @EntityGraph(attributePaths = "productFileEntities")
   Page<ProductEntity> findByProductNameContaining(String keyword, Pageable pageable);
 
   @EntityGraph(attributePaths = "productFileEntities")
   Optional<ProductEntity> findById(Long id);
 
+  @EntityGraph(attributePaths = "productFileEntities")
   Page<ProductEntity> findAll(Pageable pageable);
 
 }

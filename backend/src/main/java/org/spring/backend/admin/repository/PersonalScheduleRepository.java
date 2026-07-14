@@ -1,9 +1,9 @@
 package org.spring.backend.admin.repository;
 
-import org.spring.backend.admin.entity.CalendarEntity;
+import org.spring.backend.admin.entity.PersonalScheduleEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CalendarRepository extends JpaRepository<CalendarEntity, Integer> {
+public interface PersonalScheduleRepository extends JpaRepository<PersonalScheduleEntity, Integer> {
 }

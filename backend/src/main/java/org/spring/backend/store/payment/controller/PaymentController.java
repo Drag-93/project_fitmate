@@ -6,8 +6,6 @@ import java.util.Map;
 
 import org.spring.backend.member.jwt.CustomUserDetails;
 import org.spring.backend.store.payment.dto.PaymentDto;
-import org.spring.backend.store.payment.dto.PaymentResultDto;
-import org.spring.backend.store.payment.service.PaymentResultService;
 import org.spring.backend.store.payment.service.PaymentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -26,7 +24,6 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/payment")
 public class PaymentController {
   private final PaymentService paymentService;
-  private final PaymentResultService paymentResultService;
 
   // 결제 등록
   @PostMapping
@@ -38,7 +35,7 @@ public class PaymentController {
   }
 
   // 마이페이지 결제 목록
-  @GetMapping("/member")
+  @GetMapping("/list")
   public ResponseEntity<List<PaymentDto>> paymentList(
       @AuthenticationPrincipal CustomUserDetails user) {
 
@@ -61,7 +58,7 @@ public class PaymentController {
   }
 
   // 결제승인
-  @GetMapping("approval/{paymentId}")
+  @GetMapping("/approval/{paymentId}")
   public ResponseEntity<String> approval(
       @PathVariable(name = "paymentId") Long paymentId,
       @RequestParam("pg_token") String pgToken) {
@@ -104,30 +101,4 @@ public class PaymentController {
     return map;
   }
 
-  @PostMapping("/insert")
-  public Map<String, Object> dbInsert(@RequestBody PaymentResultDto dto) {
-
-    System.out.println(dto + " .. dto");
-    System.out.println(dto.getMemberId() + " .. dto");
-
-    Map<String, Object> map = new HashMap<String, Object>();
-
-    PaymentResultDto payResult = paymentResultService.dbInsert(dto);
-
-    map.put("payResult", payResult);
-
-    return map;
-  }
-
-  @GetMapping("/list")
-  public Map<String, Object> getList() {
-
-    Map<String, Object> map = new HashMap<String, Object>();
-
-    List<PaymentResultDto> lists = paymentResultService.getList();
-
-    map.put("payRsList", lists);
-
-    return map;
-  }
 }

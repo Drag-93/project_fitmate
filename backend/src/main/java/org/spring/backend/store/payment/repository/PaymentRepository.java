@@ -13,11 +13,18 @@ import org.springframework.data.repository.query.Param;
 public interface PaymentRepository extends JpaRepository<PaymentEntity, Long> {
 
   // 마이페이지
-  @EntityGraph(attributePaths = { "orderEntity" })
-  List<PaymentEntity> findByOrderEntity_MemberEntity_Id(Long memberId);
+  @Query("""
+          SELECT p
+          FROM PaymentEntity p
+          WHERE p.orderEntity.memberEntity.id = :memberId
+             OR p.subscriptionEntity.memberEntity.id = :memberId""")
+  @EntityGraph(attributePaths = {
+      "orderEntity",
+      "subscriptionEntity"})
+  List<PaymentEntity> findPaymentListByMemberId(@Param("memberId") Long memberId);
 
   // 관리자용 전체 조회
-  @EntityGraph(attributePaths = { "orderEntity" })
+  @EntityGraph(attributePaths = { "orderEntity", "subscriptionEntity" })
   List<PaymentEntity> findAll();
 
   // 변경 감지(Dirty Checking) 대신 벌크 연산이 꼭 필요한 때를 위한 안전장치 추가

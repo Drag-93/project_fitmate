@@ -2,9 +2,11 @@ package org.spring.backend.store.subscription.controller;
 
 import java.util.List;
 
+import org.spring.backend.member.jwt.CustomUserDetails;
 import org.spring.backend.store.subscription.dto.SubscriptionDto;
 import org.spring.backend.store.subscription.service.SubscriptionService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,51 +21,54 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/api/subscription")
 public class SubscriptionController {
-      private final SubscriptionService subscriptionService;
+    private final SubscriptionService subscriptionService;
 
     // 구독 신청
-    @PostMapping("/{memberId}/{productId}")
+    @PostMapping("/{productId}")
     public ResponseEntity<Void> insertSubscription(
-            @PathVariable Long memberId,
+            @AuthenticationPrincipal CustomUserDetails user,
             @PathVariable Long productId,
             @RequestBody SubscriptionDto subscriptionDto) {
 
-        subscriptionService.insertSubscription(memberId, productId, subscriptionDto);
+        subscriptionService.insertSubscription((user.getMemberEntity().getId()), productId, subscriptionDto);
         return ResponseEntity.ok().build();
     }
 
     // 내 구독 목록
-    @GetMapping("/{memberId}")
+    @GetMapping("/list")
     public ResponseEntity<List<SubscriptionDto>> subscriptionList(
-            @PathVariable Long memberId) {
+            @AuthenticationPrincipal CustomUserDetails user) {
 
-        return ResponseEntity.ok(subscriptionService.subscriptionList(memberId));
+        return ResponseEntity.ok(subscriptionService.subscriptionList(user.getMemberEntity().getId()));
     }
 
     // 구독 상세
     @GetMapping("/detail/{subscriptionId}")
     public ResponseEntity<SubscriptionDto> subscriptionDetail(
+            @AuthenticationPrincipal CustomUserDetails user,
             @PathVariable Long subscriptionId) {
 
-        return ResponseEntity.ok(subscriptionService.subscriptionDetail(subscriptionId));
+        return ResponseEntity.ok(subscriptionService.subscriptionDetail(user.getMemberEntity().getId(),subscriptionId));
     }
 
     // 구독 상태 변경
     @PatchMapping("/{subscriptionId}/status")
     public ResponseEntity<Void> updateSubscriptionStatus(
+        @AuthenticationPrincipal CustomUserDetails user,
             @PathVariable Long subscriptionId,
             @RequestBody SubscriptionDto subscriptionDto) {
 
-        subscriptionService.updateSubscriptionStatus(subscriptionId, subscriptionDto);
+        subscriptionService.updateSubscriptionStatus(user.getMemberEntity().getId(),subscriptionId, subscriptionDto);
         return ResponseEntity.ok().build();
     }
 
     // 구독 취소
     @PatchMapping("/{subscriptionId}/cancel")
     public ResponseEntity<Void> cancelSubscription(
+        @AuthenticationPrincipal CustomUserDetails user,
             @PathVariable Long subscriptionId) {
 
-        subscriptionService.cancelSubscription(subscriptionId);
+        subscriptionService.cancelSubscription(user.getMemberEntity().getId(),subscriptionId);
         return ResponseEntity.ok().build();
     }
 
@@ -72,7 +77,7 @@ public class SubscriptionController {
     public ResponseEntity<Void> updateNextPaymentDate(
             @PathVariable Long subscriptionId) {
 
-        subscriptionService.updateNextPaymentDate(subscriptionId); //추후 스케줄러에서 작성
+        subscriptionService.updateNextPaymentDate(subscriptionId); // 추후 스케줄러에서 작성
         return ResponseEntity.ok().build();
     }
 }

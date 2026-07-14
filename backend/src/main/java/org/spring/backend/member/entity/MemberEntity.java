@@ -12,6 +12,9 @@ import lombok.Setter;
 import org.spring.backend.common.Role;
 import org.spring.backend.file.entity.FileEntity;
 import org.spring.backend.member.dto.MemberDto;
+import org.spring.backend.store.subscription.entity.SubscriptionEntity;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
 
@@ -41,7 +44,7 @@ public class MemberEntity extends BasicTime {
 
   private String userPhone;
 
-  //성별은 공란일시 UNKNOWN으로 자동저장
+  // 성별은 공란일시 UNKNOWN으로 자동저장
   @Enumerated(EnumType.STRING)
   @Column(columnDefinition = "VARCHAR(25) DEFAULT 'UNKNOWN'")
   private Gender gender;
@@ -55,45 +58,50 @@ public class MemberEntity extends BasicTime {
   @Column(nullable = false)
   private Role role;
 
-  //멤버의 추가데이터와 1:1매칭
+  // 멤버의 추가데이터와 1:1매칭
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinColumn(name = "member_add_id")
   private MemberAddEntity memberAddEntity;
 
-  //이전 멤버파일엔티티와의 1:1매핑
-//  @OneToOne(mappedBy = "memberEntity",
-//          fetch = FetchType.LAZY, orphanRemoval = true)
-//  private MemberFileEntity memberFileEntity;
-  //파일엔티티와 1:N 매핑
-  @OneToMany(mappedBy = "memberEntity",
-          fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+  // 이전 멤버파일엔티티와의 1:1매핑
+  // @OneToOne(mappedBy = "memberEntity",
+  // fetch = FetchType.LAZY, orphanRemoval = true)
+  // private MemberFileEntity memberFileEntity;
+  // 파일엔티티와 1:N 매핑
+  @OneToMany(mappedBy = "memberEntity", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
   private List<FileEntity> fileEntities;
 
-  public static MemberEntity toInsertMemberEntity(MemberDto memberDto, String encodePw){
+  // 구독 상품 매핑
+  @OneToMany(mappedBy = "memberEntity", fetch = FetchType.LAZY)
+  @JsonIgnore
+  private List<SubscriptionEntity> subscriptionEntities;
+
+  public static MemberEntity toInsertMemberEntity(MemberDto memberDto, String encodePw) {
     return MemberEntity.builder()
-            .userEmail(memberDto.getUserEmail())
-            .userPw(encodePw)
-            .userName(memberDto.getUserName())
-            .userAddress(memberDto.getUserAddress())
-            .userPhone(memberDto.getUserPhone())
-            .gender(memberDto.getGender())
-            .subscribe(0)
-            .profilePhoto(0)
-            .role(Role.MEMBER)
-            .build();
+        .userEmail(memberDto.getUserEmail())
+        .userPw(encodePw)
+        .userName(memberDto.getUserName())
+        .userAddress(memberDto.getUserAddress())
+        .userPhone(memberDto.getUserPhone())
+        .gender(memberDto.getGender())
+        .subscribe(0)
+        .profilePhoto(0)
+        .role(Role.MEMBER)
+        .build();
   }
-  public static MemberEntity toUpdateMemberEntity(MemberDto memberDto, String encodePw){
+
+  public static MemberEntity toUpdateMemberEntity(MemberDto memberDto, String encodePw) {
     return MemberEntity.builder()
-            .id(memberDto.getId())
-            .userEmail(memberDto.getUserEmail())
-            .userPw(encodePw)
-            .userName(memberDto.getUserName())
-            .userAddress(memberDto.getUserAddress())
-            .userPhone(memberDto.getUserPhone())
-            .gender(memberDto.getGender())
-            .subscribe(memberDto.getSubscribe())
-            .profilePhoto(memberDto.getProfilePhoto())
-            .role(memberDto.getRole())
-            .build();
+        .id(memberDto.getId())
+        .userEmail(memberDto.getUserEmail())
+        .userPw(encodePw)
+        .userName(memberDto.getUserName())
+        .userAddress(memberDto.getUserAddress())
+        .userPhone(memberDto.getUserPhone())
+        .gender(memberDto.getGender())
+        .subscribe(memberDto.getSubscribe())
+        .profilePhoto(memberDto.getProfilePhoto())
+        .role(memberDto.getRole())
+        .build();
   }
 }

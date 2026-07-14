@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
 import "../css/Community/CommunityLeft.css";
+import { API_SERVER_URL } from "../../apis/commonApi";
 
 const CommunityLeft = ({ onSelect }) => {
   const [tab, setTab] = useState([]);
@@ -12,12 +13,8 @@ const CommunityLeft = ({ onSelect }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const tabRes = await axios.get(
-          "http://localhost:8090/community/tabList",
-        );
-        const catRes = await axios.get(
-          "http://localhost:8090/community/category",
-        );
+        const tabRes = await axios.get(`${API_SERVER_URL}/community/tabList`);
+        const catRes = await axios.get(`${API_SERVER_URL}/community/category`);
         setTab(tabRes.data.result);
         setCategoryList(catRes.data.result);
       } catch (err) {

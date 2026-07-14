@@ -8,14 +8,17 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.spring.backend.common.TableType;
 import org.spring.backend.community.dto.CommunityDto;
 import org.spring.backend.community.entity.CategoryEntity;
 import org.spring.backend.community.entity.CommunityEntity;
 import org.spring.backend.community.repository.CategoryRepository;
 import org.spring.backend.community.repository.CommunityRepository;
 import org.spring.backend.community.service.CommunityService;
+import org.spring.backend.file.handler.FileHandler;
 import org.spring.backend.member.entity.MemberEntity;
 import org.spring.backend.member.repository.MemberRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,11 +32,12 @@ import lombok.extern.slf4j.Slf4j;
 public class CommunityServiceImpl implements CommunityService{
   
 private final CommunityRepository communityRepository;
-//private final FileRepository fileRepository;
 private final CategoryRepository categoryRepository;
 private final MemberRepository memberRepository;
+private final FileHandler fileHandler;
 
-  String path = "file:///E:/backend/community/";
+    @Value("${img.path.community}")
+    private String path;
 
   public void saveFile(MultipartFile file, String filePath) throws IOException{
     File destinationFile = new File(filePath.replace("file://",""));
@@ -64,7 +68,7 @@ public void insertWithFile(CommunityDto communityDto, String  userEmail) {
             .categoryName(category.getCategoryName())
             .tabId(category.getTabEntity().getId())
             .tabName(category.getTabEntity().getTabName())
-            .userEmail(communityDto.getMemberEntity().getUserEmail())
+            .userEmail(memberEntity.getUserEmail())
         .hasFile(1)
         .hit(0)
         .reply(0)
@@ -81,14 +85,10 @@ public void insertWithFile(CommunityDto communityDto, String  userEmail) {
         if (!fileDir.exists()) fileDir.mkdirs();
 
         communityDto.getAttachFile().transferTo(new File(filePath));
-        
 
-//        // 3. 파일 엔티티 저장
-//        fileRepository.save(FileEntity.builder()
-//            .newFileName(newFileName)
-//            .oldFileName(originalFilename)
-//            .communityEntity(saveCommunity)
-//            .build());
+
+        // 3. 파일 엔티티 저장
+       fileHandler.insertFile(filePath, TableType.COMMUNITY, saveCommunity.getId(), communityDto.getAttachFile());
     } catch (IOException e) {
         // 파일 저장 실패 시 예외 처리 (트랜잭션에 의해 게시글도 롤백됨)
         throw new RuntimeException("파일 저장 중 오류 발생", e);
@@ -116,7 +116,7 @@ public void insertWithFile(CommunityDto communityDto, String  userEmail) {
                 .hasFile(0)
                 .hit(0)
                 .reply(0)
-                .userEmail(communityDto.getMemberEntity().getUserEmail())
+                .userEmail(memberEntity.getUserEmail())
                 .build();
 
         communityRepository.save(communityEntity);

@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { API_SERVER_URL } from "../../apis/commonApi";
 
 const TabList = () => {
   const navigate = useNavigate();
@@ -10,7 +11,7 @@ const TabList = () => {
 
   const fetchTabData = async () => {
     setIsLoading(true);
-    const url = "http://localhost:8090/community/tabList";
+    const url = `${API_SERVER_URL}/community/tabList`;
     try {
       const res = await axios.get(url, {
         params: {

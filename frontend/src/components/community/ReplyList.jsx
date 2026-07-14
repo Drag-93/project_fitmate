@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import jwtAxios from "../../apis/util/jwtUtil";
+import { API_SERVER_URL } from "../../apis/commonApi";
 
 const ReplyList = ({ communityId, refreshKey }) => {
   const [replies, setReplies] = useState([]);
@@ -15,7 +16,7 @@ const ReplyList = ({ communityId, refreshKey }) => {
 
   const getUser = async () => {
     try {
-      const res = await jwtAxios.get("http://localhost:8090/api/member/detail");
+      const res = await jwtAxios.get(`${API_SERVER_URL}/api/member/detail`);
       if (res.data?.result) {
         setUserName(res.data.result.userName);
       }
@@ -28,7 +29,7 @@ const ReplyList = ({ communityId, refreshKey }) => {
     try {
       setIsLoading(true);
       const res = await axios.get(
-        `http://localhost:8090/reply/list/${communityId}?count=false`,
+        `${API_SERVER_URL}/reply/list/${communityId}?count=false`,
       );
       setReplies(res.data?.replies || res.data?.result || []);
     } catch (error) {
@@ -64,7 +65,7 @@ const ReplyList = ({ communityId, refreshKey }) => {
       return;
     }
     try {
-      await jwtAxios.put(`http://localhost:8090/reply/update/${reply.id}`, {
+      await jwtAxios.put(`${API_SERVER_URL}/reply/update/${reply.id}`, {
         content: editContent,
         communityId: reply.communityId,
         // memberId: reply.memberId,
@@ -85,7 +86,7 @@ const ReplyList = ({ communityId, refreshKey }) => {
   const deleteEdit = async (reply) => {
     if (!window.confirm("정말 삭제하시겠습니까?")) return;
     try {
-      await jwtAxios.delete(`http://localhost:8090/reply/delete/${reply.id}`, {
+      await jwtAxios.delete(`${API_SERVER_URL}/reply/delete/${reply.id}`, {
         communityId: reply.communityId,
         // memberId: reply.memberId,
       });

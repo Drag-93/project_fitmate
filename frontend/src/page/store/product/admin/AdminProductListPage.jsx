@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getProductList, deleteProduct } from "../../../../apis/store/productApi.js";
 import ProductTable from "../../../../components/store/product/admin/ProductTable.jsx";
+import "../../../../components/css/store/product/admin/ProductAdmin.css";
+
 
 const AdminProductListPage = () => {
 
@@ -54,9 +56,9 @@ const AdminProductListPage = () => {
   if (loading) { return <div>Loading...</div>; }
 
   return (
-    <div className="admin-product-list">
+    <div className="admin-product-page">
       <h2>상품 관리</h2>
-      <button
+      <button className="admin-product-insert"
         onClick={() => navigate("/store/admin/product/insert")}
       >
         상품 등록

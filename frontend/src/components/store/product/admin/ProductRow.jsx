@@ -1,4 +1,5 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
 
 const ProductRow = ({ product, onEdit, onDelete }) => {
 
@@ -9,12 +10,13 @@ const ProductRow = ({ product, onEdit, onDelete }) => {
   );
 
   return (
-    <tr>
-      <td>{product.id}</td>
-      <td>
+    <tr className="productRow">
+      <td className="productId">{product.id}</td>
+      <td className="thumbnail">
         {thumbnail ? (
+          <Link to={`/products/detail/${product.id}`}>
           <img
-            src={thumbnail.newFileName}
+            src={`http://localhost:8090${thumbnail?.newFileName}`} 
             alt={product.productName}
             width={80}
             height={80}
@@ -23,6 +25,7 @@ const ProductRow = ({ product, onEdit, onDelete }) => {
               borderRadius: "6px"
             }}
           />
+          </Link>
         ) : (
           <span>이미지 없음</span>
         )}
@@ -35,7 +38,7 @@ const ProductRow = ({ product, onEdit, onDelete }) => {
       <td>{product.productStatus}</td>
 
       <td>
-        <button
+        <button className="update"
           onClick={() =>
             navigate(`/store/admin/product/update/${product.id}`)
           }
@@ -43,7 +46,7 @@ const ProductRow = ({ product, onEdit, onDelete }) => {
           수정
         </button>
 
-        <button
+        <button className="delete"
           onClick={() => onDelete(product.id)}
         >
           삭제

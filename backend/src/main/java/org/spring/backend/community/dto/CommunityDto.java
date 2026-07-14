@@ -3,6 +3,7 @@ package org.spring.backend.community.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import jakarta.persistence.Column;
 import org.spring.backend.community.entity.CategoryEntity;
 import org.spring.backend.community.entity.CommunityEntity;
 import org.spring.backend.member.entity.MemberEntity;

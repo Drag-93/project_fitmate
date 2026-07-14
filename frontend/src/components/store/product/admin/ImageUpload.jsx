@@ -43,7 +43,7 @@ const ImageUpload = ({ onChange = () => {} }) => {
   };
 
   return (
-    <div>
+    <div className="image-upload">
 
       <div>
         <label>썸네일</label>
@@ -55,7 +55,7 @@ const ImageUpload = ({ onChange = () => {} }) => {
       </div>
 
       <div>
-        <label>메인 이미지</label>
+        <label >메인 이미지</label>
         <input
           type="file"
           multiple
@@ -65,7 +65,7 @@ const ImageUpload = ({ onChange = () => {} }) => {
       </div>
 
       <div>
-        <label>상세 이미지</label>
+        <label >상세 이미지</label>
         <input
           type="file"
           multiple

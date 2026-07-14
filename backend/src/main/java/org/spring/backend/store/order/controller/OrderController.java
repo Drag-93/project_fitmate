@@ -60,7 +60,7 @@ public class OrderController {
   }
 
   // 주문 목록
-  @GetMapping
+  @GetMapping("/list")
   public ResponseEntity<List<OrderDto>> orderList(
       @AuthenticationPrincipal CustomUserDetails user) {
 
