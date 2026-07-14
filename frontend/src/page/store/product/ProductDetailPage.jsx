@@ -39,13 +39,13 @@ const ProductDetailPage = () => {
 
     if (!member) {
       alert("로그인이 필요합니다.");
-  
+
       navigate("/auth/login", {
         state: {
           from: location.pathname + location.search,
         },
       });
-  
+
       return;
     }
 
@@ -61,29 +61,34 @@ const ProductDetailPage = () => {
   };
 
   // 바로 구매
-  const handleBuy = () => {
+  const handleBuy = async () => {
 
     const member = getCookie("member");
 
     if (!member) {
       alert("로그인이 필요합니다.");
-  
+
       navigate("/auth/login", {
         state: {
           from: location.pathname + location.search,
         },
       });
-  
       return;
     }
-
-    navigate("/order", {
-      state: {
-        productId: product.id,
-        quantity: quantity
-      }
-    });
-
+      navigate("/order", {
+        state: {
+          directItem: {
+            id: product.id,
+            productId: product.id,
+            productName: product.productName,
+            price: product.price,
+            productImage: product.productFileDtos.find(
+              file => file.imageType === "THUMBNAIL"
+            )?.newFileName,
+            quantity: quantity
+          }
+        }
+      });
   };
 
   if (!product) return <div>Loading...</div>;

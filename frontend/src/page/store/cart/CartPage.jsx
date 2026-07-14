@@ -9,12 +9,14 @@ import {
   updateCartQuantity,
   deleteCartItem
 } from "../../../apis/store/cartApi";
+import { useNavigate } from "react-router-dom";
 
 
 const CartPage = () => {
 
   const [cartItems, setCartItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     loadCart();
@@ -29,6 +31,11 @@ const CartPage = () => {
       setSelectedItems(res.data.map(item => item.id));
     } catch (e) {
       console.error(e);
+      if (e.response) {
+        console.log(e.response.data);
+      } else {
+        console.log(e.message);
+      }
     }
   };
 
@@ -74,38 +81,52 @@ const CartPage = () => {
     <div className="cart-page">
       <h2>장바구니</h2>
       <div className="cart-list">
-        {cartItems.map(item => (
-          <CartItem
-            key={item.id}
-            item={item}
-            checked={selectedItems.includes(item.id)}
-            onSelect={handleSelectItem}
-            changeQuantity={changeQuantity}
-            removeItem={removeItem}
-          />
+        {cartItems.length === 0 ? (
+          <div className="empty-cart">
+            <h3>  장바구니가 비어있습니다.</h3>
+            <button
+              className="shop-btn"
+              onClick={() => navigate("/store/index")}
+            >
+              상품 주문하러 가기 →
+            </button>
+          </div>
+        ) : (
+          <>
+            {cartItems.map(item => (
+              <CartItem
+                key={item.id}
+                item={item}
+                checked={selectedItems.includes(item.id)}
+                onSelect={handleSelectItem}
+                changeQuantity={changeQuantity}
+                removeItem={removeItem}
+              />
+            ))}
 
-        ))
-        }
-        <div className="cart-select-all">
+            <div className="cart-select-all">
 
-          <input
-            type="checkbox"
-            checked={
-              cartItems.length > 0 &&
-              selectedItems.length === cartItems.length
-            }
-            onChange={(e) =>
-              handleSelectAll(e.target.checked)
-            }
-          />
+              <input
+                type="checkbox"
+                checked={
+                  cartItems.length > 0 &&
+                  selectedItems.length === cartItems.length
+                }
+                onChange={(e) =>
+                  handleSelectAll(e.target.checked)
+                }
+              />
 
-          <span>전체 선택</span>
+              <span>전체 선택</span>
 
-        </div>
+            </div>
+          </>
+        )}
       </div>
-      <CartSummary
-        cartItems={cartItems} 
-        selectedItems={selectedItems}/>
+      {cartItems.length > 0 && (
+        <CartSummary
+          cartItems={cartItems}
+          selectedItems={selectedItems} />)}
     </div>
   );
 };

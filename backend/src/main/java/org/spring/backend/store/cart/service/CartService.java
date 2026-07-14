@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.spring.backend.store.cart.dto.CartListDto;
 
-
 public interface CartService {
 
   void insertCart(String userEmail, CartListDto carListDto);
@@ -17,5 +16,9 @@ public interface CartService {
 
   void deleteCartItem(Long cartItemId);
 
+  // 장바구니 전체 비우기
   void clearCart(String userEmail);
+
+  // 주문한 상품만 삭제
+  void deletePurchasedItems(Long orderId);
 }

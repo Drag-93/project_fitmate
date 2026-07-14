@@ -12,6 +12,9 @@ import org.spring.backend.store.cart.entity.CartListEntity;
 import org.spring.backend.store.cart.repository.CartListRepository;
 import org.spring.backend.store.cart.repository.CartRepository;
 import org.spring.backend.store.cart.service.CartService;
+import org.spring.backend.store.order.entity.OrderEntity;
+import org.spring.backend.store.order.entity.OrderItemEntity;
+import org.spring.backend.store.order.repository.OrderRepository;
 import org.spring.backend.store.product.entity.ProductEntity;
 import org.spring.backend.store.product.repository.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -28,6 +31,7 @@ public class CartServiceImpl implements CartService {
   private final CartListRepository cartListRepository;
   private final MemberRepository memberRepository;
   private final ProductRepository productRepository;
+  private final OrderRepository orderRepository;
 
   @Override
   public void insertCart(String userEmail, CartListDto cartListDto) {
@@ -112,6 +116,25 @@ public class CartServiceImpl implements CartService {
   @Override
   public void clearCart(String userEmail) {
     cartListRepository.deleteByCartEntity_MemberEntity_UserEmail(userEmail);
+  }
+
+  @Override
+  public void deletePurchasedItems(Long orderId) {
+    OrderEntity order = orderRepository.findById(orderId)
+        .orElseThrow(() -> new IllegalArgumentException("주문이 존재하지 않습니다."));
+
+    CartEntity cart = cartRepository.findByMemberEntity_UserEmail(
+        order.getMemberEntity().getUserEmail())
+        .orElseThrow(() -> new IllegalArgumentException("장바구니가 존재하지 않습니다."));
+
+    for (OrderItemEntity orderItem : order.getOrderItemEntities()) {
+
+      cartListRepository
+          .findByCartEntityIdAndProductEntityId(
+              cart.getId(),
+              orderItem.getProductEntity().getId())
+          .ifPresent(cartListRepository::delete);
+    }
   }
 
 }

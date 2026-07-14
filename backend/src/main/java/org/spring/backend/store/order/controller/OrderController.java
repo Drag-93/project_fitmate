@@ -35,9 +35,11 @@ public class OrderController {
   public ResponseEntity<Long> directOrder(
       @AuthenticationPrincipal CustomUserDetails user,
       @RequestBody OrderDto orderDto) {
-
+    MemberEntity member = memberRepository
+        .findByUserEmail(user.getUsername())
+        .orElseThrow(() -> new IllegalArgumentException("회원이 없습니다."));
     Long orderId = orderService.insertDirectOrder(
-        user.getMemberEntity().getId(),
+        member.getId(),
         orderDto);
     return ResponseEntity.ok(orderId);
   }

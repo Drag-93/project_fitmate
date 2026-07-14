@@ -5,3 +5,10 @@ export const kakaoPay = async (orderId) => {
   const res = await jwtAxios.get(`${API_SERVER_URL}/api/payment/kakao/pg/${orderId}`);
   return res.data;
 };
+
+export const getPaymentList = async()=>{
+  const res = await jwtAxios.get(
+    `${API_SERVER_URL}/api/payment/member`);
+ 
+  return res.data;
+ }

@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.spring.backend.store.cart.service.CartService;
 import org.spring.backend.store.order.entity.OrderEntity;
 import org.spring.backend.store.order.entity.OrderItemEntity;
 import org.spring.backend.store.order.repository.OrderRepository;
@@ -45,6 +46,7 @@ public class PaymentServiceImpl implements PaymentService {
   private final OrderRepository orderRepository;
   private final PaymentRepository paymentRepository;
   private final SubscriptionRepository subscriptionRepository;
+  private final CartService cartService;
 
   @Value("${kakao.admin-key}")
   private String kakaoAdminKey;
@@ -194,6 +196,8 @@ public class PaymentServiceImpl implements PaymentService {
       order.setOrderStatus(OrderStatus.SUCCESS);
       order.setDeliveryStatus(DeliveryStatus.READY);
       createSubscription(paymentEntity);
+      // 주문된 상품만 장바구니에서 제거
+      cartService.deletePurchasedItems(order.getId());
 
     } catch (Exception e) {
       paymentEntity.setPaymentStatus(PaymentStatus.FAILED); // 실패 상태 기록
@@ -284,7 +288,6 @@ public class PaymentServiceImpl implements PaymentService {
       throw new RuntimeException("카카오페이 Ready 요청 실패", e);
     }
   }
-
 
   // 구독 생성 메서드
   private void createSubscription(PaymentEntity paymentEntity) {

@@ -1,26 +1,27 @@
 import React, { useEffect, useState } from 'react'
+import jwtAxios from "../../../apis/util/jwtUtil";
 
-const KakaoPayList = () => {
+const PaymentList = () => {
 
-  const [data, setData] = useState()
+  const [data, setData] = useState([]);
 
   useEffect(() => {
 
-    const fetchPaymentList = async (e) => {
+    const fetchPaymentList = async () => {
       try {
-        const response = await fetch("http://localhost:8090/api/payment/list",
-          {
-            credentials: "include"
-          }
+        const response = await jwtAxios.get("http://localhost:8090/api/payment/list"
         );
-        const result = await response.json();
-        setData(result);
+
+        console.log("결제목록 응답:", response.data);
+
+        setData(response.data);
+
       } catch (error) {
         console.error(error);
       }
     };
-    fetchPaymentList()
-  }, [])
+    fetchPaymentList();
+  }, []);
 
 
   return (
@@ -35,7 +36,7 @@ const KakaoPayList = () => {
               <span>결제금액</span>
               <span>결제상태</span>
             </li>
-            {data.map((payment) => {
+            {Array.isArray(data) && data.map((payment)=>{
               return (
                 <li key={payment.id}>
                   <span>{payment.id}</span>
@@ -53,4 +54,4 @@ const KakaoPayList = () => {
   )
 }
 
-export default KakaoPayList
+export default PaymentList;

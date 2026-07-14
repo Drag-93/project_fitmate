@@ -17,7 +17,7 @@ public class ProductsTest {
 
   @Test
   void insert() {
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 4; i++) {
 
       ProductEntity productEntity = ProductEntity.builder()
           .productName("상품" + i)

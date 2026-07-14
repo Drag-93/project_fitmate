@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.spring.backend.member.entity.MemberEntity;
 import org.spring.backend.member.jwt.CustomUserDetails;
+import org.spring.backend.member.repository.MemberRepository;
 import org.spring.backend.store.payment.dto.PaymentDto;
 import org.spring.backend.store.payment.service.PaymentService;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/payment")
 public class PaymentController {
   private final PaymentService paymentService;
+  private final MemberRepository memberRepository;
 
   // 결제 등록
   @PostMapping
@@ -39,7 +42,12 @@ public class PaymentController {
   public ResponseEntity<List<PaymentDto>> paymentList(
       @AuthenticationPrincipal CustomUserDetails user) {
 
-    return ResponseEntity.ok(paymentService.paymentListFn(user.getMemberEntity().getId()));
+    MemberEntity member = memberRepository
+        .findByUserEmail(user.getUsername())
+        .orElseThrow(() -> new IllegalArgumentException("회원이 없습니다."));
+
+    return ResponseEntity.ok(
+        paymentService.paymentListFn(member.getId()));
   }
 
   // 관리자 결제 목록

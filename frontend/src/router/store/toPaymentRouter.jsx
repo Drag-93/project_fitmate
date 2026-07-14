@@ -2,14 +2,11 @@ import React, { lazy, Suspense } from "react";
 
 const Loading = <div className="loading">...Loading</div>;
 
-const KakaoPaySuccessPage = lazy(() => import("../../page/store/payment/KakaoPaySuccessPage"));
+const PaymentSuccessPage = lazy(() => import("../../page/store/payment/PaymentSuccessPage"));
 const PaymentPage = lazy(() => import("../../page/store/payment/PaymentPage"));
-const PaymentFailPage = lazy(
-  () => import("../../page/store/payment/PaymentFailPage"),
-);
-const PaymentSuccessPage = lazy(
-  () => import("../../page/store/payment/PaymentSuccessPage"),
-);
+const PaymentFailPage = lazy(() => import("../../page/store/payment/PaymentFailPage"));
+const PaymentListPage = lazy(() => import("../../page/store/payment/PaymentListPage"));
+
 
 const toPaymentRouter = () => {
   return [
@@ -22,7 +19,15 @@ const toPaymentRouter = () => {
       ),
     },
     {
-      path: "success",
+      path: "fail",
+      element: (
+        <Suspense fallback={Loading}>
+          <PaymentFailPage />
+        </Suspense>
+      ),
+    },
+    {
+      path: "approval/:paymentId",
       element: (
         <Suspense fallback={Loading}>
           <PaymentSuccessPage />
@@ -30,22 +35,12 @@ const toPaymentRouter = () => {
       ),
     },
     {
-      path: "fail",
+      path: "list",
       element: (
         <Suspense fallback={Loading}>
-          <PaymentFailPage />
+          <PaymentListPage />
         </Suspense>
       ),
-      
-    },
-    {
-      path: "/payment/approval/:paymentId",
-      element: (
-        <Suspense fallback={Loading}>
-          <KakaoPaySuccessPage />
-        </Suspense>
-      ),
-      
     },
   ];
 };

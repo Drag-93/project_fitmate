@@ -35,8 +35,17 @@ public class OrderServiceImpl implements OrderService {
 
   @Override
   public Long insertDirectOrder(Long memberId, OrderDto orderDto) {
+    System.out.println("memberId = " + memberId);
+    System.out.println("==== 받은 DTO ====");
+System.out.println(orderDto);
+
+for(OrderItemDto item : orderDto.getOrderItemDtos()) {
+    System.out.println("productId : " + item.getProductId());
+    System.out.println("quantity : " + item.getQuantity());
+}
     // 회원 조회
     MemberEntity memberEntity = memberRepository.findById(memberId)
+
         .orElseThrow(() -> new IllegalArgumentException("회원이 존재하지 않습니다."));
 
     // 주문 생성

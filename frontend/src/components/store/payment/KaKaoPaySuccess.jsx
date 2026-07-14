@@ -53,7 +53,7 @@ const KakaoPaySuccess = () => {
               <button onClick={() => navigate('/')}>HOME으로 이동</button>
             </li>
             <li>
-              <button onClick={() => navigate('/api/payment/list')}>결제 내역 확인</button>
+              <button onClick={() => navigate('/payment/list')}>결제 내역 확인</button>
             </li>
           </ul>
         </div>

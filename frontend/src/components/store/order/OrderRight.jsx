@@ -1,21 +1,27 @@
 import React from 'react';
 import { kakaoPay } from "../../../apis/store/paymentApi";
-import { cartOrder } from "../../../apis/store/orderApi";
-
+import { cartOrder, directOrder } from "../../../apis/store/orderApi";
 
 const OrderRight = ({ cartIds, orderData, totalPrice }) => {
 
   const handlePayment = async () => {
     try {
-      // 1. 주문 생성
-      const orderId = await cartOrder({
-        cartIds,
-        order: orderData
-      });
+      let orderId;
+      // 바로구매
+      if (orderData.orderItemDtos?.length > 0) {
+        orderId = await directOrder(orderData);
+      }
+
+      // 장바구니 구매
+      else {
+        orderId = await cartOrder({
+          cartIds,
+          order: orderData
+        });
+      }
 
       // 2. 카카오 결제 요청
       const res = await kakaoPay(orderId);
-
       console.log("카카오 응답:", res);
 
       // 3. 카카오 결제창 이동
@@ -36,7 +42,7 @@ const OrderRight = ({ cartIds, orderData, totalPrice }) => {
       }
     }
   };
-  
+
 
   return (
     <div className="orderRight">
