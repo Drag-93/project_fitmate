@@ -1,8 +1,11 @@
 package org.spring.backend.member.controller;
 
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.spring.backend.member.dto.MemberDto;
 import org.spring.backend.member.jwt.CustomUserDetails;
 import org.spring.backend.member.service.MemberService;
