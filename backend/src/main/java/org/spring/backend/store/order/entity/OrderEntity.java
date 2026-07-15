@@ -1,11 +1,13 @@
 package org.spring.backend.store.order.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.spring.backend.common.BasicTime;
 import org.spring.backend.member.entity.MemberEntity;
 import org.spring.backend.store.order.type.DeliveryStatus;
 import org.spring.backend.store.order.type.OrderStatus;
+import org.spring.backend.store.payment.entity.PaymentEntity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -20,6 +22,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -59,7 +62,7 @@ public class OrderEntity extends BasicTime {
   private String receiverPhone;
 
   @Column(nullable = false)
-  private String address;
+  private String receiverAddress;
 
   private String deliveryMemo;
 
@@ -70,6 +73,9 @@ public class OrderEntity extends BasicTime {
   private MemberEntity memberEntity;
 
   @JsonIgnore
-  @OneToMany(mappedBy = "orderEntity")
-  private List<OrderItemEntity> orderItemEntities;
+  @OneToMany(mappedBy = "orderEntity", fetch = FetchType.LAZY)
+  private List<OrderItemEntity> orderItemEntities = new ArrayList<>();
+
+  @OneToMany(mappedBy = "orderEntity", fetch = FetchType.LAZY)
+  private List<PaymentEntity> paymentEntities = new ArrayList<>();
 }

@@ -61,7 +61,7 @@ const OrderList = ({ orders }) => {
 
                     <div className="order-status">
                       <span>배송: {order.deliveryStatus}</span>
-                      <Link to={`/order/${order.id}`}>주문상세</Link>
+                      <Link to={`/order/detail/${order.id}`}>주문상세</Link>
                     </div>
 
                   </div>

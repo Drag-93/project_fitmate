@@ -70,6 +70,7 @@ public class SubscriptionEntity extends BasicTime {
   private MemberEntity memberEntity;
 
   @JsonIgnore
-  @OneToMany(mappedBy = "subscriptionEntity")
-    private List<PaymentEntity> paymentEntityList = new ArrayList<>();
+  @OneToMany(mappedBy = "subscriptionEntity", fetch = FetchType.LAZY)
+    private List<PaymentEntity> paymentEntities = new ArrayList<>();
+
 }
