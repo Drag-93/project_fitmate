@@ -35,13 +35,14 @@ public void insertTab(List<TabDto> tabDtoList) { // 파라미터를 List로 받�
         // 탭 엔티티 생성 및 저장
         TabEntity tab = new TabEntity();
         tab.setTabName(tabDto.getTabName());
+        tab.setAdminOnly(tabDto.getAdminOnly());
         tabRepository.save(tab);
 
         // 2. 해당 탭의 카테고리 리스트를 순회합니다.
         if (tabDto.getCategoryList() != null) {
             for (CategoryDto catDto : tabDto.getCategoryList()) {
                 CategoryEntity category = new CategoryEntity();
-                category.setCategoryName(catDto.getCategoryName()); 
+                category.setCategoryName(catDto.getCategoryName());
                 category.setTabEntity(tab);
                 categoryRepository.save(category);
             }
@@ -54,27 +55,25 @@ public void insertTab(List<TabDto> tabDtoList) { // 파라미터를 List로 받�
         List<TabEntity> tabEntities = tabRepository.findAll();
 
         return tabEntities.stream().map(el -> {
-    // 1. 카테고리 DTO 리스트 생성
-    List<CategoryDto> dtos = el.getCategoryList().stream()
-        .map(cat -> CategoryDto.builder()
-            .id(cat.getId())
-            .categoryName(cat.getCategoryName())
-            .build())
-        .toList();
+            List<CategoryDto> dtos = el.getCategoryList().stream()
+                    .map(cat -> CategoryDto.builder()
+                            .id(cat.getId())
+                            .categoryName(cat.getCategoryName())
+                            .build())
+                    .toList();
 
-    // 2. 카테고리 이름 리스트 생성
-    List<String> names = el.getCategoryList().stream()
-        .map(CategoryEntity::getCategoryName)
-        .toList();
+            List<String> names = el.getCategoryList().stream()
+                    .map(CategoryEntity::getCategoryName)
+                    .toList();
 
-    // 3. TabDto 빌드 (여기서 리턴 타입을 명시적으로 확실하게 해줍니다)
-    return TabDto.builder()
-        .id(el.getId())
-        .tabName(el.getTabName())
-        .categoryList(dtos)
-        .categoryNames(names)
-        .build();
-}).toList(); // 마지막에 전체를 List로 수집
+            return TabDto.builder()
+                    .id(el.getId())
+                    .tabName(el.getTabName())
+                    .adminOnly(el.getAdminOnly())
+                    .categoryList(dtos)
+                    .categoryNames(names)
+                    .build();
+        }).toList();
     }
 
     @Override
@@ -86,6 +85,7 @@ public void insertTab(List<TabDto> tabDtoList) { // 파라미터를 List로 받�
 
         // 2. 탭 이름 수정
         tab.setTabName(tabDto.getTabName());
+        tab.setAdminOnly(tabDto.getAdminOnly());
 
         // 3. 기존 카테고리 리스트 가져오기
         List<CategoryEntity> existingCategories = tab.getCategoryList();
@@ -125,29 +125,30 @@ public void insertTab(List<TabDto> tabDtoList) { // 파라미터를 List로 받�
     }
 
 
-@Override
-public TabDto tabDetail(Long id) {
-    TabEntity tabEntity = tabRepository.findById(id)
-            .orElseThrow(() -> new NoSuchElementException("탭이 존재하지 않습니다"));
+    @Override
+    public TabDto tabDetail(Long id) {
+        TabEntity tabEntity = tabRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("탭이 존재하지 않습니다"));
 
-    List<CategoryDto> dtos = tabEntity.getCategoryList().stream()
-            .map(cat -> CategoryDto.builder()
-                    .id(cat.getId())
-                    .categoryName(cat.getCategoryName())
-                    .build())
-            .collect(Collectors.toList());
+        List<CategoryDto> dtos = tabEntity.getCategoryList().stream()
+                .map(cat -> CategoryDto.builder()
+                        .id(cat.getId())
+                        .categoryName(cat.getCategoryName())
+                        .build())
+                .collect(Collectors.toList());
 
-    List<String> names = tabEntity.getCategoryList().stream()
-            .map(CategoryEntity::getCategoryName)
-            .toList();
+        List<String> names = tabEntity.getCategoryList().stream()
+                .map(CategoryEntity::getCategoryName)
+                .toList();
 
-    return TabDto.builder()
-            .id(tabEntity.getId())
-            .tabName(tabEntity.getTabName())
-            .categoryList(dtos)
-            .categoryNames(names)
-            .build();
-}
+        return TabDto.builder()
+                .id(tabEntity.getId())
+                .tabName(tabEntity.getTabName())
+                .adminOnly(tabEntity.getAdminOnly()) // ★ 추가
+                .categoryList(dtos)
+                .categoryNames(names)
+                .build();
+    }
 
 @Override
 public List<CategoryDto> categoryList() {

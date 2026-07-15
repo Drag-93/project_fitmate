@@ -4,10 +4,16 @@ import CommunityList from "./CommunityList";
 
 const CommunityIndex = () => {
   const [params, setParams] = useState({ tabId: null, categoryId: null });
-  const [selectTabName, setSelectTabName] = useState("전체게시판");
-  const handleSelect = (tabId, categoryId, tabName) => {
+  const [selectTab, setSelectTab] = useState({
+    tabName: "전체게시판",
+    adminOnly: false,
+  });
+  const handleSelect = (tabId, categoryId, tabName, adminOnly) => {
     setParams({ tabId, categoryId });
-    setSelectTabName(tabName || "전체게시판");
+    setSelectTab({
+      tabName: tabName || "전체게시판",
+      adminOnly: !!adminOnly,
+    });
   };
   return (
     <div className="community-wrapper" style={{ display: "flex" }}>
@@ -15,7 +21,7 @@ const CommunityIndex = () => {
       <CommunityLeft onSelect={handleSelect} />
 
       {/* 관리중인 파라미터를 리스트 컴포넌트로 전달 */}
-      <CommunityList params={params} tabName={selectTabName} />
+      <CommunityList params={params} tab={selectTab} />
     </div>
   );
 };

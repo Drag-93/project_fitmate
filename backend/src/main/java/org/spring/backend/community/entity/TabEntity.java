@@ -33,6 +33,9 @@ public class TabEntity {
 
   private String tabName;
 
+  @Column(name = "admin_only")
+  private Boolean adminOnly = false;
+
   @JsonIgnore
   @OneToMany(mappedBy = "tabEntity", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<CategoryEntity> categoryList = new ArrayList<>();
