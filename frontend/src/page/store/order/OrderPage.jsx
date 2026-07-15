@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import jwtAxios from "../../../apis/util/jwtUtil";
 
 import ProductList from "../../../components/store/order/ProductList";
 import BuyerInfo from "../../../components/store/order/BuyerInfo";
@@ -9,13 +10,39 @@ import "../../../components/css/store/order/OrderPage.css"
 
 const OrderPage = () => {
   const location = useLocation();
-
   const [orderInfo, setOrderInfo] = useState({
     receiverName: "",
     receiverPhone: "",
-    address: "",
+    receiverAddress: "",
     deliveryMemo: ""
   });
+
+  const [memberInfo, setMemberInfo] = useState(null);
+
+  useEffect(() => {
+
+    jwtAxios.get("/api/member/detail")
+      .then(res => {
+        setMemberInfo(res.data.result);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+
+  }, []);
+
+  // 회원 정보를 기본 배송 정보로 세팅
+  useEffect(() => {
+    if (memberInfo) {
+      setOrderInfo({
+        receiverName: memberInfo.userName || "",
+        receiverPhone: memberInfo.userPhone || "",
+        receiverAddress: memberInfo.userAddress || "",
+        deliveryMemo: ""
+      });
+    }
+  }, [memberInfo]);
+
 
   // 장바구니 주문 데이터
   const cartItems = location.state?.cartItems || [];
@@ -23,8 +50,6 @@ const OrderPage = () => {
   const totalPrice = location.state?.totalPrice || 0;
   // 바로구매 데이터
   const directItem = location.state?.directItem;
-
-  const isDirect = !!directItem;
 
   const orderData = {
     ...orderInfo,
@@ -35,9 +60,7 @@ const OrderPage = () => {
           productId: directItem.productId,
           quantity: directItem.quantity
         }
-      ]
-      : []
-      
+      ] : []
   };
 
   return (

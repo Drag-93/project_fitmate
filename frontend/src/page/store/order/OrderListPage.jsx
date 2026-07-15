@@ -10,7 +10,6 @@ const OrderListPage = () => {
     const fetchOrders = async () => {
       try {
         const res = await jwtAxios.get("http://localhost:8090/api/order/list");
-        console.log(res.data);
         setOrders(res.data);
       } catch (err) {
         console.error(err);

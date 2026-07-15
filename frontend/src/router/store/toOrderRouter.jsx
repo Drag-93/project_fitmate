@@ -46,6 +46,14 @@ const toOrderRouter = () => {
         </Suspense>
       ),
     },
+    {
+      path: "detail/:orderId",
+      element: (
+        <Suspense fallback={Loading}>
+          <OrderDetailPage />
+        </Suspense>
+      ),
+    },
   ];
 };
 

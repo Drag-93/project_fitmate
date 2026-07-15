@@ -39,8 +39,7 @@ public class OrderServiceImpl implements OrderService {
     System.out.println(orderDto);
 
     for (OrderItemDto item : orderDto.getOrderItemDtos()) {
-      System.out.println("productId : " + item.getProductId());
-      System.out.println("quantity : " + item.getQuantity());
+
     }
     // 회원 조회
     MemberEntity memberEntity = memberRepository.findById(memberId)
@@ -54,7 +53,7 @@ public class OrderServiceImpl implements OrderService {
         .deliveryStatus(DeliveryStatus.READY)
         .receiverName(orderDto.getReceiverName())
         .receiverPhone(orderDto.getReceiverPhone())
-        .address(orderDto.getAddress())
+        .receiverAddress(orderDto.getReceiverAddress())
         .deliveryMemo(orderDto.getDeliveryMemo())
         .memberEntity(memberEntity)
         .build();
@@ -91,11 +90,6 @@ public class OrderServiceImpl implements OrderService {
   @Override
   public Long insertCartOrder(Long memberId, List<Long> cartListIds, OrderDto orderDto) {
 
-    System.out.println("memberId = " + memberId);
-    System.out.println("cartIds = " + cartListIds);
-    System.out.println("address = " + orderDto.getAddress());
-    System.out.println("receiverName = " + orderDto.getReceiverName());
-    System.out.println(orderDto);
     // 회원 조회
     MemberEntity memberEntity = memberRepository.findById(memberId)
         .orElseThrow(() -> new IllegalArgumentException("회원이 존재하지 않습니다."));
@@ -107,7 +101,7 @@ public class OrderServiceImpl implements OrderService {
         .deliveryStatus(DeliveryStatus.READY)
         .receiverName(orderDto.getReceiverName())
         .receiverPhone(orderDto.getReceiverPhone())
-        .address(orderDto.getAddress())
+        .receiverAddress(orderDto.getReceiverAddress())
         .deliveryMemo(orderDto.getDeliveryMemo())
         .memberEntity(memberEntity)
         .build();
@@ -144,7 +138,7 @@ public class OrderServiceImpl implements OrderService {
   @Override
   public List<OrderDto> orderList(Long memberId) {
 
-    return orderRepository.findByMemberEntityId(memberId)
+    return orderRepository.findGoodsOrdersByMemberId(memberId)
         .stream()
         .map(OrderDto::toOrderDto)
         .toList();
@@ -153,12 +147,13 @@ public class OrderServiceImpl implements OrderService {
   @Override
   @Transactional(readOnly = true)
   public OrderDto orderDetail(Long orderId) {
-    OrderEntity orderEntity = orderRepository.findById(orderId)
-        .orElseThrow(() -> new IllegalArgumentException("주문이 존재하지 않습니다."));
-
-    return OrderDto.toOrderDto(orderEntity);
+  
+      OrderEntity orderEntity = orderRepository.findDetailById(orderId)
+          .orElseThrow(() -> new IllegalArgumentException("주문이 존재하지 않습니다."));
+  
+      return OrderDto.toOrderDto(orderEntity);
   }
-
+  
   @Override
   public void cancelOrder(Long orderId) {
     OrderEntity orderEntity = orderRepository.findById(orderId)

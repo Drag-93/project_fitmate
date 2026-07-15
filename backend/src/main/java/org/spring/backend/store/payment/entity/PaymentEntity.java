@@ -76,9 +76,8 @@ public class PaymentEntity extends BasicTime {
   @JoinColumn(name = "subscription_id")
   private SubscriptionEntity subscriptionEntity;
 
-  // 1: 1
   @JsonIgnore
-  @OneToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "order_id")
   private OrderEntity orderEntity;
 }
