@@ -1,13 +1,8 @@
 package org.spring.backend.member.controller;
 
 import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
-import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.spring.backend.member.dto.MemberDto;
 import org.spring.backend.member.jwt.CustomUserDetails;
 import org.spring.backend.member.service.MemberService;
@@ -15,7 +10,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -63,14 +57,23 @@ public class MemberController {
 
     //회원탈퇴 api
     @DeleteMapping("/quit")
-    public ResponseEntity<?> myPageDelete(@AuthenticationPrincipal CustomUserDetails userDetails){
+    public ResponseEntity<?> myPageDelete(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                          HttpServletResponse response){
         String userEmail = userDetails.getUsername();
         try{
-        memberService.memberDelete(userEmail);
+            memberService.memberDelete(userEmail);
+            // refresh쿠키를 삭제시키기 위해 만료된 쿠키생성
+            Cookie cookie = new Cookie("refresh", null);
+            cookie.setMaxAge(0);
+            cookie.setPath("/");
+            cookie.setHttpOnly(true);
+            response.addCookie(cookie);
+            return ResponseEntity.ok("ok");
         }catch (Exception e){
-            System.out.println(e.getMessage());
+            System.out.println("회원탈퇴중 에러발생: " + e.getMessage());
+            return ResponseEntity.status(500).body("회원탈퇴 실패: " + e.getMessage());
         }
-        return ResponseEntity.ok("ok");
+
     }
 
     //회원수정 api

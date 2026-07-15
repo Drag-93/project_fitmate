@@ -9,18 +9,21 @@ import lombok.RequiredArgsConstructor;
 import org.spring.backend.member.entity.RefreshEntity;
 import org.spring.backend.member.jwt.JWTUtil;
 import org.spring.backend.member.repository.RefreshRepository;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequiredArgsConstructor
 public class ReissueController {
     private final JWTUtil jwtUtil;
-    private final RefreshRepository refreshRepository;
+//    private final RefreshRepository refreshRepository;
+    private final RedisTemplate<String, String> redisTemplate;
 
     @PostMapping("/reissue")
     @Transactional
@@ -54,12 +57,13 @@ public class ReissueController {
             return new ResponseEntity<>("invalid refresh token", HttpStatus.BAD_REQUEST);
         }
         //Refresh테이블에 저장되어있는지 확인
-        Boolean isExist = refreshRepository.existsByRefresh(refresh);
+        String userEmail = jwtUtil.getUserEmail(refresh);
+        Boolean isExist = redisTemplate.hasKey(userEmail);
         if(!isExist){
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return new ResponseEntity<>("invalid refresh token", HttpStatus.BAD_REQUEST);
         }
-
-        String userEmail = jwtUtil.getUserEmail(refresh);
+        redisTemplate.delete(userEmail);
         String role = jwtUtil.getRole(refresh);
 
         //토큰생성
@@ -67,28 +71,37 @@ public class ReissueController {
         String newRefresh = jwtUtil.createJwt("refresh",userEmail,role,84600000L);
         //Refresh 토큰 저장, 기존의 Refresh토큰이 있었다면 제거 후 새 Refresh토큰으로 저장
         try {
-            refreshRepository.deleteByRefresh(refresh);
-            refreshRepository.flush();
+            redisTemplate.delete(refresh);
         } catch (Exception e) {
             System.out.println("이미 다른 요청에 의해 삭제된 토큰입니다: " + e.getMessage());
         }
-        addRefreshEntity(userEmail, newRefresh, 86400000L);
+        addRefreshToRedis(userEmail, newRefresh, 864000L);
 
         response.setHeader("access",newAccess);
         response.addCookie(createCookie("refresh", newRefresh));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    private void addRefreshEntity(String userEmail, String refresh, Long expiredMs){
-        
-        Date date = new Date(System.currentTimeMillis() + expiredMs);
-        RefreshEntity refreshEntity = RefreshEntity.builder()
-                .userEmail(userEmail)
-                .refresh(refresh)
-                .expiration(date.toString())
-                .build();
-        refreshRepository.save(refreshEntity);
+    private void addRefreshToRedis(String userEmail, String refresh, long expireS) {
+        // opsForValue().set(key, value, timeout, timeunit)을 사용해 만료시간 자동관리
+        redisTemplate.opsForValue().set(
+                userEmail,
+                refresh,
+                expireS,
+                TimeUnit.SECONDS
+        );
     }
+
+//    private void addRefreshEntity(String userEmail, String refresh, Long expiredMs){
+//
+//        Date date = new Date(System.currentTimeMillis() + expiredMs);
+//        RefreshEntity refreshEntity = RefreshEntity.builder()
+//                .userEmail(userEmail)
+//                .refresh(refresh)
+//                .expiration(date.toString())
+//                .build();
+//        refreshRepository.save(refreshEntity);
+//    }
 
     private Cookie createCookie(String key, String value) {
         Cookie cookie = new Cookie(key, value);

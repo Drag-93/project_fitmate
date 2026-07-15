@@ -1,9 +1,13 @@
 import axios from "axios";
 import { getCookie, setCookie } from "./cookieUtil";
 import { API_SERVER_URL } from "../commonApi";
+import store from "../../store/store";
+import { logoutAsync } from "../../store/slices/loginSlice";
 
 //jwtUtil을 이용하기위해 axios통신 객체 생성
-const jwtAxios = axios.create();
+const jwtAxios = axios.create({
+  withCredentials: true,
+});
 const host = API_SERVER_URL; //백엔드 서버주소
 //액세스토큰 재 발급 함수
 const refreshJWT = async () => {

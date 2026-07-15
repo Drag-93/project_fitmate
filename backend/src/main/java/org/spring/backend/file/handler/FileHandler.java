@@ -43,6 +43,13 @@ public class    FileHandler {
     throws IOException {
         //비어있는 파일엔티티 생성
         Optional<FileEntity> optionalFileEntity = Optional.empty();
+        //URI기반으로 경로 변환
+        Path baseDirPath;
+        try{
+            baseDirPath = Paths.get(URI.create(filePath));
+        }catch (Exception e){
+            baseDirPath = Paths.get(filePath);
+        }
         //테이블타입별로 나눔(타입추가시에 common/TableType enum 수정
         switch (tableType){
             //해당하는 타입별로 memberEntity기준(1:N매칭한거)으로 찾아냄
@@ -62,15 +69,12 @@ public class    FileHandler {
 
         //파일DB에 저장되어있는게 없으면 예외처리
         if(optionalFileEntity.isEmpty()){
-            throw new NullPointerException("파일엔티티의 값이 존재하지 않습니다.");
+//            System.out.println("파일엔티티가 존재하지 않습니다.");
+            return;
         }
         try {
-//            URI fileUri = new URI(filePath + optionalFileEntity.get().getNewFileName());
-//            File deleteFile = new File(fileUri);
-            //테스트시에는 경로uri사용할수 없기에 로컬로 사용
-            String localPath = filePath.replace("file:///", "");
             //파일이 최종저장되어있는 절대 경로 생성
-            Path targetFilePath = Paths.get(localPath).resolve(optionalFileEntity.get().getNewFileName());
+            Path targetFilePath = baseDirPath.resolve(optionalFileEntity.get().getNewFileName());
             //파일로 변경
             File deleteFile = targetFilePath.toFile();
             //해당하는 파일이 있을 경우 삭제
@@ -100,7 +104,6 @@ public class    FileHandler {
         String oldFileName = file.getOriginalFilename();
         //파일의 새로운이름 저장(생성된UUID_원본파일이름)
         String newFileName = UUID.randomUUID() + "_" + oldFileName;
-        // file:///E:/fitmate/backend/member/와 파일명을 조합하여 URI 생성
         //URI기반으로 경로 변환
         Path baseDirPath;
         try{
@@ -213,8 +216,6 @@ public class    FileHandler {
         String oldFileName = file.getOriginalFilename();
         //파일의 새로운이름 저장(생성된UUID_원본파일이름)
         String newFileName = UUID.randomUUID() + "_" + oldFileName;
-        //URI fileUri = new URI(filePath + optionalFileEntity.get().getNewFileName());
-        //File deleteFile = new File(fileUri);
         //URI기반으로 경로 변환
         Path baseDirPath;
         try{
@@ -306,9 +307,6 @@ public class    FileHandler {
         }
         try{
             //새로운 파일 저장
-            // file:///E:/fitmate/backend/member/와 파일명을 조합하여 URI 생성
-//            URI fileUri = new URI(filePath + newFileName);
-//            File deleteFile = new File(fileUri);
             //파일이 최종저장되어있는 절대 경로 생성
             Path targetPath = baseDirPath.resolve(newFileName);
             //만약 폴더가 없을때는 생성

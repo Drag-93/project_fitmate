@@ -28,7 +28,7 @@ export const logoutAsync = createAsyncThunk(
       );
       return res.data;
     } catch (err) {
-      return rejectWithValue(err);
+      return rejectWithValue(err.response?.data || err.message);
     }
   },
 );
@@ -61,12 +61,14 @@ export const loadMemberInit = createAsyncThunk(
     try {
       const memberInfo = getCookie("member");
       if (memberInfo === null) return null;
+      //member쿠키를 파싱
+      const parsedMember =
+        typeof memberInfo === "string" ? JSON.parse(memberInfo) : memberInfo;
 
-      if (memberInfo && memberInfo.userEmail) {
+      if (parsedMember && parsedMember.userEmail) {
         const res = await jwtAxios.get(
-          `${API_SERVER_URL}/api/member/init/${memberInfo.userEmail}`,
+          `${API_SERVER_URL}/api/member/init/${parsedMember.userEmail}`,
         );
-        // console.log(res.data);
         return res.data;
       }
       return null;
@@ -76,10 +78,19 @@ export const loadMemberInit = createAsyncThunk(
   },
 );
 
+const getInitialState = () => {
+  const savedMember = loadMemberCookie();
+  if (savedMember) {
+    // 쿠키가 있으면 그 정보 전체가 현재 로그인 정보가 됨
+    return savedMember;
+  }
+  return { ...initState }; // { memberData: null }
+};
+
 //로그인 관련 슬라이스 설정
 const loginSlice = createSlice({
   name: "loginSlice",
-  initialState: loadMemberCookie() || initState, //쿠키의 유무에따라 초깃값사용
+  initialState: getInitialState(), //쿠키의 유무에따라 초깃값사용
   reducers: {
     //로그인
     login: (state, action) => {
@@ -130,6 +141,8 @@ const loginSlice = createSlice({
           }
           //쿠키 저장
           setCookie("member", JSON.stringify(cookiePayload), 1);
+
+          return payload;
         }
       })
       .addCase(loadMemberInit.fulfilled, (state, action) => {
