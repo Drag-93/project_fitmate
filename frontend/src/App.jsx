@@ -35,9 +35,11 @@ function App() {
   //일반로그인전용
   useEffect(() => {
     const socialMemberInfo = getCookie("memberInfo");
+    const memberCookie = getCookie("member");
 
     if (
       !socialMemberInfo &&
+      memberCookie &&
       (!memberData || Object.keys(memberData).length === 0)
     ) {
       dispatch(loadMemberInit());

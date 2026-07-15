@@ -28,8 +28,7 @@ const MemberDetail = () => {
   //멤버데이터를 수정할 때 따로 수정데이터를 조작할 수 있게 설정
   const [updateData, setUpdateData] = useState(null);
 
-  //이미지 수정 시 미리보기url과 상태값을 변경하기 위한 상수선언
-  const [file, setFile] = useState(null);
+  //이미지 수정 시 미리보기url을 변경하기 위한 상수선언
   const [prevUrl, setPrevUrl] = useState("");
 
   //이메일 정규식
@@ -62,7 +61,6 @@ const MemberDetail = () => {
   const onChangeFileFn = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
-      setFile(selectedFile);
       //선택된 파일로 임시 미리보기 URL 생성 후 세팅
       setPrevUrl(URL.createObjectURL(selectedFile));
     }
@@ -139,7 +137,7 @@ const MemberDetail = () => {
       if (res.data === "ok") {
         dispatch(logout());
         alert("회원탈퇴 성공");
-        navigate("/");
+        window.location.href = "/";
       } else {
         alert("회원탈퇴에 실패하였습니다.");
       }
@@ -325,7 +323,6 @@ const MemberDetail = () => {
                         onClick={() => {
                           setIsUpdate((prev) => !prev);
                           setPrevUrl("");
-                          setFile(null);
                         }}
                       >
                         취소

@@ -51,7 +51,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
 
-
         String userEmail = customUserDetails.getUsername();
         //재 로그인시에 refresh토큰이 쌓이는걸 방지하기 위해 제거
 //        refreshRepository.deleteByUserEmail(userEmail);

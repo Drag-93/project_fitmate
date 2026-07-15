@@ -12,6 +12,7 @@ import lombok.Setter;
 import org.spring.backend.common.Role;
 import org.spring.backend.file.entity.FileEntity;
 import org.spring.backend.member.dto.MemberDto;
+import org.spring.backend.store.order.entity.OrderEntity;
 import org.spring.backend.store.subscription.entity.SubscriptionEntity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -72,9 +73,14 @@ public class MemberEntity extends BasicTime {
   private List<FileEntity> fileEntities;
 
   // 구독 상품 매핑
-  @OneToMany(mappedBy = "memberEntity", fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "memberEntity", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE,
+          orphanRemoval = true)
   @JsonIgnore
   private List<SubscriptionEntity> subscriptionEntities;
+
+  @OneToMany(mappedBy = "memberEntity", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+  @JsonIgnore
+  private List<OrderEntity> orderEntities;
 
   public static MemberEntity toInsertMemberEntity(MemberDto memberDto, String encodePw) {
     return MemberEntity.builder()

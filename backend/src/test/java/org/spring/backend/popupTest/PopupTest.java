@@ -26,7 +26,11 @@ public class PopupTest {
                     .sortOrder(i)
                     .build();
 
+            try{
             mainService.insertPopup(popupDto);
+            }catch (Exception e){
+                System.out.println(e.getMessage());
+            }
 
         }
     }

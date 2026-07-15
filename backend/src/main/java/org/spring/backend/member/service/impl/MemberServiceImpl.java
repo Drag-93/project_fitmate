@@ -13,6 +13,7 @@ import org.spring.backend.member.service.MemberService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,7 @@ public class MemberServiceImpl implements MemberService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final MemberAddRepository memberAddRepository;
     private final FileHandler fileHandler;
+    private final RedisTemplate<String, String> redisTemplate;
 
     @Value("${img.path.member}")
     private String filePath;
@@ -123,17 +125,7 @@ public class MemberServiceImpl implements MemberService {
     public void memberDelete(Long id) throws IOException{
         MemberEntity memberEntity = memberRepository.findById(id)
                 .orElseThrow(()->new NoSuchElementException("회원아이디 없음"));
-        if (memberEntity.getMemberAddEntity() != null) {
-            MemberAddEntity addEntity = memberEntity.getMemberAddEntity();
-
-            // 부모 객체에서 자식으로 가는 연결 고리를 null로 끊음
-            memberEntity.setMemberAddEntity(null);
-
-            // 자식(MemberAdd) 데이터를 먼저 직접 삭제
-            memberAddRepository.delete(addEntity);
-        }
-        fileHandler.deleteFile(filePath, TableType.MEMBER,memberEntity.getId());
-        memberRepository.deleteById(id);
+        memberCommonDelete(memberEntity);
     }
 
     @Transactional
@@ -141,18 +133,7 @@ public class MemberServiceImpl implements MemberService {
     public void memberDelete(String userEmail) throws IOException{
         MemberEntity memberEntity = memberRepository.findByUserEmail(userEmail)
                 .orElseThrow(()->new NoSuchElementException("회원정보 없음"));
-        if (memberEntity.getMemberAddEntity() != null) {
-            MemberAddEntity addEntity = memberEntity.getMemberAddEntity();
-
-            // 부모 객체에서 자식으로 가는 연결 고리를 null로 끊음
-            memberEntity.setMemberAddEntity(null);
-
-            // 자식(MemberAdd) 데이터를 먼저 직접 삭제
-            memberAddRepository.delete(addEntity);
-        }
-        fileHandler.deleteFile(filePath, TableType.MEMBER,memberEntity.getId());
-        memberRepository.delete(memberEntity);
-        memberRepository.flush();
+        memberCommonDelete(memberEntity);
     }
 
     @Override
@@ -161,5 +142,30 @@ public class MemberServiceImpl implements MemberService {
         .orElseThrow(()->new NoSuchElementException("이메일이 존재하지 않습니다."));
 
         return MemberDto.toInitMemberDto(memberEntity);
+    }
+
+    //멤버 삭제시 공통으로 들어가는 작업 함수화
+    void memberCommonDelete(MemberEntity memberEntity) throws IOException{
+        //redis에 userEmail명으로 저장되어있는 refresh토큰이 있는지 확인 후 제거
+        if (redisTemplate.hasKey(memberEntity.getUserEmail())) {
+            redisTemplate.delete(memberEntity.getUserEmail());
+        }
+        //멤버 추가 엔티티가 존재하는지 확인 후 연결상태들 전부 제거
+        if (memberEntity.getMemberAddEntity() != null) {
+            MemberAddEntity addEntity = memberEntity.getMemberAddEntity();
+
+            // 부모 객체에서 자식으로 가는 연결 고리를 null로 끊음
+            memberEntity.setMemberAddEntity(null);
+
+            // 자식(MemberAdd) 데이터를 먼저 직접 삭제
+            memberAddRepository.delete(addEntity);
+
+            //자식데이터 직접 삭제
+            memberEntity.setMemberAddEntity(null);
+        }
+        //파일이 존재하면 삭제, 존재하지 않을땐 그대로 넘어감
+        fileHandler.deleteFile(filePath, TableType.MEMBER,memberEntity.getId());
+        //이후 회원탈퇴 진행
+        memberRepository.delete(memberEntity);
     }
 }
