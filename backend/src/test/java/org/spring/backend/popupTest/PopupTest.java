@@ -15,7 +15,7 @@ public class PopupTest {
     MainService mainService;
 
     @Test
-    void insertPopup() throws IOException{
+    void insert() throws IOException{
         for(int i=1; i<5; i++){
             PopupDto popupDto = PopupDto.builder()
                     .active(true)

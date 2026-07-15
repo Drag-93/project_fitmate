@@ -37,9 +37,7 @@ public class MainServiceImpl implements MainService {
     private final FileRepository fileRepository;
     private final FileHandler fileHandler;
 
-    // 팝업 이미지가 실제 저장되는 경로
-    // application.yml 또는 application.properties의 설정 이름
-
+    // 팝업 이미지 저장 경로
     @Value("${img.path.popup}")
     private String popupPath;
 
@@ -203,16 +201,11 @@ public class MainServiceImpl implements MainService {
         PopupEntity popupEntity =
                 PopupEntity.toInsertPopupEntity(popupDto);
 
-        /*
-         * 파일을 저장하려면 팝업 id가 먼저 필요하기 때문에
-         * PopupEntity를 먼저 저장합니다.
-         */
+        //PopupEntity를 먼저 저장합니다.
         PopupEntity savedPopup =
                 popupRepository.save(popupEntity);
 
-        /*
-         * 실제 파일이 존재할 때만 파일 저장
-         */
+        // 실제 파일이 존재할 때만 파일 저장
         if (popupDto.getAttachFile() != null
                 && !popupDto.getAttachFile().isEmpty()) {
 
