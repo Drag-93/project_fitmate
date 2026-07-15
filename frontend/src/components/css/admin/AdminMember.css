@@ -1,0 +1,14 @@
+.admin-main {
+  position: relative;
+
+  width: calc(100% - 260px);
+  min-height: calc(100vh - 70px);
+
+  margin-left: 260px;
+  margin-top: 70px;
+
+  padding: 32px;
+  box-sizing: border-box;
+
+  background-color: #f5f7fb;
+}

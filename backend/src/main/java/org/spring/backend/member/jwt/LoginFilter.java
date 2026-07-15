@@ -65,11 +65,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String access = jwtUtil.createJwt("access",userEmail, role, 60 * 60 *  100L);
         String refresh = jwtUtil.createJwt("refresh",userEmail, role, 86400000L);
 
-        //Refresh토큰 저장        
-//        addRefreshEntity(userEmail, refresh, 86400000L);
+        //Refresh토큰 저장
         addRefreshToRedis(userEmail, refresh, 86400L);
-
-
 
         //Refresh쿠키 저장
         response.addCookie(createCookie("refresh",refresh));
@@ -96,18 +93,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                 TimeUnit.SECONDS
         );
     }
-
-    //Refresh토큰 DB서버에 저장
-//    private void addRefreshEntity(String userEmail, String refresh, Long expireMs){
-//        Date date = new Date(System.currentTimeMillis() + expireMs);
-//
-//        RefreshEntity refreshEntity = RefreshEntity.builder()
-//                .userEmail(userEmail)
-//                .refresh(refresh)
-//                .expiration(date.toString())
-//                .build();
-//        refreshRepository.save(refreshEntity);
-//    }
     //쿠키 생성
     private Cookie createCookie(String key, String value){
         Cookie cookie = new Cookie(key, value);

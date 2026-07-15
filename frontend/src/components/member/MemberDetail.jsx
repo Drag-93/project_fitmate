@@ -38,7 +38,11 @@ const MemberDetail = () => {
   //처음 시작 시 멤버데이터를 불러오기 위한 비동기 함수
   const getMemberDetail = async () => {
     //jwtAxios => jwtUtil의 axios함수(jwt토큰 중 access토큰과 refresh토큰을 비교하여 데이터를 불러옴)
-    const res = await jwtAxios.get(`${API_URL}/api/member/detail`);
+    const res = await jwtAxios.get(`${API_URL}/api/member/detail`, {
+      headers: {
+        "Cache-Control": "no-cache",
+      },
+    });
     return res.data;
   };
 
@@ -208,13 +212,19 @@ const MemberDetail = () => {
                     <span>{member.subscribe}</span>
                   </li>
                   <li>
-                    <span><Link to="/order/list">주문/결제</Link></span>
+                    <span>
+                      <Link to="/order/list">주문/결제</Link>
+                    </span>
                   </li>
                   <li>
-                    <span><Link to="/mypage/">구독 관리</Link></span>
+                    <span>
+                      <Link to="/mypage/">구독 관리</Link>
+                    </span>
                   </li>
                   <li>
-                  <span><Link to="/mypage/">운동 관리</Link></span>
+                    <span>
+                      <Link to="/mypage/">운동 관리</Link>
+                    </span>
                   </li>
                   <li className="buttonArea">
                     <button

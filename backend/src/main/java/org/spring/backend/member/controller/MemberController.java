@@ -6,7 +6,11 @@ import lombok.RequiredArgsConstructor;
 import org.spring.backend.member.dto.MemberDto;
 import org.spring.backend.member.jwt.CustomUserDetails;
 import org.spring.backend.member.service.MemberService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -91,5 +96,24 @@ public class MemberController {
         }else{
             return ResponseEntity.ok("ok");
         }
+    }
+    @GetMapping("/memberList")
+    public ResponseEntity<?> memberList(@PageableDefault(page = 0, size = 5, sort="id",
+    direction = Sort.Direction.DESC)Pageable pageable,
+                                        @RequestParam(value = "subject",required = false)String subject,
+                                        @RequestParam(value = "search", required = false)String search){
+        Page<MemberDto> memberList = memberService.memberList(pageable, subject, search);
+
+        int newPage = memberList.getNumber(); //현재페이지
+        int totalPage = memberList.getTotalPages(); //전체페이지
+        int blockNum = 5; //한페이지에 보여질 페이지넘버의 수
+
+        //블록 시작
+        int startPage = (newPage / totalPage) * blockNum + 1; //시작페이지
+        //블록 끝
+        int endPage = Math.min(startPage+blockNum-1, totalPage); //끝페이지
+        Map<String, List<MemberDto>> map = new HashMap<>();
+//        map.put("result", memberList);
+        return ResponseEntity.status(HttpStatus.OK).body(map);
     }
 }

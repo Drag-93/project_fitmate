@@ -5,6 +5,7 @@ const Loading = <div className="loading">...Loading</div>;
 const AdminIndexPage = lazy(() => import("../page/admin/AdminIndexPage"));
 const AdminCalendarPage = lazy(() => import("../page/admin/AdminCalendarPage"));
 const AdminPopupPage = lazy(() => import("../page/admin/AdminPopupPage"));
+const AdminMemberPage = lazy(() => import("../page/admin/AdminMemberPage"));
 
 const toAdminRouter = () => {
   return [
@@ -49,6 +50,14 @@ const toAdminRouter = () => {
       element: (
         <Suspense fallback={Loading}>
           <AdminPopupPage />
+        </Suspense>
+      ),
+    },
+    {
+      path: "member",
+      element: (
+        <Suspense fallback={Loading}>
+          <AdminMemberPage />
         </Suspense>
       ),
     },

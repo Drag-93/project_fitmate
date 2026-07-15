@@ -1,14 +1,12 @@
 package org.spring.backend.member.controller;
 
-import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.spring.backend.member.entity.RefreshEntity;
 import org.spring.backend.member.jwt.JWTUtil;
-import org.spring.backend.member.repository.RefreshRepository;
+import org.spring.backend.member.service.TokenValidationService;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,64 +20,52 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class ReissueController {
     private final JWTUtil jwtUtil;
-//    private final RefreshRepository refreshRepository;
     private final RedisTemplate<String, String> redisTemplate;
+
+    private final TokenValidationService tokenValidationService;
 
     @PostMapping("/reissue")
     @Transactional
     public ResponseEntity<?> reissue(HttpServletRequest request,
                                      HttpServletResponse response){
-        //Refresh토큰 가져오기
-        String refresh = null;
+        try{
+
+            String userEmail = tokenValidationService.validateRefreshAndGetEmail(request,response);
+            String refresh = getRefreshFromCookie(request);
+            String role = jwtUtil.getRole(refresh);
+
+            //토큰생성
+            String newAccess = jwtUtil.createJwt("access",userEmail, role, 60* 60 *100L);
+            String newRefresh = jwtUtil.createJwt("refresh",userEmail,role,84600000L);
+            redisTemplate.delete(userEmail);
+            addRefreshToRedis(userEmail, newRefresh, 864000L);
+
+            response.setHeader("access",newAccess);
+            response.addCookie(createCookie("refresh", newRefresh));
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch (IllegalArgumentException e) {
+            // 토큰 만료, 포맷 오버 등 잘못된 요청 처리는 400 Bad Request
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+
+        } catch (IllegalStateException e) {
+            // Redis 서버 다운 등 예외
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error");
+        }
+    }
+    // 쿠키 배열에서 안전하게 refresh 토큰만 찾아 꺼내는 헬퍼 메서드
+    private String getRefreshFromCookie(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                //쿠키중 refresh이름이 달린 쿠키 찾기
-                if (cookie.getName().equals("refresh")) {
-                    refresh = cookie.getValue();
+                if ("refresh".equals(cookie.getName())) {
+                    return cookie.getValue();
                 }
             }
         }
-
-        //Refresh토큰 유효성 검사
-        if(refresh == null){
-            return new ResponseEntity<>("refresh token null", HttpStatus.BAD_REQUEST);
-        }
-        //유효기간 만료 검사
-        try{
-            jwtUtil.isExpired(refresh);
-        }catch (ExpiredJwtException e){
-            return new ResponseEntity<>("refresh token expired", HttpStatus.BAD_REQUEST);
-        }
-        //토큰카테고리가 refresh인지 확인(이름만 refresh인것을 걸러내기 위함)
-        String category = jwtUtil.getCategory(refresh);
-        if(!category.equals("refresh")){
-            return new ResponseEntity<>("invalid refresh token", HttpStatus.BAD_REQUEST);
-        }
-        //Refresh테이블에 저장되어있는지 확인
-        String userEmail = jwtUtil.getUserEmail(refresh);
-        Boolean isExist = redisTemplate.hasKey(userEmail);
-        if(!isExist){
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return new ResponseEntity<>("invalid refresh token", HttpStatus.BAD_REQUEST);
-        }
-        redisTemplate.delete(userEmail);
-        String role = jwtUtil.getRole(refresh);
-
-        //토큰생성
-        String newAccess = jwtUtil.createJwt("access",userEmail, role, 60* 60 *100L);
-        String newRefresh = jwtUtil.createJwt("refresh",userEmail,role,84600000L);
-        //Refresh 토큰 저장, 기존의 Refresh토큰이 있었다면 제거 후 새 Refresh토큰으로 저장
-        try {
-            redisTemplate.delete(refresh);
-        } catch (Exception e) {
-            System.out.println("이미 다른 요청에 의해 삭제된 토큰입니다: " + e.getMessage());
-        }
-        addRefreshToRedis(userEmail, newRefresh, 864000L);
-
-        response.setHeader("access",newAccess);
-        response.addCookie(createCookie("refresh", newRefresh));
-        return new ResponseEntity<>(HttpStatus.OK);
+        return null;
     }
 
     private void addRefreshToRedis(String userEmail, String refresh, long expireS) {
@@ -91,17 +77,6 @@ public class ReissueController {
                 TimeUnit.SECONDS
         );
     }
-
-//    private void addRefreshEntity(String userEmail, String refresh, Long expiredMs){
-//
-//        Date date = new Date(System.currentTimeMillis() + expiredMs);
-//        RefreshEntity refreshEntity = RefreshEntity.builder()
-//                .userEmail(userEmail)
-//                .refresh(refresh)
-//                .expiration(date.toString())
-//                .build();
-//        refreshRepository.save(refreshEntity);
-//    }
 
     private Cookie createCookie(String key, String value) {
         Cookie cookie = new Cookie(key, value);

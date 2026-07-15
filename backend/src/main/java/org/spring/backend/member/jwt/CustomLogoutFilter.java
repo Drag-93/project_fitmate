@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.spring.backend.member.repository.RefreshRepository;
+import org.spring.backend.member.service.TokenValidationService;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.filter.GenericFilterBean;
 
@@ -17,9 +18,10 @@ import java.io.IOException;
 
 @RequiredArgsConstructor
 public class CustomLogoutFilter extends GenericFilterBean {
-    private final JWTUtil jwtUtil;
 //    private final RefreshRepository refreshRepository;
     private final RedisTemplate<String, String> redisTemplate;
+
+    private final TokenValidationService tokenValidationService;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -41,63 +43,21 @@ public class CustomLogoutFilter extends GenericFilterBean {
             return;
         }
 
-        //Refresh토큰 가져오기
-        String refresh = null;
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for(Cookie cookie: cookies){
-                //쿠키중 refresh이름이 달린 쿠키 찾기
-                if(cookie.getName().equals("refresh")){
-                    refresh = cookie.getValue();
-                }
-            }
-        }
-        //Refresh토큰 유효성 검사
-        if(refresh == null){
+        try {
+            String userEmail = tokenValidationService.validateRefreshAndGetEmail(request, response);
+
+            // 검증 완료 후 세션 삭제 및 쿠키 무효화
+            redisTemplate.delete(userEmail);
+            tokenValidationService.deleteRefreshCookie(response);
+
+            response.setStatus(HttpServletResponse.SC_OK);
+
+        } catch (IllegalArgumentException e) {
+            // 토큰 누락, 만료, 위조, 세션 없음 등의 예외 발생 시 -> 400 Bad Request
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return;
+
+        } catch (IllegalStateException e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
-
-        //유효기간 만료 검사
-        try{
-            jwtUtil.isExpired(refresh);
-        }catch (ExpiredJwtException e){
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return;
-        }
-        //토큰카테고리가 refresh인지 확인(이름만 refresh인것을 걸러내기 위함)
-        String category = jwtUtil.getCategory(refresh);
-        if(!category.equals("refresh")){
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return;
-        }
-
-        //Refresh테이블에 저장되어있는지 확인
-//        Boolean isExist = refreshRepository.existsByRefresh(refresh);
-//        if(!isExist){
-//            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-//            return;
-//        }
-
-        //Refresh토큰 DB에서 제거
-//        refreshRepository.deleteByRefresh(refresh);
-
-        String userEmail = jwtUtil.getUserEmail(refresh);
-
-        Boolean isExist = redisTemplate.hasKey(userEmail);
-        if(!isExist){
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return;
-        }
-        redisTemplate.delete(userEmail);
-
-        //Refresh 토큰 Cookie값 초기화
-        Cookie cookie = new Cookie("refresh", null);
-        cookie.setMaxAge(0);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-
-        response.addCookie(cookie);
-        response.setStatus(HttpServletResponse.SC_OK);
     }
 }

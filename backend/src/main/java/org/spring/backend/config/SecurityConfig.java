@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.spring.backend.member.jwt.*;
 import org.spring.backend.member.repository.RefreshRepository;
+import org.spring.backend.member.service.TokenValidationService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -42,6 +43,8 @@ public class SecurityConfig {
         // oauth2의 계정로그인에 성공 시 일반로그인과 동일하게 토큰발급 및 refresh토큰 저장을 위한 핸들러
         private final CustomOAuth2SuccessHandler customOAuth2SuccessHandler;
 
+        private final TokenValidationService tokenValidationService;
+
         @Bean
         public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
                 return configuration.getAuthenticationManager();
@@ -73,7 +76,7 @@ public class SecurityConfig {
                                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil,
                                                 objectMapper, redisTemplate),
                                                 UsernamePasswordAuthenticationFilter.class) // Spring 기본 로그인 필터대신 사용
-                                .addFilterBefore(new CustomLogoutFilter(jwtUtil, redisTemplate),
+                                .addFilterBefore(new CustomLogoutFilter(redisTemplate,tokenValidationService),
                                                 LogoutFilter.class); // 로그아웃 처리
 
                 return http.build();
