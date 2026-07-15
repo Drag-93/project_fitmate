@@ -2,6 +2,8 @@ package org.spring.backend.community.repository;
 
 import org.spring.backend.community.dto.CommunityDto;
 import org.spring.backend.community.entity.CommunityEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,10 +13,9 @@ import java.util.List;
 
 public interface CommunityRepository extends JpaRepository<CommunityEntity, Long>{
 
-List<CommunityEntity> findByCategoryEntity_Id(Long categoryId);
+    Page<CommunityEntity> findByCategoryEntity_Id(Long categoryId, Pageable pageable);
 
-    @Query("SELECT c FROM CommunityEntity c WHERE c.categoryEntity.tabEntity.id = :tabId")
-    List<CommunityEntity> findByTabId(@Param("tabId") Long tabId);
+    Page<CommunityEntity> findByTabId(Long tabId, Pageable pageable);
 
 
     // 공지사항만 최신순 TOP 5
@@ -31,4 +32,10 @@ List<CommunityEntity> findByCategoryEntity_Id(Long categoryId);
     List<CommunityEntity> findTop5ByCategoryNameOrderByHitDesc(
             String categoryName
     );
+    //제목 검색
+    Page<CommunityEntity> findByTitleContaining(Pageable pageable, String search);
+    //내용검색
+    Page<CommunityEntity> findByContentContaining(Pageable pageable, String search);
+    //작성자 검색
+    Page<CommunityEntity> findByUserNameContaining(Pageable pageable, String search);
 }

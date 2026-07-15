@@ -2,9 +2,6 @@ import React, { lazy, Suspense } from "react";
 import { Navigate } from "react-router-dom";
 const Loading = <div className="loading">...Loading</div>;
 
-const CommunityIndexPage = lazy(
-  () => import("../page/community/CommunityIndexPage"),
-);
 const CommunityInsertPage = lazy(
   () => import("../page/community/CommunityInsertPage"),
 );
@@ -31,7 +28,7 @@ const toCommunityRouter = () => {
       path: "index",
       element: (
         <Suspense fallback={Loading}>
-          <CommunityIndexPage />
+          <CommunityListPage />
         </Suspense>
       ),
     },

@@ -18,6 +18,8 @@ public class TabDto {
 
   private String tabName;
 
+  private Boolean adminOnly;
+
   private List<CategoryDto> categoryList;
 
   private List<String> categoryNames;

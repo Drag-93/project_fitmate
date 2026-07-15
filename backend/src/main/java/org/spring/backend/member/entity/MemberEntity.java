@@ -10,12 +10,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.spring.backend.common.Role;
+import org.spring.backend.community.entity.CommunityEntity;
 import org.spring.backend.file.entity.FileEntity;
 import org.spring.backend.member.dto.MemberDto;
 import org.spring.backend.store.subscription.entity.SubscriptionEntity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -75,6 +77,9 @@ public class MemberEntity extends BasicTime {
   @OneToMany(mappedBy = "memberEntity", fetch = FetchType.LAZY)
   @JsonIgnore
   private List<SubscriptionEntity> subscriptionEntities;
+
+  @OneToMany(mappedBy = "memberEntity", cascade = CascadeType.REMOVE, orphanRemoval = true)
+  private List<CommunityEntity> communityEntities = new ArrayList<>();
 
   public static MemberEntity toInsertMemberEntity(MemberDto memberDto, String encodePw) {
     return MemberEntity.builder()

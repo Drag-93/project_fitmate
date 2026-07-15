@@ -14,16 +14,19 @@ const CommunityDetail = () => {
   const [community, setCommunity] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // 게시글 작성자 이메일과 비교, 권한 관리자 확인
+  //현재 로그인 이메일, 권한 추출
   const member = getCookie("member");
-  const currentUserEmail = member?.userEmail
+  //쿠키 이메일 디코딩
+  const decodedMemberEmail = member?.userEmail
     ? decodeURIComponent(member.userEmail)
     : "";
-  const isAdmin = member?.role === "ADMIN";
-  const isOwner = currentUserEmail && currentUserEmail === community?.userEmail;
 
-  // ★ adminOnly 설정이면 관리자만 관리 가능
-  const canManage = community?.tabAdminOnly ? isAdmin : isOwner || isAdmin;
+  // 게시글 작성자 이메일과 비교, 권한 관리자 확인
+  const isOwner =
+    decodedMemberEmail && decodedMemberEmail === community?.userEmail;
+  const isAdmin = member?.role === "ADMIN";
+  const canManage = isOwner || isAdmin;
+
   //상세정보 보기
   const getCommunityDetail = async () => {
     try {

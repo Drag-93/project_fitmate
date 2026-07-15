@@ -72,6 +72,22 @@ public class CommunityDto {
         this.tabId=entity.getCategoryEntity().getTabEntity().getId();
         this.tabName=entity.getCategoryEntity().getTabEntity().getTabName();
         this.reply= entity.getReply();
-        this.memberEntity=entity.getMemberEntity();
+    }
+    public static CommunityDto toCommunityDto(CommunityEntity communityEntity){
+      return CommunityDto.builder()
+              .id(communityEntity.getId())
+              .userName(communityEntity.getUserName())
+              .title(communityEntity.getUserName())
+              .content(communityEntity.getContent())
+              .categoryId(communityEntity.getId())
+              .categoryName(communityEntity.getCategoryName())
+              .reply(communityEntity.getReply())
+              .userEmail(communityEntity.getUserEmail())
+              .hasFile(communityEntity.getHasFile())
+              .createTime(communityEntity.getCreateTime())
+              .updateTime(communityEntity.getUpdateTime())
+              .hit(communityEntity.getHit())
+              .originalFileName(communityEntity.getOriginalFileName())
+              .build();
     }
 }
