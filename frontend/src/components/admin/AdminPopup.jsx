@@ -237,8 +237,7 @@ const AdminPopup = () => {
     <div className="admin-popup">
       <div className="admin-popup-header">
         <div>
-          <h2>팝업 관리</h2>
-          <p>메인 화면에 노출되는 팝업을 관리합니다.</p>
+          <h2>팝업</h2>
         </div>
 
         <button
@@ -258,6 +257,7 @@ const AdminPopup = () => {
               <th>제목</th>
               <th>노출 여부</th>
               <th>노출 순서</th>
+              <th>이미지</th>
               <th>노출 시작일</th>
               <th>노출 종료일</th>
               <th>관리</th>
@@ -272,35 +272,36 @@ const AdminPopup = () => {
                 </td>
               </tr>
             ) : (
-              popupList.map((item) => (
-                <tr key={item.id}>
-                  <td>{item.id}</td>
+              popupList.map((popup) => (
+                <tr key={popup.id}>
+                  <td>{popup.id}</td>
 
-                  <td className="popup-title">{item.title}</td>
+                  <td className="popup-title">{popup.title}</td>
 
                   <td>
                     <span
                       className={
-                        item.active
+                        popup.active
                           ? "popup-status active"
                           : "popup-status inactive"
                       }
                     >
-                      {item.active ? "노출" : "미노출"}
+                      {popup.active ? "노출" : "미노출"}
                     </span>
                   </td>
 
-                  <td>{item.sortOrder}</td>
+                  <td>{popup.sortOrder}</td>
+                  <td>{popup.newFileName ? "O" : "X"}</td>
 
                   <td>
-                    {item.startDate
-                      ? item.startDate.replace("T", " ").slice(0, 16)
+                    {popup.startDate
+                      ? popup.startDate.replace("T", " ").slice(0, 16)
                       : "-"}
                   </td>
 
                   <td>
-                    {item.endDate
-                      ? item.endDate.replace("T", " ").slice(0, 16)
+                    {popup.endDate
+                      ? popup.endDate.replace("T", " ").slice(0, 16)
                       : "-"}
                   </td>
 
@@ -309,7 +310,7 @@ const AdminPopup = () => {
                       <button
                         type="button"
                         className="popup-update-btn"
-                        onClick={() => openUpdateModal(item)}
+                        onClick={() => openUpdateModal(popup)}
                       >
                         수정
                       </button>
@@ -317,7 +318,7 @@ const AdminPopup = () => {
                       <button
                         type="button"
                         className="popup-delete-btn"
-                        onClick={() => openDeleteModal(item)}
+                        onClick={() => openDeleteModal(popup)}
                       >
                         삭제
                       </button>
