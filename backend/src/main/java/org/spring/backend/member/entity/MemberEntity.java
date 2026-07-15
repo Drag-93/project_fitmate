@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.spring.backend.common.Role;
+import org.spring.backend.community.entity.CommunityEntity;
 import org.spring.backend.file.entity.FileEntity;
 import org.spring.backend.member.dto.MemberDto;
 import org.spring.backend.store.order.entity.OrderEntity;
@@ -17,6 +18,7 @@ import org.spring.backend.store.subscription.entity.SubscriptionEntity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter

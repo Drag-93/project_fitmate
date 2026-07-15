@@ -2,13 +2,11 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import jwtAxios from "../../apis/util/jwtUtil";
 import { API_SERVER_URL } from "../../apis/commonApi";
-import { getCookie } from "../../apis/util/cookieUtil";
 
 const ReplyList = ({ communityId, refreshKey }) => {
   const [replies, setReplies] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [userName, setUserName] = useState("");
-  const [userEmail, setUserEmail] = useState("");
   const [editingId, setEditingId] = useState(null);
   const [editContent, setEditContent] = useState("");
 
@@ -21,7 +19,6 @@ const ReplyList = ({ communityId, refreshKey }) => {
       const res = await jwtAxios.get(`${API_SERVER_URL}/api/member/detail`);
       if (res.data?.result) {
         setUserName(res.data.result.userName);
-        setUserEmail(res.data.result.userEmail);
       }
     } catch (error) {
       console.error("비로그인 상태입니다..");
@@ -49,13 +46,6 @@ const ReplyList = ({ communityId, refreshKey }) => {
     }
   }, [communityId, refreshKey]);
 
-  // 현재 로그인한 사용자 정보 (댓글 목록 전체에 공통으로 쓰임)
-  const member = getCookie("member");
-  const currentUserEmail = member?.userEmail
-    ? decodeURIComponent(member.userEmail)
-    : "";
-  const isAdmin = member?.role === "ADMIN";
-
   // 수정 모드 진입
   const startEdit = (reply) => {
     setEditingId(reply.id);
@@ -78,6 +68,7 @@ const ReplyList = ({ communityId, refreshKey }) => {
       await jwtAxios.put(`${API_SERVER_URL}/reply/update/${reply.id}`, {
         content: editContent,
         communityId: reply.communityId,
+        // memberId: reply.memberId,
       });
       setReplies((prev) =>
         prev.map((item) =>
@@ -97,6 +88,7 @@ const ReplyList = ({ communityId, refreshKey }) => {
     try {
       await jwtAxios.delete(`${API_SERVER_URL}/reply/delete/${reply.id}`, {
         communityId: reply.communityId,
+        // memberId: reply.memberId,
       });
       setReplies((prev) => prev.filter((item) => item.id !== reply.id));
       alert("삭제되었습니다");
@@ -116,50 +108,39 @@ const ReplyList = ({ communityId, refreshKey }) => {
 
   return (
     <div className="reply-list">
-      {replies.map((reply) => {
-        // ★ 각 댓글마다 개별적으로 본인/관리자 여부를 판단
-        const isOwner =
-          currentUserEmail && currentUserEmail === reply.userEmail;
-        const canManage = isOwner || isAdmin;
-
-        return (
-          <div key={reply.id}>
-            {editingId === reply.id ? (
-              <div className="reply-edit">
-                <input
-                  type="text"
-                  value={editContent}
-                  onChange={(e) => setEditContent(e.target.value)}
-                  autoFocus
-                />
-                <button type="button" onClick={() => saveEdit(reply)}>
-                  저장
+      {replies.map((reply) => (
+        <div key={reply.id}>
+          {editingId === reply.id ? (
+            <div className="reply-edit">
+              <input
+                type="text"
+                value={editContent}
+                onChange={(e) => setEditContent(e.target.value)}
+                autoFocus
+              />
+              <button type="button" onClick={() => saveEdit(reply)}>
+                저장
+              </button>
+              <button type="button" onClick={cancelEdit}>
+                취소
+              </button>
+            </div>
+          ) : (
+            <>
+              <div className="reply-content">{reply.content}</div>
+              <div className="reply-meta">
+                <input name="userName" value={reply.userName} readOnly />
+                <button type="button" onClick={() => startEdit(reply)}>
+                  수정
                 </button>
-                <button type="button" onClick={cancelEdit}>
-                  취소
+                <button type="button" onClick={() => deleteEdit(reply)}>
+                  삭제
                 </button>
               </div>
-            ) : (
-              <>
-                <div className="reply-content">{reply.content}</div>
-                <div className="reply-meta">
-                  <input name="userName" value={reply.userName} readOnly />
-                  {isOwner && (
-                    <button type="button" onClick={() => startEdit(reply)}>
-                      수정
-                    </button>
-                  )}
-                  {canManage && (
-                    <button type="button" onClick={() => deleteEdit(reply)}>
-                      삭제
-                    </button>
-                  )}
-                </div>
-              </>
-            )}
-          </div>
-        );
-      })}
+            </>
+          )}
+        </div>
+      ))}
     </div>
   );
 };

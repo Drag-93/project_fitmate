@@ -23,6 +23,8 @@ public class CommunityReplyDto {
 
   private String userName;
 
+  private String userEmail;
+
   private Long communityId;
 
   private Long memberId;
@@ -40,6 +42,13 @@ public class CommunityReplyDto {
       userName = replyEntity.getMemberEntity().getUserName();
     }
 
+    String userEmail = null;
+    if (replyEntity.getUserEmail()!=null){
+      userEmail = replyEntity.getUserEmail();
+    } else if (replyEntity.getMemberEntity()!=null) {
+      userEmail = replyEntity.getMemberEntity().getUserEmail();
+    }
+
     Long memberId = null;
     if (replyEntity.getMemberId() != null){
       memberId = replyEntity.getMemberId();
@@ -51,6 +60,7 @@ public class CommunityReplyDto {
             .id(replyEntity.getId())
             .content(replyEntity.getContent())
             .userName(userName) // 수정된 로직 적용
+            .userEmail(userEmail)
             .communityId(replyEntity.getCommunityId())
             .memberId(memberId)
             .createTime(replyEntity.getCreateTime())

@@ -1,17 +1,9 @@
 package org.spring.backend.community.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import org.spring.backend.common.BasicTime;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,6 +26,8 @@ public class CommunityReplyEntity extends BasicTime {
 
     private String userName;
 
+    private String userEmail;
+
     private String content;
 
     private int emoticon;
@@ -44,12 +38,12 @@ public class CommunityReplyEntity extends BasicTime {
     @Column(name = "member_id", insertable = false, updatable = false)
     private Long memberId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name="community_id")
     private CommunityEntity communityEntity;
 
   @JsonIgnore
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
   @JoinColumn(name = "member_id")
   private MemberEntity memberEntity;
 

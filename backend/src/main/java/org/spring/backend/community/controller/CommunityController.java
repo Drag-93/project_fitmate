@@ -10,6 +10,10 @@ import org.spring.backend.community.service.CommunityService;
 import org.spring.backend.community.service.TabService;
 import org.spring.backend.member.jwt.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -31,17 +35,17 @@ import org.springframework.http.ResponseEntity;
 @Slf4j
 public class CommunityController {
 
-
-
   private final CommunityService communityService;
   private final TabService tabService;
 
   //게시글 리스트
   @GetMapping({"","/","communityList"})
-  public ResponseEntity<?> communityList(){
-    Map<String, List<CommunityDto>> map = new HashMap<>();
+  public ResponseEntity<?> communityList( @PageableDefault(size = 10, sort = "createTime", direction = Sort.Direction.DESC)Pageable pageable,
+                                         @RequestParam(required = false) String subject,
+                                         @RequestParam(required = false) String search){
+    Map<String, Page<CommunityDto>> map = new HashMap<>();
 
-    List<CommunityDto> communityList = communityService.communityList();
+    Page<CommunityDto> communityList = communityService.communityList(pageable, subject, search);
     map.put("result", communityList);
 
     return ResponseEntity.status(HttpStatus.OK).body(map);
@@ -65,9 +69,10 @@ public class CommunityController {
 
   //게시글 삭제
   @DeleteMapping("/delete/{id}")
-  public ResponseEntity<?> communityDelete(@PathVariable("id") Long id){
-    
-    communityService.communityDelete(id);
+  public ResponseEntity<?> communityDelete(@PathVariable("id") Long id,
+                                           Authentication authentication){
+    String userEmail = authentication.getName();
+    communityService.communityDelete(id, userEmail);
     Map<String, String> map = new HashMap<>();
     map.put("result", "Delete");
       return ResponseEntity.status(HttpStatus.OK).body(map);
@@ -75,10 +80,11 @@ public class CommunityController {
 
   //게시글 수정
   @PutMapping("/update/{id}")
-  public ResponseEntity<?> communityUpdate(@PathVariable("id") Long id, @RequestBody CommunityDto communityDto, Authentication authentication){
+  public ResponseEntity<?> communityUpdate(@PathVariable("id") Long id,
+                                           @RequestBody CommunityDto communityDto,
+                                           Authentication authentication){
     // 컨트롤러가 받은 id를 서비스로 확실하게 전달합니다.
-    CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-    String userEmail = userDetails.getMemberEntity().getUserEmail();
+    String userEmail = authentication.getName();
     communityService.communityUpdate(id, communityDto, userEmail);
     
     Map<String, CommunityDto> map = new HashMap<>();
@@ -159,8 +165,9 @@ public class CommunityController {
   }
   
   //탭 수정
-      @PutMapping("/tabUpdate")
-      public ResponseEntity<?> tabUpdate(@RequestBody TabDto tabDto){
+      @PutMapping("/tabUpdate/{id}")
+      public ResponseEntity<?> tabUpdate(@PathVariable("id") Long id, @RequestBody TabDto tabDto){
+        tabDto.setId(id);
         Map<String, TabDto> map = new HashMap<>();
         
         tabService.tabUpdate(tabDto);
@@ -198,13 +205,14 @@ public class CommunityController {
         return ResponseEntity.status(HttpStatus.OK).body(map);
       }
 
-      @GetMapping("/list")
-      public ResponseEntity<?> getList(@RequestParam(value="tabId", required = false) Long tabId,
-                                   @RequestParam(value = "categoryId", required = false) Long categoryId){
-        List<CommunityDto> list = communityService.findCommunityList(tabId, categoryId);
+      @GetMapping("/tclist")
+      public ResponseEntity<?> tcList(@RequestParam(value="tabId", required = false) Long tabId,
+                                   @RequestParam(value = "categoryId", required = false) Long categoryId,
+                                      @PageableDefault(size=10,sort = "createTime", direction = Sort.Direction.DESC) Pageable pageable){
+        Page<CommunityDto> page = communityService.findCommunityList(tabId, categoryId, pageable);
 
         Map<String, Object> map = new HashMap<>();
-        map.put("result", list);
+        map.put("result", page);
         return ResponseEntity.status(HttpStatus.OK).body(map);
       }
     }
