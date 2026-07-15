@@ -22,7 +22,7 @@ const ProductListPage = () => {
 
   const loadProducts = async () => {
     try {
-      const res = await getProductList(productType, page, 12);
+      const res = await getProductList(productType, page, 100);
 
       console.log(res.data);
       setProducts(res.data.content);
