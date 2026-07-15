@@ -9,7 +9,6 @@ const ReplyForm = ({ communityId, onReplyAdd }) => {
     content: "",
     communityId,
     userName: "",
-    userEmail: "",
   });
   useEffect(() => {
     getUser();
@@ -23,7 +22,6 @@ const ReplyForm = ({ communityId, onReplyAdd }) => {
           ...prev,
           memberId: res.data.result.memberId,
           userName: res.data.result.userName,
-          userEmail: res.data.result.userEmail,
         }));
       }
     } catch (error) {

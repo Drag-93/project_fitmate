@@ -38,6 +38,7 @@ public class CommunityReplyServiceImpl implements CommunityReplyService {
         // 4. 엔티티 생성 시 조회한 memberEntity를 직접 사용
         CommunityReplyEntity replyEntity = CommunityReplyEntity.builder()
                 .content(dto.getContent())
+                .userEmail(memberEntity.getUserEmail())
                 .userName(memberEntity.getUserName()) // 로그인한 유저의 이름을 사용
                 .communityEntity(communityEntity)
                 .memberEntity(memberEntity) // null이 아닌 실제 엔티티 객체 전달
