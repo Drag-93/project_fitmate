@@ -31,13 +31,11 @@ const AdminMemberDetail = () => {
               <div className="memberList">
                 <ul className="memberList-head">
                   <li>이름</li>
-                  <li>성별</li>
                   <li>관심사</li>
                   <li>상세보기</li>
                 </ul>
                 <ul className="memberList-body" key={memberData.id}>
                   <li>{memberData.userName}</li>
-                  <li>{memberData.gender}</li>
                   <li>{memberData.interest}</li>
                   <li>{memberData.userName}</li>
                 </ul>

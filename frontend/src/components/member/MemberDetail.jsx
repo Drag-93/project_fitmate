@@ -4,7 +4,7 @@ import jwtAxios from "../../apis/util/jwtUtil";
 import { API_SERVER_URL } from "../../apis/commonApi";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { logout } from "../../store/slices/loginSlice";
+import { logout, logoutAsync } from "../../store/slices/loginSlice";
 
 import "../css/member/memberDetail.css";
 
@@ -117,7 +117,7 @@ const MemberDetail = () => {
           console.error("최신 회원 정보 가져오기 실패:", err);
         }
         if (updateData.userEmail !== member.userEmail) {
-          dispatch(logout());
+          logoutFn();
           alert("이메일 변경확인. 다시 로그인 해주시기 바랍니다.");
           navigate("/auth/login");
         } else {
@@ -130,6 +130,20 @@ const MemberDetail = () => {
     } catch (err) {
       console.log(err);
       alert("회원수정중 오류가 발생했습니다.");
+    }
+  };
+  const logoutFn = async () => {
+    //기존 그냥 로그아웃함수만 불러오던것 -> 비동기청크로 실제 customLogoutFilter를 거칠수있게 설정
+    try {
+      //로그아웃이 될때까지 기다림
+      await dispatch(logoutAsync()).unwrap();
+      alert("로그아웃 되었습니다.");
+      navigate("/");
+    } catch (error) {
+      //로그아웃api가 실패하거나 서버가 다운되어있으면 로그를 남기고, 멤버쿠키만 제거하는 기존 로그아웃으로 진행
+      console.error("로그아웃 처리 중 에러 발생:", error);
+      dispatch(logout());
+      navigate("/");
     }
   };
 

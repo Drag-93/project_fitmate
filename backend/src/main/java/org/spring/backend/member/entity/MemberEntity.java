@@ -2,7 +2,6 @@ package org.spring.backend.member.entity;
 
 import jakarta.persistence.*;
 import org.spring.backend.common.BasicTime;
-import org.spring.backend.common.Gender;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +18,6 @@ import org.spring.backend.store.subscription.entity.SubscriptionEntity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -47,11 +45,6 @@ public class MemberEntity extends BasicTime {
   private String userAddress;
 
   private String userPhone;
-
-  // 성별은 공란일시 UNKNOWN으로 자동저장
-  @Enumerated(EnumType.STRING)
-  @Column(columnDefinition = "VARCHAR(25) DEFAULT 'UNKNOWN'")
-  private Gender gender;
 
   private int subscribe;
 
@@ -99,9 +92,6 @@ public class MemberEntity extends BasicTime {
         .userName(memberDto.getUserName())
         .userAddress(memberDto.getUserAddress())
         .userPhone(memberDto.getUserPhone())
-        .gender((memberDto.getGender() == null || memberDto.getGender().toString().trim().isEmpty())
-                ? Gender.UNKNOWN
-                : memberDto.getGender())
         .subscribe(0)
         .profilePhoto(0)
         .role(Role.MEMBER)

@@ -110,7 +110,6 @@ public class MemberServiceImpl implements MemberService {
         originMemberEntity.setUserName(memberDto.getUserName());
         originMemberEntity.setUserAddress(memberDto.getUserAddress());
         originMemberEntity.setUserPhone(memberDto.getUserPhone());
-        originMemberEntity.setGender(memberDto.getGender());
         originMemberEntity.setSubscribe(memberDto.getSubscribe());
         originMemberEntity.setRole(memberDto.getRole());
 

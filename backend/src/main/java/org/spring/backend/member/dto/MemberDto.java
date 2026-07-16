@@ -2,8 +2,6 @@ package org.spring.backend.member.dto;
 
 import java.time.LocalDateTime;
 
-import org.spring.backend.common.Gender;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,8 +28,6 @@ public class MemberDto {
   private String userAddress;
 
   private String userPhone;
-
-  private Gender gender;
 
   private int subscribe;
 
@@ -74,7 +70,6 @@ public class MemberDto {
             .userName(memberEntity.getUserName())
             .userAddress(memberEntity.getUserAddress())
             .userPhone(memberEntity.getUserPhone())
-            .gender(memberEntity.getGender())
             .subscribe(memberEntity.getSubscribe())
             .profilePhoto(memberEntity.getProfilePhoto())
             .role(memberEntity.getRole())
@@ -98,7 +93,6 @@ public class MemberDto {
     return MemberDto.builder()
             .userEmail(memberEntity.getUserEmail())
             .userName(memberEntity.getUserName())
-            .gender(memberEntity.getGender())
             .subscribe(memberEntity.getSubscribe())
             .role(memberEntity.getRole())
             .memberAddId(memberEntity.getMemberAddEntity().getId())

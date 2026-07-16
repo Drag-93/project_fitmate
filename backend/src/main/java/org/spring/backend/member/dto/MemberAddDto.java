@@ -4,13 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.spring.backend.common.Gender;
 import org.spring.backend.common.Interest;
-import org.spring.backend.common.Role;
 import org.spring.backend.member.entity.MemberAddEntity;
 import org.spring.backend.member.entity.MemberEntity;
-
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor

@@ -1,7 +1,6 @@
 package org.spring.backend.member.jwt;
 
 import lombok.RequiredArgsConstructor;
-import org.spring.backend.common.Gender;
 import org.spring.backend.common.Role;
 import org.spring.backend.member.entity.MemberAddEntity;
 import org.spring.backend.member.entity.MemberEntity;
@@ -66,7 +65,6 @@ public class CustomDefaultOAuth2UserService extends DefaultOAuth2UserService {
                 .userEmail(userEmail)
                 .userPw(passwordEncoder.encode(oauth2Dummy))
                 .userName(userName)
-                .gender(Gender.UNKNOWN)
                 .role(Role.MEMBER)
                 .subscribe(0)
                 .profilePhoto(0)
