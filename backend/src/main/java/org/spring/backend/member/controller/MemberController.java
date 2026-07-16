@@ -99,7 +99,7 @@ public class MemberController {
     }
     @GetMapping("/memberList")
     public ResponseEntity<?> memberList(@PageableDefault(page = 0, size = 5, sort="id",
-    direction = Sort.Direction.DESC)Pageable pageable,
+    direction = Sort.Direction.ASC)Pageable pageable,
                                         @RequestParam(value = "subject",required = false)String subject,
                                         @RequestParam(value = "search", required = false)String search){
         Page<MemberDto> memberList = memberService.memberList(pageable, subject, search);
@@ -109,11 +109,25 @@ public class MemberController {
         int blockNum = 5; //한페이지에 보여질 페이지넘버의 수
 
         //블록 시작
-        int startPage = (newPage / totalPage) * blockNum + 1; //시작페이지
+        int startPage = (newPage / blockNum) * blockNum + 1; //시작페이지
         //블록 끝
         int endPage = Math.min(startPage+blockNum-1, totalPage); //끝페이지
-        Map<String, List<MemberDto>> map = new HashMap<>();
-//        map.put("result", memberList);
+        Map<String, Object> response = new HashMap<>();
+        response.put("memberList", memberList.getContent());
+        response.put("currentPage", newPage);
+        response.put("totalPage", totalPage);
+        response.put("startPage", startPage);
+        response.put("totalElements", memberList.getTotalElements());
+        response.put("endPage", endPage);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+    @GetMapping("/detail/{id}")
+    public ResponseEntity<?> adminMemberDetail(@PathVariable("id")Long id){
+        MemberDto memberDto = memberService.memberDetail(id);
+
+        Map<String, MemberDto> map = new HashMap<>();
+        map.put("result", memberDto);
+
         return ResponseEntity.status(HttpStatus.OK).body(map);
     }
 }

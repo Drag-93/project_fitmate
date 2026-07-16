@@ -91,25 +91,12 @@ public class MemberEntity extends BasicTime {
         .userName(memberDto.getUserName())
         .userAddress(memberDto.getUserAddress())
         .userPhone(memberDto.getUserPhone())
-        .gender(memberDto.getGender())
+        .gender((memberDto.getGender() == null || memberDto.getGender().toString().trim().isEmpty())
+                ? Gender.UNKNOWN
+                : memberDto.getGender())
         .subscribe(0)
         .profilePhoto(0)
         .role(Role.MEMBER)
-        .build();
-  }
-
-  public static MemberEntity toUpdateMemberEntity(MemberDto memberDto, String encodePw) {
-    return MemberEntity.builder()
-        .id(memberDto.getId())
-        .userEmail(memberDto.getUserEmail())
-        .userPw(encodePw)
-        .userName(memberDto.getUserName())
-        .userAddress(memberDto.getUserAddress())
-        .userPhone(memberDto.getUserPhone())
-        .gender(memberDto.getGender())
-        .subscribe(memberDto.getSubscribe())
-        .profilePhoto(memberDto.getProfilePhoto())
-        .role(memberDto.getRole())
         .build();
   }
 }

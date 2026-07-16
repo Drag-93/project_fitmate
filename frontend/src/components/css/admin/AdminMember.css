@@ -1,4 +1,4 @@
-.admin-main {
+.admin-member {
   position: relative;
 
   width: calc(100% - 260px);
@@ -11,4 +11,78 @@
   box-sizing: border-box;
 
   background-color: #f5f7fb;
+}
+
+/* 전체 컨테이너 */
+.admin-member-con {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* 검색창 영역 (필요시 사용) */
+.search {
+  margin-bottom: 20px;
+}
+
+/* 리스트 전체 감싸는 영역 */
+.memberList {
+  width: 100%;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* 헤더와 바디의 공통 레이아웃 (Grid 설정) */
+.memberList-head,
+.memberList-body {
+  display: grid;
+  /* 4개 열의 비율 설정: 이름(1) : 성별(0.8) : 관심사(2) : 상세보기(1) */
+  /* 필요에 따라 비율을 조정하세요 (예: 1fr 1fr 2fr 1fr 등) */
+  grid-template-columns: 1fr 0.8fr 2fr 1fr;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+  text-align: center;
+}
+
+/* 공통 셀 스타일 */
+.memberList-head li,
+.memberList-body li {
+  padding: 14px 8px;
+  font-size: 14px;
+  /* 글자가 너무 길어질 경우 말줄임표(...) 처리 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 헤더 전용 스타일 */
+.memberList-head {
+  background-color: #f8fafc;
+  border-bottom: 2px solid #cbd5e1;
+  font-weight: bold;
+  color: #334155;
+}
+
+/* 데이터 바디 전용 스타일 */
+.memberList-body {
+  background-color: #ffffff;
+  color: #475569;
+  border-bottom: 1px solid #f1f5f9;
+  transition: background-color 0.2s ease;
+}
+
+/* 마지막 행은 밑줄 제거 */
+.memberList-body:last-child {
+  border-bottom: none;
+}
+
+/* 마우스 올렸을 때 효과 (행 단위로 하이라이트) */
+.memberList-body:hover {
+  background-color: #f1f5f9;
+  cursor: pointer;
 }
