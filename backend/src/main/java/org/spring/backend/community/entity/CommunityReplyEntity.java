@@ -46,5 +46,4 @@ public class CommunityReplyEntity extends BasicTime {
   @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
   @JoinColumn(name = "member_id")
   private MemberEntity memberEntity;
-
 }

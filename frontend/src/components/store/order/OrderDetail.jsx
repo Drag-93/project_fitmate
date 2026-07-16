@@ -3,7 +3,6 @@ const OrderDetail = ({ order }) => {
   if (!order) {
     return <p>주문 정보를 불러오는 중...</p>;
   }
-  console.log(order)
   return (
     <div className="order-detail">
 

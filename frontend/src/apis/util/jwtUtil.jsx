@@ -53,13 +53,22 @@ const responseFail = async (err) => {
   ) {
     try {
       const memberCookieValue = getCookie("member");
+      //쿠키값을 자바스크립트 객체로 변환
+      const parsedMember =
+        typeof memberCookieValue === "string"
+          ? JSON.parse(memberCookieValue)
+          : memberCookieValue;
+      //정상적으로 memberCookie가 객체로 변환되었는지 확인
+      if (!parsedMember) {
+        throw new Error("MEMBER_COOKIE_NOT_FOUND");
+      }
       //새 액세스 토큰 발급
       const newAccessToken = await refreshJWT();
       if (!newAccessToken) {
         throw new Error("REFRESH_FAILED"); // 토큰이 없으면 강제로 에러 발생
       }
       //'member'쿠키 최신화
-      memberCookieValue.access = newAccessToken;
+      parsedMember.access = newAccessToken;
       setCookie("member", JSON.stringify(memberCookieValue), 1);
       //실패했던 요청정보를 가져와서 새 토큰으로 교체
       const originalRequest = err.config;

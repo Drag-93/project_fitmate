@@ -11,7 +11,6 @@ const KakaoPaySuccess = () => {
   useEffect(() => {
     // 카카오페이가 인증 성공 후 우리 approval_url 뒤에 붙여주는 pg_token 획득
     const pgToken = searchParams.get("pg_token");
-    console.log("approval 호출");
     const finalApproval = async () => {
       try {
         // 백엔드 엔드포인트와 데이터 규격 바인딩 안정화
@@ -19,9 +18,15 @@ const KakaoPaySuccess = () => {
           `http://localhost:8090/api/payment/approval/${paymentId}?pg_token=${pgToken}`
         );
 
-        const result = await response.text();
-        console.log("최종 결제 승인 결과 DB 반영");
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.log("error :", errorText);
+          throw new Error(errorText);
+        }
+
+        const result = await response.json();
         setPaymentInfo(result);
+
       } catch (error) {
         console.error("결제 승인 처리 중 에러 발생");
       } finally {
@@ -53,7 +58,17 @@ const KakaoPaySuccess = () => {
               <button onClick={() => navigate('/')}>HOME으로 이동</button>
             </li>
             <li>
-              <button onClick={() => navigate('/payment/list')}>결제 내역 확인</button>
+              <button
+                onClick={() => {
+                  if (paymentInfo?.productType === "GOODS") {
+                    navigate('/order/list');
+                  } else if(paymentInfo?.productType === "PREMIUM") {
+                    navigate('/subscription/list');
+                  } else {
+                    navigate('/membership/list');
+                  }
+                }}
+              >구매 내역 확인</button>
             </li>
           </ul>
         </div>

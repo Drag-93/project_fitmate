@@ -1,3 +1,7 @@
+<img width="1181" height="498" alt="image" src="https://github.com/user-attachments/assets/2b79666d-8013-46fa-b25e-db3899e7e576" />
+
+
+
 # Git 규칙
 
 ## 작업 순서

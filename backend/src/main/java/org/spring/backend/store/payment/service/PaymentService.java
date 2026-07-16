@@ -3,6 +3,7 @@ package org.spring.backend.store.payment.service;
 import java.util.List;
 
 import org.spring.backend.store.payment.dto.PaymentDto;
+import org.spring.backend.store.payment.dto.PaymentSuccessDto;
 import org.spring.backend.store.payment.entity.PaymentEntity;
 
 public interface PaymentService {
@@ -19,7 +20,7 @@ public interface PaymentService {
   PaymentDto findById(Long id);
 
   // 최종 결제 승인 프로세스 (변경 감지 적용)
-  void paymentApproval(String pgToken, Long paymentId);
+  PaymentSuccessDto paymentApproval(String pgToken, Long paymentId);
 
   // 카카오 결제 승인 요청 (v1/payment/approve)
   void paymentApproveKakao(PaymentEntity paymentEntity);

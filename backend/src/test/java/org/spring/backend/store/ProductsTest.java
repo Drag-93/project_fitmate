@@ -7,9 +7,12 @@ import org.spring.backend.store.product.type.BillingType;
 import org.spring.backend.store.product.type.ProductStatus;
 import org.spring.backend.store.product.type.ProductType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class ProductsTest {
 
   @Autowired
@@ -70,7 +73,7 @@ public class ProductsTest {
   }
   @Test
   void insert4() {
-    for (int i = 0; i < 4; i++) {
+    for (int i = 9; i <10; i++) {
 
       ProductEntity productEntity = ProductEntity.builder()
           .productName("프리미엄 구독" + i)
