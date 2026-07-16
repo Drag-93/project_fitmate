@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import OrderList from "../../../components/store/order/OrderList";
 import jwtAxios from "../../../apis/util/jwtUtil";
+import "../../../components/css/store/order/OrderList.css";
 
 const OrderListPage = () => {
 
@@ -10,7 +11,6 @@ const OrderListPage = () => {
     const fetchOrders = async () => {
       try {
         const res = await jwtAxios.get("http://localhost:8090/api/order/list");
-        console.log(res.data);
         setOrders(res.data);
       } catch (err) {
         console.error(err);
@@ -21,10 +21,7 @@ const OrderListPage = () => {
   }, []);
 
   return (
-    <div>
-      <h2>주문 내역</h2>
       <OrderList orders={orders} />
-    </div>
   );
 };
 

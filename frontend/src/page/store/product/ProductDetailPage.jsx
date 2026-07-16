@@ -75,20 +75,23 @@ const ProductDetailPage = () => {
       });
       return;
     }
-      navigate("/order", {
-        state: {
-          directItem: {
-            id: product.id,
-            productId: product.id,
-            productName: product.productName,
-            price: product.price,
-            productImage: product.productFileDtos.find(
-              file => file.imageType === "THUMBNAIL"
-            )?.newFileName,
-            quantity: quantity
-          }
+    navigate("/order", {
+      state: {
+        directItem: {
+          id: product.id,
+          productId: product.id,
+          productName: product.productName,
+          price: product.price,
+          productImage: product.productFileDtos.find(
+            file => file.imageType === "THUMBNAIL"
+          )?.newFileName,
+          quantity:
+          product.productType === "GOODS"
+            ? quantity
+            : 1
         }
-      });
+      }
+    });
   };
 
   if (!product) return <div>Loading...</div>;
@@ -126,27 +129,45 @@ const ProductDetailPage = () => {
         <p className="description">{product.description}</p>
 
         {/* 수량 조절*/}
-        <div className="quantity-box">
-          <button
-            onClick={() =>
-              setQuantity(prev => Math.max(1, prev - 1))
-            }> - </button>
+        {product.productType === "GOODS" && (
+          <div className="quantity-box">
+            <button
+              onClick={() =>
+                setQuantity(prev => Math.max(1, prev - 1))
+              }> - </button>
 
-          <span>
-            {quantity}
-          </span>
+            <span>
+              {quantity}
+            </span>
 
-          <button
-            onClick={() =>
-              setQuantity(prev => prev + 1)} >  + </button>
-        </div>
-
+            <button
+              onClick={() =>
+                setQuantity(prev => prev + 1)} >  + </button>
+          </div>
+        )}
         {/* 버튼 */}
         <div className="purchase-box">
-          <button className="cart-button"
-            onClick={handleCart}> 장바구니 </button>
-          <button className="buy-button"
-            onClick={handleBuy}>바로 구매</button>
+
+          {product.productType === "GOODS" && (
+            <button
+              className="cart-button"
+              onClick={handleCart}
+            >
+              장바구니
+            </button>
+          )}
+
+          <button
+            className="buy-button"
+            onClick={handleBuy}
+          >
+            {product.productType === "PREMIUM"
+              ? "구독 시작"
+              : product.productType === "PT" || product.productType === "GYM"
+                ? "이용권 구매"
+                : "바로 구매"}
+          </button>
+
         </div>
         {
           showCartModal &&

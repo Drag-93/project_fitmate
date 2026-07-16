@@ -8,6 +8,7 @@ import org.spring.backend.member.entity.MemberEntity;
 import org.spring.backend.member.jwt.CustomUserDetails;
 import org.spring.backend.member.repository.MemberRepository;
 import org.spring.backend.store.payment.dto.PaymentDto;
+import org.spring.backend.store.payment.dto.PaymentSuccessDto;
 import org.spring.backend.store.payment.service.PaymentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -67,11 +68,11 @@ public class PaymentController {
 
   // 결제승인
   @GetMapping("/approval/{paymentId}")
-  public ResponseEntity<String> approval(
+  public ResponseEntity<PaymentSuccessDto> approval(
       @PathVariable(name = "paymentId") Long paymentId,
       @RequestParam("pg_token") String pgToken) {
-    paymentService.paymentApproval(pgToken, paymentId);
-    return ResponseEntity.ok("OK");
+    return ResponseEntity.ok(
+        paymentService.paymentApproval(pgToken, paymentId));
   }
 
   /*

@@ -1,25 +1,27 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import jwtAxios from "../../../apis/util/jwtUtil";
+import { getOrderDetail } from "../../../apis/store/orderApi";
 import OrderDetail from "../../../components/store/order/OrderDetail";
+import "../../../components/css/store/order/OrderDetail.css";
+
 
 const OrderDetailPage = () => {
 
-  const { id } = useParams();
+  const { orderId } = useParams();
   const [order, setOrder] = useState(null);
 
   useEffect(() => {
     const fetchOrder = async () => {
       try {
-        const res = await jwtAxios.get(`http://localhost:8090/api/order/${id}`);
-        setOrder(res.data);
+        const data = await getOrderDetail(orderId);
+        setOrder(data);
       } catch (err) {
         console.error(err);
       }
     };
 
     fetchOrder();
-  }, [id]);
+  }, [orderId]);
 
   return <OrderDetail order={order} />;
 };

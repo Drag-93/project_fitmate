@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 
-const BuyerInfo = ({ orderInfo, setOrderInfo }) => {
+const BuyerInfo = ({ member, orderInfo, setOrderInfo }) => {
+
+  const [isEdit, setIsEdit] = useState(false);
 
   const handleChange = (e) => {
     setOrderInfo({
@@ -9,57 +11,67 @@ const BuyerInfo = ({ orderInfo, setOrderInfo }) => {
     });
   };
 
+
   return (
     <div className="buyerInfo">
 
-      <h2>주문자 정보</h2>
+      <h2>
+        배송 정보
+        <button
+          type="button"
+          onClick={() => setIsEdit(!isEdit)}
+        >
+          {isEdit ? "완료" : "변경하기"}
+        </button>
+      </h2>
+
 
       <div className="inputBox">
-        <label>이름</label>
+        <label>받는 분</label>
         <input
           name="receiverName"
-          value={orderInfo.receiverName}
+          value={orderInfo.receiverName || ""}
           onChange={handleChange}
-          placeholder="이름 입력"
+          readOnly={!isEdit}
         />
       </div>
+
 
       <div className="inputBox">
         <label>연락처</label>
         <input
           name="receiverPhone"
-          value={orderInfo.receiverPhone}
+          value={orderInfo.receiverPhone || ""}
           onChange={handleChange}
-          placeholder="전화번호 입력"
+          readOnly={!isEdit}
         />
       </div>
 
-
-      <h2>배송 정보</h2>
 
       <div className="inputBox">
         <label>주소</label>
         <input
-          name="address"
-          value={orderInfo.address}
+          name="receiverAddress"
+          value={orderInfo.receiverAddress || ""}
           onChange={handleChange}
-          placeholder="주소 입력"
+          readOnly={!isEdit}
         />
       </div>
 
-      
+
       <div className="inputBox">
         <label>배송 요청사항</label>
         <input
           name="deliveryMemo"
-          value={orderInfo.delibetyMemo}
+          value={orderInfo.deliveryMemo || ""}
           onChange={handleChange}
-          placeholder="배송 요청사항"
+          readOnly={!isEdit}
         />
       </div>
 
     </div>
   );
 };
+
 
 export default BuyerInfo;

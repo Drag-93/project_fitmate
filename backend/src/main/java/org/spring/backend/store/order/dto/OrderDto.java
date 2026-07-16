@@ -6,6 +6,7 @@ import java.util.List;
 import org.spring.backend.store.order.entity.OrderEntity;
 import org.spring.backend.store.order.type.DeliveryStatus;
 import org.spring.backend.store.order.type.OrderStatus;
+import org.spring.backend.store.payment.dto.PaymentDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,31 +28,50 @@ public class OrderDto {
 
   private DeliveryStatus deliveryStatus;
 
+  // 주문자 정보 (회원 정보)
+  private String memberName;
+  private String memberPhone;
+  private String memberEmail;
+  private String memberAddress;
+
+  // 배송 정보 (주문 당시 저장)
   private String receiverName;
-
   private String receiverPhone;
-
-  private String address;
+  private String receiverAddress;
+  private String deliveryMemo;
 
   private List<OrderItemDto> orderItemDtos;
 
-  private String deliveryMemo;
+  // 결제 내역
+  private PaymentDto paymentDto;
+
 
   private LocalDateTime createTime;
 
-  public static OrderDto toOrderDto(OrderEntity orderEntity){
+
+  public static OrderDto toOrderDto(OrderEntity orderEntity) {
+
+    
     return OrderDto.builder()
-    .id(orderEntity.getId())
-    .totalPrice(orderEntity.getTotalPrice())
-    .orderStatus(orderEntity.getOrderStatus())
-    .deliveryStatus(orderEntity.getDeliveryStatus())
-    .receiverName(orderEntity.getReceiverName())
-    .receiverPhone(orderEntity.getReceiverPhone())
-    .address(orderEntity.getAddress())
-    .orderItemDtos(orderEntity.getOrderItemEntities().stream().map(OrderItemDto::toOrderItemDto).toList())
-    .deliveryMemo(orderEntity.getDeliveryMemo())
-    .createTime(orderEntity.getCreateTime())
-    .build();
+        .id(orderEntity.getId())
+        .totalPrice(orderEntity.getTotalPrice())
+        .orderStatus(orderEntity.getOrderStatus())
+        .deliveryStatus(orderEntity.getDeliveryStatus())
+        .memberName(orderEntity.getMemberEntity().getUserName())
+        .memberPhone(orderEntity.getMemberEntity().getUserPhone())
+        .memberEmail(orderEntity.getMemberEntity().getUserEmail())
+        .memberAddress(orderEntity.getMemberEntity().getUserAddress())
+        .orderItemDtos(orderEntity.getOrderItemEntities().stream().map(OrderItemDto::toOrderItemDto).toList())
+        .paymentDto(
+          orderEntity.getPaymentEntities().isEmpty()
+              ? null
+              : PaymentDto.toPaymentDto(orderEntity.getPaymentEntities().get(0)))
+        .receiverName(orderEntity.getReceiverName())
+        .receiverPhone(orderEntity.getReceiverPhone())
+        .receiverAddress(orderEntity.getReceiverAddress())
+        .deliveryMemo(orderEntity.getDeliveryMemo())
+        .createTime(orderEntity.getCreateTime())
+        .build();
   }
 
 }
