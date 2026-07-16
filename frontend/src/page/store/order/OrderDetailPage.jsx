@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getOrderDetail } from "../../../apis/store/orderApi";
 import OrderDetail from "../../../components/store/order/OrderDetail";
+import "../../../components/css/store/order/OrderDetail.css";
+
 
 const OrderDetailPage = () => {
 
