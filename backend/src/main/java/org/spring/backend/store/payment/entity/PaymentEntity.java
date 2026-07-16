@@ -64,11 +64,11 @@ public class PaymentEntity extends BasicTime {
 
   @Lob
   @Column(columnDefinition = "TEXT")
-  private String paymentReadyJson;
+  private String paymentReadyJson; // 카카오페이 ready API 응답 저장
 
   @Lob
   @Column(columnDefinition = "TEXT")
-  private String paymentApproveJson;
+  private String paymentApproveJson; // 카카오페이 approve API 응답 저장
 
   // N:1
   @JsonIgnore

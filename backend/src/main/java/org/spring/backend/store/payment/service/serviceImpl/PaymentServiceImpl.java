@@ -13,6 +13,7 @@ import org.spring.backend.store.order.type.DeliveryStatus;
 import org.spring.backend.store.order.type.OrderStatus;
 import org.spring.backend.store.payment.dto.KakaoPayPrepareDto;
 import org.spring.backend.store.payment.dto.PaymentDto;
+import org.spring.backend.store.payment.dto.PaymentSuccessDto;
 import org.spring.backend.store.payment.entity.PaymentEntity;
 import org.spring.backend.store.payment.repository.PaymentRepository;
 import org.spring.backend.store.payment.service.PaymentService;
@@ -133,20 +134,41 @@ public class PaymentServiceImpl implements PaymentService {
   }
 
   @Override
-  public void paymentApproval(String pgToken, Long paymentId) {
+  public PaymentSuccessDto paymentApproval(String pgToken, Long paymentId) {
     // DB에서 엔티티를 영속 상태로 조회 (없으면 예외 발생)
     PaymentEntity paymentEntity = paymentRepository.findById(paymentId)
-        .orElseThrow(() -> new IllegalArgumentException("해당 결제 건이 존재하지 않습니다. ID: " + paymentId));
+        .orElseThrow(() -> new IllegalArgumentException("해당 결제 건이 존재하지 않습니다."));
 
-    if (paymentEntity.getPaymentStatus() == PaymentStatus.SUCCESS) {
-      return;
+    if (paymentEntity.getPaymentStatus() != PaymentStatus.SUCCESS) {
+      paymentEntity.setPgToken(pgToken);
+      paymentEntity.setPaymentStatus(PaymentStatus.SUCCESS);
+
+      paymentApproveKakao(paymentEntity);
     }
-    // pg_token 세팅 (Dirty CHecking에 의해 자동 업데이트)
-    paymentEntity.setPgToken(pgToken);
-    paymentEntity.setPaymentStatus(PaymentStatus.PROCESSING);
 
-    // 카카오 결제 승인 API 호출 진행
-    paymentApproveKakao(paymentEntity);
+    OrderEntity orderEntity = paymentEntity.getOrderEntity();
+    List<OrderItemEntity> items = orderEntity.getOrderItemEntities();
+
+    String productName = "상품 없음";
+
+    if (!items.isEmpty()) {
+      if (items.size() == 1) {
+        productName = items.get(0)
+            .getProductEntity()
+            .getProductName();
+      } else {
+        productName = items.get(0)
+            .getProductEntity()
+            .getProductName()
+            + " 외 " + (items.size() - 1) + "개";
+      }
+    }
+
+    return PaymentSuccessDto.builder()
+        .productName(productName)
+        .amount(paymentEntity.getAmount())
+        .productType(items.get(0).getProductEntity().getProductType())
+        .build();
   }
 
   @Override
