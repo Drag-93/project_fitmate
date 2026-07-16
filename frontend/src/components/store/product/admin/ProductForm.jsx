@@ -96,8 +96,7 @@ const ProductForm = ({ product, onSubmit }) => {
       </div>
 
       {/* PT / GYM 기간 */}
-      {(formData.productType === "PT" ||
-        formData.productType === "GYM") && (
+      {(formData.productType === "GYM") && (
           <div>
             <label>이용기간(일)</label>
             <input
@@ -123,18 +122,6 @@ const ProductForm = ({ product, onSubmit }) => {
       )}
 
       <div>
-        <label>결제방식</label>
-        <select
-          name="billingType"
-          value={formData.billingType}
-          onChange={changeHandler}
-        >
-          <option value="ONE_TIME">일회성</option>
-          <option value="SUBSCRIPTION">정기결제</option>
-        </select>
-      </div>
-
-      <div>
         <label>상품상태</label>
         <select
           name="productStatus"
@@ -145,18 +132,6 @@ const ProductForm = ({ product, onSubmit }) => {
           <option value="SOLDOUT">품절</option>
         </select>
       </div>
-
-      <div>
-        <label>카테고리</label>
-        <select
-          name="category"
-          value={formData.category}
-          onChange={changeHandler}
-        >
-          <option value="diet">다이어트</option>
-        </select>
-      </div>
-
       <button type="submit">
         {product ? "수정" : "등록"}
       </button>

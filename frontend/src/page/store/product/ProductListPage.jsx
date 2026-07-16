@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { getProductList } from "../../../apis/store/productApi";
-import CategoryMenu from "../../../components/store/product/CategoryMenu";
 import ProductCard from "../../../components/store/product/ProductCard";
 
 import "../../../components/css/store/product/ProductListPage.css";
@@ -30,15 +29,7 @@ const ProductListPage = () => {
 
   return (
     <>
-      <button
-        onClick={() => navigate("/store/admin/product")}
-      >
-        관리자 상품 관리
-      </button>
-      
-      <CategoryMenu />
-
-      <div className="product-list">
+        <div className="product-list">
         <div className="product-list-con">
           {products.map(product => (
             <ProductCard

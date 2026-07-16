@@ -36,11 +36,11 @@ public class OrderItemDto {
         .quantity(orderItemEntity.getQuantity())
         .productImage(
             orderItemEntity.getProductEntity()
-                .getProductFileEntities()
+                .getFileEntities()
                 .isEmpty()
                     ? null
                     : orderItemEntity.getProductEntity()
-                        .getProductFileEntities()
+                        .getFileEntities()
                         .get(0)
                         .getNewFileName())
         .productId(orderItemEntity.getProductEntity().getId())

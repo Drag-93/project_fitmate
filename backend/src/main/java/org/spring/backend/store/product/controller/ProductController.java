@@ -65,16 +65,6 @@ public class ProductController {
     return ResponseEntity.ok().build();
   }
 
-  // 상품사진 전체 삭제
-  @DeleteMapping("/{productId}/images")
-  public ResponseEntity<Void> deleteAllImages(
-      @PathVariable("productId") Long productId) {
-
-    productService.deleteAllImages(productId);
-
-    return ResponseEntity.ok().build();
-  }
-
   // 상품 한장만 삭제
   @DeleteMapping("/image/{productFileId}")
   public ResponseEntity<Void> deleteImage(

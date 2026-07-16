@@ -30,6 +30,4 @@ public interface ProductService {
   // 이미지 한장만 삭제
   void deleteImage(Long productFileId);
 
-  // 이미지 전체 삭제
-  void deleteAllImages(Long productId);
 }

@@ -1,11 +1,11 @@
 package org.spring.backend.store.product.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.spring.backend.common.BasicTime;
 import org.spring.backend.file.entity.FileEntity;
 import org.spring.backend.member.entity.MemberEntity;
-import org.spring.backend.store.product.dto.ProductDto;
 import org.spring.backend.store.product.type.BillingType;
 import org.spring.backend.store.product.type.ProductStatus;
 import org.spring.backend.store.product.type.ProductType;
@@ -77,7 +77,7 @@ public class ProductEntity extends BasicTime {
 
   @JsonIgnore
   @OneToMany(mappedBy = "productEntity", cascade = CascadeType.REMOVE)
-  private List<ProductFileEntity> productFileEntities;
+  private List<FileEntity> FileEntities;
 
   // //N:1
   @JsonIgnore
@@ -85,9 +85,9 @@ public class ProductEntity extends BasicTime {
   @JoinColumn(name = "member_id")
   private MemberEntity memberEntity;
 
-  //파일엔티티와 1:N 매핑
-  @OneToMany(mappedBy = "productEntity",
-          fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-  private List<FileEntity> fileEntities;
+  // 파일엔티티와 1:N 매핑
+  @OneToMany(mappedBy = "productEntity", 
+  cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<FileEntity> fileEntities = new ArrayList<>();
 
 }

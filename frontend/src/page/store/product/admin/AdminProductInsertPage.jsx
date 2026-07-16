@@ -75,7 +75,7 @@ const AdminProductInsertPage = () => {
 
       alert("상품이 등록되었습니다.");
 
-      navigate("/store/admin/product");
+      navigate("/admin/product");
 
     } catch(e){
       console.error(e);

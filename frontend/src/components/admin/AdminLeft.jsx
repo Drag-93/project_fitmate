@@ -61,7 +61,7 @@ const AdminLeft = ({ isMobile, show, onClose }) => {
               className={linkClass}
               onClick={onClose}
             >
-              상품결제
+              주문/결제
             </NavLink>
           </li>
           <li>

@@ -31,7 +31,7 @@ const AdminProductListPage = () => {
   };
 
   const handleEdit = (product) => {
-    navigate(`/store/admin/product/update/${product.id}`);
+    navigate(`/admin/product/update/${product.id}`);
   };
 
   const handleDelete = async (productId) => {
@@ -59,7 +59,7 @@ const AdminProductListPage = () => {
     <div className="admin-product-page">
       <h2>상품 관리</h2>
       <button className="admin-product-insert"
-        onClick={() => navigate("/store/admin/product/insert")}
+        onClick={() => navigate("/admin/product/insert")}
       >
         상품 등록
       </button>

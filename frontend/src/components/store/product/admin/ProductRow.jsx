@@ -40,7 +40,7 @@ const ProductRow = ({ product, onEdit, onDelete }) => {
       <td>
         <button className="update"
           onClick={() =>
-            navigate(`/store/admin/product/update/${product.id}`)
+            navigate(`/admin/product/update/${product.id}`)
           }
         >
           수정

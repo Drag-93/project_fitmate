@@ -1,13 +1,12 @@
 package org.spring.backend.store.product.service.serviceImpl;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import org.spring.backend.common.TableType;
+import org.spring.backend.file.handler.FileHandler;
 import org.spring.backend.store.product.dto.ProductDto;
 import org.spring.backend.store.product.entity.ProductEntity;
-import org.spring.backend.store.product.entity.ProductFileEntity;
-import org.spring.backend.store.product.repository.ProductFileRepository;
 import org.spring.backend.store.product.repository.ProductRepository;
 import org.spring.backend.store.product.service.ProductService;
 import org.spring.backend.store.product.type.ImageType;
@@ -30,7 +29,8 @@ public class ProductServiceImpl implements ProductService {
   private String itemPath;
 
   private final ProductRepository productRepository;
-  private final ProductFileRepository productFileRepository;
+
+  private final FileHandler fileHandler;
 
   @Override
   public void insertProduct(ProductDto productDto, MultipartFile thumbnail, List<MultipartFile> main,
@@ -50,19 +50,42 @@ public class ProductServiceImpl implements ProductService {
 
     productRepository.save(productEntity);
 
-    saveFile(thumbnail, productEntity, ImageType.THUMBNAIL, 1);
+    try {
+      fileHandler.insertFile(
+          itemPath,
+          TableType.PRODUCT,
+          productEntity.getId(),
+          thumbnail,
+          ImageType.THUMBNAIL,
+          1);
 
-    if (main != null) {
-      for (int i = 0; i < main.size(); i++) {
-        saveFile(main.get(i), productEntity, ImageType.MAIN, i + 1);
+      if (main != null) {
+        for (int i = 0; i < main.size(); i++) {
+          fileHandler.insertFile(
+              itemPath,
+              TableType.PRODUCT,
+              productEntity.getId(),
+              main.get(i),
+              ImageType.MAIN,
+              i + 1);
+        }
       }
+      if (details != null) {
+        for (int i = 0; i < details.size(); i++) {
+          fileHandler.insertFile(
+              itemPath,
+              TableType.PRODUCT,
+              productEntity.getId(),
+              details.get(i),
+              ImageType.DETAIL,
+              i + 1);
+        }
+      }
+
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
 
-    if (details != null) {
-      for (int i = 0; i < details.size(); i++) {
-        saveFile(details.get(i), productEntity, ImageType.DETAIL, i + 1);
-      }
-    }
   }
 
   @Override
@@ -83,26 +106,52 @@ public class ProductServiceImpl implements ProductService {
     productEntity.setSessionCount(productDto.getSessionCount());
 
     productRepository.save(productEntity);
-    if (thumbnail != null && !thumbnail.isEmpty()) {
-      saveFile(thumbnail, productEntity, ImageType.THUMBNAIL, 1);
+    try {
+      fileHandler.insertFile(
+          itemPath,
+          TableType.PRODUCT,
+          productEntity.getId(),
+          thumbnail,
+          ImageType.THUMBNAIL,
+          1);
+
+      if (main != null) {
+        for (int i = 0; i < main.size(); i++) {
+          fileHandler.insertFile(
+              itemPath,
+              TableType.PRODUCT,
+              productEntity.getId(),
+              main.get(i),
+              ImageType.MAIN,
+              i + 1);
+        }
+      }
+      if (details != null) {
+        for (int i = 0; i < details.size(); i++) {
+          fileHandler.insertFile(
+              itemPath,
+              TableType.PRODUCT,
+              productEntity.getId(),
+              details.get(i),
+              ImageType.DETAIL,
+              i + 1);
+        }
+      }
+
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
 
-    if (main != null) {
-      for (int i = 0; i < main.size(); i++) {
-        saveFile(main.get(i), productEntity, ImageType.MAIN, i + 1);
-      }
-    }
-
-    if (details != null) {
-      for (int i = 0; i < details.size(); i++) {
-        saveFile(details.get(i), productEntity, ImageType.DETAIL, i + 1);
-      }
-    }
   }
 
   @Override
   public void deleteProduct(Long productId) {
-    deleteAllImages(productId);
+    try {
+      fileHandler.deleteProductFiles(itemPath, productId);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+
     productRepository.deleteById(productId);
   }
 
@@ -143,77 +192,11 @@ public class ProductServiceImpl implements ProductService {
   @Override
   public void deleteImage(Long productFileId) {
 
-    ProductFileEntity fileEntity = productFileRepository.findById(productFileId)
-        .orElseThrow(() -> new IllegalArgumentException("이미지가 존재하지 않습니다."));
-
-    File file = new File(
-        itemPath.replace("file:///", ""),
-        fileEntity.getNewFileName());
-
-    if (file.exists()) {
-      file.delete();
-    }
-
-    productFileRepository.delete(fileEntity);
-  }
-
-  @Override
-  public void deleteAllImages(Long productId) {
-
-    ProductEntity productEntity = productRepository.findById(productId)
-        .orElseThrow(() -> new IllegalArgumentException("상품이 존재하지 않습니다."));
-
-    List<ProductFileEntity> fileList = productFileRepository.findByProductEntity(productEntity);
-
-    for (ProductFileEntity fileEntity : fileList) {
-
-      File file = new File(
-          itemPath.replace("file:///", ""),
-          fileEntity.getNewFileName());
-
-      if (file.exists()) {
-        file.delete();
-      }
-    }
-
-    productFileRepository.deleteByProductEntity(productEntity);
-  }
-
-  private void saveFile(
-      MultipartFile file,
-      ProductEntity product,
-      ImageType imageType,
-      int sortOrder) {
-
-    if (file == null || file.isEmpty()) {
-      return;
-    }
     try {
-      String oldFileName = file.getOriginalFilename();
-
-      String newFileName = java.util.UUID.randomUUID() + "_" + oldFileName;
-
-      String savePath = itemPath.replace("file:///", "");
-
-      File dir = new File(savePath);
-
-      if (!dir.exists()) {
-        dir.mkdirs();
-      }
-
-      file.transferTo(new File(dir, newFileName));
-
-      ProductFileEntity fileEntity = ProductFileEntity.builder()
-          .oldFileName(oldFileName)
-          .newFileName(newFileName)
-          .imageType(imageType)
-          .sortOrder(sortOrder)
-          .productEntity(product)
-          .build();
-
-      productFileRepository.save(fileEntity);
+      fileHandler.deleteSingleFile(productFileId, itemPath);
     } catch (IOException e) {
-      throw new RuntimeException("파일 저장 실패", e);
+      throw new RuntimeException(e);
     }
   }
+
 }

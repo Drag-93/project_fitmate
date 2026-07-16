@@ -63,7 +63,7 @@ const KakaoPaySuccess = () => {
                   if (paymentInfo?.productType === "GOODS") {
                     navigate('/order/list');
                   } else if(paymentInfo?.productType === "PREMIUM") {
-                    navigate('/membership/list');
+                    navigate('/subscription/list');
                   } else {
                     navigate('/fitness/list');
                   }

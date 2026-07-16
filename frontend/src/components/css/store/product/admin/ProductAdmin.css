@@ -9,8 +9,9 @@
 }
 
 .admin-product-page {
-  width: 1200px;
-  margin: 40px auto;
+  margin-left: 260px;
+  margin-top: 100px;
+  padding: 30px;
 }
 
 /* 제목 + 버튼 */
@@ -23,10 +24,31 @@
   color: #222;
 }
 
+.admin-product-insert{
+  margin-left: 260px;
+  margin-top: 100px;
+  padding: 30px;
+}
 
+.admin-product-update{
+  margin-left: 260px;
+  margin-top: 100px;
+  padding: 30px;
+}
+
+.admin-product-insert h2{
+  text-align: center;
+  margin-bottom: 20px;
+
+}
+
+.admin-product-update h2{
+  text-align: center;
+  margin-bottom: 20px;
+
+}
 /* 상품 등록 버튼 */
 .admin-product-insert button{
-  float: right;
 
   padding: 10px 20px;
 

@@ -117,7 +117,7 @@ const AdminProductUpdatePage = () => {
         data
       );
       alert("수정되었습니다.");
-      navigate("/store/admin/product");
+      navigate("/admin/product");
 
     }catch(e){
       console.error(e);

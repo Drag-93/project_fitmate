@@ -12,14 +12,14 @@ import lombok.*;
 @Builder
 public class KakaoPayPrepareEntity {
 
-    private String tid;
-    private String tmsResult;
-    private String nextRedirectAppUrl;
-    private String nextRedirectMobileUrl;
-    private String nextRedirectPcUrl;
-    private String androidAppScheme;
-    private String iosAppScheme;
-    private String createdAt;
+    private String tid; // 고유 거래번호
+    private String tmsResult; //TMS처리결과
+    private String nextRedirectAppUrl; //앱 결제용 URL
+    private String nextRedirectMobileUrl; //모바일용 URL
+    private String nextRedirectPcUrl; // PC용 URL
+    private String androidAppScheme; // 안드로이드 앱용
+    private String iosAppScheme; // iOS앱용
+    private String createdAt; // 결제 준비 생성 시간
 
     public static KakaoPayPrepareEntity toEntity(KakaoPayPrepareDto kakaoPayPrepareDto) {
         return KakaoPayPrepareEntity.builder()
