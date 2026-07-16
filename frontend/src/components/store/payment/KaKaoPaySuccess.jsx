@@ -63,9 +63,9 @@ const KakaoPaySuccess = () => {
                   if (paymentInfo?.productType === "GOODS") {
                     navigate('/order/list');
                   } else if(paymentInfo?.productType === "PREMIUM") {
-                    navigate('/subscription/list');
-                  } else {
                     navigate('/membership/list');
+                  } else {
+                    navigate('/fitness/list');
                   }
                 }}
               >구매 내역 확인</button>

@@ -4,7 +4,7 @@ const categories = [
   { label: "전체", value: undefined },
   { label: "PT", value: "PT" },
   { label: "헬스장", value: "GYM" },
-  { label: "굿즈", value: "GOODS" },
+  { label: "상품", value: "GOODS" },
   { label: "프리미엄", value: "PREMIUM" },
 ];
 

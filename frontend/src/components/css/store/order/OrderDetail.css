@@ -1,4 +1,4 @@
-.order-detail {
+.order-detail-page {
   max-width: 900px;
   margin: 40px auto;
   padding: 30px;
@@ -8,14 +8,14 @@
 }
 
 
-.order-detail h2 {
+.order-detail-page h2 {
   font-size: 28px;
   margin-bottom: 30px;
   font-weight: 700;
 }
 
 
-.order-detail h3 {
+.order-detail-page h3 {
   font-size: 18px;
   margin-bottom: 15px;
   padding-bottom: 10px;
@@ -105,7 +105,7 @@
 /* 모바일 */
 @media (max-width: 600px) {
 
-  .order-detail {
+  .order-detail-page {
     margin: 20px;
     padding: 20px;
   }
