@@ -91,20 +91,20 @@ const responseFail = async (err) => {
       return Promise.reject(refreshError);
     }
   }
-  console.log(status);
-  console.warn(`인증 외 에러 발생 (${status}): 로컬 세션을 클리어합니다.`);
-  removeCookie("member");
-  store.dispatch(logout());
+  // console.log(status);
+  // console.warn(`인증 외 에러 발생 (${status}): 로컬 세션을 클리어합니다.`);
+  // removeCookie("member");
+  // store.dispatch(logout());
 
-  // 상황에 따른 알림 창 분기
-  if (status === 500) {
-    alert("서버 장애가 발생했습니다. 잠시 후 다시 로그인해주세요.");
-  } else {
-    alert("올바르지 않은 세션 정보입니다. 다시 로그인해주세요.");
-  }
+  // // 상황에 따른 알림 창 분기
+  // if (status === 500) {
+  //   alert("서버 장애가 발생했습니다. 잠시 후 다시 로그인해주세요.");
+  // } else {
+  //   alert("올바르지 않은 세션 정보입니다. 다시 로그인해주세요.");
+  // }
 
-  window.location.href = "/";
-  return Promise.reject(err);
+  // window.location.href = "/";
+  // return Promise.reject(err);
 };
 
 jwtAxios.interceptors.request.use(beforeReq, requestFail);

@@ -43,7 +43,6 @@ const Join = () => {
     formData.append("userEmail", joinData.userEmail);
     formData.append("userPw", joinData.userPw);
     formData.append("userName", joinData.userName);
-    formData.append("gender", joinData.gender);
 
     try {
       const res = await axios.post(
@@ -138,18 +137,6 @@ const Join = () => {
                 value={joinData.userName}
                 onChange={onChangeFn}
               />
-            </li>
-            <li>
-              <span>성별</span>
-              <select
-                name="gender"
-                id="gender"
-                onChange={onChangeFn}
-                value={joinData.gender}
-              >
-                <option value="MALE">남자</option>
-                <option value="FEMALE">여자</option>
-              </select>
             </li>
             <li>
               <button onClick={onJoinFn}>회원가입</button>

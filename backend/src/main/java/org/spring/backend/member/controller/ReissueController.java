@@ -35,7 +35,7 @@ public class ReissueController {
             String role = jwtUtil.getRole(refresh);
 
             //토큰생성
-            String newAccess = jwtUtil.createJwt("access",userEmail, role, 60* 60 *100L);
+            String newAccess = jwtUtil.createJwt("access",userEmail, role, 60* 60 *10000L);
             String newRefresh = jwtUtil.createJwt("refresh",userEmail,role,84600000L);
             redisTemplate.delete(userEmail);
             addRefreshToRedis(userEmail, newRefresh, 864000L);
