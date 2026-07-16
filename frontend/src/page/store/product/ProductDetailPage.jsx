@@ -3,9 +3,11 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { getProductDetail } from "../../../apis/store/productApi";
 import { addCart } from "../../../apis/store/cartApi";
 import { getCookie } from "../../../apis/util/cookieUtil";
-import CartModal from "../../../components/store/cart/CartModal";
+
 
 import "../../../components/css/store/product/ProductDetailPage.css";
+import ProductDetail from "../../../components/store/product/ProductDetail";
+import CartModal from "../../../components/store/cart/CartModal";
 
 const ProductDetailPage = () => {
 
@@ -64,111 +66,60 @@ const ProductDetailPage = () => {
   const handleBuy = async () => {
 
     const member = getCookie("member");
-
     if (!member) {
       alert("로그인이 필요합니다.");
-
       navigate("/auth/login", {
         state: {
-          from: location.pathname + location.search,
-        },
+          from: location.pathname + location.search
+        }
       });
       return;
     }
-    navigate("/order", {
-      state: {
-        directItem: {
-          id: product.id,
-          productId: product.id,
-          productName: product.productName,
-          price: product.price,
-          productImage: product.productFileDtos.find(
-            file => file.imageType === "THUMBNAIL"
-          )?.newFileName,
-          quantity:
-          product.productType === "GOODS"
-            ? quantity
-            : 1
-        }
-      }
-    });
-  };
+
+    const directItem = {
+      id: product.id,
+      productId: product.id,
+      productName: product.productName,
+      price: product.price,
+      productImage: product.productFileDtos.find(
+        file => file.imageType === "THUMBNAIL"
+      )?.newFileName,
+      quantity: product.productType === "GOODS"
+        ? quantity
+        : 1};
+
+    if (product.productType === "GOODS") {
+      navigate("/order", {
+        state: {
+          directItem
+        }});
+    } else if (
+      product.productType === "PT" ||
+      product.productType === "GYM"
+    ) {
+      navigate("/fitness/order", {
+        state: {
+          product
+        }});
+    } else if (product.productType === "PREMIUM") {
+      navigate("/membership/order", {
+        state: {
+          product
+        }});
+    }};
 
   if (!product) return <div>Loading...</div>;
-
-  const thumbnail = product.productFileDtos.find(
-    file => file.imageType === "THUMBNAIL"
-  );
-
-  const main = product.productFileDtos.find(
-    file => file.imageType === "MAIN"
-  );
-
-  const details = product.productFileDtos.filter(
-    file => file.imageType === "DETAIL"
-  );
 
   return (
     <div className="product-detail">
       <div className="product-detail-con">
-
-
-        {/* 메인 이미지 */}
-        {main && (
-          <img
-            src={`http://localhost:8090${thumbnail?.newFileName}`}
-            alt={product.productName}
-            className="main-image"
-          />
-        )}
-
-        <h2 className="productName"> {product.productName}</h2>
-
-        <p className="price">{product.price.toLocaleString()}원</p>
-
-        <p className="description">{product.description}</p>
-
-        {/* 수량 조절*/}
-        {product.productType === "GOODS" && (
-          <div className="quantity-box">
-            <button
-              onClick={() =>
-                setQuantity(prev => Math.max(1, prev - 1))
-              }> - </button>
-
-            <span>
-              {quantity}
-            </span>
-
-            <button
-              onClick={() =>
-                setQuantity(prev => prev + 1)} >  + </button>
-          </div>
-        )}
-        {/* 버튼 */}
-        <div className="purchase-box">
-
-          {product.productType === "GOODS" && (
-            <button
-              className="cart-button"
-              onClick={handleCart}
-            >
-              장바구니
-            </button>
-          )}
-
-          <button
-            className="buy-button"
-            onClick={handleBuy}
-          >
-            {product.productType === "PREMIUM"
-              ? "구독 시작"
-              : product.productType === "PT" || product.productType === "GYM"
-                ? "이용권 구매"
-                : "바로 구매"}
-          </button>
-
-        </div>
+        <ProductDetail
+          product={product}
+          quantity={quantity}
+          setQuantity={setQuantity}
+          handleCart={handleCart}
+          handleBuy={handleBuy}
+        />
         {
           showCartModal &&
           <CartModal
@@ -183,15 +134,6 @@ const ProductDetailPage = () => {
 
           />
         }
-        {/* 상세 이미지 */}
-        {details.map(detail => (
-          <img
-            key={detail.id}
-            src={`http://localhost:8090${thumbnail?.newFileName}`}
-            alt="상세"
-            className="detail-image"
-          />
-        ))}
       </div>
     </div>
   );

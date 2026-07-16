@@ -4,7 +4,7 @@ const OrderDetail = ({ order }) => {
     return <p>주문 정보를 불러오는 중...</p>;
   }
   return (
-    <div className="order-detail">
+    <div className="order-detail-page">
 
       <h2>주문 상세</h2>
 
