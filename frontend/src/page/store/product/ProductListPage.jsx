@@ -16,15 +16,12 @@ const ProductListPage = () => {
   const [page, setPage] = useState(0);
 
   useEffect(() => {
-    console.log("productType:", productType);
     loadProducts();
   }, [productType, page]);
 
   const loadProducts = async () => {
     try {
-      const res = await getProductList(productType, page, 12);
-
-      console.log(res.data);
+      const res = await getProductList(productType, page, 100);
       setProducts(res.data.content);
     } catch (err) {
       console.error(err);

@@ -35,26 +35,33 @@ const OrderList = ({ orders }) => {
           {/* 해당 날짜에 속한 주문 카드들을 반복 출력 */}
           <div className="order-cards-container">
             {groupedOrders[date].map((order) => {
-              const item = order.orderItemDtos?.[0];
+              const item = order.orderItemDtos?.[0] || null;
+              // 디폴트 이미지 설정 (이미지가 없을 때 보여줄 대체 이미지 경로)
+              const imageSrc = item?.productImage
+                ? `http://localhost:8090/upload/product/${item.productImage}`
+                : null;
 
               return (
                 <div className="order-card" key={order.id}>
                   <div className="order-content">
-
-                    <img
-                      src={item?.productImage}
-                      alt={item?.productName}
-                      className="order-thumbnail"
-                    />
+                    
+                    {/* 이미지가 있을 때만 렌더링 */}
+                    {item?.productImage && (
+                      <img
+                        src={imageSrc}
+                        alt={item?.productName || "상품 정보 없음"}
+                        className="order-thumbnail"
+                      />
+                    )}
 
                     <div className="order-info">
-                      <h4>{item?.productName}</h4>
+                      <h4>{item?.productName || "등록된 상품 정보가 없습니다"}</h4>
                       <p>{order.totalPrice?.toLocaleString()}원</p>
                     </div>
 
                     <div className="order-status">
                       <span>배송: {order.deliveryStatus}</span>
-                      <Link to={`/order/${order.id}`}>주문상세</Link>
+                      <Link to={`/order/detail/${order.id}`}>주문상세</Link>
                     </div>
 
                   </div>

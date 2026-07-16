@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import jwtAxios from "../../../apis/util/jwtUtil";
-
+// 관리자 조회페이지로 변경하기
 const PaymentList = () => {
 
   const [data, setData] = useState([]);
