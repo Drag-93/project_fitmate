@@ -23,4 +23,6 @@ public interface MemberRepository extends JpaRepository<MemberEntity, Long> {
     @Override
     @EntityGraph(attributePaths = {"memberAddEntity"})
     Page<MemberEntity> findAll(Pageable pageable);
+
+    Page<MemberEntity> findByRoleContaining(Pageable pageable, String search);
 }

@@ -60,10 +60,6 @@ public class MemberEntity extends BasicTime {
   @JoinColumn(name = "member_add_id")
   private MemberAddEntity memberAddEntity;
 
-  // 이전 멤버파일엔티티와의 1:1매핑
-  // @OneToOne(mappedBy = "memberEntity",
-  // fetch = FetchType.LAZY, orphanRemoval = true)
-  // private MemberFileEntity memberFileEntity;
   // 파일엔티티와 1:N 매핑
   @OneToMany(mappedBy = "memberEntity", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
   private List<FileEntity> fileEntities;

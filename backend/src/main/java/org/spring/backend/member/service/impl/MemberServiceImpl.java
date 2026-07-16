@@ -65,18 +65,13 @@ public class MemberServiceImpl implements MemberService {
         if(subject==null||subject.isBlank()||search==null||search.isBlank()){
             return memberRepository.findAll(pageable).map(MemberDto::toMemberDto);
         }
-        Page<MemberEntity> memberEntities = null;
+        Page<MemberEntity> memberEntities = switch (subject) {
+            case "userName" -> memberRepository.findByUserNameContaining(pageable, search);
+            case "userEmail" -> memberRepository.findByUserEmailContaining(pageable, search);
+            case "role" -> memberRepository.findByRoleContaining(pageable, search);
+            default -> memberRepository.findAll(pageable);
+        };
         //멤버리스트 검색필터링기능
-        switch (subject){
-            case "userName":
-                memberEntities = memberRepository.findByUserNameContaining(pageable, search);
-                break;
-            case "userEmail":
-                memberEntities = memberRepository.findByUserEmailContaining(pageable, search);
-                break;
-            default:
-                memberEntities = memberRepository.findAll(pageable);
-        }
         return memberEntities.map(MemberDto::toMemberDto);
     }
     @Override
