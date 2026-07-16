@@ -16,6 +16,7 @@ import org.spring.backend.main.service.MainService;
 import org.spring.backend.store.order.repository.OrderItemRepository;
 import org.spring.backend.store.product.dto.ProductDto;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -219,16 +220,44 @@ public class MainServiceImpl implements MainService {
     }
 
     // 관리자 팝업 전체 목록 조회
+//    @Transactional(readOnly = true)
+//    @Override
+//    public List<PopupDto> popupList() {
+//
+//        return popupRepository
+//                .findAll()
+//                .stream()
+//                .map(this::convertPopupDto)
+//                .toList();
+//    }
     @Transactional(readOnly = true)
     @Override
-    public List<PopupDto> popupList() {
-
-        return popupRepository
-                .findAll()
-                .stream()
-                .map(this::convertPopupDto)
-                .toList();
+    public Page<PopupDto> popupList(Pageable pageable, String subject, String search) {
+        if(subject==null||subject.isBlank()||search==null||search.isBlank()){
+            return popupRepository.findAll(pageable).map(this::convertPopupDto);
+        }
+        Page<PopupEntity> popupEntities = null;
+        //멤버리스트 검색필터링기능
+        switch (subject){
+//            case "endDate":
+//                popupEntities = popupRepository.findByEndDateContaining(pageable, search);
+//                break;
+//            case "startDate":
+//                popupEntities = popupRepository.findByStartDateContaining(pageable, search);
+//                break;
+            case "active":
+                popupEntities = popupRepository.findByActiveContaining(pageable, search);
+                break;
+            case "sortOrder":
+                popupEntities = popupRepository.findBysortOrderContaining(pageable, search);
+                break;
+            default:
+                popupEntities = popupRepository.findAll(pageable);
+        }
+        return popupEntities.map(this::convertPopupDto);
     }
+
+
 
     //팝업 상세 조회
     @Transactional(readOnly = true)
