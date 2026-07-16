@@ -24,10 +24,10 @@ public class TabTest {
     void insertTabCategory() {
         // Map<탭이름, List.of(카테고리이름)
         Map<String, List<String>> tabData = Map.of(
-                "공지사항", List.of("게시글 관련 공지", "쇼핑몰 관련 공지", "건의게시판"),
+                "공지사항", List.of("공지사항"),
                 "자유게시판", List.of("일상이야기", "식사게시판", "질문게시판"),
-                "거래게시판", List.of("구매", "판매", "교환", "거래완료"),
-                "운동게시판", List.of("운동관련 질문", "자랑게시판", "팁 게시판")
+                "운동게시판", List.of("운동관련 질문", "자랑게시판", "팁 게시판"),
+                "Q&A", List.of("Q&A 게시판")
         );
         // 데이터 저장
         for (Map.Entry<String, List<String>> entry : tabData.entrySet()) {
