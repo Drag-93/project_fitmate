@@ -68,7 +68,7 @@ const Main = () => {
       });
 
       setPopupList(visiblePopupList.slice(0, 2));
-      // console.log(res.data);
+      console.log(res.data);
     } catch (err) {
       console.error(err);
     }
@@ -243,8 +243,8 @@ const Main = () => {
                             style={{ display: "flex", flexDirection: "column" }}
                           >
                             <img
-                              src={`/images/test/test${bestProduct.id}.jpg`}
-                              alt="테스트이미지"
+                              src={`${API_SERVER_URL}/upload/product/${bestProduct.newFileName}`}
+                              alt={bestProduct.productName}
                               style={{
                                 width: `30vh`,
                                 height: `30vh`,
@@ -290,15 +290,22 @@ const Main = () => {
                     otherProducts.map((product) => (
                       <li key={product.id}>
                         <a href={`/store/detail/${product.id}`}>
-                          {/* <img src={product.productImage} alt={product.productName} /> */}
                           <img
+                            src={`${API_SERVER_URL}/upload/product/${product.newFileName}`}
+                            alt={product.productName}
+                            style={{
+                              width: `10vh`,
+                              height: `10vh`,
+                            }}
+                          />
+                          {/* <img
                             src={`/images/test/test${product.id}.jpg`}
                             alt="테스트용 이미지"
                             style={{
                               width: `10vh`,
                               height: `10vh`,
                             }}
-                          />
+                          /> */}
                         </a>
                         <p>{product.productName}</p>
                         <span>{product.price?.toLocaleString()}원</span>
