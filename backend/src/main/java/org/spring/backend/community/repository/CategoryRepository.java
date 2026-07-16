@@ -1,6 +1,7 @@
 package org.spring.backend.community.repository;
 
 import org.spring.backend.community.entity.CategoryEntity;
+import org.spring.backend.community.entity.TabEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -10,4 +11,5 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Long>{
     @Query("SELECT c FROM CategoryEntity c JOIN FETCH c.tabEntity")
     List<CategoryEntity> findAllWithTab();
 
+    List<CategoryEntity> findByTabEntity(TabEntity tab);
 }

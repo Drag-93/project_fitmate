@@ -113,6 +113,8 @@ public void insertTab(List<TabDto> tabDtoList) { // 파라미터를 List로 받�
         // 5. 기존 리스트를 지우고 새로운 리스트로 교체 (orphanRemoval에 의해 삭제됨)
         existingCategories.clear();
         existingCategories.addAll(updatedCategories);
+
+        tabRepository.save(tab);
     }
 
     @Override

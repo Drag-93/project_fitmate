@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.spring.backend.common.Role;
 import org.spring.backend.community.entity.CommunityEntity;
+import org.spring.backend.community.entity.CommunityReplyEntity;
 import org.spring.backend.file.entity.FileEntity;
 import org.spring.backend.member.dto.MemberDto;
 import org.spring.backend.store.order.entity.OrderEntity;
@@ -73,6 +74,13 @@ public class MemberEntity extends BasicTime {
   // 파일엔티티와 1:N 매핑
   @OneToMany(mappedBy = "memberEntity", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
   private List<FileEntity> fileEntities;
+
+  //게시판엔티티와 1:N 매핑
+  @OneToMany(mappedBy = "memberEntity", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+  private List<CommunityEntity> communityEntities;
+  //게시판댓글엔티티와 1:N 매핑
+  @OneToMany(mappedBy = "memberEntity", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+  private List<CommunityReplyEntity> communityReplyEntities;
 
   // 구독 상품 매핑
   @OneToMany(mappedBy = "memberEntity", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE,
