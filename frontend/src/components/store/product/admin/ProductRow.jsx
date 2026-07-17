@@ -1,34 +1,32 @@
 import { Link, useNavigate } from "react-router-dom";
 
-
 const ProductRow = ({ product, onEdit, onDelete }) => {
-
   const navigate = useNavigate();
 
-  const thumbnail = product.productFileDtos?.find(
-    file => file.imageType === "THUMBNAIL"
+  const thumbnail = product.fileDtos?.find(
+    (file) => file.imageType === "THUMBNAIL",
   );
 
   return (
     <tr className="productRow">
       <td className="productId">{product.id}</td>
       <td className="thumbnail">
-        {thumbnail ? (
-          <Link to={`/products/detail/${product.id}`}>
-          <img
-            src={`http://localhost:8090${thumbnail?.newFileName}`} 
-            alt={product.productName}
-            width={80}
-            height={80}
-            style={{
-              objectFit: "cover",
-              borderRadius: "6px"
-            }}
-          />
-          </Link>
-        ) : (
-          <span>이미지 없음</span>
-        )}
+        <Link to={`/products/detail/${product.id}`}>
+          {thumbnail ? (
+            <img
+              src={`http://localhost:8090/upload/product/${thumbnail.newFileName}`}
+              alt={product.productName}
+              width={80}
+              height={80}
+              style={{
+                objectFit: "cover",
+                borderRadius: "6px",
+              }}
+            />
+          ) : (
+            <span>이미지 없음</span>
+          )}
+        </Link>
       </td>
       <td>{product.productName}</td>
       <td>{product.category}</td>
@@ -38,17 +36,14 @@ const ProductRow = ({ product, onEdit, onDelete }) => {
       <td>{product.productStatus}</td>
 
       <td>
-        <button className="update"
-          onClick={() =>
-            navigate(`/admin/product/update/${product.id}`)
-          }
+        <button
+          className="update"
+          onClick={() => navigate(`/admin/product/update/${product.id}`)}
         >
           수정
         </button>
 
-        <button className="delete"
-          onClick={() => onDelete(product.id)}
-        >
+        <button className="delete" onClick={() => onDelete(product.id)}>
           삭제
         </button>
       </td>

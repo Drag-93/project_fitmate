@@ -75,10 +75,6 @@ public class ProductEntity extends BasicTime {
   @Column
   private int sessionCount; // PT 횟수
 
-  @JsonIgnore
-  @OneToMany(mappedBy = "productEntity", cascade = CascadeType.REMOVE)
-  private List<FileEntity> FileEntities;
-
   // //N:1
   @JsonIgnore
   @ManyToOne(fetch = FetchType.LAZY)
@@ -86,6 +82,7 @@ public class ProductEntity extends BasicTime {
   private MemberEntity memberEntity;
 
   // 파일엔티티와 1:N 매핑
+  @JsonIgnore
   @OneToMany(mappedBy = "productEntity", 
   cascade = CascadeType.ALL, orphanRemoval = true)
   private List<FileEntity> fileEntities = new ArrayList<>();

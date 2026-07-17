@@ -24,4 +24,6 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
   @EntityGraph(attributePaths = "fileEntities")
   Page<ProductEntity> findAll(Pageable pageable);
 
+  boolean existsByProductName(String productName);
+
 }

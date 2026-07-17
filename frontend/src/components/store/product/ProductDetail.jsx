@@ -7,11 +7,11 @@ const ProductDetail = ({
   handleCart,
   handleBuy
 }) => {
-  const main = product.productFileDtos.find(
+  const main = product.fileDtos.find(
     file => file.imageType === "MAIN"
-  ) || product.productFileDtos[0];
+  ) || product.fileDtos[0];
 
-  const details = product.productFileDtos.filter(
+  const details = product.fileDtos.filter(
     file => file.imageType === "DETAIL"
   );
 
@@ -20,7 +20,7 @@ const ProductDetail = ({
       {/* 메인 이미지 */}
       {main && (
         <img
-          src={`http://localhost:8090${main?.newFileName}`}
+          src={`http://localhost:8090/upload/product/${main.newFileName}`}
           alt={product.productName}
           className="main-image"
         />
@@ -78,7 +78,7 @@ const ProductDetail = ({
       {details.map(detail => (
         <img
           key={detail.id}
-          src={`http://localhost:8090${detail.newFileName}`}
+          src={`http://localhost:8090/upload/product/${detail.newFileName}`}
           alt="상세"
           className="detail-image"
         />

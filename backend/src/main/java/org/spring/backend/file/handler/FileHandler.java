@@ -327,36 +327,42 @@ public class FileHandler {
             throws IOException {
 
     }
+
     // 상품 삭제 시 이미지 전체 삭제
     @Transactional
     public void deleteProductFiles(String filePath, Long productId) throws IOException {
-
         ProductEntity productEntity = productRepository.findById(productId)
                 .orElseThrow(() -> new NoSuchElementException("상품이 없습니다."));
 
         List<FileEntity> fileList = fileRepository.findByProductEntityOrderBySortOrderAsc(productEntity);
 
+        if (fileList.isEmpty()) {
+            return;
+        }
+        // 파일 경로 파싱 안전장치
         Path baseDirPath;
-
         try {
             baseDirPath = Paths.get(URI.create(filePath));
         } catch (Exception e) {
             baseDirPath = Paths.get(filePath);
         }
-        for (FileEntity fileEntity : fileList) {
 
+        for (FileEntity fileEntity : fileList) {
             Path target = baseDirPath.resolve(fileEntity.getNewFileName());
             File file = target.toFile();
 
             if (file.exists()) {
-                if(file.exists() && !file.delete()){
-                    throw new IOException("파일 삭제 실패");
+                if (!file.delete()) {
+                    throw new IOException("실제 파일 삭제 실패: " + fileEntity.getNewFileName());
                 }
+                System.out.println("물리 파일 삭제 성공 : " + fileEntity.getNewFileName());
+            } else {
+                System.out.println("⚠️ 경고: 서버 컴퓨터에 실제 파일이 존재하지 않습니다: " + file.getAbsolutePath());
             }
-
-            fileRepository.delete(fileEntity);
         }
+        fileRepository.deleteAll(fileList);
     }
+
     // 상품 이미지 하나 삭제
     @Transactional
     public void deleteSingleFile(Long fileId, String filePath) throws IOException {
@@ -371,12 +377,12 @@ public class FileHandler {
         } catch (Exception e) {
             baseDirPath = Paths.get(filePath);
         }
-    
+
         Path target = baseDirPath.resolve(fileEntity.getNewFileName());
         File file = target.toFile();
 
         if (file.exists()) {
-            if(file.exists() && !file.delete()){
+            if (file.exists() && !file.delete()) {
                 throw new IOException("파일 삭제 실패");
             }
         }

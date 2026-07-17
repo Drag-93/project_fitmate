@@ -2,9 +2,12 @@ package org.spring.backend.store.product.service.serviceImpl;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.spring.backend.common.TableType;
+import org.spring.backend.file.entity.FileEntity;
 import org.spring.backend.file.handler.FileHandler;
+import org.spring.backend.file.repository.FileRepository;
 import org.spring.backend.store.product.dto.ProductDto;
 import org.spring.backend.store.product.entity.ProductEntity;
 import org.spring.backend.store.product.repository.ProductRepository;
@@ -29,12 +32,18 @@ public class ProductServiceImpl implements ProductService {
   private String itemPath;
 
   private final ProductRepository productRepository;
+  private final FileRepository fileRepository;
 
   private final FileHandler fileHandler;
 
   @Override
   public void insertProduct(ProductDto productDto, MultipartFile thumbnail, List<MultipartFile> main,
       List<MultipartFile> details) {
+
+    if(productRepository.existsByProductName(productDto.getProductName())) {
+      throw new IllegalArgumentException("이미 등록된 상품입니다.");
+    }
+
 
     ProductEntity productEntity = ProductEntity.builder()
         .productName(productDto.getProductName())
@@ -199,4 +208,18 @@ public class ProductServiceImpl implements ProductService {
     }
   }
 
+  @Override
+  @Transactional
+  public void deleteImages(Long productId) {
+    try {
+      fileHandler.deleteProductFiles(itemPath, productId);
+
+      ProductEntity productEntity = productRepository.findById(productId)
+              .orElseThrow(() -> new NoSuchElementException("상품이 없습니다."));
+      productEntity.getFileEntities().clear();
+
+    } catch (IOException e) {
+      throw new RuntimeException("상품 이미지 전체 삭제 실패", e);
+    }
+  }
 }

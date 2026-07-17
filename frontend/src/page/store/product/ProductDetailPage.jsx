@@ -81,7 +81,7 @@ const ProductDetailPage = () => {
       productId: product.id,
       productName: product.productName,
       price: product.price,
-      productImage: product.productFileDtos.find(
+      productImage: product.fileDtos.find(
         file => file.imageType === "THUMBNAIL"
       )?.newFileName,
       quantity: product.productType === "GOODS"
