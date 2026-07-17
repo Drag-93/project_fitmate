@@ -5,11 +5,11 @@ const Loading = <div className="loading">...Loading</div>;
 const AdminIndexPage = lazy(() => import("../page/admin/AdminIndexPage"));
 const AdminCalendarPage = lazy(() => import("../page/admin/AdminCalendarPage"));
 const AdminPopupPage = lazy(() => import("../page/admin/AdminPopupPage"));
-
 const AdminMemberPage = lazy(() => import("../page/admin/AdminMemberPage"));
 const AdminMemberDetailPage = lazy(
   () => import("../page/admin/AdminMemberDetailPage"),
 );
+
 const AdminProductListPage = lazy(() => import("../page/store/product/admin/AdminProductListPage"));
 const AdminProductUpdatePage = lazy(() => import("../page/store/product/admin/AdminProductUpdatePage"));
 const AdminProductInsertPage = lazy(() => import("../page/store/product/admin/AdminProductInsertPage"));
@@ -117,7 +117,6 @@ const toAdminRouter = () => {
           <AdminProductDetailPage />
         </Suspense>),
     },
-
   ];
 };
 

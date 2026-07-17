@@ -12,12 +12,12 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Table(name = "calendar")
+@Table(name = "personalSchedule_tb")
 public class PersonalScheduleEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="calendar_id")
+    @Column(name="personalSchedule_id")
     private Integer id;
 
     @Column(nullable = false)

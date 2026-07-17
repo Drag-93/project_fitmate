@@ -2,12 +2,11 @@ package org.spring.backend.member.dto;
 
 import java.time.LocalDateTime;
 
-import org.spring.backend.common.Gender;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.spring.backend.common.Interest;
 import org.spring.backend.common.Role;
 import org.spring.backend.member.entity.MemberAddEntity;
 import org.spring.backend.member.entity.MemberEntity;
@@ -30,8 +29,6 @@ public class MemberDto {
 
   private String userPhone;
 
-  private Gender gender;
-
   private int subscribe;
 
   private int profilePhoto;
@@ -50,7 +47,22 @@ public class MemberDto {
 
   private Long memberAddId;
 
+  //memberAdd의 요소들
+  private float height;
+
+  private float weight;
+
+  private float goalWeight;
+
+  private int dailyCheck;
+
+  private Interest interest;
+
+  private String badge;
+
+
   public static MemberDto toMemberDto(MemberEntity memberEntity){
+    MemberAddEntity addEntity = memberEntity.getMemberAddEntity();
     return MemberDto.builder()
             .id(memberEntity.getId())
             .userEmail(memberEntity.getUserEmail())
@@ -58,13 +70,19 @@ public class MemberDto {
             .userName(memberEntity.getUserName())
             .userAddress(memberEntity.getUserAddress())
             .userPhone(memberEntity.getUserPhone())
-            .gender(memberEntity.getGender())
             .subscribe(memberEntity.getSubscribe())
             .profilePhoto(memberEntity.getProfilePhoto())
             .role(memberEntity.getRole())
             .createTime(memberEntity.getCreateTime())
             .updateTime(memberEntity.getUpdateTime())
             .memberAddId(memberEntity.getMemberAddEntity().getId())
+            //memberAddEntity의 값들 저장
+            .interest(addEntity != null ? addEntity.getInterest() : null)
+            .height(addEntity != null ? addEntity.getHeight() : 0.0f)
+            .weight(addEntity != null ? addEntity.getWeight() : 0.0f)
+            .goalWeight(addEntity != null ? addEntity.getGoalWeight() : 0.0f)
+            .dailyCheck(addEntity != null ? addEntity.getDailyCheck() : 0)
+            .badge(addEntity != null ? addEntity.getBadge() : null)
             // 파일 엔티티가 존재할 때만 이름을 넣고, 없으면 null 세팅
             .newFileName(memberEntity.getFileEntities() != null && !memberEntity.getFileEntities().isEmpty() ? memberEntity.getFileEntities().get(0).getNewFileName() : null)
             .oldFileName(memberEntity.getFileEntities() != null && !memberEntity.getFileEntities().isEmpty() ? memberEntity.getFileEntities().get(0).getOldFileName() : null)
@@ -75,7 +93,6 @@ public class MemberDto {
     return MemberDto.builder()
             .userEmail(memberEntity.getUserEmail())
             .userName(memberEntity.getUserName())
-            .gender(memberEntity.getGender())
             .subscribe(memberEntity.getSubscribe())
             .role(memberEntity.getRole())
             .memberAddId(memberEntity.getMemberAddEntity().getId())

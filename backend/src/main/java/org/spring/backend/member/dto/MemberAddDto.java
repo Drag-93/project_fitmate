@@ -4,11 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.spring.backend.common.Gender;
-import org.spring.backend.common.Role;
+import org.spring.backend.common.Interest;
+import org.spring.backend.member.entity.MemberAddEntity;
 import org.spring.backend.member.entity.MemberEntity;
-
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -25,7 +23,25 @@ public class MemberAddDto {
 
     private int dailyCheck;
 
+    private Interest interest;
+
     private String badge;
 
     private MemberEntity memberEntity;
+
+    private Long memberId;
+
+    public static MemberAddDto toMemberAddDto(MemberAddEntity memberAddEntity){
+        return MemberAddDto.builder()
+                .id(memberAddEntity.getId())
+                .height(memberAddEntity.getHeight())
+                .weight(memberAddEntity.getWeight())
+                .goalWeight(memberAddEntity.getGoalWeight())
+                .dailyCheck(memberAddEntity.getDailyCheck())
+                .interest(memberAddEntity.getInterest())
+                .badge(memberAddEntity.getBadge())
+                .memberEntity(memberAddEntity.getMemberEntity())
+                .memberId(memberAddEntity.getMemberEntity().getId())
+                .build();
+    }
 }

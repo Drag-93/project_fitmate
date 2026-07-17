@@ -4,6 +4,7 @@ import { loginFn, loginOAuth2Fn } from "../../apis/auth/login";
 import { API_SERVER_URL } from "../../apis/commonApi";
 import jwtAxios from "../../apis/util/jwtUtil";
 import axios from "axios";
+import store from "../store";
 //멤버 초기화값
 const initState = {
   memberData: null,
@@ -73,6 +74,11 @@ export const loadMemberInit = createAsyncThunk(
       }
       return null;
     } catch (err) {
+      console.log("에러발생 : ", err);
+      removeCookie("member");
+      store.dispatch(logout());
+      alert("로그인 세션이 만료되었습니다. 다시 로그인해주세요.");
+      window.location.href = "/";
       return rejectWithValue(err);
     }
   },

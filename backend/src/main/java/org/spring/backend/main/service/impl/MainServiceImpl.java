@@ -16,6 +16,7 @@ import org.spring.backend.main.service.MainService;
 import org.spring.backend.store.order.repository.OrderItemRepository;
 import org.spring.backend.store.product.dto.ProductDto;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -37,9 +38,7 @@ public class MainServiceImpl implements MainService {
     private final FileRepository fileRepository;
     private final FileHandler fileHandler;
 
-    // 팝업 이미지가 실제 저장되는 경로
-    // application.yml 또는 application.properties의 설정 이름
-
+    // 팝업 이미지 저장 경로
     @Value("${img.path.popup}")
     private String popupPath;
 
@@ -55,7 +54,7 @@ public class MainServiceImpl implements MainService {
         // 공지사항 최신순 TOP 5
         List<CommunityDto> noticeList =
                 communityRepository
-                        .findTop5ByCategoryNameOrderByCreateTimeDesc("notice")
+                        .findTop5ByCategoryNameOrderByCreateTimeDesc("공지사항")
                         .stream()
                         .map(entity -> CommunityDto.builder()
                                 .id(entity.getId())
@@ -66,7 +65,7 @@ public class MainServiceImpl implements MainService {
         // 공지사항을 제외한 전체 게시글 조회수 높은 순 TOP 5
         List<CommunityDto> communityList =
                 communityRepository
-                        .findTop5ByCategoryNameNotOrderByHitDesc("notice")
+                        .findTop5ByCategoryNameNotOrderByHitDesc("공지사항")
                         .stream()
                         .map(entity -> CommunityDto.builder()
                                 .id(entity.getId())
@@ -118,7 +117,7 @@ public class MainServiceImpl implements MainService {
         // 공지사항은 사용자 관심사와 관계없이  최신순 TOP 5 조회
         List<CommunityDto> noticeList =
                 communityRepository
-                        .findTop5ByCategoryNameOrderByCreateTimeDesc("notice")
+                        .findTop5ByCategoryNameOrderByCreateTimeDesc("공지사항")
                         .stream()
                         .map(entity -> CommunityDto.builder()
                                 .id(entity.getId())
@@ -203,16 +202,11 @@ public class MainServiceImpl implements MainService {
         PopupEntity popupEntity =
                 PopupEntity.toInsertPopupEntity(popupDto);
 
-        /*
-         * 파일을 저장하려면 팝업 id가 먼저 필요하기 때문에
-         * PopupEntity를 먼저 저장합니다.
-         */
+        //PopupEntity를 먼저 저장합니다.
         PopupEntity savedPopup =
                 popupRepository.save(popupEntity);
 
-        /*
-         * 실제 파일이 존재할 때만 파일 저장
-         */
+        // 실제 파일이 존재할 때만 파일 저장
         if (popupDto.getAttachFile() != null
                 && !popupDto.getAttachFile().isEmpty()) {
 
@@ -226,16 +220,44 @@ public class MainServiceImpl implements MainService {
     }
 
     // 관리자 팝업 전체 목록 조회
+//    @Transactional(readOnly = true)
+//    @Override
+//    public List<PopupDto> popupList() {
+//
+//        return popupRepository
+//                .findAll()
+//                .stream()
+//                .map(this::convertPopupDto)
+//                .toList();
+//    }
     @Transactional(readOnly = true)
     @Override
-    public List<PopupDto> popupList() {
-
-        return popupRepository
-                .findAll()
-                .stream()
-                .map(this::convertPopupDto)
-                .toList();
+    public Page<PopupDto> popupList(Pageable pageable, String subject, String search) {
+        if(subject==null||subject.isBlank()||search==null||search.isBlank()){
+            return popupRepository.findAll(pageable).map(this::convertPopupDto);
+        }
+        Page<PopupEntity> popupEntities = null;
+        //멤버리스트 검색필터링기능
+        switch (subject){
+//            case "endDate":
+//                popupEntities = popupRepository.findByEndDateContaining(pageable, search);
+//                break;
+//            case "startDate":
+//                popupEntities = popupRepository.findByStartDateContaining(pageable, search);
+//                break;
+            case "active":
+                popupEntities = popupRepository.findByActiveContaining(pageable, search);
+                break;
+            case "sortOrder":
+                popupEntities = popupRepository.findBysortOrderContaining(pageable, search);
+                break;
+            default:
+                popupEntities = popupRepository.findAll(pageable);
+        }
+        return popupEntities.map(this::convertPopupDto);
     }
+
+
 
     //팝업 상세 조회
     @Transactional(readOnly = true)

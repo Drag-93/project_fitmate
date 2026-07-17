@@ -12,6 +12,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
+<<<<<<< HEAD
+=======
+//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+>>>>>>> dev
 public class ProductsTest {
 
   @Autowired

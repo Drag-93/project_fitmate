@@ -18,7 +18,7 @@ const initState = {
 
 const AdminPopup = () => {
   // 팝업 목록
-  const [popupList, setPopupList] = useState([]);
+  // const [popupList, setPopupList] = useState([]);
 
   // 모달 입력값
   const [popup, setPopup] = useState({ ...initState });
@@ -33,16 +33,42 @@ const AdminPopup = () => {
   const [previewUrl, setPreviewUrl] = useState("");
 
   // 팝업 목록 조회
-  const getPopupList = async () => {
-    try {
-      const res = await jwtAxios.get(`${API_SERVER_URL}/admin/popupList`);
+  // const getPopupList = async () => {
+  //   try {
+  //     const res = await jwtAxios.get(`${API_SERVER_URL}/admin/popupList`);
 
-      setPopupList(res.data.result || []);
-    } catch (err) {
-      console.error("팝업 목록 조회 실패", err);
-    }
+  //     setPopupList(res.data.result || []);
+  //   } catch (err) {
+  //     console.error("팝업 목록 조회 실패", err);
+  //   }
+  // };
+
+  //팝업 공용 페이징 추가
+  const [popupData, setPopupData] = useState(null);
+  const [subject, setSubject] = useState("");
+  const [search, setSearch] = useState("");
+  const handleSearchSubmit = (e) => {
+    e.preventDefault(); // 폼 제출 시 페이지 새로고침 방지
+    getPopupList(subject, search, 0);
+    // 선택된 조건이 없거나 검색어가 비어있으면 전체 목록으로 이동하거나 알림 처리
+    // if (!subject && search) {
+    //   alert("검색 필터를 선택해주세요.");
+    //   return;
+    // }
   };
 
+  const getPopupList = async (subject, search, page) => {
+    //있을때나 없을때나 실행할수있게 설정
+    const url = `${API_SERVER_URL}/admin/popupList?page=${page}&size=5&subject=${subject ? subject : ""}&search=${encodeURIComponent(search ? search : "")}`;
+    try {
+      const res = await jwtAxios.get(url);
+      setPopupData(res.data);
+      // setPopupList(popupData.popupList);
+      console.log(res.data);
+    } catch (err) {
+      alert("에러발생 : " + err);
+    }
+  };
   //페이지 최초 실행 시 팝업 목록 조회
   useEffect(() => {
     getPopupList();
@@ -237,8 +263,7 @@ const AdminPopup = () => {
     <div className="admin-popup">
       <div className="admin-popup-header">
         <div>
-          <h2>팝업 관리</h2>
-          <p>메인 화면에 노출되는 팝업을 관리합니다.</p>
+          <h2>팝업</h2>
         </div>
 
         <button
@@ -249,7 +274,31 @@ const AdminPopup = () => {
           팝업 등록
         </button>
       </div>
+      <div className="search">
+        <div className="filters">
+          <form onSubmit={handleSearchSubmit}>
+            <select
+              name="subject"
+              value={subject}
+              onChange={(e) => setSubject(e.target.value)}
+            >
+              <option value="">::선택::</option>
+              <option value="active">노출 여부</option>
+              <option value="sortOrder">노출 순서</option>
+            </select>
 
+            <input
+              type="text"
+              name="search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="검색어를 입력하세요"
+            />
+
+            <input type="submit" value="검색" />
+          </form>
+        </div>
+      </div>
       <div className="admin-popup-table-wrap">
         <table className="admin-popup-table">
           <thead>
@@ -258,6 +307,7 @@ const AdminPopup = () => {
               <th>제목</th>
               <th>노출 여부</th>
               <th>노출 순서</th>
+              <th>이미지</th>
               <th>노출 시작일</th>
               <th>노출 종료일</th>
               <th>관리</th>
@@ -265,42 +315,43 @@ const AdminPopup = () => {
           </thead>
 
           <tbody>
-            {popupList.length === 0 ? (
+            {popupData?.popupList.length === 0 ? (
               <tr>
                 <td colSpan={7} className="popup-empty">
                   등록된 팝업이 없습니다.
                 </td>
               </tr>
             ) : (
-              popupList.map((item) => (
-                <tr key={item.id}>
-                  <td>{item.id}</td>
+              popupData?.popupList.map((popup) => (
+                <tr key={popup.id}>
+                  <td>{popup.id}</td>
 
-                  <td className="popup-title">{item.title}</td>
+                  <td className="popup-title">{popup.title}</td>
 
                   <td>
                     <span
                       className={
-                        item.active
+                        popup.active
                           ? "popup-status active"
                           : "popup-status inactive"
                       }
                     >
-                      {item.active ? "노출" : "미노출"}
+                      {popup.active ? "노출" : "미노출"}
                     </span>
                   </td>
 
-                  <td>{item.sortOrder}</td>
+                  <td>{popup.sortOrder}</td>
+                  <td>{popup.newFileName ? "O" : "X"}</td>
 
                   <td>
-                    {item.startDate
-                      ? item.startDate.replace("T", " ").slice(0, 16)
+                    {popup.startDate
+                      ? popup.startDate.replace("T", " ").slice(0, 16)
                       : "-"}
                   </td>
 
                   <td>
-                    {item.endDate
-                      ? item.endDate.replace("T", " ").slice(0, 16)
+                    {popup.endDate
+                      ? popup.endDate.replace("T", " ").slice(0, 16)
                       : "-"}
                   </td>
 
@@ -309,7 +360,7 @@ const AdminPopup = () => {
                       <button
                         type="button"
                         className="popup-update-btn"
-                        onClick={() => openUpdateModal(item)}
+                        onClick={() => openUpdateModal(popup)}
                       >
                         수정
                       </button>
@@ -317,7 +368,7 @@ const AdminPopup = () => {
                       <button
                         type="button"
                         className="popup-delete-btn"
-                        onClick={() => openDeleteModal(item)}
+                        onClick={() => openDeleteModal(popup)}
                       >
                         삭제
                       </button>
