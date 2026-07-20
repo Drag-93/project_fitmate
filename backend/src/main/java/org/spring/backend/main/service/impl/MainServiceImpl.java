@@ -312,7 +312,7 @@ public class MainServiceImpl implements MainService {
     @Transactional
     @Override
     public void deletePopup(Long id) throws IOException {
-        System.out.println("백엔드 팝업 삭제 실행");
+//        System.out.println("백엔드 팝업 삭제 실행");
         PopupEntity popupEntity =
                 popupRepository
                         .findById(id)

@@ -1,6 +1,7 @@
 package org.spring.backend.member.entity;
 
 import jakarta.persistence.*;
+import org.spring.backend.admin.entity.PersonalScheduleEntity;
 import org.spring.backend.common.BasicTime;
 
 import lombok.AllArgsConstructor;
@@ -80,6 +81,10 @@ public class MemberEntity extends BasicTime {
   @OneToMany(mappedBy = "memberEntity", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
   @JsonIgnore
   private List<OrderEntity> orderEntities;
+
+  @OneToMany(mappedBy = "memberEntity", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+  @JsonIgnore
+  private List<PersonalScheduleEntity> personalScheduleEntities;
 
   public static MemberEntity toInsertMemberEntity(MemberDto memberDto, String encodePw) {
     return MemberEntity.builder()
