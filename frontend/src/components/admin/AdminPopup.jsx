@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import jwtAxios from "../../apis/util/jwtUtil";
 import { API_SERVER_URL } from "../../apis/commonApi";
+import PageGenerate from "../common/Page/PageGenerate";
 //초기값 선언
 const initState = {
   id: null,
@@ -285,6 +286,7 @@ const AdminPopup = () => {
               <option value="">::선택::</option>
               <option value="active">노출 여부</option>
               <option value="sortOrder">노출 순서</option>
+              <option value="title">제목</option>
             </select>
 
             <input
@@ -380,7 +382,19 @@ const AdminPopup = () => {
           </tbody>
         </table>
       </div>
-
+      <div className="admin-popup-bottom">
+        <div className="admin-popup-paging">
+          <PageGenerate
+            currentPage={popupData?.currentPage} //현재 페이지
+            startPage={popupData?.startPage} //시작 페이지
+            endPage={popupData?.endPage} //끝 페이지
+            totalPage={popupData?.totalPage} //전체 페이지
+            onPageChange={getPopupList} //리스트를 불러오는 함수
+            search={search} //검색어
+            subject={subject} //검색필터
+          />
+        </div>
+      </div>
       {modalOpen && (
         <div className="popup-modal-overlay" onClick={closeModal}>
           <div className="popup-modal" onClick={(e) => e.stopPropagation()}>

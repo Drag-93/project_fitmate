@@ -49,7 +49,8 @@ public class PopupEntity extends BasicTime {
     @OneToMany(
             mappedBy = "popupEntity",
             fetch = FetchType.LAZY,
-            cascade = CascadeType.REMOVE
+            cascade = CascadeType.REMOVE,
+            orphanRemoval = true
     )
     private List<FileEntity> fileEntities = new ArrayList<>();
 
