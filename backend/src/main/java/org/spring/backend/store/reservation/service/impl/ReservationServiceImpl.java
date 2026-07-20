@@ -56,6 +56,8 @@ public class ReservationServiceImpl implements ReservationService {
     return reservation.getId();
   }
 
+
+
   // 트레이너 예약 목록
   @Override
   public List<ReservationDto> getTrainerReservation(Long trainerId) {
@@ -67,10 +69,24 @@ public class ReservationServiceImpl implements ReservationService {
         .toList();
   }
 
+  @Override
+  public List<ReservationDto> getMemberReservation(Long memberId) {
+    return List.of();
+  }
+  @Override
+  public void updateReservation(Long reservationId, ReservationDto reservationDto, Long memberId) {
+
+  }
+
+  @Override
+  public void cancelTrainerReservation(Long reservationId, Long trainerId) {
+
+  }
+
   // 회원용 예약 상태 변경
   @Override
   @Transactional
-  public void cancelReservation(Long reservationId, Long memberId) {
+  public void cancelMemberReservation(Long reservationId, Long memberId) {
 
     ReservationEntity reservation = reservationRepository.findById(reservationId)
         .orElseThrow(() -> new IllegalArgumentException("예약이 없습니다."));
