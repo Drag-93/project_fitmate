@@ -8,6 +8,7 @@ import org.spring.backend.store.cart.entity.CartListEntity;
 import org.spring.backend.store.cart.repository.CartListRepository;
 import org.spring.backend.store.order.dto.OrderDto;
 import org.spring.backend.store.order.dto.OrderItemDto;
+import org.spring.backend.store.order.dto.SubscriptionOrderRequestDto;
 import org.spring.backend.store.order.entity.OrderEntity;
 import org.spring.backend.store.order.entity.OrderItemEntity;
 import org.spring.backend.store.order.repository.OrderItemRepository;
@@ -27,148 +28,185 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class OrderServiceImpl implements OrderService {
 
-  private final OrderRepository orderRepository;
-  private final OrderItemRepository orderItemRepository;
-  private final MemberRepository memberRepository;
-  private final ProductRepository productRepository;
-  private final CartListRepository cartListRepository;
+    private final OrderRepository orderRepository;
+    private final OrderItemRepository orderItemRepository;
+    private final MemberRepository memberRepository;
+    private final ProductRepository productRepository;
+    private final CartListRepository cartListRepository;
 
-  @Override
-  public Long insertDirectOrder(Long memberId, OrderDto orderDto) {
+    @Override
+    public Long insertDirectOrder(Long memberId, OrderDto orderDto) {
 
-    System.out.println(orderDto);
+        System.out.println(orderDto);
 
-    for (OrderItemDto item : orderDto.getOrderItemDtos()) {
+        for (OrderItemDto item : orderDto.getOrderItemDtos()) {
+
+        }
+        // 회원 조회
+        MemberEntity memberEntity = memberRepository.findById(memberId)
+
+                .orElseThrow(() -> new IllegalArgumentException("회원이 존재하지 않습니다."));
+
+        // 주문 생성
+        OrderEntity orderEntity = OrderEntity.builder()
+                .totalPrice(0)
+                .orderStatus(OrderStatus.PENDING)
+                .deliveryStatus(DeliveryStatus.READY)
+                .receiverName(orderDto.getReceiverName())
+                .receiverPhone(orderDto.getReceiverPhone())
+                .receiverAddress(orderDto.getReceiverAddress())
+                .deliveryMemo(orderDto.getDeliveryMemo())
+                .memberEntity(memberEntity)
+                .build();
+
+        orderRepository.save(orderEntity);
+
+        int totalPrice = 0;
+
+        // 주문 상품 저장
+        for (OrderItemDto itemDto : orderDto.getOrderItemDtos()) {
+
+            ProductEntity productEntity = productRepository.findById(itemDto.getProductId())
+                    .orElseThrow(() -> new IllegalArgumentException("상품이 존재하지 않습니다."));
+
+            OrderItemEntity orderItemEntity = OrderItemEntity.builder()
+                    .orderEntity(orderEntity)
+                    .productEntity(productEntity)
+                    .productName(productEntity.getProductName())
+                    .price(productEntity.getPrice())
+                    .quantity(itemDto.getQuantity())
+                    .build();
+
+            orderItemRepository.save(orderItemEntity);
+
+            totalPrice += productEntity.getPrice() * itemDto.getQuantity();
+        }
+
+        orderEntity.setTotalPrice(totalPrice);
+
+        return orderEntity.getId();
 
     }
-    // 회원 조회
-    MemberEntity memberEntity = memberRepository.findById(memberId)
 
-        .orElseThrow(() -> new IllegalArgumentException("회원이 존재하지 않습니다."));
+    @Override
+    public Long insertCartOrder(Long memberId, List<Long> cartListIds, OrderDto orderDto) {
 
-    // 주문 생성
-    OrderEntity orderEntity = OrderEntity.builder()
-        .totalPrice(0)
-        .orderStatus(OrderStatus.PENDING)
-        .deliveryStatus(DeliveryStatus.READY)
-        .receiverName(orderDto.getReceiverName())
-        .receiverPhone(orderDto.getReceiverPhone())
-        .receiverAddress(orderDto.getReceiverAddress())
-        .deliveryMemo(orderDto.getDeliveryMemo())
-        .memberEntity(memberEntity)
-        .build();
+        // 회원 조회
+        MemberEntity memberEntity = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("회원이 존재하지 않습니다."));
 
-    orderRepository.save(orderEntity);
+        // 주문 생성
+        OrderEntity orderEntity = OrderEntity.builder()
+                .totalPrice(0)
+                .orderStatus(OrderStatus.PENDING)
+                .deliveryStatus(DeliveryStatus.READY)
+                .receiverName(orderDto.getReceiverName())
+                .receiverPhone(orderDto.getReceiverPhone())
+                .receiverAddress(orderDto.getReceiverAddress())
+                .deliveryMemo(orderDto.getDeliveryMemo())
+                .memberEntity(memberEntity)
+                .build();
 
-    int totalPrice = 0;
+        orderRepository.save(orderEntity);
 
-    // 주문 상품 저장
-    for (OrderItemDto itemDto : orderDto.getOrderItemDtos()) {
+        int totalPrice = 0;
 
-      ProductEntity productEntity = productRepository.findById(itemDto.getProductId())
-          .orElseThrow(() -> new IllegalArgumentException("상품이 존재하지 않습니다."));
+        for (Long cartListId : cartListIds) {
 
-      OrderItemEntity orderItemEntity = OrderItemEntity.builder()
-          .orderEntity(orderEntity)
-          .productEntity(productEntity)
-          .productName(productEntity.getProductName())
-          .price(productEntity.getPrice())
-          .quantity(itemDto.getQuantity())
-          .build();
+            CartListEntity cartListEntity = cartListRepository.findById(cartListId)
+                    .orElseThrow(() -> new IllegalArgumentException("장바구니 상품이 존재하지 않습니다."));
 
-      orderItemRepository.save(orderItemEntity);
+            ProductEntity productEntity = cartListEntity.getProductEntity();
 
-      totalPrice += productEntity.getPrice() * itemDto.getQuantity();
+            OrderItemEntity orderItemEntity = OrderItemEntity.builder()
+                    .orderEntity(orderEntity)
+                    .productEntity(productEntity)
+                    .productName(productEntity.getProductName())
+                    .price(productEntity.getPrice())
+                    .quantity(cartListEntity.getQuantity())
+                    .build();
+
+            orderItemRepository.save(orderItemEntity);
+
+            totalPrice += productEntity.getPrice() * cartListEntity.getQuantity();
+        }
+
+        orderEntity.setTotalPrice(totalPrice);
+
+        return orderEntity.getId();
     }
 
-    orderEntity.setTotalPrice(totalPrice);
+    @Override
+    public List<OrderDto> orderList(Long memberId) {
 
-    return orderEntity.getId();
-
-  }
-
-  @Override
-  public Long insertCartOrder(Long memberId, List<Long> cartListIds, OrderDto orderDto) {
-
-    // 회원 조회
-    MemberEntity memberEntity = memberRepository.findById(memberId)
-        .orElseThrow(() -> new IllegalArgumentException("회원이 존재하지 않습니다."));
-
-    // 주문 생성
-    OrderEntity orderEntity = OrderEntity.builder()
-        .totalPrice(0)
-        .orderStatus(OrderStatus.PENDING)
-        .deliveryStatus(DeliveryStatus.READY)
-        .receiverName(orderDto.getReceiverName())
-        .receiverPhone(orderDto.getReceiverPhone())
-        .receiverAddress(orderDto.getReceiverAddress())
-        .deliveryMemo(orderDto.getDeliveryMemo())
-        .memberEntity(memberEntity)
-        .build();
-
-    orderRepository.save(orderEntity);
-
-    int totalPrice = 0;
-
-    for (Long cartListId : cartListIds) {
-
-      CartListEntity cartListEntity = cartListRepository.findById(cartListId)
-          .orElseThrow(() -> new IllegalArgumentException("장바구니 상품이 존재하지 않습니다."));
-
-      ProductEntity productEntity = cartListEntity.getProductEntity();
-
-      OrderItemEntity orderItemEntity = OrderItemEntity.builder()
-          .orderEntity(orderEntity)
-          .productEntity(productEntity)
-          .productName(productEntity.getProductName())
-          .price(productEntity.getPrice())
-          .quantity(cartListEntity.getQuantity())
-          .build();
-
-      orderItemRepository.save(orderItemEntity);
-
-      totalPrice += productEntity.getPrice() * cartListEntity.getQuantity();
+        return orderRepository.findGoodsOrdersByMemberId(memberId)
+                .stream()
+                .map(OrderDto::toOrderDto)
+                .toList();
     }
 
-    orderEntity.setTotalPrice(totalPrice);
+    @Override
+    @Transactional(readOnly = true)
+    public OrderDto orderDetail(Long orderId) {
 
-    return orderEntity.getId();
-  }
+        OrderEntity orderEntity = orderRepository.findDetailById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException("주문이 존재하지 않습니다."));
 
-  @Override
-  public List<OrderDto> orderList(Long memberId) {
+        return OrderDto.toOrderDto(orderEntity);
+    }
 
-    return orderRepository.findGoodsOrdersByMemberId(memberId)
-        .stream()
-        .map(OrderDto::toOrderDto)
-        .toList();
-  }
+    @Override
+    public void cancelOrder(Long orderId) {
+        OrderEntity orderEntity = orderRepository.findById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException("주문이 존재하지 않습니다."));
 
-  @Override
-  @Transactional(readOnly = true)
-  public OrderDto orderDetail(Long orderId) {
-  
-      OrderEntity orderEntity = orderRepository.findDetailById(orderId)
-          .orElseThrow(() -> new IllegalArgumentException("주문이 존재하지 않습니다."));
-  
-      return OrderDto.toOrderDto(orderEntity);
-  }
-  
-  @Override
-  public void cancelOrder(Long orderId) {
-    OrderEntity orderEntity = orderRepository.findById(orderId)
-        .orElseThrow(() -> new IllegalArgumentException("주문이 존재하지 않습니다."));
+        orderEntity.setOrderStatus(OrderStatus.CANCELED);
+    }
 
-    orderEntity.setOrderStatus(OrderStatus.CANCELED);
-  }
+    @Override
+    public void updateOrderStatus(Long orderId, DeliveryStatus deliveryStatus) {
 
-  @Override
-  public void updateOrderStatus(Long orderId, DeliveryStatus deliveryStatus) {
+        OrderEntity orderEntity = orderRepository.findById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException("주문이 존재하지 않습니다."));
 
-    OrderEntity orderEntity = orderRepository.findById(orderId)
-        .orElseThrow(() -> new IllegalArgumentException("주문이 존재하지 않습니다."));
+        orderEntity.setDeliveryStatus(deliveryStatus);
+    }
 
-    orderEntity.setDeliveryStatus(deliveryStatus);
-  }
+    @Override
+    @Transactional
+    public Long insertSubscriptionOrder(
+            Long memberId,
+            SubscriptionOrderRequestDto request) {
+
+        MemberEntity member = memberRepository.findById(memberId)
+                .orElseThrow();
+
+        ProductEntity product = productRepository.findById(request.getProductId())
+                .orElseThrow();
+
+        OrderEntity order = OrderEntity.builder()
+                .memberEntity(member)
+                .totalPrice(product.getPrice())
+                .orderStatus(OrderStatus.PENDING)
+                .deliveryStatus(DeliveryStatus.NONE)
+                .receiverName(null)
+                .receiverPhone(null)
+                .receiverAddress(null)
+                .build();
+
+        orderRepository.save(order);
+
+        OrderItemEntity item = OrderItemEntity.builder()
+                .orderEntity(order)
+                .productEntity(product)
+                .productName(product.getProductName())
+                .quantity(1)
+                .price(product.getPrice())
+                .build();
+
+        orderItemRepository.save(item);
+
+        return order.getId();
+    }
 
 }

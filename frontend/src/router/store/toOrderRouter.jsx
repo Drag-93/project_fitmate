@@ -7,8 +7,7 @@ const OrderPage = lazy(() => import("../../page/store/order/OrderPage"));
 const OrderDetailPage = lazy(() => import("../../page/store/order/OrderDetailPage"));
 const OrderListPage = lazy(() => import("../../page/store/order/OrderListPage"));
 const OrderCompletePage = lazy(() => import("../../page/store/order/OrderCompletePage"));
-const OrderFitnessPage = lazy(() => import("../../page/store/order/OrderFitnessPage"));
-const OrderSubscriptinoPage = lazy(() => import("../../page/store/order/OrderSubscriptinoPage"));
+const OrderMembershipPage = lazy(() => import("../../page/store/order/OrderMembershipPage"));
 
 const toOrderRouter = () => {
   return [
@@ -45,18 +44,10 @@ const toOrderRouter = () => {
       ),
     },
     {
-      path: "fitness",
+      path: "membership",
       element: (
         <Suspense fallback={Loading}>
-          <OrderFitnessPage />
-        </Suspense>
-      ),
-    },
-    {
-      path: "subscription",
-      element: (
-        <Suspense fallback={Loading}>
-          <OrderSubscriptinoPage />
+          <OrderMembershipPage />
         </Suspense>
       ),
     },

@@ -179,9 +179,13 @@ public class PaymentServiceImpl implements PaymentService {
     Long memberId = order.getMemberEntity().getId();
     int amount = order.getTotalPrice();
 
-    String productName = order.getOrderItemEntities()
-        .get(0)
-        .getProductName();
+    OrderItemEntity item = order.getOrderItemEntities().get(0);
+
+    String productName = item.getProductName();
+
+    if(productName == null){
+      productName = item.getProductEntity().getProductName();
+    }
 
     RestTemplate restTemplate = new RestTemplate();
     String tid = paymentEntity.getTid();
@@ -249,9 +253,13 @@ public class PaymentServiceImpl implements PaymentService {
     int amount = orderEntity.getTotalPrice();
 
     // 첫 번째 상품명을 대표 상품명으로 사용
-    String productName = orderEntity.getOrderItemEntities()
-        .get(0)
-        .getProductName();
+    OrderItemEntity item = orderEntity.getOrderItemEntities().get(0);
+
+    String productName = item.getProductName();
+
+    if(productName == null){
+      productName = item.getProductEntity().getProductName();
+    }
 
     // 1. 주문번호(ID) 발급을 위해 최소 정보로 최초 저장
     PaymentEntity paymentEntity = PaymentEntity.builder()
@@ -327,7 +335,6 @@ public class PaymentServiceImpl implements PaymentService {
 
     SubscriptionEntity subscription = SubscriptionEntity.builder()
         .memberEntity(order.getMemberEntity())
-        .productEntity(product)
         .productEntity(product)
         .subscriptionStatus(SubscriptionStatus.ACTIVE)
         .startDate(LocalDateTime.now())

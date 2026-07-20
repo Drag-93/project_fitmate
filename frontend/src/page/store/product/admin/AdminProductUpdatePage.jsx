@@ -10,7 +10,7 @@ import {
 
 import ProductForm from "../../../../components/store/product/admin/ProductForm";
 import ImageUpload from "../../../../components/store/product/admin/ImageUpload";
-import "../../../../components/css/store/product/admin/ProductAdmin.css";
+import "../../../../components/css/store/product/admin/productAdmin.css";
 
 const AdminProductUpdatePage = () => {
   const { productId } = useParams();

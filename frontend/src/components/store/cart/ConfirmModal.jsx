@@ -1,5 +1,5 @@
 import React from "react";
-import "../../css/store/cart/ConfirmModal.css";
+import "../../css/store/cart/confirmModal.css";
 
 const ConfirmModal = ({
   message,

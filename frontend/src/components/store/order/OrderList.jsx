@@ -55,7 +55,7 @@ const OrderList = ({ orders }) => {
 
                   return (
                     <Link
-                      to={`/store/product/${item.productId}`}
+                      to={`/products/detail/${item.productId}`}
                       className="order-content"
                       key={item.id || item.productName}>
                       {/* 이미지가 있을 때만 렌더링 */}

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import OrderList from "../../../components/store/order/OrderList";
 import jwtAxios from "../../../apis/util/jwtUtil";
-import "../../../components/css/store/order/OrderList.css";
+import "../../../components/css/store/order/orderList.css";
 
 const OrderListPage = () => {
 

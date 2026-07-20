@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-import "../../../components/css/store/product/ProductCard.css"
+import "../../../components/css/store/product/productCard.css"
 
 const ProductCard = ({ product }) => {
 

@@ -7,6 +7,7 @@ import org.spring.backend.member.jwt.CustomUserDetails;
 import org.spring.backend.member.repository.MemberRepository;
 import org.spring.backend.store.order.dto.CartOrderRequestDto;
 import org.spring.backend.store.order.dto.OrderDto;
+import org.spring.backend.store.order.dto.SubscriptionOrderRequestDto;
 import org.spring.backend.store.order.service.OrderService;
 import org.spring.backend.store.order.type.DeliveryStatus;
 import org.springframework.http.ResponseEntity;
@@ -98,5 +99,22 @@ public class OrderController {
 
     orderService.updateOrderStatus(orderId, deliveryStatus);
     return ResponseEntity.ok().build();
+  }
+
+  // PT / GYM / PREMIUM 주문
+  @PostMapping("/subscription")
+  public ResponseEntity<Long> subscriptionOrder(
+      @AuthenticationPrincipal CustomUserDetails user,
+      @RequestBody SubscriptionOrderRequestDto request) {
+
+    MemberEntity member = memberRepository
+        .findByUserEmail(user.getUsername())
+        .orElseThrow(() -> new IllegalArgumentException("회원이 없습니다."));
+
+    Long orderId = orderService.insertSubscriptionOrder(
+        member.getId(),
+        request);
+
+    return ResponseEntity.ok(orderId);
   }
 }

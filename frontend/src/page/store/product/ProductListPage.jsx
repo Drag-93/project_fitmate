@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { getProductList } from "../../../apis/store/productApi";
 import ProductCard from "../../../components/store/product/ProductCard";
 
-import "../../../components/css/store/product/ProductListPage.css";
+import "../../../components/css/store/product/productListPage.css";
 
 const ProductListPage = () => {
 

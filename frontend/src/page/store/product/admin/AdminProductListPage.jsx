@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getProductList, deleteProduct } from "../../../../apis/store/productApi.js";
 import ProductTable from "../../../../components/store/product/admin/ProductTable.jsx";
-import "../../../../components/css/store/product/admin/ProductAdmin.css";
+import "../../../../components/css/store/product/admin/productAdmin.css";
 
 
 const AdminProductListPage = () => {
