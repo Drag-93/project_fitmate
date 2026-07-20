@@ -27,9 +27,11 @@ public class ReservationDto {
   private String memo;
 
   private Long memberId;
+  
   private String memberName;
 
   private Long trainerId;
+
   private String trainerName;
 
   public static ReservationDto toReservationDto(
@@ -43,7 +45,7 @@ public class ReservationDto {
         .memberId(entity.getMember().getId())
         .memberName(entity.getMember().getUserName())
         .trainerId(entity.getTrainer().getId())
-        .trainerName(entity.getTrainer().getUserName())
+        .trainerName(entity.getTrainer().getMember().getUserName())
         .build();
   }
 }

@@ -4,10 +4,14 @@ import java.time.LocalDateTime;
 
 import org.spring.backend.common.BasicTime;
 import org.spring.backend.member.entity.MemberEntity;
+import org.spring.backend.store.product.entity.ProductEntity;
 import org.spring.backend.store.reservation.type.ReservationStatus;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -36,16 +40,25 @@ public class ReservationEntity extends BasicTime {
   @Column(nullable = false)
   private LocalDateTime reservationTime; // 예약 날짜
 
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
   private ReservationStatus reservationStatus; // RESERVED, COMPLETE, CANCEL
 
   @Column(length = 500)
   private String memo; // 요청사항
 
-  @ManyToOne
+  // 예약한 회원
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "member_id", nullable = false)
   private MemberEntity member;
 
-  @ManyToOne
+  // 담당 트레이너
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "trainer_id", nullable = false)
-  private MemberEntity trainer;
+  private TrainerEntity trainer;
+
+   // PT 상품
+  @ManyToOne
+  @JoinColumn(name = "product_id")
+  private ProductEntity ProductEntity;
 }
