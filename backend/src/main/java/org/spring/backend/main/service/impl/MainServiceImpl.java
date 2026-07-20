@@ -236,23 +236,30 @@ public class MainServiceImpl implements MainService {
         if(subject==null||subject.isBlank()||search==null||search.isBlank()){
             return popupRepository.findAll(pageable).map(this::convertPopupDto);
         }
-        Page<PopupEntity> popupEntities = null;
         //멤버리스트 검색필터링기능
+        //검색 변수
+        Page<PopupEntity> popupEntities;
         switch (subject){
-//            case "endDate":
-//                popupEntities = popupRepository.findByEndDateContaining(pageable, search);
-//                break;
-//            case "startDate":
-//                popupEntities = popupRepository.findByStartDateContaining(pageable, search);
-//                break;
-            case "active":
-                popupEntities = popupRepository.findByActiveContaining(pageable, search);
-                break;
-            case "sortOrder":
-                popupEntities = popupRepository.findBysortOrderContaining(pageable, search);
-                break;
-            default:
-                popupEntities = popupRepository.findAll(pageable);
+            case "endDate"
+              ->popupEntities = popupRepository.findByEndDateContaining(pageable, search);
+            case "startDate"
+              ->  popupEntities =popupRepository.findByStartDateContaining(pageable, search);
+            case "title"
+                -> popupEntities = popupRepository.findByTitleContaining(pageable, search);
+            case "active" -> {
+                Boolean active = Boolean.parseBoolean(search);
+                popupEntities =popupRepository.findByActive(active,pageable);}
+
+            case "sortOrder" -> {
+                try {
+                    Integer sortOrder = Integer.parseInt(search);
+                    popupEntities = popupRepository.findBySortOrder(sortOrder,pageable);
+                } catch (NumberFormatException e) {
+                    // sortOrder 검색값이 숫자가 아니면 빈 결과 반환
+                    popupEntities = Page.empty(pageable);
+                }
+            }
+            default -> popupEntities = popupRepository.findAll(pageable);
         }
         return popupEntities.map(this::convertPopupDto);
     }

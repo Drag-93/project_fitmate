@@ -26,9 +26,11 @@ public interface PopupRepository extends JpaRepository<PopupEntity, Long> {
 
     Page<PopupEntity> findByStartDateContaining(Pageable pageable, String search);
 
-    Page<PopupEntity> findByActiveContaining(Pageable pageable, String search);
+    Page<PopupEntity> findByTitleContaining(Pageable pageable, String search);
 
-    Page<PopupEntity> findBysortOrderContaining(Pageable pageable, String search);
+    Page<PopupEntity> findByActive(Boolean active, Pageable pageable);
+
+    Page<PopupEntity> findBySortOrder(Integer sortOrder, Pageable pageable);
 
 // Popup 조회 흐름
 // 1. 현재 시간(LocalDateTime.now())을 기준으로 조회
