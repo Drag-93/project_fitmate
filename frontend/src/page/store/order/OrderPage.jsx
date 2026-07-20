@@ -16,7 +16,7 @@ const OrderPage = () => {
     receiverAddress: "",
     deliveryMemo: ""
   });
-
+  const [payment, setPayment] = useState("kakao");
   const [memberInfo, setMemberInfo] = useState(null);
 
   useEffect(() => {
@@ -77,7 +77,9 @@ const OrderPage = () => {
             <BuyerInfo
               orderInfo={orderInfo}
               setOrderInfo={setOrderInfo} />
-            <PaymentMethod />
+            <PaymentMethod payment={payment}
+              setPayment={setPayment}
+            />
           </div>
 
           <div className="right">
@@ -89,6 +91,7 @@ const OrderPage = () => {
                   ? directItem.price * directItem.quantity
                   : totalPrice
               }
+              payment={payment}
             />
           </div>
         </div>

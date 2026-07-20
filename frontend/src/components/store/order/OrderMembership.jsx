@@ -49,7 +49,6 @@ const OrderMembership = ({ product }) => {
         <h2>결제하기</h2>
 
         <div className="calendar-box">
-          <h3>이용 시작일 선택</h3>
 
           <CommonCalendar
             events={[]}
@@ -61,7 +60,7 @@ const OrderMembership = ({ product }) => {
         </div>
 
         <div className="selected-date">
-          선택한 날짜 :
+          이용 시작일 : &nbsp;
           {startDate || " 선택해주세요."}
         </div>
 

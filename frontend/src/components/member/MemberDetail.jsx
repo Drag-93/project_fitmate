@@ -232,12 +232,12 @@ const MemberDetail = () => {
                   </li>
                   <li>
                     <span>
-                      <Link to="/mypage/">구독 관리</Link>
+                      <Link to="/subscription/list">FitMate Plus+</Link>
                     </span>
                   </li>
                   <li>
                     <span>
-                      <Link to="/mypage/">운동 관리</Link>
+                      <Link to="/reservation">운동 관리</Link>
                     </span>
                   </li>
                   <li className="buttonArea">

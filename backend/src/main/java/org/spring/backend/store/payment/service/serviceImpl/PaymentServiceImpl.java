@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.spring.backend.store.cart.service.CartService;
+import org.spring.backend.store.order.dto.OrderItemDto;
 import org.spring.backend.store.order.entity.OrderEntity;
 import org.spring.backend.store.order.entity.OrderItemEntity;
 import org.spring.backend.store.order.repository.OrderRepository;
@@ -183,7 +184,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     String productName = item.getProductName();
 
-    if(productName == null){
+    if (productName == null) {
       productName = item.getProductEntity().getProductName();
     }
 
@@ -257,7 +258,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     String productName = item.getProductName();
 
-    if(productName == null){
+    if (productName == null) {
       productName = item.getProductEntity().getProductName();
     }
 
@@ -347,5 +348,36 @@ public class PaymentServiceImpl implements PaymentService {
         .build();
 
     subscriptionRepository.save(subscription);
+  }
+
+  public PaymentSuccessDto normalPayment(Long orderId) {
+
+    OrderEntity order = orderRepository.findById(orderId)
+        .orElseThrow(() -> new RuntimeException("주문을 찾을 수 없습니다."));
+
+    PaymentEntity payment = PaymentEntity.builder()
+        .paymentMethod(PaymentMethod.CARD)
+        .paymentStatus(PaymentStatus.SUCCESS)
+        .amount(order.getTotalPrice())
+        .orderEntity(order)
+        .build();
+
+    paymentRepository.save(payment);
+
+    List<OrderItemDto> orderItems = order.getOrderItemEntities()
+        .stream()
+        .map(OrderItemDto::toOrderItemDto)
+        .toList();
+
+    return PaymentSuccessDto.builder()
+        .productName(order.getOrderItemEntities().get(0).getProductName())
+        .amount(payment.getAmount())
+        .paymentMethod(payment.getPaymentMethod().name())
+        .productType(order.getOrderItemEntities()
+            .get(0)
+            .getProductEntity()
+            .getProductType())
+        .orderItems(orderItems)
+        .build();
   }
 }

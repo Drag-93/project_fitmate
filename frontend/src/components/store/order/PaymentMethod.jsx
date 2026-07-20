@@ -1,6 +1,6 @@
 import React from 'react';
 
-const PaymentMethod = () => {
+const PaymentMethod = ({ payment, setPayment }) => {
   return (
     <div className="paymentMethod">
 
@@ -12,6 +12,8 @@ const PaymentMethod = () => {
             type="radio"
             name="payment"
             value="kakao"
+            checked={payment === "kakao"}
+            onChange={(e)=>setPayment(e.target.value)}
           />
           카카오페이
         </label>
@@ -24,20 +26,10 @@ const PaymentMethod = () => {
             type="radio"
             name="payment"
             value="card"
+            checked={payment === "card"}
+            onChange={(e)=>setPayment(e.target.value)}
           />
-          카드 결제
-        </label>
-      </div>
-
-
-      <div>
-        <label>
-          <input 
-            type="radio"
-            name="payment"
-            value="bank"
-          />
-          계좌이체
+          일반 결제
         </label>
       </div>
 

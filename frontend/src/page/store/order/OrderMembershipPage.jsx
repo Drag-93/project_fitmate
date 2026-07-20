@@ -1,5 +1,6 @@
 import { useLocation } from "react-router-dom";
 import OrderMembership from "../../../components/store/order/OrderMembership";
+import "../../../components/css/store/order/OrderMembership.css"
 
 
 const OrderMembershipPage = () => {

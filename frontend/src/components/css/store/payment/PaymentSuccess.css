@@ -1,75 +1,84 @@
-.kakaoPay-success {
-  min-height: 80vh;
+.payment-success {
+  width: 100%;
+  min-height: 100vh;
+  background: #f7f7f7;
+
   display: flex;
   justify-content: center;
   align-items: center;
 
-  background-color: #f7f7f7;
+  padding: 40px 0;
 }
 
 
-/* 결제 결과 카드 */
-.kakaoPay-success-con {
+.payment-success-con {
   width: 500px;
-  padding: 40px;
 
   background: white;
   border-radius: 16px;
 
-  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+  padding: 40px;
+
+  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
 
   text-align: center;
 }
 
 
 /* 제목 */
-.kakaoPay-success .title {
-  margin-bottom: 30px;
-
+.payment-success .title {
   font-size: 28px;
   font-weight: 700;
+
+  margin-bottom: 35px;
 
   color: #222;
 }
 
 
-/* 내용 */
-.kakaoPay-result ul {
+/* 결과 영역 */
+.payment-result ul {
+  list-style: none;
   padding: 0;
   margin: 0;
-
-  list-style: none;
 }
 
 
-.kakaoPay-result li {
-  margin-bottom: 15px;
+.payment-result li {
+  margin-bottom: 18px;
 
-  font-size: 15px;
+  font-size: 16px;
   color: #555;
 }
 
 
-/* 결제 완료 문구 */
-.kakaoPay-result li:first-child {
+/* 상품명 / 금액 강조 */
+.payment-result li:nth-child(2) {
   font-weight: 600;
-  color: #333;
+  color: #222;
 }
 
 
+.payment-result li:nth-child(3) {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111;
+}
+
+
+
 /* 버튼 영역 */
-.kakaoPay-result button {
+.payment-result button {
 
-  width: 100%;
-
-  margin-top: 10px;
-  padding: 13px;
+  width: 200px;
+  height: 45px;
 
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
 
-  background-color: #4a90e2;
+  margin-top: 10px;
 
+  background: #222;
   color: white;
 
   font-size: 15px;
@@ -81,17 +90,34 @@
 }
 
 
-.kakaoPay-result button:hover {
-  background-color: #357abd;
+.payment-result button:hover {
+
+  background: #444;
+
+  transform: translateY(-2px);
+
 }
 
 
-/* 두 번째 버튼 */
-.kakaoPay-result li:last-child button {
-  background-color: #555;
-}
+/* 모바일 */
+@media(max-width:768px){
 
+  .payment-success {
+    padding: 20px;
+  }
+  .payment-success-con {
 
-.kakaoPay-result li:last-child button:hover {
-  background-color: #333;
+    width: 100%;
+    padding: 30px 20px;
+
+  }
+
+  .payment-success .title {
+    font-size: 24px;
+  }
+
+  .payment-result button {
+    width: 100%;
+  }
+
 }

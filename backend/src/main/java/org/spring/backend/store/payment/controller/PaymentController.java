@@ -75,6 +75,15 @@ public class PaymentController {
         paymentService.paymentApproval(pgToken, paymentId));
   }
 
+  // 일반 결제 성공
+  @PostMapping("/success/{orderId}")
+  public ResponseEntity<PaymentSuccessDto> normalPayment(
+      @PathVariable Long orderId) {
+
+    return ResponseEntity.ok(
+        paymentService.normalPayment(orderId));
+  }
+
   /*
    * productId, cartId, totalPrice, itemPrice, itemName,
    * return 으로 result pc 앱 결제 url 만 설정

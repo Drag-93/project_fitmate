@@ -1,12 +1,12 @@
 import React from 'react'
-import KakaoPaySuccess from '../../../components/store/payment/KaKaoPaySuccess'
+import PaymentSuccess from '../../../components/store/payment/PaymentSuccess'
 import "../../../components/css/store/payment/paymentSuccess.css"
 
 
 
 const PaymentSuccessPage = () => {
   return (
-    <KakaoPaySuccess />
+    <PaymentSuccess/>
   )
 }
 

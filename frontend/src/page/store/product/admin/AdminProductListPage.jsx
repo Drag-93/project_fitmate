@@ -57,7 +57,7 @@ const AdminProductListPage = () => {
 
   return (
     <div className="admin-product-page">
-      <h2>상품 관리</h2>
+      <h2 className="title">상품 관리</h2>
       <button className="admin-product-insert"
         onClick={() => navigate("/admin/product/insert")}
       >
