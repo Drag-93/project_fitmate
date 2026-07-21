@@ -1,8 +1,8 @@
-package org.spring.backend.admin.entity;
+package org.spring.backend.calendar.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.spring.backend.admin.dto.PersonalScheduleDto;
+import org.spring.backend.calendar.dto.PersonalScheduleDto;
 import org.spring.backend.file.entity.FileEntity;
 import org.spring.backend.member.entity.MemberEntity;
 
@@ -28,7 +28,7 @@ public class PersonalScheduleEntity {
     private String title;
 
     @Column
-    private String content;
+    private String description;
 
     // WORKOUT, PERSONAL
     @Column(nullable = false)
@@ -61,7 +61,7 @@ public class PersonalScheduleEntity {
     public static PersonalScheduleEntity toInsertPersonalScheduleEntity(PersonalScheduleDto dto,MemberEntity memberEntity) {
         return PersonalScheduleEntity.builder()
                 .title(dto.getTitle())
-                .content(dto.getContent())
+                .description(dto.getDescription())
                 .eventType(dto.getEventType())
                 .start(dto.getStart())
                 .end(dto.getEnd())
@@ -72,7 +72,7 @@ public class PersonalScheduleEntity {
     // 일정 수정용
     public void toUpdate(PersonalScheduleDto dto) {
         this.title = dto.getTitle();
-        this.content = dto.getContent();
+        this.description = dto.getDescription();
         this.eventType = dto.getEventType();
         this.start = dto.getStart();
         this.end = dto.getEnd();

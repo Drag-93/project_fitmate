@@ -2,7 +2,7 @@ package org.spring.backend.file.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.spring.backend.admin.entity.PersonalScheduleEntity;
+import org.spring.backend.calendar.entity.PersonalScheduleEntity;
 import org.spring.backend.common.BasicTime;
 import org.spring.backend.common.TableType;
 import org.spring.backend.community.entity.CommunityEntity;

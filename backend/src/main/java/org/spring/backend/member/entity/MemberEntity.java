@@ -1,7 +1,7 @@
 package org.spring.backend.member.entity;
 
 import jakarta.persistence.*;
-import org.spring.backend.admin.entity.PersonalScheduleEntity;
+import org.spring.backend.calendar.entity.PersonalScheduleEntity;
 import org.spring.backend.common.BasicTime;
 
 import lombok.AllArgsConstructor;
