@@ -356,7 +356,9 @@ const AdminMemberViewDetail = () => {
             <li>
               <button onClick={updateFn}>수정</button>
               <button onClick={deleteFn}>삭제</button>
-              <button onClick={() => navigate(-1)}>뒤로가기</button>
+              <button onClick={() => navigate("/admin/member")}>
+                뒤로가기
+              </button>
             </li>
           </ul>
         </div>
