@@ -12,7 +12,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class ProductsTest {
 
   @Autowired
@@ -73,7 +72,7 @@ public class ProductsTest {
   }
   @Test
   void insert4() {
-    for (int i = 9; i <10; i++) {
+    for (int i = 0; i <4; i++) {
 
       ProductEntity productEntity = ProductEntity.builder()
           .productName("프리미엄 구독" + i)

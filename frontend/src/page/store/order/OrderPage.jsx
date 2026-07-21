@@ -6,7 +6,7 @@ import BuyerInfo from "../../../components/store/order/BuyerInfo";
 import PaymentMethod from "../../../components/store/order/PaymentMethod";
 import OrderRight from "../../../components/store/order/OrderRight";
 import { useLocation } from 'react-router-dom';
-import "../../../components/css/store/order/OrderPage.css"
+import "../../../components/css/store/order/orderPage.css"
 
 const OrderPage = () => {
   const location = useLocation();
@@ -16,7 +16,7 @@ const OrderPage = () => {
     receiverAddress: "",
     deliveryMemo: ""
   });
-
+  const [payment, setPayment] = useState("kakao");
   const [memberInfo, setMemberInfo] = useState(null);
 
   useEffect(() => {
@@ -77,7 +77,9 @@ const OrderPage = () => {
             <BuyerInfo
               orderInfo={orderInfo}
               setOrderInfo={setOrderInfo} />
-            <PaymentMethod />
+            <PaymentMethod payment={payment}
+              setPayment={setPayment}
+            />
           </div>
 
           <div className="right">
@@ -89,6 +91,7 @@ const OrderPage = () => {
                   ? directItem.price * directItem.quantity
                   : totalPrice
               }
+              payment={payment}
             />
           </div>
         </div>

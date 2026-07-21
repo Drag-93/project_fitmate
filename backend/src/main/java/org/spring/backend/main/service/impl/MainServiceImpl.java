@@ -16,6 +16,7 @@ import org.spring.backend.main.service.MainService;
 import org.spring.backend.store.order.repository.OrderItemRepository;
 import org.spring.backend.store.product.dto.ProductDto;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -219,16 +220,51 @@ public class MainServiceImpl implements MainService {
     }
 
     // 관리자 팝업 전체 목록 조회
+//    @Transactional(readOnly = true)
+//    @Override
+//    public List<PopupDto> popupList() {
+//
+//        return popupRepository
+//                .findAll()
+//                .stream()
+//                .map(this::convertPopupDto)
+//                .toList();
+//    }
     @Transactional(readOnly = true)
     @Override
-    public List<PopupDto> popupList() {
+    public Page<PopupDto> popupList(Pageable pageable, String subject, String search) {
+        if(subject==null||subject.isBlank()||search==null||search.isBlank()){
+            return popupRepository.findAll(pageable).map(this::convertPopupDto);
+        }
+        //멤버리스트 검색필터링기능
+        //검색 변수
+        Page<PopupEntity> popupEntities;
+        switch (subject){
+            case "endDate"
+              ->popupEntities = popupRepository.findByEndDateContaining(pageable, search);
+            case "startDate"
+              ->  popupEntities =popupRepository.findByStartDateContaining(pageable, search);
+            case "title"
+                -> popupEntities = popupRepository.findByTitleContaining(pageable, search);
+            case "active" -> {
+                Boolean active = Boolean.parseBoolean(search);
+                popupEntities =popupRepository.findByActive(active,pageable);}
 
-        return popupRepository
-                .findAll()
-                .stream()
-                .map(this::convertPopupDto)
-                .toList();
+            case "sortOrder" -> {
+                try {
+                    Integer sortOrder = Integer.parseInt(search);
+                    popupEntities = popupRepository.findBySortOrder(sortOrder,pageable);
+                } catch (NumberFormatException e) {
+                    // sortOrder 검색값이 숫자가 아니면 빈 결과 반환
+                    popupEntities = Page.empty(pageable);
+                }
+            }
+            default -> popupEntities = popupRepository.findAll(pageable);
+        }
+        return popupEntities.map(this::convertPopupDto);
     }
+
+
 
     //팝업 상세 조회
     @Transactional(readOnly = true)
@@ -276,7 +312,7 @@ public class MainServiceImpl implements MainService {
     @Transactional
     @Override
     public void deletePopup(Long id) throws IOException {
-        System.out.println("백엔드 팝업 삭제 실행");
+//        System.out.println("백엔드 팝업 삭제 실행");
         PopupEntity popupEntity =
                 popupRepository
                         .findById(id)

@@ -1,5 +1,5 @@
 import React from 'react'
-import "../../../../components/css/store/product/admin/ProductAdmin.css";
+import "../../../../components/css/store/product/admin/productAdmin.css";
 
 
 const AdminProductDetailPage = () => {

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.spring.backend.store.cart.service.CartService;
+import org.spring.backend.store.order.dto.OrderItemDto;
 import org.spring.backend.store.order.entity.OrderEntity;
 import org.spring.backend.store.order.entity.OrderItemEntity;
 import org.spring.backend.store.order.repository.OrderRepository;
@@ -179,9 +180,13 @@ public class PaymentServiceImpl implements PaymentService {
     Long memberId = order.getMemberEntity().getId();
     int amount = order.getTotalPrice();
 
-    String productName = order.getOrderItemEntities()
-        .get(0)
-        .getProductName();
+    OrderItemEntity item = order.getOrderItemEntities().get(0);
+
+    String productName = item.getProductName();
+
+    if (productName == null) {
+      productName = item.getProductEntity().getProductName();
+    }
 
     RestTemplate restTemplate = new RestTemplate();
     String tid = paymentEntity.getTid();
@@ -249,9 +254,13 @@ public class PaymentServiceImpl implements PaymentService {
     int amount = orderEntity.getTotalPrice();
 
     // 첫 번째 상품명을 대표 상품명으로 사용
-    String productName = orderEntity.getOrderItemEntities()
-        .get(0)
-        .getProductName();
+    OrderItemEntity item = orderEntity.getOrderItemEntities().get(0);
+
+    String productName = item.getProductName();
+
+    if (productName == null) {
+      productName = item.getProductEntity().getProductName();
+    }
 
     // 1. 주문번호(ID) 발급을 위해 최소 정보로 최초 저장
     PaymentEntity paymentEntity = PaymentEntity.builder()
@@ -328,7 +337,6 @@ public class PaymentServiceImpl implements PaymentService {
     SubscriptionEntity subscription = SubscriptionEntity.builder()
         .memberEntity(order.getMemberEntity())
         .productEntity(product)
-        .productEntity(product)
         .subscriptionStatus(SubscriptionStatus.ACTIVE)
         .startDate(LocalDateTime.now())
         .endDate(
@@ -340,5 +348,36 @@ public class PaymentServiceImpl implements PaymentService {
         .build();
 
     subscriptionRepository.save(subscription);
+  }
+
+  public PaymentSuccessDto normalPayment(Long orderId) {
+
+    OrderEntity order = orderRepository.findById(orderId)
+        .orElseThrow(() -> new RuntimeException("주문을 찾을 수 없습니다."));
+
+    PaymentEntity payment = PaymentEntity.builder()
+        .paymentMethod(PaymentMethod.CARD)
+        .paymentStatus(PaymentStatus.SUCCESS)
+        .amount(order.getTotalPrice())
+        .orderEntity(order)
+        .build();
+
+    paymentRepository.save(payment);
+
+    List<OrderItemDto> orderItems = order.getOrderItemEntities()
+        .stream()
+        .map(OrderItemDto::toOrderItemDto)
+        .toList();
+
+    return PaymentSuccessDto.builder()
+        .productName(order.getOrderItemEntities().get(0).getProductName())
+        .amount(payment.getAmount())
+        .paymentMethod(payment.getPaymentMethod().name())
+        .productType(order.getOrderItemEntities()
+            .get(0)
+            .getProductEntity()
+            .getProductType())
+        .orderItems(orderItems)
+        .build();
   }
 }

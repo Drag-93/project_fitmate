@@ -10,7 +10,11 @@ const OrderDetail = ({ order }) => {
 
       <div className="order-info">
         <p>주문번호 : {order.id}</p>
-        <p>결제날짜 : {order.createTime?.substring(0, 10)}</p>
+        <p>결제일시 : {
+          order.createTime
+            ? new Date(order.createTime).toLocaleString("ko-KR")
+            : ""
+        }</p>
       </div>
 
       <h3>주문 상품</h3>
@@ -25,14 +29,14 @@ const OrderDetail = ({ order }) => {
         ))}
       </ul>
       <div className="buyer-info">
-      <h3>주문자 정보</h3>
+        <h3>주문자 정보</h3>
         <p>주문자 : {order.memberName}</p>
         <p>연락처 : {order.memberPhone}</p>
         <p>이메일 : {order.memberEmail}</p>
       </div>
 
       <div className="payment-info">
-      <h3>결제 정보</h3>
+        <h3>결제 정보</h3>
         <p>결제수단 : {order.paymentDto?.paymentMethod}</p>
         <p>총 결제금액 : {order.totalPrice?.toLocaleString()}원</p>
       </div>

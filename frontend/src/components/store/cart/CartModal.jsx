@@ -1,5 +1,5 @@
 import React from "react";
-import "../../css/store/cart/CartModal.css";
+import "../../css/store/cart/cartModal.css";
 
 const CartModal = ({
   onContinue,

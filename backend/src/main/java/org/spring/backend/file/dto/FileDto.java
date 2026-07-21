@@ -6,9 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.spring.backend.common.TableType;
 import org.spring.backend.community.entity.CommunityEntity;
+import org.spring.backend.file.entity.FileEntity;
 import org.spring.backend.main.entity.PopupEntity;
 import org.spring.backend.member.entity.MemberEntity;
 import org.spring.backend.store.product.entity.ProductEntity;
+import org.spring.backend.store.product.type.ImageType;
 
 import java.time.LocalDateTime;
 
@@ -31,7 +33,7 @@ public class FileDto {
 
     private LocalDateTime updateTime;
 
-    //각자 매핑했던 id, entity 불러오는용도
+    // 각자 매핑했던 id, entity 불러오는용도
     private Long memberId;
 
     private Long communityId;
@@ -47,4 +49,22 @@ public class FileDto {
     private ProductEntity productEntity;
 
     private PopupEntity popupEntity;
+
+    private ImageType imageType;
+
+    private int sortOrder;
+
+    public static FileDto toFileDto(FileEntity fileEntity) {
+
+        return FileDto.builder()
+                .id(fileEntity.getId())
+                .tableType(fileEntity.getTableType())
+                .newFileName(fileEntity.getNewFileName())
+                .oldFileName(fileEntity.getOldFileName())
+                .imageType(fileEntity.getImageType())
+                .sortOrder(fileEntity.getSortOrder())
+                .createTime(fileEntity.getCreateTime())
+                .updateTime(fileEntity.getUpdateTime())
+                .build();
+    }
 }

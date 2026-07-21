@@ -10,7 +10,24 @@ const BuyerInfo = ({ member, orderInfo, setOrderInfo }) => {
       [e.target.name]: e.target.value
     });
   };
+  const handleEditToggle = () => {
 
+    if (isEdit) { 
+      if (!orderInfo.receiverName?.trim()) {
+        alert("받는 분을 입력해주세요.");
+        return;
+      }
+      if (!orderInfo.receiverPhone?.trim()) {
+        alert("연락처를 입력해주세요.");
+        return;
+      }
+      if (!orderInfo.receiverAddress?.trim()) {
+        alert("주소를 입력해주세요.");
+        return;
+      }
+    }
+    setIsEdit(!isEdit);
+  };
 
   return (
     <div className="buyerInfo">
@@ -19,7 +36,7 @@ const BuyerInfo = ({ member, orderInfo, setOrderInfo }) => {
         배송 정보
         <button
           type="button"
-          onClick={() => setIsEdit(!isEdit)}
+          onClick={handleEditToggle}
         >
           {isEdit ? "완료" : "변경하기"}
         </button>

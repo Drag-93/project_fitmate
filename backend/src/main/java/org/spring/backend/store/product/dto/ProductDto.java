@@ -3,13 +3,13 @@ package org.spring.backend.store.product.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.spring.backend.file.dto.FileDto;
 import org.spring.backend.store.product.entity.ProductEntity;
 import org.spring.backend.store.product.type.BillingType;
 import org.spring.backend.store.product.type.ProductStatus;
 import org.spring.backend.store.product.type.ProductType;
 import org.springframework.web.multipart.MultipartFile;
 
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,7 +37,7 @@ public class ProductDto {
 
   private ProductStatus productStatus;
 
-  private List<ProductFileDto> productFileDtos;
+  private List<FileDto> fileDtos;
 
   private MultipartFile thumbnail;
 
@@ -64,11 +64,11 @@ public class ProductDto {
         .productType(productEntity.getProductType())
         .billingType(productEntity.getBillingType())
         .productStatus(productEntity.getProductStatus())
-        .productFileDtos(productEntity.getProductFileEntities() == null
+        .fileDtos(productEntity.getFileEntities() == null
             ? List.of()
-            : productEntity.getProductFileEntities()
+            : productEntity.getFileEntities()
                 .stream()
-                .map(ProductFileDto::toProductFileDto).toList())
+                .map(FileDto::toFileDto).toList())
         .createTime(productEntity.getCreateTime())
         .updateTime(productEntity.getUpdateTime())
         .category(productEntity.getCategory())

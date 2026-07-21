@@ -82,6 +82,8 @@ const CommonCalendar = ({
   onEventClick,
   // 날짜 클릭 시 부모 페이지에서 실행할 함수
   onDateClick,
+  // 날짜 선택 범위 제한가능한 옵션
+  validRange,
 }) => {
   // CalendarDto의 eventType에 따라 일정별 CSS 클래스 적용
   const getEventClassNames = (info) => {
@@ -116,6 +118,8 @@ const CommonCalendar = ({
         // 캘린더가 처음 열렸을 때 월간 화면 표시
         initialView="dayGridMonth"
         // 부모 페이지에서 전달받은 일정 목록
+        validRange={validRange}
+        // 날짜 선택 범위 제한 가능한 옵션
         events={events}
         // 일정 클릭 이벤트
         // 실제 상세 조회 또는 수정 모달 처리는 부모 페이지에서 담당

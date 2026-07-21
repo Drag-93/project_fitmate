@@ -2,6 +2,7 @@ package org.spring.backend.file.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.spring.backend.admin.entity.PersonalScheduleEntity;
 import org.spring.backend.common.BasicTime;
 import org.spring.backend.common.TableType;
 import org.spring.backend.community.entity.CommunityEntity;
@@ -60,4 +61,9 @@ public class FileEntity extends BasicTime {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "popup_id")
     private PopupEntity popupEntity;
+
+    //N:1 스케쥴
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "personalSchedule_id")
+    private PersonalScheduleEntity personalScheduleEntity;
 }

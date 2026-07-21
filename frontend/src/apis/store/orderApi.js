@@ -32,3 +32,14 @@ export const getOrderDetail = async(orderId)=>{
     `${API_SERVER_URL}/api/order/detail/${orderId}`);
   return res.data;
 }
+
+// PT / GYM / PREMIUM 주문 생성
+export const createMembershipOrder = async (data) => {
+
+  const res = await jwtAxios.post(
+    `${API_SERVER_URL}/api/order/subscription`,
+    data
+  );
+  console.log("주문 생성 응답:", res);
+  return res.data;
+};

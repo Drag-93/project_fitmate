@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import jwtAxios from "../../apis/util/jwtUtil";
 import { API_SERVER_URL } from "../../apis/commonApi";
+import PageGenerate from "../common/Page/PageGenerate";
 //초기값 선언
 const initState = {
   id: null,
@@ -18,7 +19,7 @@ const initState = {
 
 const AdminPopup = () => {
   // 팝업 목록
-  const [popupList, setPopupList] = useState([]);
+  // const [popupList, setPopupList] = useState([]);
 
   // 모달 입력값
   const [popup, setPopup] = useState({ ...initState });
@@ -33,16 +34,42 @@ const AdminPopup = () => {
   const [previewUrl, setPreviewUrl] = useState("");
 
   // 팝업 목록 조회
-  const getPopupList = async () => {
-    try {
-      const res = await jwtAxios.get(`${API_SERVER_URL}/admin/popupList`);
+  // const getPopupList = async () => {
+  //   try {
+  //     const res = await jwtAxios.get(`${API_SERVER_URL}/admin/popupList`);
 
-      setPopupList(res.data.result || []);
-    } catch (err) {
-      console.error("팝업 목록 조회 실패", err);
-    }
+  //     setPopupList(res.data.result || []);
+  //   } catch (err) {
+  //     console.error("팝업 목록 조회 실패", err);
+  //   }
+  // };
+
+  //팝업 공용 페이징 추가
+  const [popupData, setPopupData] = useState(null);
+  const [subject, setSubject] = useState("");
+  const [search, setSearch] = useState("");
+  const handleSearchSubmit = (e) => {
+    e.preventDefault(); // 폼 제출 시 페이지 새로고침 방지
+    getPopupList(subject, search, 0);
+    // 선택된 조건이 없거나 검색어가 비어있으면 전체 목록으로 이동하거나 알림 처리
+    // if (!subject && search) {
+    //   alert("검색 필터를 선택해주세요.");
+    //   return;
+    // }
   };
 
+  const getPopupList = async (subject, search, page) => {
+    //있을때나 없을때나 실행할수있게 설정
+    const url = `${API_SERVER_URL}/admin/popupList?page=${page}&size=5&subject=${subject ? subject : ""}&search=${encodeURIComponent(search ? search : "")}`;
+    try {
+      const res = await jwtAxios.get(url);
+      setPopupData(res.data);
+      // setPopupList(popupData.popupList);
+      console.log(res.data);
+    } catch (err) {
+      alert("에러발생 : " + err);
+    }
+  };
   //페이지 최초 실행 시 팝업 목록 조회
   useEffect(() => {
     getPopupList();
@@ -248,7 +275,32 @@ const AdminPopup = () => {
           팝업 등록
         </button>
       </div>
+      <div className="search">
+        <div className="filters">
+          <form onSubmit={handleSearchSubmit}>
+            <select
+              name="subject"
+              value={subject}
+              onChange={(e) => setSubject(e.target.value)}
+            >
+              <option value="">::선택::</option>
+              <option value="active">노출 여부</option>
+              <option value="sortOrder">노출 순서</option>
+              <option value="title">제목</option>
+            </select>
 
+            <input
+              type="text"
+              name="search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="검색어를 입력하세요"
+            />
+
+            <input type="submit" value="검색" />
+          </form>
+        </div>
+      </div>
       <div className="admin-popup-table-wrap">
         <table className="admin-popup-table">
           <thead>
@@ -265,14 +317,14 @@ const AdminPopup = () => {
           </thead>
 
           <tbody>
-            {popupList.length === 0 ? (
+            {popupData?.popupList.length === 0 ? (
               <tr>
                 <td colSpan={7} className="popup-empty">
                   등록된 팝업이 없습니다.
                 </td>
               </tr>
             ) : (
-              popupList.map((popup) => (
+              popupData?.popupList.map((popup) => (
                 <tr key={popup.id}>
                   <td>{popup.id}</td>
 
@@ -330,7 +382,19 @@ const AdminPopup = () => {
           </tbody>
         </table>
       </div>
-
+      <div className="admin-popup-bottom">
+        <div className="admin-popup-paging">
+          <PageGenerate
+            currentPage={popupData?.currentPage} //현재 페이지
+            startPage={popupData?.startPage} //시작 페이지
+            endPage={popupData?.endPage} //끝 페이지
+            totalPage={popupData?.totalPage} //전체 페이지
+            onPageChange={getPopupList} //리스트를 불러오는 함수
+            search={search} //검색어
+            subject={subject} //검색필터
+          />
+        </div>
+      </div>
       {modalOpen && (
         <div className="popup-modal-overlay" onClick={closeModal}>
           <div className="popup-modal" onClick={(e) => e.stopPropagation()}>

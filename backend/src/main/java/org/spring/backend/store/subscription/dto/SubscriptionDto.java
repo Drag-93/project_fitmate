@@ -4,8 +4,8 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Optional;
 
+import org.spring.backend.file.entity.FileEntity;
 import org.spring.backend.store.product.entity.ProductEntity;
-import org.spring.backend.store.product.entity.ProductFileEntity;
 import org.spring.backend.store.subscription.entity.SubscriptionEntity;
 import org.spring.backend.store.subscription.type.SubscriptionStatus;
 
@@ -51,11 +51,11 @@ public class SubscriptionDto {
         .productName(subscriptionEntity.getProductEntity().getProductName())
         .productImage(
             Optional.ofNullable(subscriptionEntity.getProductEntity())
-                .map(ProductEntity::getProductFileEntities)
+                .map(ProductEntity::getFileEntities)
                 .orElse(Collections.emptyList())
                 .stream()
                 .findFirst()
-                .map(ProductFileEntity::getNewFileName)
+                .map(FileEntity::getNewFileName)
                 .orElse(null))
         .build();
   }

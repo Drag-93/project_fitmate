@@ -1,6 +1,6 @@
 import React from 'react'
 import PaymentList from '../../../components/store/payment/PaymentList.jsx'
-import "../../../components/css/store/payment/PaymentList.css"
+import "../../../components/css/store/payment/paymentList.css"
 
 const PaymentListPage = () => {
   return (

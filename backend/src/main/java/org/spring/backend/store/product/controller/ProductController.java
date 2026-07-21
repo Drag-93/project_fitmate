@@ -39,9 +39,9 @@ public class ProductController {
   @PostMapping
   public ResponseEntity<Void> insertProduct(
       @RequestPart("productDto") ProductDto productDto,
-      @RequestPart(value="thumbnail", required=false) MultipartFile thumbnail,
-      @RequestPart(value="main", required=false) List<MultipartFile> main,
-      @RequestPart(value="details", required = false) List<MultipartFile> details) {
+      @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnail,
+      @RequestPart(value = "main", required = false) List<MultipartFile> main,
+      @RequestPart(value = "details", required = false) List<MultipartFile> details) {
     productService.insertProduct(productDto, thumbnail, main, details);
     return ResponseEntity.ok().build();
   }
@@ -51,9 +51,9 @@ public class ProductController {
   public ResponseEntity<Void> updateProduct(
       @PathVariable("productId") Long productId,
       @RequestPart("productDto") ProductDto productDto,
-      @RequestPart(value="thumbnail", required=false) MultipartFile thumbnail,
-      @RequestPart(value="main", required=false) List<MultipartFile> main,
-      @RequestPart(value="details", required = false) List<MultipartFile> details) {
+      @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnail,
+      @RequestPart(value = "main", required = false) List<MultipartFile> main,
+      @RequestPart(value = "details", required = false) List<MultipartFile> details) {
     productService.updateProduct(productId, productDto, thumbnail, main, details);
     return ResponseEntity.ok().build();
   }
@@ -65,22 +65,22 @@ public class ProductController {
     return ResponseEntity.ok().build();
   }
 
-  // 상품사진 전체 삭제
-  @DeleteMapping("/{productId}/images")
-  public ResponseEntity<Void> deleteAllImages(
-      @PathVariable("productId") Long productId) {
-
-    productService.deleteAllImages(productId);
-
-    return ResponseEntity.ok().build();
-  }
-
   // 상품 한장만 삭제
   @DeleteMapping("/image/{productFileId}")
   public ResponseEntity<Void> deleteImage(
       @PathVariable("productFileId") Long productFileId) {
 
     productService.deleteImage(productFileId);
+
+    return ResponseEntity.ok().build();
+  }
+
+  // 상품 이미지 전체 삭제
+  @DeleteMapping("/{productId}/images")
+  public ResponseEntity<Void> deleteImages(
+      @PathVariable("productId") Long productId) {
+
+    productService.deleteImages(productId);
 
     return ResponseEntity.ok().build();
   }

@@ -5,7 +5,7 @@ import { insertProduct } from "../../../../apis/store/productApi";
 
 import ProductForm from "../../../../components/store/product/admin/ProductForm";
 import ImageUpload from "../../../../components/store/product/admin/ImageUpload";
-import "../../../../components/css/store/product/admin/ProductAdmin.css";
+import "../../../../components/css/store/product/admin/productAdmin.css";
 
 
 
@@ -75,7 +75,7 @@ const AdminProductInsertPage = () => {
 
       alert("상품이 등록되었습니다.");
 
-      navigate("/store/admin/product");
+      navigate("/admin/product");
 
     } catch(e){
       console.error(e);

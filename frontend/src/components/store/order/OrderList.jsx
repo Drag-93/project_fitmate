@@ -54,7 +54,10 @@ const OrderList = ({ orders }) => {
                     : null;
 
                   return (
-                    <div className="order-content" key={item.id || item.productName}>
+                    <Link
+                      to={`/products/detail/${item.productId}`}
+                      className="order-content"
+                      key={item.id || item.productName}>
                       {/* 이미지가 있을 때만 렌더링 */}
                       {item?.productImage && (
                         <img
@@ -70,7 +73,7 @@ const OrderList = ({ orders }) => {
                           {item.price?.toLocaleString()}원
                         </p>
                       </div>
-                    </div>
+                    </Link>
                   );
                 })}
 

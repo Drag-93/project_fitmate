@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router-dom";
 
-import "../../../components/css/store/product/ProductCard.css"
+import "../../../components/css/store/product/productCard.css"
 
 const ProductCard = ({ product }) => {
 
   const navigate = useNavigate();
 
-  const thumbnail = product.productFileDtos?.find(
+  const thumbnail = product.fileDtos?.find(
     file => file.imageType === "THUMBNAIL"  
   );
 
@@ -14,8 +14,12 @@ const ProductCard = ({ product }) => {
     <div  className="product-card"
       onClick={() => navigate(`/products/detail/${product.id}`)}
     >
-      <img src={`http://localhost:8090${thumbnail?.newFileName}`} alt={product.productName} />
-
+      {thumbnail ? (<img
+            src={`http://localhost:8090/upload/product/${thumbnail.newFileName}`}
+            alt={product.productName}/>
+        ) : (
+          <div>이미지 없음</div>)}
+          
       <h3>{product.productName}</h3>
 
       <p>{product.price.toLocaleString()}원</p>

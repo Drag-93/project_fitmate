@@ -5,17 +5,14 @@ import {
   getProductDetail,
   updateProduct,
   deleteImage,
-  deleteAllImages
+  deleteAllImages,
 } from "../../../../apis/store/productApi";
 
 import ProductForm from "../../../../components/store/product/admin/ProductForm";
 import ImageUpload from "../../../../components/store/product/admin/ImageUpload";
-import "../../../../components/css/store/product/admin/ProductAdmin.css";
-
-
+import "../../../../components/css/store/product/admin/productAdmin.css";
 
 const AdminProductUpdatePage = () => {
-
   const { productId } = useParams();
   const navigate = useNavigate();
 
@@ -24,7 +21,7 @@ const AdminProductUpdatePage = () => {
   const [images, setImages] = useState({
     thumbnail: null,
     main: [],
-    details: []
+    details: [],
   });
 
   useEffect(() => {
@@ -32,9 +29,9 @@ const AdminProductUpdatePage = () => {
   }, []);
 
   const loadProduct = async () => {
-
     try {
       const res = await getProductDetail(productId);
+
       setProduct(res.data);
     } catch (e) {
       console.error(e);
@@ -43,10 +40,8 @@ const AdminProductUpdatePage = () => {
 
   // 이미지 추가
   const handleImageChange = (imageData) => {
-
     setImages(imageData);
   };
-
 
   // 이미지 개별 삭제
   const handleDeleteImage = async (fileId) => {
@@ -54,124 +49,94 @@ const AdminProductUpdatePage = () => {
       await deleteImage(fileId);
       alert("이미지가 삭제되었습니다.");
       loadProduct();
-    } catch(e) {
+    } catch (e) {
       console.error(e);
     }
   };
 
   // 이미지 전체 삭제
   const handleDeleteAllImages = async () => {
-
-    if(!window.confirm("모든 이미지를 삭제하시겠습니까?")){
+    if (!product.fileDtos || product.fileDtos.length === 0) {
+      alert("등록된 이미지가 없습니다.");
+      return;
+    }
+    if (!window.confirm("모든 이미지를 삭제하시겠습니까?")) {
       return;
     }
     try {
       await deleteAllImages(productId);
+      setProduct((prev) => ({
+        ...prev,
+        fileDtos: [],
+      }));
       alert("전체 삭제되었습니다.");
-      loadProduct();
-    } catch(e){
+    } catch (e) {
       console.error(e);
     }
   };
 
-
   // 수정
-  const handleSubmit = async(formData) => {
-
+  const handleSubmit = async (formData) => {
     const data = new FormData();
 
     data.append(
       "productDto",
-      new Blob(
-        [JSON.stringify(formData)],
-        {
-          type:"application/json"
-        }
-      )
+      new Blob([JSON.stringify(formData)], {
+        type: "application/json",
+      }),
     );
 
-    if(images.thumbnail){
-      data.append(
-        "thumbnail",
-        images.thumbnail
-      );
+    if (images.thumbnail) {
+      data.append("thumbnail", images.thumbnail);
     }
 
-    images.main.forEach(file => {
-      data.append(
-        "main",
-        file
-      );
+    images.main.forEach((file) => {
+      data.append("main", file);
     });
 
-    images.details.forEach(file => {
-      data.append(
-        "details",
-        file
-      );
+    images.details.forEach((file) => {
+      data.append("details", file);
     });
 
     try {
-      await updateProduct(
-        productId,
-        data
-      );
+      await updateProduct(productId, data);
       alert("수정되었습니다.");
-      navigate("/store/admin/product");
-
-    }catch(e){
+      navigate("/admin/product");
+    } catch (e) {
       console.error(e);
       alert("수정 실패");
     }
   };
 
-  if(!product){
+  if (!product) {
     return <div>Loading...</div>;
   }
 
   return (
     <div className="admin-product-update">
       <h2> 상품 수정 </h2>
-      <ProductForm
-        product={product}
-        onSubmit={handleSubmit}
-      />
+      <ProductForm product={product} onSubmit={handleSubmit} />
 
-      <ImageUpload
-        onChange={handleImageChange}
-      />
+      <ImageUpload onChange={handleImageChange} />
 
       <div>
-        <button
-          onClick={handleDeleteAllImages}
-        >
-          이미지 전체 삭제
-        </button>
+        <button onClick={handleDeleteAllImages}>이미지 전체 삭제</button>
       </div>
 
       <div className="image-list">
-        {
-          product.productFileDtos?.map(file => (
-            <div key={file.id}>
-              <img
-                src={file.newFileName}
-                width="100"
-              />
+        {product.fileDtos?.map((file) => (
+          <div key={file.id}>
+            <img
+              src={`http://localhost:8090/upload/product/${file.newFileName}`}
+              width="100"
+            />
 
-              <button
-                onClick={() =>
-                  handleDeleteImage(file.id)
-                }
-              >
-                삭제
-              </button>
-            </div>
-          ))
-        }
+            <button onClick={() => handleDeleteImage(file.id)}>삭제</button>
+          </div>
+        ))}
       </div>
     </div>
   );
 };
-
 
 export default AdminProductUpdatePage;

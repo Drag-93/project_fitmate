@@ -1,3 +1,5 @@
+@import "../../../css/common/reset.css";
+
 /* 주문 페이지 전체 레이아웃 */
 .orderPage {
   width: 100%;

@@ -31,6 +31,7 @@ public interface PaymentService {
   // 카카오 결제 준비 요청 (v1/payment/ready)
   String pgRequest(String pg, Long orderId);
 
-
+  // 일반결제 성공
+  public PaymentSuccessDto normalPayment(Long orderId);
 
 }

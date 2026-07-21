@@ -5,7 +5,7 @@ import { addCart } from "../../../apis/store/cartApi";
 import { getCookie } from "../../../apis/util/cookieUtil";
 
 
-import "../../../components/css/store/product/ProductDetailPage.css";
+import "../../../components/css/store/product/productDetailPage.css";
 import ProductDetail from "../../../components/store/product/ProductDetail";
 import CartModal from "../../../components/store/cart/CartModal";
 
@@ -70,8 +70,8 @@ const ProductDetailPage = () => {
       alert("로그인이 필요합니다.");
       navigate("/auth/login", {
         state: {
-          from: location.pathname + location.search
-        }
+          from: location.pathname + location.search,
+        },
       });
       return;
     }
@@ -81,32 +81,27 @@ const ProductDetailPage = () => {
       productId: product.id,
       productName: product.productName,
       price: product.price,
-      productImage: product.productFileDtos.find(
+      productImage: product.fileDtos.find(
         file => file.imageType === "THUMBNAIL"
       )?.newFileName,
-      quantity: product.productType === "GOODS"
-        ? quantity
-        : 1};
+      quantity: product.productType === "GOODS" ? quantity : 1
+    };
 
     if (product.productType === "GOODS") {
       navigate("/order", {
         state: {
           directItem
-        }});
-    } else if (
-      product.productType === "PT" ||
-      product.productType === "GYM"
-    ) {
-      navigate("/fitness/order", {
+        }
+      });
+    } else {
+      // PT / GYM / PREMIUM 공통
+      navigate("/order/membership", {
         state: {
-          product
-        }});
-    } else if (product.productType === "PREMIUM") {
-      navigate("/membership/order", {
-        state: {
-          product
-        }});
-    }};
+          product,
+        },
+      });
+    }
+  };
 
   if (!product) return <div>Loading...</div>;
 

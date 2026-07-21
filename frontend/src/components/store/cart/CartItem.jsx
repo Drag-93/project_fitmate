@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import ConfirmModal from "./ConfirmModal";
 
 const CartItem = ({
@@ -9,7 +10,7 @@ const CartItem = ({
   removeItem
 }) => {
   const [showModal, setShowModal] = useState(false);
-  
+
   return (
     <div className="cart-item">
       <input
@@ -19,9 +20,21 @@ const CartItem = ({
           onSelect(item.id, e.target.checked)
         }
       />
-      <img className="productImage"
-        src={`http://localhost:8090/upload/product/${item.productImage}`}
-        alt={item.productName} />
+      <Link to={`/products/detail/${item.productId}`}>
+        {item.productImage ? (
+          <img
+            className="productImage"
+            src={`http://localhost:8090/upload/product/${item.productImage}`}
+            alt={item.productName}
+          />
+
+        ) : (
+          <div className="productImage no-image">
+            이미지 없음
+          </div>
+        )}
+      </Link>
+      
       <div>
         <h3 className="productName">
           {item.productName}

@@ -17,7 +17,8 @@ const MemberDetail = () => {
 
   //member의 userEmail여부로 로그인이 되었는지 확인
   const isLogin = !!memberData?.result?.userEmail;
-
+  // 트레이너 여부
+  const isTrainer = memberData?.result?.role === "TRAINER";
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -192,21 +193,38 @@ const MemberDetail = () => {
                     <span>구독여부</span>
                     <span>{member.subscribe}</span>
                   </li>
-                  <li>
-                    <span>
-                      <Link to="/order/list">주문/결제</Link>
-                    </span>
-                  </li>
-                  <li>
-                    <span>
-                      <Link to="/mypage/">구독 관리</Link>
-                    </span>
-                  </li>
-                  <li>
-                    <span>
-                      <Link to="/mypage/">운동 관리</Link>
-                    </span>
-                  </li>
+                  {
+                    isTrainer ? (
+                      <>
+                        <li>
+                          <Link to="/reservation/trainer">
+                            PT 관리
+                          </Link>
+                        </li>
+                      </>
+                    ) : (
+                      <>
+                        <li>
+                          <Link to="/order/list">
+                            주문/결제
+                          </Link>
+                        </li>
+
+                        <li>
+                          <Link to="/subscription/list">
+                            FitMate Plus+
+                          </Link>
+                        </li>
+
+                        <li>
+                          <Link to="/reservation/member">
+                            이용권 관리
+                          </Link>
+                        </li>
+                      </>
+                    )
+                  }
+
                   <li className="buttonArea">
                     <button
                       className="pwBtn"

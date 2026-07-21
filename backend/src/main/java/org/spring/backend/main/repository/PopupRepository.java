@@ -1,6 +1,8 @@
 package org.spring.backend.main.repository;
 
 import org.spring.backend.main.entity.PopupEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -19,6 +21,16 @@ public interface PopupRepository extends JpaRepository<PopupEntity, Long> {
         ORDER BY p.sortOrder ASC
     """)
     List<PopupEntity> findActivePopup(LocalDateTime now);
+
+    Page<PopupEntity> findByEndDateContaining(Pageable pageable, String search);
+
+    Page<PopupEntity> findByStartDateContaining(Pageable pageable, String search);
+
+    Page<PopupEntity> findByTitleContaining(Pageable pageable, String search);
+
+    Page<PopupEntity> findByActive(Boolean active, Pageable pageable);
+
+    Page<PopupEntity> findBySortOrder(Integer sortOrder, Pageable pageable);
 
 // Popup 조회 흐름
 // 1. 현재 시간(LocalDateTime.now())을 기준으로 조회

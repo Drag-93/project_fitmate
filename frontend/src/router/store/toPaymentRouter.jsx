@@ -1,4 +1,5 @@
 import React, { lazy, Suspense } from "react";
+import KakaoPayApproval from "../../components/store/payment/KakaoPayApproval";
 
 const Loading = <div className="loading">...Loading</div>;
 
@@ -27,7 +28,17 @@ const toPaymentRouter = () => {
       ),
     },
     {
+      // 카카오 결제 승인 처리
       path: "approval/:paymentId",
+      element: (
+        <Suspense fallback={Loading}>
+          <KakaoPayApproval />
+        </Suspense>
+      ),
+    },
+    // 모든 결제 완료 화면
+    {
+      path: "success",
       element: (
         <Suspense fallback={Loading}>
           <PaymentSuccessPage />

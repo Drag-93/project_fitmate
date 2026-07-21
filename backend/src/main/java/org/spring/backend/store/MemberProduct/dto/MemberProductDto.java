@@ -3,9 +3,9 @@ package org.spring.backend.store.MemberProduct.dto;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import org.spring.backend.file.entity.FileEntity;
 import org.spring.backend.store.MemberProduct.entity.MemberProductEntity;
 import org.spring.backend.store.product.entity.ProductEntity;
-import org.spring.backend.store.product.entity.ProductFileEntity;
 
 import java.util.Collections;
 import lombok.AllArgsConstructor;
@@ -58,11 +58,11 @@ public class MemberProductDto {
         .productType(
             product.getProductType().name())
         .productImage(
-            Optional.ofNullable(product.getProductFileEntities())
+            Optional.ofNullable(product.getFileEntities())
                 .orElse(Collections.emptyList())
                 .stream()
                 .findFirst()
-                .map(ProductFileEntity::getNewFileName)
+                .map(FileEntity::getNewFileName)
                 .orElse(null))
         .startDate(memberProductEntity.getStartDate())
         .endDate(memberProductEntity.getEndDate())

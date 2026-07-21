@@ -10,6 +10,11 @@ const AdminMemberDetailPage = lazy(
   () => import("../page/admin/AdminMemberDetailPage"),
 );
 
+const AdminProductListPage = lazy(() => import("../page/store/product/admin/AdminProductListPage"));
+const AdminProductUpdatePage = lazy(() => import("../page/store/product/admin/AdminProductUpdatePage"));
+const AdminProductInsertPage = lazy(() => import("../page/store/product/admin/AdminProductInsertPage"));
+const AdminProductDetailPage = lazy(() => import("../page/store/product/admin/AdminProductDetailPage"));
+
 const toAdminRouter = () => {
   return [
     {
@@ -73,6 +78,44 @@ const toAdminRouter = () => {
           <AdminMemberDetailPage />
         </Suspense>
       ),
+    },
+    {
+      path: "product",
+      element: (
+        <Suspense fallback={Loading}>
+          <AdminProductListPage />
+        </Suspense>
+      ),
+    },
+    {
+      path: "order",
+      element: (
+        <Suspense fallback={Loading}>
+          <AdminProductListPage />
+        </Suspense>
+      ),
+    },
+    {
+      path: "product/update/:productId",
+      element: (
+        <Suspense fallback={Loading}>
+          <AdminProductUpdatePage />
+        </Suspense>
+      ),
+    },
+    {
+      path: "product/insert",
+      element: (
+        <Suspense fallback={Loading}>
+          <AdminProductInsertPage />
+        </Suspense>),
+    },
+    {
+      path: "product/detail/:productId",
+      element: (
+        <Suspense fallback={Loading}>
+          <AdminProductDetailPage />
+        </Suspense>),
     },
   ];
 };

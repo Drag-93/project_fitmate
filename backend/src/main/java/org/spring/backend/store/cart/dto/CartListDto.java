@@ -49,7 +49,7 @@ public class CartListDto {
         .price(cartListEntity.getProductEntity().getPrice())
         .productImage(
           cartListEntity.getProductEntity()
-          .getProductFileEntities()
+          .getFileEntities()
           .stream()
           .filter(file -> file.getImageType() == ImageType.THUMBNAIL)
           .findFirst()

@@ -19,22 +19,7 @@ const toStoreRouter = () => {
       path: "index",
       element: <StoreIndexPage />,
     },
-    {
-      path: "admin/product",
-      element: <AdminProductListPage />,
-    },
-    {
-      path: "admin/product/update/:productId",
-      element: <AdminProductUpdatePage />,
-    },
-    {
-      path: "admin/product/insert",
-      element: <AdminProductInsertPage />,
-    },
-    {
-      path: "admin/product/detail/:productId",
-      element: <AdminProductDetailPage />,
-    },
+
   ];
 };
 
