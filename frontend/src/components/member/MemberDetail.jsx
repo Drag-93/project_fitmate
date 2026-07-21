@@ -7,7 +7,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { logout, logoutAsync } from "../../store/slices/loginSlice";
 
 import "../css/member/memberDetail.css";
-import { checkEmail, memberUpdate } from "../../apis/member/memberApi";
 import MemberDetailUpdateView from "./detailComponents/MemberDetailUpdateView";
 import MemberDetailView from "./detailComponents/MemberDetailView";
 
