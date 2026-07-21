@@ -5,6 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -25,4 +27,14 @@ public interface MemberRepository extends JpaRepository<MemberEntity, Long> {
     Page<MemberEntity> findAll(Pageable pageable);
 
     Page<MemberEntity> findByRoleContaining(Pageable pageable, String search);
+
+    //memberAddEntity에 1:1로 매칭되어 저장된 관심사 가져오는 함수
+    @Query(value = "SELECT m FROM MemberEntity m " +
+            "INNER JOIN FETCH m.memberAddEntity a " +
+            "WHERE a.interest LIKE CONCAT('%', :search, '%')",
+            //기존 JPA문처럼 count(총합 수)를 가져올수 없기때문에 따로 쿼리문으로 불러옴
+            countQuery = "SELECT count(m) FROM MemberEntity m " +
+                    "INNER JOIN m.memberAddEntity a " +
+                    "WHERE a.interest LIKE CONCAT('%', :search, '%')")
+    Page<MemberEntity> findByInterest(Pageable pageable, @Param("search") String search);
 }

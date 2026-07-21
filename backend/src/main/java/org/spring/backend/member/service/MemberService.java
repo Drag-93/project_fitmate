@@ -14,9 +14,16 @@ public interface MemberService {
 
     List<MemberDto> memberList();
 
+    //관리자페이지 회원관리 시 사용할 멤버리스트
     Page<MemberDto> memberList(Pageable pageable, String subject, String search);
+    //트레이너 회원관리 시 사용할 멤버리스트
+    Page<MemberDto> memberListSummary(Pageable pageable, String subject, String search);
 
+    //관리자페이지 회원관리 시 사용할 정보 조회
     MemberDto memberDetail(Long id);
+
+    //트레이너의 회원관리 시 사용할 정보 조회(제한된 정보)
+    MemberDto memberSummary(Long id);
 
     //멤버 개인페이지 조회 시 사용할 정보 조회
     MemberDto memberDetail(String userEmail);

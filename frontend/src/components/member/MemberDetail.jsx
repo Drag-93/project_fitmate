@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { logout, logoutAsync } from "../../store/slices/loginSlice";
 
 import "../css/member/memberDetail.css";
+import { checkEmail, memberUpdate } from "../../apis/member/memberApi";
 
 const API_URL = API_SERVER_URL;
 
@@ -47,12 +48,12 @@ const MemberDetail = () => {
   };
 
   //멤버 수정버튼 클릭시 상태값이 서로 반전되고, 수정를 실행하는 함수
-  const memberUpdateFn = () => {
+  const updateFn = () => {
     if (!isUpdate) {
       setIsUpdate((prev) => !prev);
       setUpdateData({ ...member, userPw: "" });
     } else {
-      memberUpdate();
+      memberUpdateFn();
     }
   };
 
@@ -71,73 +72,39 @@ const MemberDetail = () => {
   };
 
   //멤버수정 비동기 함수
-  const memberUpdate = async () => {
-    if (!confirm("회원수정을 하시겠습니까?")) return;
-    try {
-      //이메일 형식에 맞지않는지 체크
-      if (!emailRegex.test(updateData.userEmail.trim())) {
-        alert("이메일 형식이 올바르지 않습니다.");
+  const memberUpdateFn = async () => {
+    //이메일 변경감지를 위해 원본데이터와 바꾼데이터를 비교
+    const emailChanged = member.userEmail !== updateData.userEmail;
+    //만약 기존 이메일의 변경이 있었다면 이메일중복체크
+    if (emailChanged) {
+      const emailCheckResult = await checkEmail(
+        updateData.userEmail,
+        emailRegex,
+      );
+      if (emailCheckResult) {
+        alert("이메일이 중복되었습니다.");
         return;
       }
-      if (!updateData.userName) {
-        alert("이름을 입력해주세요");
-        return;
-      }
-
-      //file정보 가져오기
-      const fileInput = document.getElementById("memberFile");
-      const file = fileInput?.files[0];
-
-      const sendData = new FormData();
-
-      Object.keys(updateData).forEach((key) => {
-        // 값의 유무 체크 후 추가 (null 반환 방지)
-        if (updateData[key] !== null && updateData[key] !== undefined) {
-          sendData.append(key, updateData[key]);
-        }
-      });
-      //파일이 존재할때만 FormData에 memberFile이름으로 추가
-      if (file) {
-        sendData.append("memberFile", file);
-      }
-
-      const res = await jwtAxios.put(`${API_URL}/api/member/update`, sendData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      // console.log(res);
-      if (res.status === 200) {
-        try {
-          const newData = await getMemberDetail();
-          if (newData && newData.result) {
-            setMember(newData.result);
-          }
-        } catch (err) {
-          console.error("최신 회원 정보 가져오기 실패:", err);
-        }
-        if (updateData.userEmail !== member.userEmail) {
-          logoutFn();
-          alert("이메일 변경확인. 다시 로그인 해주시기 바랍니다.");
-          navigate("/auth/login");
-        } else {
-          alert("회원수정에 성공하였습니다.");
-          setIsUpdate((prev) => !prev);
-        }
-      } else {
-        alert("회원수정 실패");
-      }
-    } catch (err) {
-      console.log(err);
-      alert("회원수정중 오류가 발생했습니다.");
     }
+    //이메일 변경 함수 실행
+    memberUpdate({
+      memberData: updateData,
+      navigate,
+      redirectUrl: "/mypage", // 성공 시 바로 이동할 주소 주입
+      apiUrl: API_SERVER_URL,
+      onRefresh: async () => {
+        const newData = await getMemberDetail();
+        if (newData && newData.result) setMember(newData.result);
+      },
+      onLogout: logoutFn,
+      onSuccessToggle: () => setIsUpdate((prev) => !prev),
+    });
   };
   const logoutFn = async () => {
     //기존 그냥 로그아웃함수만 불러오던것 -> 비동기청크로 실제 customLogoutFilter를 거칠수있게 설정
     try {
       //로그아웃이 될때까지 기다림
       await dispatch(logoutAsync()).unwrap();
-      alert("로그아웃 되었습니다.");
       navigate("/");
     } catch (error) {
       //로그아웃api가 실패하거나 서버가 다운되어있으면 로그를 남기고, 멤버쿠키만 제거하는 기존 로그아웃으로 진행
@@ -251,7 +218,7 @@ const MemberDetail = () => {
                     >
                       비밀번호변경
                     </button>
-                    <button className="updateBtn" onClick={memberUpdateFn}>
+                    <button className="updateBtn" onClick={updateFn}>
                       개인정보수정
                     </button>
                     <button className="deleteBtn" onClick={memberDelete}>
