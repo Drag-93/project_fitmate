@@ -107,7 +107,7 @@ public class MemberServiceImpl implements MemberService {
     public MemberDto memberDetail(String userEmail) {
         MemberEntity memberEntity = memberRepository.findByUserEmail(userEmail)
                 .orElseThrow(()->new NoSuchElementException("회원아이디 없음"));
-        return MemberDto.toMemberDto(memberEntity);
+        return MemberDto.toMemberDtoSummary(memberEntity);
     }
 
     @Transactional

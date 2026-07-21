@@ -101,6 +101,7 @@ public class MemberDto {
             .userEmail(memberEntity.getUserEmail())
             .userName(memberEntity.getUserName())
             .userPhone(memberEntity.getUserPhone())
+            .userAddress(memberEntity.getUserAddress())
             .subscribe(memberEntity.getSubscribe())
             .profilePhoto(memberEntity.getProfilePhoto())
             .role(memberEntity.getRole())

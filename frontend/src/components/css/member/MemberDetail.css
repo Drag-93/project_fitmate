@@ -1,267 +1,314 @@
-.memberDetail {
-  width: 100%;
-  min-height: 100vh;
-  background: #f5f6fa;
+/* ==========================================
+   1. 전체 컨테이너 및 섹션 공통
+   ========================================== */
+.memberDetailContainer,
+.memberUpdateContainer {
+  max-width: 768px;
+  margin: 0 auto;
+  padding: 24px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.infoSection {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.infoSection h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #343a40;
+  margin-top: 0;
+  margin-bottom: 16px;
+  border-bottom: 2px solid #dee2e6;
+  padding-bottom: 8px;
+}
+
+/* ==========================================
+   2. 프로필 상단 영역 (사진 & 이름)
+   ========================================== */
+.profileHeader {
   display: flex;
-  justify-content: center;
   align-items: center;
-  padding: 60px 20px;
-  box-sizing: border-box;
+  gap: 20px;
+  padding-bottom: 24px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #f1f3f5;
 }
 
-.memberDetail-con {
-  width: 100%;
-  max-width: 700px;
+.profilePhotoEdit,
+.profilePhoto {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
 
-.memberInfo {
-  background: #fff;
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-  padding: 50px;
+.profile-preview img,
+.profilePhoto img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #e9ecef;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.memberForm {
+.profileName h1 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #212529;
+  margin: 0 0 6px 0;
+}
+
+.subscribeBadge {
+  display: inline-block;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 20px;
+  background-color: #e7f5ff;
+  color: #1c7ed6;
+}
+
+/* 파일 업로드 버튼 커스텀 */
+.fileInputArea input[type="file"] {
+  display: none;
+}
+
+.fileLabel {
+  display: inline-block;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #495057;
+  background-color: #e9ecef;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.fileLabel:hover {
+  background-color: #dee2e6;
+}
+
+/* ==========================================
+   3. 정보 그리드 (일반 조회 / 수정 폼 공통)
+   ========================================== */
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2열 배치 */
+  gap: 16px 20px;
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.memberForm > .memberTitle {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-bottom: none; /* 필요 없으면 제거 */
-}
-
-.memberTitle h1 {
-  width: 100%;
-  text-align: center;
-  font-size: 32px;
-  color: #333;
-}
-
-/* 제목 */
-
-.memberTitle {
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.memberTitle h1 {
-  font-size: 32px;
-  color: #333;
-}
-
-.memberTitle input {
-  width: 250px;
-  text-align: center;
-  font-size: 30px;
-  border: none;
-  border-bottom: 2px solid #3f72af;
-  outline: none;
-  padding: 8px;
-}
-
-/* 프로필 */
-
-.profilePhoto {
+.infoGrid li {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 18px;
-  margin-bottom: 35px;
-  padding: 30px 0;
 }
 
-.profilePhoto > span:first-child {
-  font-size: 18px;
+.infoGrid li.fullWidth {
+  grid-column: span 2; /* 주소 등 길게 사용할 항목 */
+}
+
+/* 일반 보기 모드 텍스트 */
+.infoGrid .label {
+  font-size: 12px;
   font-weight: 600;
-  color: #555;
+  color: #868e96;
+  margin-bottom: 4px;
 }
 
-.profile-preview {
-  width: 180px;
-  height: 180px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.profilePhoto img,
-.prev-img {
-  width: 180px;
-  height: 180px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 4px solid #ddd;
-}
-
-.prev-img {
-  background: #f8f8f8;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-}
-
-.profilePhoto input[type="file"] {
-  width: 260px;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background: #fff;
-  cursor: pointer;
-}
-
-/* 파일 선택 버튼 */
-
-.profilePhoto input[type="file"]::file-selector-button {
-  background: #3f72af;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  padding: 8px 15px;
-  margin-right: 12px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.profilePhoto input[type="file"]::file-selector-button:hover {
-  background: #2d5f96;
-}
-
-/* 정보 */
-
-.memberForm > li {
-  display: flex;
-  align-items: center;
-  padding: 18px 0;
-  border-bottom: 1px solid #eee;
-}
-
-.memberForm > li > span:first-child {
-  width: 130px;
-  font-weight: bold;
-  color: #555;
-}
-
-.memberForm > li > span:last-child {
-  flex: 1;
-  color: #333;
+.infoGrid .value {
+  font-size: 15px;
+  font-weight: 500;
+  color: #212529;
   word-break: break-all;
 }
 
-/* input */
+/* 수정 모드 Input 필드 */
+.infoGrid label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 6px;
+}
 
-.updateMode input[type="text"],
-.updateMode input[type="email"] {
+.infoGrid input[type="text"],
+.infoGrid input[type="email"],
+.infoGrid input[type="number"] {
   width: 100%;
-  padding: 10px 15px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 15px;
-  transition: 0.3s;
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
   box-sizing: border-box;
-}
-
-.updateMode input:focus {
-  border-color: #3f72af;
   outline: none;
-  box-shadow: 0 0 5px rgba(63, 114, 175, 0.3);
+  transition: border-color 0.2s;
 }
 
-/* 버튼 */
+.infoGrid input:focus {
+  border-color: #339af0;
+  box-shadow: 0 0 0 3px rgba(51, 154, 240, 0.15);
+}
 
+/* ==========================================
+   관심사 Dropdown (<select>) 전용 스타일
+   ========================================== */
+.infoGrid select {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  color: #212529;
+  background-color: #ffffff;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  box-sizing: border-box;
+  outline: none;
+  cursor: pointer;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+
+  /* 기본 화살표 디자인 깔끔하게 가다듬기 */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%3868e96' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 36px; /* 화살표와 텍스트 겹침 방지 */
+}
+
+/* 포커스 되었을 때 (클릭 시) */
+.infoGrid select:focus {
+  border-color: #339af0;
+  box-shadow: 0 0 0 3px rgba(51, 154, 240, 0.15);
+}
+
+/* 옵션(드롭다운 리스트) 스타일 */
+.infoGrid select option {
+  padding: 8px;
+  color: #212529;
+  background-color: #ffffff;
+}
+
+/* 선택 안 되었을 때("없음" 또는 비어있을 때) 글자색 옅게 처리 */
+.infoGrid select[value=""] {
+  color: #868e96;
+}
+
+/* ==========================================
+   4. 빠른 바로가기 링크 (일반 보기 모드 전용)
+   ========================================== */
+.linkList {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.linkList a {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #ffffff;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  color: #495057;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.linkList a:hover {
+  background-color: #f1f3f5;
+  color: #212529;
+}
+
+/* ==========================================
+   5. 하단 버튼 영역 (공통)
+   ========================================== */
 .buttonArea {
-  display: flex !important;
-  justify-content: center;
-  gap: 15px;
-  border: none !important;
-  margin-top: 35px;
-  padding-top: 25px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #f1f3f5;
 }
 
 .buttonArea button {
-  min-width: 120px;
-  padding: 12px 18px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 15px;
+  padding: 10px 18px;
+  font-size: 14px;
   font-weight: 600;
-  transition: 0.25s;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    transform 0.1s;
 }
 
-/* 조회 */
-
-.pwBtn {
-  background: #6c757d;
-  color: #fff;
+.buttonArea button:active {
+  transform: scale(0.98);
 }
 
-.pwBtn:hover {
-  background: #5b6268;
-}
-
-.updateBtn {
-  background: #3f72af;
-  color: #fff;
-}
-
-.updateBtn:hover {
-  background: #2d5f96;
-}
-
-/* 수정 */
-
+/* 버튼 개별 색상 지정 */
+.scheduleBtn,
 .saveBtn {
-  background: #28a745;
-  color: #fff;
+  background-color: #339af0;
+  color: #ffffff;
 }
 
+.scheduleBtn:hover,
 .saveBtn:hover {
-  background: #1f8a39;
+  background-color: #228be6;
 }
 
+.pwBtn,
+.updateBtn,
 .cancelBtn {
-  background: #ffc107;
-  color: #333;
+  background-color: #f1f3f5;
+  color: #495057;
 }
 
+.pwBtn:hover,
+.updateBtn:hover,
 .cancelBtn:hover {
-  background: #e6ad05;
+  background-color: #e9ecef;
 }
-
-/* 공통 */
 
 .deleteBtn {
-  background: #dc3545;
-  color: #fff;
+  background-color: #ffc9c9;
+  color: #c92a2a;
 }
 
 .deleteBtn:hover {
-  background: #bb2231;
+  background-color: #ffa8a8;
 }
 
-/* 반응형 */
-
-@media (max-width: 768px) {
-  .memberInfo {
-    padding: 30px 20px;
+/* 모바일 대응 (반응형) */
+@media (max-width: 576px) {
+  .infoGrid {
+    grid-template-columns: 1fr; /* 모바일에선 1열로 세로 정렬 */
   }
-
-  .memberForm > li {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
+  .infoGrid li.fullWidth {
+    grid-column: span 1;
   }
-
-  .memberForm > li > span:first-child {
-    width: 100%;
-  }
-
   .buttonArea {
     flex-direction: column;
   }
-
   .buttonArea button {
     width: 100%;
   }
