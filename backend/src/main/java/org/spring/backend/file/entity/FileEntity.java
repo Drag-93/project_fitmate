@@ -6,7 +6,7 @@ import org.spring.backend.calendar.entity.PersonalScheduleEntity;
 import org.spring.backend.common.BasicTime;
 import org.spring.backend.common.TableType;
 import org.spring.backend.community.entity.CommunityEntity;
-import org.spring.backend.main.entity.PopupEntity;
+import org.spring.backend.admin.popup.entity.PopupEntity;
 import org.spring.backend.member.entity.MemberEntity;
 import org.spring.backend.store.product.entity.ProductEntity;
 import org.spring.backend.store.product.type.ImageType;

@@ -3,7 +3,7 @@ package org.spring.backend.file.repository;
 import org.spring.backend.calendar.entity.PersonalScheduleEntity;
 import org.spring.backend.community.entity.CommunityEntity;
 import org.spring.backend.file.entity.FileEntity;
-import org.spring.backend.main.entity.PopupEntity;
+import org.spring.backend.admin.popup.entity.PopupEntity;
 import org.spring.backend.member.entity.MemberEntity;
 import org.spring.backend.store.product.entity.ProductEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

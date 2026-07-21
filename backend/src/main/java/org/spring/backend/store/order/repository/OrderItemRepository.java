@@ -14,9 +14,9 @@ import org.springframework.data.repository.query.Param;
 public interface OrderItemRepository extends JpaRepository<OrderItemEntity, Long> {
 
         @Query("""
-                            SELECT oi.productEntity From OrderItemEntity oi
-                            GROUP BY oi.productEntity
-                            ORDER BY SUM(oi.quantity) DESC
+                        SELECT oi.productEntity From OrderItemEntity oi
+                        GROUP BY oi.productEntity
+                        ORDER BY SUM(oi.quantity) DESC
                         """)
         List<ProductEntity> findPopularProducts(Pageable pageable);
         // 1. order_item_tb에서 주문된 상품들을 가져옴
@@ -39,5 +39,13 @@ public interface OrderItemRepository extends JpaRepository<OrderItemEntity, Long
         // 4. quantity 합산, 많이 팔린 순으로 정렬
         // 5. Pageable로 상위 5개만 가져옴
 
+        // 대시보드용: productEntity와 누적 판매량 포함
+        @Query("""
+        SELECT oi.productEntity, SUM(oi.quantity)
+        FROM OrderItemEntity oi
+        GROUP BY oi.productEntity
+        ORDER BY SUM(oi.quantity) DESC
+    """)
+        List<Object[]> findPopularProductsWithSalesCount(Pageable pageable);
 
 }

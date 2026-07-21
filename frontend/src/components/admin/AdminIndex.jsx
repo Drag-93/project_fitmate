@@ -1,85 +1,81 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "../css/admin/Admin.css";
+import jwtAxios from "../../apis/util/jwtUtil";
 
 const AdminIndex = () => {
-  /*
-    추후 대시보드 API를 연결하면 해당 데이터로 교체
-    예시:
-    const [dashboardData, setDashboardData] = useState({});
-   
-    const getDashboardData = async () => {
+  const [dashboardData, setDashboardData] = useState({
+    summary: {
+      totalMemberCount: 0,
+      totalProductCount: 0,
+      todayCommunityCount: 0,
+      todaySales: 0,
+      monthlySales: 0,
+    },
+
+    member: {
+      activeSubscriptionCount: 0,
+      expiringSubscriptionCount: 0,
+      expiredSubscriptionCount: 0,
+      inactiveMemberCount: 0,
+    },
+
+    interestChart: [],
+    communityChart: [],
+    salesChart: [],
+
+    communityList: [],
+    productList: [],
+  });
+
+  /* ===================== 대시보드 조회 ===================== */
+  const getDashboardData = async () => {
+    try {
       const res = await jwtAxios.get("/admin/dashboard");
-      setDashboardData(res.data);
-    };
-   */
 
-  // 주요 현황 데이터
-  const summaryData = {
-    totalMemberCount: 0,
-    todayMemberCount: 0,
-    todayOrderCount: 0,
-    todaySalesAmount: 0,
-    todayCommunityCount: 0,
-    unansweredInquiryCount: 0,
+      setDashboardData({
+        summary: res.data.summary || {
+          totalMemberCount: 0,
+          totalProductCount: 0,
+          todayCommunityCount: 0,
+          todaySales: 0,
+          monthlySales: 0,
+        },
+
+        member: res.data.member || {
+          activeSubscriptionCount: 0,
+          expiringSubscriptionCount: 0,
+          expiredSubscriptionCount: 0,
+          inactiveMemberCount: 0,
+        },
+
+        interestChart: res.data.interestChart || [],
+        communityChart: res.data.communityChart || [],
+        salesChart: res.data.salesChart || [],
+
+        communityList: res.data.communityList || [],
+        productList: res.data.productList || [],
+      });
+      console.log(res.data);
+    } catch (err) {
+      console.error("대시보드 조회 실패", err);
+    }
   };
 
-  // 회원 CRM 데이터
-  const memberCrmData = {
-    totalMemberCount: 0,
-    memberCount: 0,
-    trainerCount: 0,
-    weeklyNewMemberCount: 0,
-    monthlyNewMemberCount: 0,
-    activeSubscriptionMemberCount: 0,
-    expiringSubscriptionMemberCount: 0,
-  };
+  useEffect(() => {
+    getDashboardData();
+  }, []);
 
-  // 커뮤니티 조회수 TOP 5
-  const communityTop5 = [
-    // {
-    //   id: 1,
-    //   title: "운동 루틴 질문드립니다.",
-    //   viewCount: 254,
-    // },
-  ];
-
-  // 상품 판매량 TOP 5
-  const productTop5 = [
-    // {
-    //   id: 1,
-    //   productName: "FitMate 구독 상품",
-    //   salesQuantity: 120,
-    // },
-  ];
-
-  // 관리자 알림
-  const adminAlerts = [
-    {
-      id: 1,
-      type: "inquiry",
-      content: `미처리 문의가 ${summaryData.unansweredInquiryCount}건 있습니다.`,
-      link: "/admin/community",
-    },
-    {
-      id: 2,
-      type: "subscription",
-      content: `7일 내 구독이 만료되는 회원이 ${memberCrmData.expiringSubscriptionMemberCount}명 있습니다.`,
-      link: "/admin/member",
-    },
-    {
-      id: 3,
-      type: "popup",
-      content: "종료 예정인 팝업을 확인해 주세요.",
-      link: "/admin/popup",
-    },
-    {
-      id: 4,
-      type: "product",
-      content: "판매 및 상품 상태를 확인해 주세요.",
-      link: "/admin/product",
-    },
-  ];
+  /* ===================== 응답 데이터 분리 ===================== */
+  const {
+    summary,
+    member,
+    interestChart,
+    communityChart,
+    salesChart,
+    communityList,
+    productList,
+  } = dashboardData;
 
   return (
     <div className="admin-main">
@@ -105,48 +101,43 @@ const AdminIndex = () => {
               {/* 전체 회원 */}
               <Link to="/admin/member" className="adminIndex-summary-card">
                 <span>전체 회원</span>
+
                 <strong>
-                  {summaryData.totalMemberCount.toLocaleString()}명
+                  {(summary.totalMemberCount ?? 0).toLocaleString()}명
                 </strong>
               </Link>
 
-              {/* 오늘 신규 회원 */}
-              <Link to="/admin/member" className="adminIndex-summary-card">
-                <span>오늘 신규 회원</span>
-                <strong>
-                  {summaryData.todayMemberCount.toLocaleString()}명
-                </strong>
-              </Link>
+              {/* 전체 상품 */}
+              <Link to="/admin/product" className="adminIndex-summary-card">
+                <span>전체 상품</span>
 
-              {/* 오늘 주문 */}
-              <Link to="/admin/payment" className="adminIndex-summary-card">
-                <span>오늘 주문</span>
                 <strong>
-                  {summaryData.todayOrderCount.toLocaleString()}건
-                </strong>
-              </Link>
-
-              {/* 오늘 매출 */}
-              <Link to="/admin/payment" className="adminIndex-summary-card">
-                <span>오늘 매출</span>
-                <strong>
-                  {summaryData.todaySalesAmount.toLocaleString()}원
+                  {(summary.totalProductCount ?? 0).toLocaleString()}개
                 </strong>
               </Link>
 
               {/* 오늘 게시글 */}
               <Link to="/admin/community" className="adminIndex-summary-card">
                 <span>오늘 게시글</span>
+
                 <strong>
-                  {summaryData.todayCommunityCount.toLocaleString()}건
+                  {(summary.todayCommunityCount ?? 0).toLocaleString()}건
                 </strong>
               </Link>
 
-              {/* 미처리 문의 */}
-              <Link to="/admin/community" className="adminIndex-summary-card">
-                <span>미처리 문의</span>
+              {/* 오늘 매출 */}
+              <Link to="/admin/payment" className="adminIndex-summary-card">
+                <span>오늘 매출</span>
+
+                <strong>{(summary.todaySales ?? 0).toLocaleString()}원</strong>
+              </Link>
+
+              {/* 이번 달 매출 */}
+              <Link to="/admin/payment" className="adminIndex-summary-card">
+                <span>이번 달 매출</span>
+
                 <strong>
-                  {summaryData.unansweredInquiryCount.toLocaleString()}건
+                  {(summary.monthlySales ?? 0).toLocaleString()}원
                 </strong>
               </Link>
             </div>
@@ -171,53 +162,36 @@ const AdminIndex = () => {
 
                 <ul>
                   <li>
-                    <span>전체 회원</span>
-                    <strong>
-                      {memberCrmData.totalMemberCount.toLocaleString()}명
-                    </strong>
-                  </li>
-
-                  <li>
-                    <span>일반 회원</span>
-                    <strong>
-                      {memberCrmData.memberCount.toLocaleString()}명
-                    </strong>
-                  </li>
-
-                  <li>
-                    <span>트레이너</span>
-                    <strong>
-                      {memberCrmData.trainerCount.toLocaleString()}명
-                    </strong>
-                  </li>
-
-                  <li>
-                    <span>이번 주 신규 가입</span>
-                    <strong>
-                      {memberCrmData.weeklyNewMemberCount.toLocaleString()}명
-                    </strong>
-                  </li>
-
-                  <li>
-                    <span>이번 달 신규 가입</span>
-                    <strong>
-                      {memberCrmData.monthlyNewMemberCount.toLocaleString()}명
-                    </strong>
-                  </li>
-
-                  <li>
                     <span>구독 유지 회원</span>
+
                     <strong>
-                      {memberCrmData.activeSubscriptionMemberCount.toLocaleString()}
-                      명
+                      {(member.activeSubscriptionCount ?? 0).toLocaleString()}명
                     </strong>
                   </li>
 
                   <li>
                     <span>7일 내 구독 만료</span>
+
                     <strong>
-                      {memberCrmData.expiringSubscriptionMemberCount.toLocaleString()}
+                      {(member.expiringSubscriptionCount ?? 0).toLocaleString()}
                       명
+                    </strong>
+                  </li>
+
+                  <li>
+                    <span>구독 만료 회원</span>
+
+                    <strong>
+                      {(member.expiredSubscriptionCount ?? 0).toLocaleString()}
+                      명
+                    </strong>
+                  </li>
+
+                  <li>
+                    <span>비활성 회원</span>
+
+                    <strong>
+                      {(member.inactiveMemberCount ?? 0).toLocaleString()}명
                     </strong>
                   </li>
                 </ul>
@@ -228,8 +202,22 @@ const AdminIndex = () => {
                 <h3>관심사별 회원 분포</h3>
 
                 <div className="adminIndex-chart">
-                  {/* 추후 Chart.js 또는 Recharts 그래프 적용 */}
-                  관심사별 회원 분포 그래프 영역
+                  {interestChart.length > 0 ? (
+                    <ul className="adminIndex-chart-list">
+                      {interestChart.map((chart, index) => (
+                        <li key={`${chart.label}-${index}`}>
+                          <span>{chart.label}</span>
+                          <strong>
+                            {(chart.value ?? 0).toLocaleString()}명
+                          </strong>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <div className="adminIndex-empty">
+                      관심사 데이터가 없습니다.
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -252,9 +240,9 @@ const AdminIndex = () => {
                   </Link>
                 </div>
 
-                {communityTop5.length > 0 ? (
+                {communityList.length > 0 ? (
                   <ul>
-                    {communityTop5.map((community, index) => (
+                    {communityList.map((community, index) => (
                       <li key={community.id}>
                         <span className="rank">{index + 1}</span>
 
@@ -266,7 +254,7 @@ const AdminIndex = () => {
                         </Link>
 
                         <span className="item-count">
-                          조회 {community.viewCount.toLocaleString()}
+                          조회 {(community.hit ?? 0).toLocaleString()}
                         </span>
                       </li>
                     ))}
@@ -283,8 +271,22 @@ const AdminIndex = () => {
                 <h3>최근 7일 게시글 등록 추이</h3>
 
                 <div className="adminIndex-chart">
-                  {/* 추후 일별 게시글 등록 수 그래프 적용 */}
-                  게시글 등록 추이 그래프 영역
+                  {communityChart.length > 0 ? (
+                    <ul className="adminIndex-chart-list">
+                      {communityChart.map((chart, index) => (
+                        <li key={`${chart.label}-${index}`}>
+                          <span>{chart.label}</span>
+                          <strong>
+                            {(chart.value ?? 0).toLocaleString()}건
+                          </strong>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <div className="adminIndex-empty">
+                      게시글 추이 데이터가 없습니다.
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -307,9 +309,9 @@ const AdminIndex = () => {
                   </Link>
                 </div>
 
-                {productTop5.length > 0 ? (
+                {productList.length > 0 ? (
                   <ul>
-                    {productTop5.map((product, index) => (
+                    {productList.map((product, index) => (
                       <li key={product.id}>
                         <span className="rank">{index + 1}</span>
 
@@ -321,7 +323,7 @@ const AdminIndex = () => {
                         </Link>
 
                         <span className="item-count">
-                          {product.salesQuantity.toLocaleString()}개
+                          {(product.salesCount ?? 0).toLocaleString()}개
                         </span>
                       </li>
                     ))}
@@ -338,33 +340,24 @@ const AdminIndex = () => {
                 <h3>최근 7일 매출 추이</h3>
 
                 <div className="adminIndex-chart">
-                  {/* 추후 일별 매출 그래프 적용 */}
-                  매출 추이 그래프 영역
+                  {salesChart.length > 0 ? (
+                    <ul className="adminIndex-chart-list">
+                      {salesChart.map((chart, index) => (
+                        <li key={`${chart.label}-${index}`}>
+                          <span>{chart.label}</span>
+                          <strong>
+                            {(chart.value ?? 0).toLocaleString()}원
+                          </strong>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <div className="adminIndex-empty">
+                      매출 추이 데이터가 없습니다.
+                    </div>
+                  )}
                 </div>
               </div>
-            </div>
-          </section>
-
-          {/* ===================== 관리자 알림 ===================== */}
-          <section className="adminIndex-alert-wrap">
-            <div className="title">
-              <h2>관리자 알림</h2>
-            </div>
-
-            <div className="adminIndex-card adminIndex-alert-con">
-              <ul className="adminIndex-alert-list">
-                {adminAlerts.map((alert) => (
-                  <li key={alert.id} className={`alert-${alert.type}`}>
-                    <Link to={alert.link}>
-                      <span className="adminIndex-alert-point"></span>
-                      <span className="adminIndex-alert-content">
-                        {alert.content}
-                      </span>
-                      <span className="adminIndex-alert-arrow">›</span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
             </div>
           </section>
 
