@@ -57,21 +57,19 @@ export const memberUpdate = async ({
       alert("회원수정 오류발생");
       return;
     }
-
-    if (typeof onRefresh === "function") {
-      try {
-        await onRefresh();
-      } catch (err) {
-        console.error("최신 회원 정보 가져오기 실패:", err);
-      }
-    }
-
     if (originData && memberData.userEmail !== originData.userEmail) {
       if (typeof onLogout === "function") onLogout();
       alert("이메일 변경확인. 다시 로그인 해주시기 바랍니다.");
       navigate("/auth/login");
     } else {
       alert("회원수정에 성공하였습니다.");
+      if (typeof onRefresh === "function") {
+        try {
+          await onRefresh();
+        } catch (err) {
+          console.error("최신 회원 정보 가져오기 실패:", err);
+        }
+      }
       if (typeof onSuccessToggle === "function") onSuccessToggle();
       if (redirectUrl) navigate(redirectUrl);
     }

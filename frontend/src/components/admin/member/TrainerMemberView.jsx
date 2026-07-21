@@ -10,6 +10,13 @@ const TrainerMemberView = () => {
   const [memberData, setMemberData] = useState(null);
   const [subject, setSubject] = useState("");
   const [search, setSearch] = useState("");
+
+  //관심사를 한글로 바꿔주기위한 상수
+  const interestMap = {
+    DIET: "다이어트",
+    WORKOUT: "운동",
+    HEALTH: "건강관리",
+  };
   const handleSearchSubmit = (e) => {
     e.preventDefault(); // 폼 제출 시 페이지 새로고침 방지
     getMemberList(subject, search, 0);
@@ -75,7 +82,7 @@ const TrainerMemberView = () => {
               return (
                 <ul className="memberList-body" key={el.id}>
                   <li>{el.userName}</li>
-                  <li>{el.interest}</li>
+                  <li>{interestMap[el.interest] ?? "없음"}</li>
                   <li>{el.subscribe === 0 ? "X" : "O"}</li>
                   <li onClick={() => navigate(`/admin/member/detail/${el.id}`)}>
                     {el.userName}
