@@ -1,6 +1,7 @@
 package org.spring.backend.admin.popup.dto;
 
 import lombok.*;
+import org.spring.backend.admin.popup.entity.PopupEntity;
 import org.spring.backend.file.entity.FileEntity;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
@@ -52,7 +53,7 @@ public class PopupDto {
     private LocalDateTime updateTime;
 
     // Entity -> Dto 파일포함
-     public static PopupDto toPopupDto(PopupEntity popupEntity,FileEntity fileEntity) {
+     public static PopupDto toPopupDto(PopupEntity popupEntity, FileEntity fileEntity) {
         return PopupDto.builder()
                 .id(popupEntity.getId())
                 .title(popupEntity.getTitle())

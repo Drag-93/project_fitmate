@@ -103,10 +103,10 @@ const MemberDetailView = ({ member, updateFn, memberDelete, navigate }) => {
           ) : (
             <>
               <li>
-                <Link to="/order/list">주문/결제</Link>
+                <Link to="/order/list">주문내역</Link>
               </li>
               <li>
-                <Link to="/subscription/list">FitMate Plus+</Link>
+                <Link to="/subscription">FitMate Plus+</Link>
               </li>
               <li>
                 <Link to="/reservation">이용권 관리</Link>

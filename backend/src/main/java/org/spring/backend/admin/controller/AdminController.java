@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.spring.backend.admin.popup.dto.PopupDto;
 import org.spring.backend.admin.popup.service.PopupService;
 import org.spring.backend.main.service.MainService;
+import org.spring.backend.store.order.dto.OrderDto;
+import org.spring.backend.store.order.service.OrderService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -21,6 +24,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AdminController {
     private final PopupService popupService;
+    private final OrderService orderService;
+
 
     //=======================popup=======================
 // 팝업 목록
@@ -84,5 +89,13 @@ public class AdminController {
         popupService.updatePopup(popupDto);
 
         return ResponseEntity.ok("ok");
+    }
+    // 관리자 주문 전체 조회
+    @GetMapping("/orderList")
+    public ResponseEntity<List<OrderDto>> orderList() {
+
+        return ResponseEntity.ok(
+                orderService.adminOrderList()
+        );
     }
 }
