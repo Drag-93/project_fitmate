@@ -21,6 +21,9 @@ public class DashboardSummaryDto {
     // 오늘 매출
     private Long todaySales;
 
-    // 이번 달 매출
-    private Long monthlySales;
+    // 이번 달 누적 매출
+    private Long currentMonthSales;
+
+    // 지난 달 매출
+    private Long lastMonthSales;
 }

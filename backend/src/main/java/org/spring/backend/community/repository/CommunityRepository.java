@@ -1,14 +1,11 @@
 package org.spring.backend.community.repository;
 
-import org.spring.backend.community.dto.CommunityDto;
 import org.spring.backend.community.entity.CommunityEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
-import java.util.Arrays;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface CommunityRepository extends JpaRepository<CommunityEntity, Long>{
@@ -19,13 +16,13 @@ public interface CommunityRepository extends JpaRepository<CommunityEntity, Long
 
 
     // 공지사항만 최신순 TOP 5
-    List<CommunityEntity> findTop5ByCategoryNameOrderByCreateTimeDesc(
-            String categoryName
+    List<CommunityEntity> findTop5ByTabNameOrderByCreateTimeDesc(
+            String TabName
     );
 
     // 비회원용: notice 제외하고 조회수 높은순 TOP 5
-    List<CommunityEntity> findTop5ByCategoryNameNotOrderByHitDesc(
-            String categoryName
+    List<CommunityEntity> findTop5ByTabNameNotOrderByHitDesc(
+            String TabName
     );
 
     // 로그인 회원용: 관심사 카테고리 기준 조회수 높은순 TOP 5
@@ -38,4 +35,7 @@ public interface CommunityRepository extends JpaRepository<CommunityEntity, Long
     Page<CommunityEntity> findByContentContaining(Pageable pageable, String search);
     //작성자 검색
     Page<CommunityEntity> findByUserNameContaining(Pageable pageable, String search);
+
+    //오늘 작성된 글 개수
+    Long countByCreateTimeGreaterThanEqualAndCreateTimeLessThanAndTabNameNot(LocalDateTime startOfToday, LocalDateTime startOfTomorrow, String tabName);
 }

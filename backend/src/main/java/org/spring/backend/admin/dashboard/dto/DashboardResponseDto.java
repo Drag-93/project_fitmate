@@ -27,6 +27,9 @@ public class DashboardResponseDto {
     // 매출 추이 차트
     private List<DashboardChartDto> salesChart;
 
+    // 회원 구독 현황 차트
+    private List<DashboardChartDto> subscriptionChart;
+
     // 커뮤니티 리스트 TOP5
     private List<DashboardCommunityDto> communityList;
 

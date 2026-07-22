@@ -22,9 +22,6 @@ public class DashboardCommunityDto {
     // 카테고리명
     private String categoryName;
 
-    // 작성자명
-    private String userName;
-
     // 조회수
     private Integer hit;
 }

@@ -20,6 +20,12 @@ public class DashboardMemberDto {
     // 구독이 종료된 회원 수
     private Long expiredSubscriptionCount;
 
-    // 일정 기간 활동이 없는 회원 수
-    private Long inactiveMemberCount;
+    // 미구독 회원 수
+    private Long unsubscribedMemberCount;
+
+    // 구독률
+    private Double subscriptionRate;
+
+    // 관심사 등록률
+    private Double interestRegistrationRate;
 }
