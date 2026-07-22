@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import jwtAxios from "../../apis/util/jwtUtil";
 import { API_SERVER_URL } from "../../apis/commonApi";
 
-const ReplyForm = ({ communityId, onReplyAdd }) => {
+const ReplyForm = ({ communityId, categoryName, onReplyAdd }) => {
   const [reply, setReply] = useState({
     memberId: "",
     content: "",
@@ -11,6 +11,9 @@ const ReplyForm = ({ communityId, onReplyAdd }) => {
     userName: "",
     userEmail: "",
   });
+  const [role, setRole] = useState(null); // 사용자 role
+  const [loadingUser, setLoadingUser] = useState(true);
+
   useEffect(() => {
     getUser();
   }, []);
@@ -25,14 +28,25 @@ const ReplyForm = ({ communityId, onReplyAdd }) => {
           userName: res.data.result.userName,
           userEmail: res.data.result.userEmail,
         }));
+        setRole(res.data.result.role); // "ADMIN" 또는 "USER" 등
       }
     } catch (error) {
       console.error("회원 정보를 불러올 수 없습니다.", error);
       setReply((prev) => ({ ...prev, userName: "비회원" }));
+    } finally {
+      setLoadingUser(false);
     }
   };
 
+  const isQna = categoryName && categoryName.toLowerCase().includes("qna");
+  const isAdmin = role === "ADMIN";
+  const isBlocked = isQna && !isAdmin;
+
   const saveReply = async () => {
+    if (isBlocked) {
+      alert("QNA 게시글의 댓글은 관리자만 작성할 수 있습니다.");
+      return;
+    }
     if (!reply.content.trim()) {
       alert("댓글 내용을 입력하세요");
       return;
@@ -45,9 +59,23 @@ const ReplyForm = ({ communityId, onReplyAdd }) => {
         onReplyAdd(res.data);
       }
     } catch (error) {
-      alert("댓글 작성 실패");
+      if (error?.response?.status === 403) {
+        alert("QNA 게시글의 댓글은 관리자만 작성할 수 있습니다.");
+      } else {
+        alert("댓글 작성 실패");
+      }
     }
   };
+
+  if (loadingUser) return null;
+
+  if (isBlocked) {
+    return (
+      <div className="reply-write reply-write--blocked">
+        <p>QNA 게시글의 댓글은 관리자만 작성할 수 있습니다.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="reply-write">

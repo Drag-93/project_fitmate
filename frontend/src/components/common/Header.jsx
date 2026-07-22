@@ -54,7 +54,7 @@ const Header = () => {
                   <Link to={`/store`}>스토어</Link>
                 </li>
                 <li onMouseEnter={() => setActiveMenu("community")}>
-                  <Link to={`/community/communityList`}>게시판</Link>
+                  <Link to={`/community`}>게시판</Link>
                 </li>
               </ul>
             </div>

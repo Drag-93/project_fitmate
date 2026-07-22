@@ -1,0 +1,308 @@
+/* =====================================================
+   게시글 관리 페이지 전체 컨테이너
+===================================================== */
+.comMain {
+  position: relative;
+  width: calc(100% - 260px);
+  min-height: calc(100vh - 70px);
+  margin-left: 260px;
+  margin-top: 70px;
+  padding: 32px;
+  box-sizing: border-box;
+  background-color: #f5f7fb;
+}
+
+.comMain-wrap {
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+/* =====================================================
+   페이지 상단 제목 및 버튼
+===================================================== */
+.comMain h1 {
+  margin: 0 0 8px;
+  font-size: 28px;
+  font-weight: 700;
+  color: #222222;
+}
+
+.comMain .write {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 24px;
+}
+
+.comMain .write button {
+  padding: 11px 20px;
+  border: none;
+  border-radius: 6px;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.comMain .write button:hover {
+  background: #1d4ed8;
+}
+
+/* =====================================================
+   필터 검색 영역
+===================================================== */
+.admin-filter-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 20px 24px;
+  background: #ffffff;
+  border: 1px solid #e4e8ee;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
+  align-items: center;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+}
+
+.admin-filter-row select,
+.admin-filter-row input {
+  height: 42px;
+  padding: 0 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #374151;
+  background-color: #ffffff;
+  outline: none;
+  transition: 0.2s;
+}
+
+.admin-filter-row select:focus,
+.admin-filter-row input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.admin-filter-row select {
+  min-width: 140px;
+}
+
+.admin-filter-row input {
+  flex: 1;
+  min-width: 200px;
+}
+
+.admin-filter-row button {
+  height: 42px;
+  padding: 0 20px;
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.admin-filter-row button:hover {
+  background: #1d4ed8;
+}
+
+/* =====================================================
+   일괄 작업 영역 (선택 개수 및 삭제 버튼)
+===================================================== */
+.admin-action-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding: 0 4px;
+}
+
+.admin-action-row span {
+  font-size: 14px;
+  font-weight: 500;
+  color: #555555;
+}
+
+.admin-action-row button {
+  padding: 8px 14px;
+  background: #ffffff;
+  color: #dc2626;
+  border: 1px solid #dc2626;
+  border-radius: 5px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.admin-action-row button:disabled {
+  background: #f3f4f6;
+  color: #9ca3af;
+  border-color: #d1d5db;
+  cursor: not-allowed;
+}
+
+.admin-action-row button:not(:disabled):hover {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+/* =====================================================
+   게시글 목록 테이블 스타일
+===================================================== */
+.comMain table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  box-shadow: 0 3px 12px rgba(15, 23, 42, 0.06);
+  overflow: hidden;
+}
+
+.comMain thead {
+  background: #f8fafc;
+}
+
+.comMain th,
+.comMain td {
+  padding: 15px 14px;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 14px;
+  color: #374151;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.comMain th {
+  color: #111827;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.comMain tbody tr {
+  transition: 0.2s;
+}
+
+.comMain tbody tr:hover {
+  background: #f9fafb;
+}
+
+.comMain tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* 테이블 각 열 너비 설정 (선택사항) */
+.comMain th:nth-child(1),
+.comMain td:nth-child(1) {
+  width: 50px;
+}
+.comMain th:nth-child(2),
+.comMain td:nth-child(2) {
+  width: 70px;
+}
+.comMain th:nth-child(3),
+.comMain td:nth-child(3) {
+  width: 110px;
+}
+.comMain th:nth-child(4),
+.comMain td:nth-child(4) {
+  width: 110px;
+}
+.comMain th:nth-child(6),
+.comMain td:nth-child(6) {
+  width: 120px;
+}
+.comMain th:nth-child(7),
+.comMain td:nth-child(7) {
+  width: 80px;
+}
+.comMain th:nth-child(8),
+.comMain td:nth-child(8) {
+  width: 110px;
+}
+.comMain th:nth-child(9),
+.comMain td:nth-child(9) {
+  width: 90px;
+}
+
+/* 제목 셀 */
+.admin-title-cell {
+  text-align: left !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+  color: #1f2937;
+  cursor: pointer;
+}
+
+.admin-title-cell:hover {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+/* 행별 개별 삭제 버튼 */
+.comMain td button {
+  padding: 6px 12px;
+  background: #ffffff;
+  color: #dc2626;
+  border: 1px solid #dc2626;
+  border-radius: 5px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.comMain td button:hover {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+/* 로딩 및 빈 데이터 안내 문구 */
+.comMain > p {
+  padding: 60px 0;
+  text-align: center;
+  font-size: 14px;
+  color: #9ca3af;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+}
+
+/* =====================================================
+   반응형 대응
+===================================================== */
+@media screen and (max-width: 900px) {
+  .comMain {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 70px;
+    padding: 22px 20px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .comMain {
+    padding: 15px;
+  }
+
+  .admin-filter-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .admin-filter-row select,
+  .admin-filter-row input,
+  .admin-filter-row button {
+    width: 100%;
+  }
+}

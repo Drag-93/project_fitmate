@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_SERVER_URL } from "../../apis/commonApi";
+import "../css/Community/TabInsert.css";
 
 const TabInsert = () => {
   const navigate = useNavigate();
@@ -47,7 +48,7 @@ const TabInsert = () => {
   const onTabFn = async () => {
     try {
       const res = await axios.post(
-        `${API_SERVER_URL}/community/tabInsert`,
+        `${API_SERVER_URL}/admin/tabInsert`,
         tabList,
       );
       alert("탭 생성 성공");

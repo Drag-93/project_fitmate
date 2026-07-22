@@ -2,19 +2,19 @@ package org.spring.backend.community.service.impl;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.spring.backend.common.Role;
 import org.spring.backend.common.TableType;
 import org.spring.backend.community.dto.CommunityDto;
+import org.spring.backend.community.dto.TabDto;
 import org.spring.backend.community.entity.CategoryEntity;
 import org.spring.backend.community.entity.CommunityEntity;
 import org.spring.backend.community.entity.TabEntity;
 import org.spring.backend.community.repository.CategoryRepository;
 import org.spring.backend.community.repository.CommunityRepository;
+import org.spring.backend.community.repository.TabRepository;
 import org.spring.backend.community.service.CommunityService;
 import org.spring.backend.file.handler.FileHandler;
 import org.spring.backend.member.entity.MemberEntity;
@@ -22,6 +22,7 @@ import org.spring.backend.member.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +39,7 @@ private final CommunityRepository communityRepository;
 private final CategoryRepository categoryRepository;
 private final MemberRepository memberRepository;
 private final FileHandler fileHandler;
+private final TabRepository tabRepository;
 
     @Value("${img.path.community}")
     private String path;
@@ -50,7 +52,7 @@ private final FileHandler fileHandler;
         MemberEntity requester = memberRepository.findByUserEmail(requesterEmail)
                 .orElseThrow(() -> new NoSuchElementException("회원이 존재하지 않습니다"));
 
-        // ★ Role은 enum이므로 String과 비교하면 안 됨. enum끼리 비교해야 함.
+        // Role은 enum이므로 String과 비교하면 안 됨. enum끼리 비교해야 함.
         if (requester.getRole() != Role.ADMIN) {
             throw new AccessDeniedException(
                     "공지사항은 관리자만 작성/수정/삭제할 수 있습니다."
@@ -172,7 +174,15 @@ private final FileHandler fileHandler;
         communityRepository.deleteById(id);
     }
 
-  @Override
+    @Override
+    public void adminDelete(Long id) {
+        CommunityEntity entity = communityRepository.findById(id)
+                .orElseThrow(()-> new NoSuchElementException("게시글이 존재하지 않습니다"));
+
+        communityRepository.deleteById(id);
+    }
+
+    @Override
   @Transactional
   public CommunityDto communityDetail(Long id, String userEmail) {
    CommunityEntity communityEntity = communityRepository.findById(id)
@@ -204,20 +214,64 @@ private final FileHandler fileHandler;
 
     @Override
     @Transactional
-    public Page<CommunityDto> findCommunityList(Long tabId, Long categoryId, Pageable pageable) {
-        Page<CommunityEntity> entities;
+    public Map<String, Object> mainList() {
+        List<TabEntity> allTab = tabRepository.findAll();
+        Map<Long, List<CommunityDto>> tabRanking = new LinkedHashMap<>();
+        //탭별 top5 추출해서 채우기
+        for (TabEntity tab : allTab){
+            List<CommunityEntity> top5;
+            if (Boolean.TRUE.equals(tab.getAdminOnly())){
+                top5 = communityRepository.findTop5ByCategoryEntity_TabEntity_IdOrderByCreateTimeDesc(tab.getId());
+            }else{
+                top5 = communityRepository.findTop5ByCategoryEntity_TabEntity_IdOrderByHitDesc(tab.getId());
+            }
+            tabRanking.put(tab.getId(), toDtoList(top5));
+        }
+        TabEntity noticeTab = allTab.stream()
+                .filter(TabEntity::getAdminOnly)
+                .findFirst().orElse(null);
+        List<CommunityDto> allRanking = noticeTab!=null
+                ? toDtoList(communityRepository.findTop5ByCategoryEntity_TabEntity_IdNotOrderByHitDesc(noticeTab.getId()))
+                : Collections.emptyList();
 
-        // 카테고리 ID가 있으면 카테고리 우선 조회
+        Map<String , Object> result = new LinkedHashMap<>();
+        result.put("byTab", tabRanking);
+        result.put("all", allRanking);
+        result.put("tabs", allTab.stream().map(TabDto::toTabDto).collect(Collectors.toList()));
+        return result;
+    }
+
+    private List<CommunityDto> toDtoList(List<CommunityEntity> entities){
+        return entities.stream().map(CommunityDto::toCommunityDto).collect(Collectors.toList());
+    }
+
+
+    @Override
+    @Transactional
+    public Page<CommunityDto> findCommunityList(Long tabId, Long categoryId, String keyword, Pageable pageable) {
+
+        Specification<CommunityEntity> spec = Specification.unrestricted();
+
+        // 카테고리 필터
         if (categoryId != null) {
-            entities = communityRepository.findByCategoryEntity_Id(categoryId, pageable);
+            spec = spec.and((root, query, cb) ->
+                    cb.equal(root.get("categoryEntity").get("id"), categoryId));
         }
-        // 탭 ID만 있으면 탭 조회
+        // 탭 필터 (categoryEntity -> tabEntity 관계를 타고 감. 중복 tabId 컬럼은 신뢰 X)
         else if (tabId != null) {
-            entities = communityRepository.findByTabId(tabId, pageable);
+            spec = spec.and((root, query, cb) ->
+                    cb.equal(root.get("categoryEntity").get("tabEntity").get("id"), tabId));
         }
-        else {
-            entities = communityRepository.findAll(pageable);
+
+        // 검색어 필터 제목 또는 작성자에 포함되면 매치
+        if (keyword != null && !keyword.isBlank()) {
+            spec = spec.and((root, query, cb) -> cb.or(
+                    cb.like(root.get("title"), "%" + keyword + "%"),
+                    cb.like(root.get("userName"), "%" + keyword + "%")
+            ));
         }
+
+        Page<CommunityEntity> entities = communityRepository.findAll(spec, pageable);
 
         return entities.map(el -> CommunityDto.builder()
                 .id(el.getId())
@@ -227,6 +281,7 @@ private final FileHandler fileHandler;
                 .categoryId(el.getCategoryEntity().getId())
                 .categoryName(el.getCategoryEntity().getCategoryName())
                 .tabId(el.getCategoryEntity().getTabEntity().getId())
+                .tabName(el.getCategoryEntity().getTabEntity().getTabName())
                 .createTime(el.getCreateTime())
                 .hit(el.getHit())
                 .build()
@@ -246,4 +301,6 @@ private final FileHandler fileHandler;
             throw new AccessDeniedException("본인 또는 관리자만 수정/삭제할 수 있습니다");
         }
     }
+
+
 }

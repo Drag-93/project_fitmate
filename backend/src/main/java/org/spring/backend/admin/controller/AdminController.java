@@ -1,9 +1,9 @@
 package org.spring.backend.admin.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.spring.backend.main.dto.PopupDto;
+import org.spring.backend.admin.popup.dto.PopupDto;
+import org.spring.backend.admin.popup.service.PopupService;
 import org.spring.backend.main.service.MainService;
-import org.spring.backend.member.dto.MemberDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -14,18 +14,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/admin")
 @RequiredArgsConstructor
 public class AdminController {
-    private final MainService mainService;
-
-
-
-
+    private final PopupService popupService;
 
     //=======================popup=======================
 // 팝업 목록
@@ -43,7 +38,7 @@ public class AdminController {
                                                 direction = Sort.Direction.ASC) Pageable pageable,
                                         @RequestParam(value = "subject",required = false)String subject,
                                         @RequestParam(value = "search", required = false)String search){
-        Page<PopupDto> popupList = mainService.popupList(pageable, subject, search);
+        Page<PopupDto> popupList = popupService.popupList(pageable, subject, search);
 
         int newPage = popupList.getNumber(); //현재페이지
         int totalPage = popupList.getTotalPages(); //전체페이지
@@ -68,7 +63,7 @@ public class AdminController {
     @PostMapping(value = "/popupInsert",
             consumes = "multipart/form-data")
     public ResponseEntity<?> popupInsert(@ModelAttribute PopupDto popupDto) throws IOException {
-        mainService.insertPopup(popupDto);
+        popupService.insertPopup(popupDto);
 
         return ResponseEntity.ok("ok");
     }
@@ -76,7 +71,7 @@ public class AdminController {
     // 팝업 삭제
     @DeleteMapping("/popupDelete/{popupId}")
     public ResponseEntity<?> popupDelete(@PathVariable Long popupId) throws IOException {
-        mainService.deletePopup(popupId);
+        popupService.deletePopup(popupId);
 
         return ResponseEntity.ok("ok");
     }
@@ -86,9 +81,8 @@ public class AdminController {
                 consumes = "multipart/form-data")
     public ResponseEntity<?> popupUpdate(@PathVariable Long popupId,@ModelAttribute PopupDto popupDto) throws IOException {
         popupDto.setId(popupId);
-        mainService.updatePopup(popupDto);
+        popupService.updatePopup(popupDto);
 
         return ResponseEntity.ok("ok");
     }
-//=======================popup=======================
 }

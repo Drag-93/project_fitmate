@@ -168,13 +168,19 @@ const CommunityInsert = () => {
       setDisplayName({ tab: targetTab?.tabName || "", category: "" });
     } else if (name === "categoryId") {
       const targetCat = categories.find((c) => String(c.id) === String(value));
+      const isAdmin = getCookie("member")?.role === "ADMIN";
+
+      // FAQ는 관리자만 작성 가능
+      if (targetCat?.categoryName === "FAQ" && !isAdmin) {
+        alert("FAQ는 관리자만 작성할 수 있습니다.");
+        return;
+      }
+
       setFormData((prev) => ({ ...prev, [name]: value }));
       setDisplayName((prev) => ({
         ...prev,
         category: targetCat?.categoryName || "",
       }));
-    } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
     }
   };
 
@@ -195,7 +201,12 @@ const CommunityInsert = () => {
     try {
       await jwtAxios.post(`${API_SERVER_URL}/community/insert`, formData);
       alert("작성 완료!");
-      navigate("/community/communityList");
+      // 방금 작성한 글이 속한 탭/카테고리 목록으로 이동
+      // (예전엔 항상 "/community/communityList"로만 갔지만,
+      //  이제 URL 라우팅 방식 목록 페이지가 있으니 그쪽으로 보냄)
+      navigate(
+        `/community/tab/${formData.tabId}/category/${formData.categoryId}`,
+      );
     } catch (err) {
       alert("작성 실패");
     }

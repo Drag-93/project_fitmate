@@ -1,9 +1,7 @@
 package org.spring.backend.popupTest;
 
 import org.junit.jupiter.api.Test;
-import org.spring.backend.file.entity.FileEntity;
-import org.spring.backend.main.dto.PopupDto;
-import org.spring.backend.main.entity.PopupEntity;
+import org.spring.backend.admin.popup.dto.PopupDto;
 import org.spring.backend.main.service.MainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

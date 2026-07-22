@@ -1,13 +1,14 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { NavLink, useNavigate, useParams } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import "../css/Community/CommunityLeft.css";
 import { API_SERVER_URL } from "../../apis/commonApi";
 
-const CommunityLeft = ({ onSelect }) => {
-  const [tabList, setTabList] = useState([]); // tab -> tabList로 이름 변경 (map 변수와 헷갈림 방지)
+const CommunityLeft = () => {
+  const [tabList, setTabList] = useState([]);
   const [categoryList, setCategoryList] = useState([]);
-  const [overTab, setOverTab] = useState(null);
+  // 어떤 탭이 열려있는지 관리하는 상태 (null이면 모두 닫힘, id값이 들어가면 해당 탭 열림)
+  const [openTabId, setOpenTabId] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,53 +25,53 @@ const CommunityLeft = ({ onSelect }) => {
     fetchData();
   }, []);
 
+  // 탭 클릭 시 열림/닫힘 토글 함수
+  const handleToggleTab = (tabId, e) => {
+    // 링크 자체의 기본 이동을 막고 토글만 제어하고 싶다면 e.preventDefault() 활용 가능
+    // 만약 라우터 이동과 토글을 동시에 하고 싶다면 아래와 같이 작성
+    setOpenTabId(openTabId === tabId ? null : tabId);
+  };
+
   return (
     <div className="community-left">
       <ul>
         <li>
-          {/* 전체게시판은 특정 탭이 아니므로 adminOnly는 항상 false */}
-          <span onClick={() => onSelect(null, null, "전체게시판", false)}>
+          <NavLink to="/community/communityList" end>
             전체게시판
-          </span>
+          </NavLink>
         </li>
         {tabList.map((tabItem) => (
-          <li
-            key={tabItem.id}
-            onMouseEnter={() => setOverTab(tabItem.id)}
-            onMouseLeave={() => setOverTab(null)}
-          >
-            {/* ★ tabItem.adminOnly를 4번째 인자로 추가 */}
-            <span
-              onClick={() =>
-                onSelect(tabItem.id, null, tabItem.tabName, tabItem.adminOnly)
-              }
+          <li key={tabItem.id}>
+            <div
+              className="tab-header"
+              onClick={(e) => handleToggleTab(tabItem.id, e)}
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
             >
-              {tabItem.tabName}
-            </span>
+              <NavLink to={`/community/tab/${tabItem.id}`}>
+                {tabItem.tabName}
+              </NavLink>
+              {/* 토글 화살표 표시 (선택사항) */}
+              <span>{openTabId === tabItem.id ? "▲" : "▼"}</span>
+            </div>
 
-            {/* 탭에 마우스가 올라갔을 때만 보여지는 카테고리 리스트 */}
-            {overTab === tabItem.id && (
-              <ul className="overTab">
-                {categoryList
-                  .filter((cat) => cat.tabId === tabItem.id)
-                  .map((cat) => (
-                    <li
-                      key={cat.id}
-                      onClick={() =>
-                        // 카테고리는 자체 adminOnly가 없으니, 소속된 tabItem의 adminOnly를 그대로 사용
-                        onSelect(
-                          tabItem.id,
-                          cat.id,
-                          cat.categoryName,
-                          tabItem.adminOnly,
-                        )
-                      }
+            {/* openTabId가 일치할 때만 open 클래스가 붙어 열린 상태 유지 */}
+            <ul className={`overTab ${openTabId === tabItem.id ? "open" : ""}`}>
+              {categoryList
+                .filter((cat) => cat.tabId === tabItem.id)
+                .map((cat) => (
+                  <li key={cat.id}>
+                    <NavLink
+                      to={`/community/tab/${tabItem.id}/category/${cat.id}`}
                     >
                       {cat.categoryName}
-                    </li>
-                  ))}
-              </ul>
-            )}
+                    </NavLink>
+                  </li>
+                ))}
+            </ul>
           </li>
         ))}
       </ul>

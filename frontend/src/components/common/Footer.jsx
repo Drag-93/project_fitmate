@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../css/common/Footer.css";
+import ChatBot from "../chatbot/chatbot";
 
 const Footer = () => {
   //스크롤 버튼 -> scroll y ->300이면 top버튼 show
@@ -65,6 +66,8 @@ const Footer = () => {
               Top ↑
             </button>
           )}
+          {/* 챗봇 */}
+          <ChatBot />
         </div>
       </div>
     </>

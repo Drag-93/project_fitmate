@@ -1,10 +1,11 @@
-package org.spring.backend.main.entity;
+package org.spring.backend.admin.popup.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+
+import org.spring.backend.admin.popup.dto.PopupDto;
 import org.spring.backend.common.BasicTime;
 import org.spring.backend.file.entity.FileEntity;
-import org.spring.backend.main.dto.PopupDto;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

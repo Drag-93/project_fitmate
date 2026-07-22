@@ -9,6 +9,7 @@ import { logout, logoutAsync } from "../../store/slices/loginSlice";
 import "../css/member/memberDetail.css";
 import MemberDetailUpdateView from "./detailComponents/MemberDetailUpdateView";
 import MemberDetailView from "./detailComponents/MemberDetailView";
+import ChatBot from "../chatbot/chatbot";
 
 const API_URL = API_SERVER_URL;
 
@@ -37,7 +38,7 @@ const MemberDetail = () => {
         "Cache-Control": "no-cache",
       },
     });
-    console.log(res);
+    // console.log(res);
     return res.data;
   };
 

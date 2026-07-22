@@ -64,7 +64,7 @@ public class SecurityConfig {
                                                 .anyRequest().permitAll())
                                 .formLogin(form -> form.disable())
                                 .httpBasic(httpBasic -> httpBasic.disable())
-                                .cors(cors -> cors.configurationSource(corsConfigurationSoruce()))
+                                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                                 .logout(logout -> logout.disable()) //기존 로그아웃방식 비활성화
                                 .sessionManagement(session -> session
                                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -83,7 +83,7 @@ public class SecurityConfig {
         }
 
         @Bean
-        public CorsConfigurationSource corsConfigurationSoruce() {
+        public CorsConfigurationSource corsConfigurationSource() {
                 CorsConfiguration configuration = new CorsConfiguration();
 
                 configuration.setAllowedOrigins(Arrays.asList(

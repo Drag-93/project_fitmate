@@ -162,7 +162,7 @@ const CommunityDetail = () => {
             <p>게시글 정보가 없습니다</p>
           )}
         </div>
-        <Reply communityId={id} />
+        <Reply communityId={id} categoryName={community?.categoryName} />
       </div>
     </>
   );

@@ -29,7 +29,7 @@ const MemberDetailView = ({ member, updateFn, memberDelete, navigate }) => {
         <div className="profileName">
           <h1>{member.userName} 님</h1>
           <span className="subscribeBadge">
-            {member.subscribe === 0 ? "구독중" : "미구독"}
+            {member.subscribe === 0 ? "미구독" : "구독중"}
           </span>
         </div>
       </div>

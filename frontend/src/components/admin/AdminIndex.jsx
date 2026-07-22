@@ -1,158 +1,183 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "../css/admin/Admin.css";
+import jwtAxios from "../../apis/util/jwtUtil";
+import { API_SERVER_URL } from "../../apis/commonApi";
+//recharts import
+import {
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  LineChart,
+  Line,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+} from "recharts";
 
+/* ==================== 차트 색상 ==================== */
+// 구독 회원 / 미구독 회원
+const SUBSCRIPTION_COLORS = ["#4f8ef7", "#ff6b6b"];
+// 관심사 막대그래프
+const INTEREST_COLORS = ["#4f8ef7", "#22c55e", "#f59e0b", "#ef4444", "#8b5cf6"];
+// 게시글 선 그래프
+const COMMUNITY_LINE_COLOR = "#36a269";
+// 매출 선 그래프
+const SALES_LINE_COLOR = "#f59e0b";
+/* ==================== 관심사 한글 변환 ==================== */
+const INTEREST_LABELS = {
+  DIET: "다이어트",
+  WORKOUT: "운동",
+  HEALTH: "건강",
+  UNREGISTERED: "관심사 미등록",
+};
 const AdminIndex = () => {
-  /*
-    추후 대시보드 API를 연결하면 해당 데이터로 교체
-    예시:
-    const [dashboardData, setDashboardData] = useState({});
-   
-    const getDashboardData = async () => {
-      const res = await jwtAxios.get("/admin/dashboard");
-      setDashboardData(res.data);
-    };
-   */
+  /* ==================== 대시보드 데이터 ==================== */
+  const [dashboardData, setDashboardData] = useState({
+    // 주요 현황
+    summary: {
+      totalMemberCount: 0,
+      totalProductCount: 0,
+      todayCommunityCount: 0,
+      todaySales: 0,
+      currentMonthSales: 0,
+      lastMonthSales: 0,
+    },
+    // 회원 CRM
+    member: {
+      activeSubscriptionCount: 0,
+      expiringSubscriptionCount: 0,
+      expiredSubscriptionCount: 0,
+      unsubscribedMemberCount: 0,
+      subscriptionRate: 0,
+      interestRegistrationRate: 0,
+    },
+    // 차트 데이터
+    interestChart: [],
+    communityChart: [],
+    salesChart: [],
+    subscriptionChart: [],
+    // TOP5 목록
+    communityList: [],
+    productList: [],
+  });
 
-  // 주요 현황 데이터
-  const summaryData = {
-    totalMemberCount: 0,
-    todayMemberCount: 0,
-    todayOrderCount: 0,
-    todaySalesAmount: 0,
-    todayCommunityCount: 0,
-    unansweredInquiryCount: 0,
+  /* ==================== 대시보드 조회 ==================== */
+  const getDashboardData = async () => {
+    try {
+      const res = await jwtAxios.get(`${API_SERVER_URL}/admin/dashboard`);
+      setDashboardData({
+        summary: res.data.summary || {
+          totalMemberCount: 0,
+          totalProductCount: 0,
+          todayCommunityCount: 0,
+          todaySales: 0,
+          currentMonthSales: 0,
+          lastMonthSales: 0,
+        },
+        member: res.data.member || {
+          activeSubscriptionCount: 0,
+          expiringSubscriptionCount: 0,
+          expiredSubscriptionCount: 0,
+          unsubscribedMemberCount: 0,
+          subscriptionRate: 0,
+          interestRegistrationRate: 0,
+        },
+        interestChart: res.data.interestChart || [],
+        communityChart: res.data.communityChart || [],
+        salesChart: res.data.salesChart || [],
+        subscriptionChart: res.data.subscriptionChart || [],
+
+        communityList: res.data.communityList || [],
+        productList: res.data.productList || [],
+      });
+    } catch (err) {
+      console.error("대시보드 조회 실패", err);
+    }
   };
 
-  // 회원 CRM 데이터
-  const memberCrmData = {
-    totalMemberCount: 0,
-    memberCount: 0,
-    trainerCount: 0,
-    weeklyNewMemberCount: 0,
-    monthlyNewMemberCount: 0,
-    activeSubscriptionMemberCount: 0,
-    expiringSubscriptionMemberCount: 0,
-  };
+  useEffect(() => {
+    getDashboardData();
+  }, []);
 
-  // 커뮤니티 조회수 TOP 5
-  const communityTop5 = [
-    // {
-    //   id: 1,
-    //   title: "운동 루틴 질문드립니다.",
-    //   viewCount: 254,
-    // },
-  ];
-
-  // 상품 판매량 TOP 5
-  const productTop5 = [
-    // {
-    //   id: 1,
-    //   productName: "FitMate 구독 상품",
-    //   salesQuantity: 120,
-    // },
-  ];
-
-  // 관리자 알림
-  const adminAlerts = [
-    {
-      id: 1,
-      type: "inquiry",
-      content: `미처리 문의가 ${summaryData.unansweredInquiryCount}건 있습니다.`,
-      link: "/admin/community",
-    },
-    {
-      id: 2,
-      type: "subscription",
-      content: `7일 내 구독이 만료되는 회원이 ${memberCrmData.expiringSubscriptionMemberCount}명 있습니다.`,
-      link: "/admin/member",
-    },
-    {
-      id: 3,
-      type: "popup",
-      content: "종료 예정인 팝업을 확인해 주세요.",
-      link: "/admin/popup",
-    },
-    {
-      id: 4,
-      type: "product",
-      content: "판매 및 상품 상태를 확인해 주세요.",
-      link: "/admin/product",
-    },
-  ];
+  //데이터 구조 분해
+  const {
+    summary,
+    member,
+    interestChart,
+    communityChart,
+    salesChart,
+    subscriptionChart,
+    communityList,
+    productList,
+  } = dashboardData;
 
   return (
     <div className="admin-main">
       <main className="adminIndex">
         <div className="adminIndex-wrap">
-          {/* ===================== 페이지 상단 ===================== */}
+          {/* ==================== 페이지 상단 ==================== */}
           <div className="adminIndex-top">
             <div className="adminIndex-top-con">
               <div className="title">
                 <h1>관리자 대시보드</h1>
-                <p>FitMate 서비스의 주요 운영 현황</p>
+                <p>주요 운영 현황</p>
               </div>
             </div>
           </div>
-
-          {/* ===================== 주요 현황 ===================== */}
+          {/* ==================== 주요 현황 ==================== */}
           <section className="adminIndex-dashboard-wrap">
             <div className="title">
               <h2>주요 현황</h2>
             </div>
-
             <div className="adminIndex-summary-list">
               {/* 전체 회원 */}
               <Link to="/admin/member" className="adminIndex-summary-card">
                 <span>전체 회원</span>
                 <strong>
-                  {summaryData.totalMemberCount.toLocaleString()}명
+                  {(summary.totalMemberCount ?? 0).toLocaleString()}명
                 </strong>
               </Link>
-
-              {/* 오늘 신규 회원 */}
-              <Link to="/admin/member" className="adminIndex-summary-card">
-                <span>오늘 신규 회원</span>
+              {/* 전체 상품 */}
+              <Link to="/admin/product" className="adminIndex-summary-card">
+                <span>전체 상품</span>
                 <strong>
-                  {summaryData.todayMemberCount.toLocaleString()}명
+                  {(summary.totalProductCount ?? 0).toLocaleString()}개
                 </strong>
               </Link>
-
-              {/* 오늘 주문 */}
-              <Link to="/admin/payment" className="adminIndex-summary-card">
-                <span>오늘 주문</span>
-                <strong>
-                  {summaryData.todayOrderCount.toLocaleString()}건
-                </strong>
-              </Link>
-
-              {/* 오늘 매출 */}
-              <Link to="/admin/payment" className="adminIndex-summary-card">
-                <span>오늘 매출</span>
-                <strong>
-                  {summaryData.todaySalesAmount.toLocaleString()}원
-                </strong>
-              </Link>
-
               {/* 오늘 게시글 */}
               <Link to="/admin/community" className="adminIndex-summary-card">
                 <span>오늘 게시글</span>
                 <strong>
-                  {summaryData.todayCommunityCount.toLocaleString()}건
+                  {(summary.todayCommunityCount ?? 0).toLocaleString()}건
                 </strong>
               </Link>
-
-              {/* 미처리 문의 */}
-              <Link to="/admin/community" className="adminIndex-summary-card">
-                <span>미처리 문의</span>
+              {/* 오늘 매출 */}
+              <Link to="/admin/order" className="adminIndex-summary-card">
+                <span>오늘 매출</span>
+                <strong>{(summary.todaySales ?? 0).toLocaleString()}원</strong>
+              </Link>
+              {/* 이번 달 누적 매출 */}
+              <Link to="/admin/order" className="adminIndex-summary-card">
+                <span>이번 달 누적 매출</span>
                 <strong>
-                  {summaryData.unansweredInquiryCount.toLocaleString()}건
+                  {(summary.currentMonthSales ?? 0).toLocaleString()}원
+                </strong>
+              </Link>
+              {/* 지난 달 매출 */}
+              <Link to="/admin/order" className="adminIndex-summary-card">
+                <span>지난 달 매출</span>
+                <strong>
+                  {(summary.lastMonthSales ?? 0).toLocaleString()}원
                 </strong>
               </Link>
             </div>
           </section>
 
-          {/* ===================== 회원 CRM ===================== */}
+          {/* ==================== 회원 CRM ==================== */}
           <section className="adminIndex-member-wrap">
             <div className="title">
               <h2>회원 CRM</h2>
@@ -163,98 +188,184 @@ const AdminIndex = () => {
               <div className="adminIndex-card adminIndex-member-left-con">
                 <div className="adminIndex-card-header">
                   <h3>회원 및 구독 현황</h3>
-
-                  <Link to="/admin/member" className="adminIndex-more-link">
-                    전체보기
-                  </Link>
                 </div>
 
                 <ul>
                   <li>
-                    <span>전체 회원</span>
-                    <strong>
-                      {memberCrmData.totalMemberCount.toLocaleString()}명
-                    </strong>
-                  </li>
-
-                  <li>
-                    <span>일반 회원</span>
-                    <strong>
-                      {memberCrmData.memberCount.toLocaleString()}명
-                    </strong>
-                  </li>
-
-                  <li>
-                    <span>트레이너</span>
-                    <strong>
-                      {memberCrmData.trainerCount.toLocaleString()}명
-                    </strong>
-                  </li>
-
-                  <li>
-                    <span>이번 주 신규 가입</span>
-                    <strong>
-                      {memberCrmData.weeklyNewMemberCount.toLocaleString()}명
-                    </strong>
-                  </li>
-
-                  <li>
-                    <span>이번 달 신규 가입</span>
-                    <strong>
-                      {memberCrmData.monthlyNewMemberCount.toLocaleString()}명
-                    </strong>
-                  </li>
-
-                  <li>
                     <span>구독 유지 회원</span>
                     <strong>
-                      {memberCrmData.activeSubscriptionMemberCount.toLocaleString()}
-                      명
+                      {(member.activeSubscriptionCount ?? 0).toLocaleString()}명
                     </strong>
                   </li>
 
                   <li>
                     <span>7일 내 구독 만료</span>
                     <strong>
-                      {memberCrmData.expiringSubscriptionMemberCount.toLocaleString()}
+                      {(member.expiringSubscriptionCount ?? 0).toLocaleString()}
                       명
+                    </strong>
+                  </li>
+
+                  <li>
+                    <span>구독 만료 회원</span>
+                    <strong>
+                      {(member.expiredSubscriptionCount ?? 0).toLocaleString()}
+                      명
+                    </strong>
+                  </li>
+
+                  <li>
+                    <span>미구독 회원</span>
+                    <strong>
+                      {(member.unsubscribedMemberCount ?? 0).toLocaleString()}명
+                    </strong>
+                  </li>
+                  <li>
+                    <span>구독률</span>
+                    <strong>
+                      {(member.subscriptionRate ?? 0).toLocaleString()}%
+                    </strong>
+                  </li>
+                  <li>
+                    <span>관심사 등록률</span>
+                    <strong>
+                      {(member.interestRegistrationRate ?? 0).toLocaleString()}%
                     </strong>
                   </li>
                 </ul>
               </div>
 
-              {/* 관심사별 회원 분포 */}
+              {/* 회원 분포 차트 */}
               <div className="adminIndex-card adminIndex-member-right-con">
-                <h3>관심사별 회원 분포</h3>
+                <div className="adminIndex-member-chart-list">
+                  {/* 회원 구독 현황 */}
+                  <div className="adminIndex-member-chart-item">
+                    <h4>회원 구독 현황</h4>
 
-                <div className="adminIndex-chart">
-                  {/* 추후 Chart.js 또는 Recharts 그래프 적용 */}
-                  관심사별 회원 분포 그래프 영역
+                    {subscriptionChart.length > 0 ? (
+                      <div className="adminIndex-chart">
+                        <ResponsiveContainer width="100%" height={250}>
+                          <PieChart>
+                            <Pie
+                              data={subscriptionChart}
+                              dataKey="value"
+                              nameKey="label"
+                              cx="50%"
+                              cy="50%"
+                              innerRadius={45}
+                              outerRadius={75}
+                              paddingAngle={3}
+                              label={({ name, percent }) =>
+                                `${name} ${(percent * 100).toFixed(1)}%`
+                              }
+                            >
+                              {subscriptionChart.map((chart, index) => (
+                                <Cell
+                                  key={chart.label}
+                                  fill={
+                                    SUBSCRIPTION_COLORS[
+                                      index % SUBSCRIPTION_COLORS.length
+                                    ]
+                                  }
+                                />
+                              ))}
+                            </Pie>
+
+                            <Tooltip
+                              formatter={(value) => [
+                                `${value.toLocaleString()}명`,
+                                "회원 수",
+                              ]}
+                            />
+
+                            <Legend />
+                          </PieChart>
+                        </ResponsiveContainer>
+                      </div>
+                    ) : (
+                      <div className="adminIndex-empty">
+                        회원 구독 데이터가 없습니다.
+                      </div>
+                    )}
+                  </div>
+
+                  {/* 관심사별 회원 분포 */}
+                  <div className="adminIndex-member-chart-item">
+                    <h4>관심사별 회원 분포</h4>
+
+                    {interestChart.length > 0 ? (
+                      <div className="adminIndex-chart">
+                        <ResponsiveContainer width="100%" height={250}>
+                          <PieChart>
+                            <Pie
+                              data={interestChart}
+                              dataKey="value"
+                              nameKey="label"
+                              cx="50%"
+                              cy="50%"
+                              innerRadius={45}
+                              outerRadius={75}
+                              paddingAngle={3}
+                              label={({ name, percent }) =>
+                                `${INTEREST_LABELS[name] || name} ${(
+                                  percent * 100
+                                ).toFixed(1)}%`
+                              }
+                            >
+                              {interestChart.map((chart, index) => (
+                                <Cell
+                                  key={chart.label}
+                                  fill={
+                                    INTEREST_COLORS[
+                                      index % INTEREST_COLORS.length
+                                    ]
+                                  }
+                                />
+                              ))}
+                            </Pie>
+
+                            <Tooltip
+                              formatter={(value, name) => [
+                                `${value.toLocaleString()}명`,
+                                INTEREST_LABELS[name] || name,
+                              ]}
+                            />
+
+                            <Legend
+                              formatter={(value) =>
+                                INTEREST_LABELS[value] || value
+                              }
+                            />
+                          </PieChart>
+                        </ResponsiveContainer>
+                      </div>
+                    ) : (
+                      <div className="adminIndex-empty">
+                        관심사 데이터가 없습니다.
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
           </section>
 
-          {/* ===================== 커뮤니티 ===================== */}
+          {/* ==================== 커뮤니티 ==================== */}
+
           <section className="adminIndex-community-wrap">
             <div className="title">
               <h2>커뮤니티</h2>
             </div>
 
             <div className="adminIndex-community-con">
-              {/* 조회수 TOP 5 */}
+              {/* 조회수 TOP5 */}
               <div className="adminIndex-card adminIndex-community-left-con">
                 <div className="adminIndex-card-header">
                   <h3>조회수 TOP 5</h3>
-
-                  <Link to="/admin/community" className="adminIndex-more-link">
-                    전체보기
-                  </Link>
                 </div>
-
-                {communityTop5.length > 0 ? (
+                {communityList.length > 0 ? (
                   <ul>
-                    {communityTop5.map((community, index) => (
+                    {communityList.map((community, index) => (
                       <li key={community.id}>
                         <span className="rank">{index + 1}</span>
 
@@ -266,7 +377,7 @@ const AdminIndex = () => {
                         </Link>
 
                         <span className="item-count">
-                          조회 {community.viewCount.toLocaleString()}
+                          조회 {(community.hit ?? 0).toLocaleString()}
                         </span>
                       </li>
                     ))}
@@ -278,50 +389,91 @@ const AdminIndex = () => {
                 )}
               </div>
 
-              {/* 게시글 등록 추이 */}
+              {/* 최근 7일 게시글 등록 추이 */}
               <div className="adminIndex-card adminIndex-community-right-con">
                 <h3>최근 7일 게시글 등록 추이</h3>
 
-                <div className="adminIndex-chart">
-                  {/* 추후 일별 게시글 등록 수 그래프 적용 */}
-                  게시글 등록 추이 그래프 영역
-                </div>
+                {communityChart.length > 0 ? (
+                  <div className="adminIndex-chart">
+                    <ResponsiveContainer width="100%" height={300}>
+                      <LineChart
+                        data={communityChart}
+                        margin={{
+                          top: 20,
+                          right: 25,
+                          left: 5,
+                          bottom: 10,
+                        }}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" />
+
+                        <XAxis
+                          dataKey="label"
+                          tickFormatter={(value) => value.substring(5)}
+                          tickLine={false}
+                          axisLine={false}
+                        />
+
+                        <YAxis
+                          allowDecimals={false}
+                          tickLine={false}
+                          axisLine={false}
+                        />
+
+                        <Tooltip
+                          labelFormatter={(label) => label.substring(5)}
+                          formatter={(value) => [
+                            `${value.toLocaleString()}건`,
+                            "게시글 수",
+                          ]}
+                        />
+
+                        <Line
+                          type="monotone"
+                          dataKey="value"
+                          name="게시글 수"
+                          stroke={COMMUNITY_LINE_COLOR}
+                          strokeWidth={3}
+                          activeDot={{ r: 6 }}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+                ) : (
+                  <div className="adminIndex-empty">
+                    게시글 추이 데이터가 없습니다.
+                  </div>
+                )}
               </div>
             </div>
           </section>
-
-          {/* ===================== 상품 및 매출 ===================== */}
+          {/* ==================== 상품 및 매출 ==================== */}
           <section className="adminIndex-product-wrap">
             <div className="title">
               <h2>상품 및 매출</h2>
             </div>
-
             <div className="adminIndex-product-con">
-              {/* 상품 판매량 TOP 5 */}
+              {/* 상품 판매량 TOP5 */}
               <div className="adminIndex-card adminIndex-product-left-con">
                 <div className="adminIndex-card-header">
                   <h3>상품 판매량 TOP 5</h3>
-
-                  <Link to="/admin/product" className="adminIndex-more-link">
-                    전체보기
-                  </Link>
                 </div>
 
-                {productTop5.length > 0 ? (
+                {productList.length > 0 ? (
                   <ul>
-                    {productTop5.map((product, index) => (
+                    {productList.map((product, index) => (
                       <li key={product.id}>
                         <span className="rank">{index + 1}</span>
 
                         <Link
-                          to={`/admin/product/${product.id}`}
+                          to={`/products/detail/${product.id}`}
                           className="item-title"
                         >
                           {product.productName}
                         </Link>
 
                         <span className="item-count">
-                          {product.salesQuantity.toLocaleString()}개
+                          {(product.salesCount ?? 0).toLocaleString()}개
                         </span>
                       </li>
                     ))}
@@ -333,38 +485,62 @@ const AdminIndex = () => {
                 )}
               </div>
 
-              {/* 매출 추이 */}
+              {/* 최근 7일 매출 추이 */}
               <div className="adminIndex-card adminIndex-product-right-con">
                 <h3>최근 7일 매출 추이</h3>
 
-                <div className="adminIndex-chart">
-                  {/* 추후 일별 매출 그래프 적용 */}
-                  매출 추이 그래프 영역
-                </div>
+                {salesChart.length > 0 ? (
+                  <div className="adminIndex-chart">
+                    <ResponsiveContainer width="100%" height={300}>
+                      <LineChart
+                        data={salesChart}
+                        margin={{
+                          top: 20,
+                          right: 25,
+                          left: 15,
+                          bottom: 10,
+                        }}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" />
+
+                        <XAxis
+                          dataKey="label"
+                          tickFormatter={(value) => value.substring(5)}
+                          tickLine={false}
+                          axisLine={false}
+                        />
+
+                        <YAxis
+                          tickFormatter={(value) => value.toLocaleString()}
+                          tickLine={false}
+                          axisLine={false}
+                        />
+
+                        <Tooltip
+                          labelFormatter={(label) => label.substring(5)}
+                          formatter={(value) => [
+                            `${value.toLocaleString()}원`,
+                            "매출",
+                          ]}
+                        />
+
+                        <Line
+                          type="monotone"
+                          dataKey="value"
+                          name="매출"
+                          stroke={SALES_LINE_COLOR}
+                          strokeWidth={3}
+                          activeDot={{ r: 6 }}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+                ) : (
+                  <div className="adminIndex-empty">
+                    매출 추이 데이터가 없습니다.
+                  </div>
+                )}
               </div>
-            </div>
-          </section>
-
-          {/* ===================== 관리자 알림 ===================== */}
-          <section className="adminIndex-alert-wrap">
-            <div className="title">
-              <h2>관리자 알림</h2>
-            </div>
-
-            <div className="adminIndex-card adminIndex-alert-con">
-              <ul className="adminIndex-alert-list">
-                {adminAlerts.map((alert) => (
-                  <li key={alert.id} className={`alert-${alert.type}`}>
-                    <Link to={alert.link}>
-                      <span className="adminIndex-alert-point"></span>
-                      <span className="adminIndex-alert-content">
-                        {alert.content}
-                      </span>
-                      <span className="adminIndex-alert-arrow">›</span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
             </div>
           </section>
 

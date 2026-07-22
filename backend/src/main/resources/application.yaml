@@ -42,9 +42,17 @@ spring:
       port: 6379
       host: localhost
 
-rabbitmq.queue.name: ec2.queue
-rabbitmq.exchange.name: ec2.exchange
-rabbitmq.question.routing.key: ec2.routing.#
+#rabbitmq ec2세팅
+rabbitmq:
+  queue:
+    question: ec2.queue
+    notification: notification.queue
+  exchange:
+    name: ec2.exchange
+  routing:
+    key:
+      question: ec2.routing.#
+      notification: ec2.notification.#
 
 #로그 설정
 logging:
@@ -58,15 +66,10 @@ img.path.community: file:///E:/fitmate/backend/community/
 img.path.member: file:///E:/fitmate/backend/member/
 #팝업 파일저장경로
 img.path.popup: file:///E:/fitmate/backend/popup/
-#스케줄 파일저장경로
+img.path.exercise: file:///E:/fitmate/backend/exercise/
 img.path.schedule: file:///E:/fitmate/backend/schedule/
 
 #jwt의 암호화를 위한 시크릿 키
 jwt:
   secret:
     key: 9FyI8s5wSrqBkG5Xl2DUsb3F3JZ3bd9ACx6CluuxyUw=
-
-# 운동 루틴 API
-exercisedb:
-  api:
-    key: REMOVED
