@@ -1,10 +1,9 @@
-package org.spring.backend.admin.repository;
+package org.spring.backend.calendar.repository;
 
-import org.spring.backend.admin.entity.PersonalScheduleEntity;
+import org.spring.backend.calendar.entity.PersonalScheduleEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Repository

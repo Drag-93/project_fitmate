@@ -109,7 +109,7 @@ const MemberDetailView = ({ member, updateFn, memberDelete, navigate }) => {
                 <Link to="/subscription/list">FitMate Plus+</Link>
               </li>
               <li>
-                <Link to="/reservation/member">이용권 관리</Link>
+                <Link to="/reservation">이용권 관리</Link>
               </li>
             </>
           )}

@@ -2,6 +2,8 @@ package org.spring.backend.file.handler;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.spring.backend.calendar.entity.PersonalScheduleEntity;
+import org.spring.backend.calendar.repository.PersonalScheduleRepository;
 import org.spring.backend.common.TableType;
 import org.spring.backend.community.entity.CommunityEntity;
 import org.spring.backend.community.repository.CommunityRepository;
@@ -37,6 +39,7 @@ public class FileHandler {
     private final CommunityRepository communityRepository;
     private final ProductRepository productRepository;
     private final PopupRepository popupRepository;
+    private final PersonalScheduleRepository personalScheduleRepository;
 
     // 파일삭제
     @Transactional
@@ -61,6 +64,8 @@ public class FileHandler {
                     communityRepository.findById(id).orElseThrow(() -> new NoSuchElementException("존재하지않는 게시글입니다.")));
             case POPUP -> optionalFileEntity = fileRepository.findByPopupEntity(
                     popupRepository.findById(id).orElseThrow(() -> new NoSuchElementException("존재하지않는 팝업입니다.")));
+            case SCHEDULE -> optionalFileEntity = fileRepository.findByPersonalScheduleEntity(
+                    personalScheduleRepository.findById(id).orElseThrow(() -> new NoSuchElementException("존재하지않는 스케줄입니다.")));
             default -> throw new IllegalArgumentException("tableType이 존재하지 않습니다.");
         }
 
@@ -160,6 +165,18 @@ public class FileHandler {
                         .newFileName(newFileName)
                         .tableType(tableType)
                         .popupEntity(popupEntity)
+                        .build();
+            }
+            case SCHEDULE -> {
+                PersonalScheduleEntity personalScheduleEntity = personalScheduleRepository.findById(id)
+                        .orElseThrow(() -> new IllegalArgumentException("스케줄이 없습니다."));
+                optionalFileEntity = fileRepository.findByPersonalScheduleEntity(personalScheduleEntity);
+                // 새 파일엔티티 생성
+                fileEntity = FileEntity.builder()
+                        .oldFileName(oldFileName)
+                        .newFileName(newFileName)
+                        .tableType(tableType)
+                        .personalScheduleEntity(personalScheduleEntity)
                         .build();
             }
             default -> throw new IllegalArgumentException("tableType이 존재하지 않습니다.");
@@ -285,7 +302,21 @@ public class FileHandler {
                         .popupEntity(popupEntity)
                         .build();
             }
-            default -> throw new IllegalArgumentException("tableType이 존재하지 않습니다.");
+            case  SCHEDULE-> {
+                PersonalScheduleEntity personalScheduleEntity = personalScheduleRepository.findById(id)
+                        .orElseThrow(() -> new IllegalArgumentException("스케줄이 없습니다."));
+                optionalFileEntity = fileRepository.findByPersonalScheduleEntity(personalScheduleEntity);
+                // 새 파일엔티티 생성
+                fileEntity = FileEntity.builder()
+                        .oldFileName(oldFileName)
+                        .newFileName(newFileName)
+                        .tableType(tableType)
+                        .imageType(imageType)
+                        .sortOrder(sortOrder)
+                        .personalScheduleEntity(personalScheduleEntity)
+                        .build();
+            }
+                   default -> throw new IllegalArgumentException("tableType이 존재하지 않습니다.");
         }
         // 해당하는 파일이 존재할 시 제거
         if (optionalFileEntity.isPresent()) {

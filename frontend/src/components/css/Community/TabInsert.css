@@ -1,0 +1,98 @@
+/* ===========================
+   TabInsert.css
+=========================== */
+
+.tabInsert {
+  width: 100%;
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 30px;
+  box-sizing: border-box;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
+
+.tabInsert h1 {
+  margin: 0 0 30px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #007bff;
+  font-size: 28px;
+  color: #333;
+}
+
+/* 탭 하나 */
+
+.tabInsert > div {
+  margin-bottom: 30px;
+  padding: 20px;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+/* 입력창 */
+
+.tabInsert input {
+  display: block;
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 12px;
+
+  border: 1px solid #ccc;
+  border-radius: 6px;
+
+  font-size: 15px;
+  box-sizing: border-box;
+}
+
+.tabInsert input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+/* 버튼 */
+
+.tabInsert button {
+  margin: 5px 8px 5px 0;
+  padding: 10px 16px;
+
+  border: none;
+  border-radius: 6px;
+
+  background: #007bff;
+  color: white;
+
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.tabInsert button:hover {
+  background: #0056b3;
+}
+
+/* 마지막 저장 버튼 */
+
+.tabInsert > button {
+  display: block;
+  width: 220px;
+  margin: 40px auto 0;
+
+  padding: 14px;
+
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* 반응형 */
+
+@media (max-width: 768px) {
+  .tabInsert {
+    padding: 20px;
+    margin: 20px;
+  }
+
+  .tabInsert > button {
+    width: 100%;
+  }
+}

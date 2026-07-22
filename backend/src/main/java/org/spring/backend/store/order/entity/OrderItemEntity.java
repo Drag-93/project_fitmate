@@ -1,5 +1,8 @@
 package org.spring.backend.store.order.entity;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import org.spring.backend.common.BasicTime;
 import org.spring.backend.store.product.entity.ProductEntity;
 
@@ -40,8 +43,11 @@ public class OrderItemEntity extends BasicTime {
   private int quantity;
 
   private String productName;
-  
+
   private String productImage;
+
+  @Column
+  private LocalDate startDate;
 
   // N:1
   @JsonIgnore

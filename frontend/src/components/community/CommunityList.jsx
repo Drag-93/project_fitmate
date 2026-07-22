@@ -22,7 +22,6 @@ const CommunityList = ({ params, tab }) => {
   }, [tab, isAdmin]);
 
   useEffect(() => {
-    // 탭/카테고리가 바뀌면 1페이지로 리셋
     setPage(0);
   }, [params]);
 

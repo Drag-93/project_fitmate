@@ -9,11 +9,24 @@ const AdminMemberPage = lazy(() => import("../page/admin/AdminMemberPage"));
 const AdminMemberDetailPage = lazy(
   () => import("../page/admin/AdminMemberDetailPage"),
 );
+const TabInsertPage = lazy(() => import("../page/community/TabInsertPage"));
+const TabDetailPage = lazy(() => import("../page/community/TabDetailPage"));
 
-const AdminProductListPage = lazy(() => import("../page/store/product/admin/AdminProductListPage"));
-const AdminProductUpdatePage = lazy(() => import("../page/store/product/admin/AdminProductUpdatePage"));
-const AdminProductInsertPage = lazy(() => import("../page/store/product/admin/AdminProductInsertPage"));
-const AdminProductDetailPage = lazy(() => import("../page/store/product/admin/AdminProductDetailPage"));
+const AdminProductListPage = lazy(
+  () => import("../page/store/product/admin/AdminProductListPage"),
+);
+const AdminProductUpdatePage = lazy(
+  () => import("../page/store/product/admin/AdminProductUpdatePage"),
+);
+const AdminProductInsertPage = lazy(
+  () => import("../page/store/product/admin/AdminProductInsertPage"),
+);
+const AdminProductDetailPage = lazy(
+  () => import("../page/store/product/admin/AdminProductDetailPage"),
+);
+const AdminCommunityPage = lazy(
+  () => import("../page/admin/AdminCommunityPage"),
+);
 
 const toAdminRouter = () => {
   return [
@@ -108,14 +121,40 @@ const toAdminRouter = () => {
       element: (
         <Suspense fallback={Loading}>
           <AdminProductInsertPage />
-        </Suspense>),
+        </Suspense>
+      ),
     },
     {
       path: "product/detail/:productId",
       element: (
         <Suspense fallback={Loading}>
           <AdminProductDetailPage />
-        </Suspense>),
+        </Suspense>
+      ),
+    },
+    {
+      path: "community",
+      element: (
+        <Suspense fallback={Loading}>
+          <AdminCommunityPage />
+        </Suspense>
+      ),
+    },
+    {
+      path: "tabInsert",
+      element: (
+        <Suspense fallback={Loading}>
+          <TabInsertPage />
+        </Suspense>
+      ),
+    },
+    {
+      path: "tabDetail/:id",
+      element: (
+        <Suspense fallback={Loading}>
+          <TabDetailPage />
+        </Suspense>
+      ),
     },
   ];
 };

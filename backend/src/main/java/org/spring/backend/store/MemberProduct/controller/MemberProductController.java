@@ -1,0 +1,30 @@
+package org.spring.backend.store.MemberProduct.controller;
+
+import java.util.List;
+
+import org.spring.backend.member.jwt.CustomUserDetails;
+import org.spring.backend.store.MemberProduct.dto.MemberProductDto;
+import org.spring.backend.store.MemberProduct.service.MemberProductService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import lombok.RequiredArgsConstructor;
+
+@RestController
+@RequestMapping("/api/member-products")
+@RequiredArgsConstructor
+public class MemberProductController {
+
+    private final MemberProductService memberProductService;
+
+    @GetMapping("/active-pt")
+    public ResponseEntity<List<MemberProductDto>> getActivePtProducts(
+            @AuthenticationPrincipal CustomUserDetails user) {
+
+        return ResponseEntity.ok(
+                memberProductService.getActivePtProducts(user.getUsername()));
+    }
+}

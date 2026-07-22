@@ -22,6 +22,7 @@ import org.spring.backend.store.payment.type.PaymentMethod;
 import org.spring.backend.store.payment.type.PaymentStatus;
 import org.spring.backend.store.product.entity.ProductEntity;
 import org.spring.backend.store.product.type.BillingType;
+import org.spring.backend.store.product.type.ProductType;
 import org.spring.backend.store.subscription.entity.SubscriptionEntity;
 import org.spring.backend.store.subscription.repository.SubscriptionRepository;
 import org.spring.backend.store.subscription.type.SubscriptionStatus;
@@ -322,11 +323,8 @@ public class PaymentServiceImpl implements PaymentService {
 
   // 구독 생성 메서드
   private void createSubscription(PaymentEntity paymentEntity) {
-
     OrderEntity order = paymentEntity.getOrderEntity();
-
     OrderItemEntity orderItem = order.getOrderItemEntities().get(0);
-
     ProductEntity product = orderItem.getProductEntity();
 
     // 구독 상품 아니면 종료
@@ -334,20 +332,30 @@ public class PaymentServiceImpl implements PaymentService {
       return;
     }
 
-    SubscriptionEntity subscription = SubscriptionEntity.builder()
+    LocalDateTime startDate = orderItem.getStartDate().atStartOfDay();
+    
+    SubscriptionEntity.SubscriptionEntityBuilder builder = SubscriptionEntity.builder()
         .memberEntity(order.getMemberEntity())
         .productEntity(product)
         .subscriptionStatus(SubscriptionStatus.ACTIVE)
-        .startDate(LocalDateTime.now())
-        .endDate(
-            LocalDateTime.now()
-                .plusDays(product.getDuration()))
-        .nextPaymentDate(
-            LocalDateTime.now()
-                .plusMonths(1))
-        .build();
+        .startDate(startDate);
 
-    subscriptionRepository.save(subscription);
+    // PREMIUM : 매월 같은 날짜 자동결제
+    if (product.getProductType() == ProductType.PREMIUM) {
+
+      builder.nextPaymentDate(
+          startDate.plusMonths(1));
+    }
+    // GYM : 기간 종료일 저장
+    if (product.getProductType() == ProductType.GYM) {
+
+      builder.endDate(
+          startDate.plusDays(
+              product.getDuration()));
+    }
+
+    subscriptionRepository.save(
+        builder.build());
   }
 
   public PaymentSuccessDto normalPayment(Long orderId) {
@@ -363,6 +371,7 @@ public class PaymentServiceImpl implements PaymentService {
         .build();
 
     paymentRepository.save(payment);
+    createSubscription(payment);
 
     List<OrderItemDto> orderItems = order.getOrderItemEntities()
         .stream()

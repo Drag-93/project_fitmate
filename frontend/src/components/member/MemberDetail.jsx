@@ -125,7 +125,6 @@ const MemberDetail = () => {
           </div>
         </div>
       </div>
-      <ChatBot />
     </>
   );
 };

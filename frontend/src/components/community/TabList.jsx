@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { API_SERVER_URL } from "../../apis/commonApi";
+import "../css/Community/TabList.css";
 
 const TabList = () => {
   const navigate = useNavigate();
@@ -35,16 +36,13 @@ const TabList = () => {
       <div className="tabList">
         <div className="tabList-con">
           <h1>탭 목록</h1>
-          <button onClick={() => navigate("/community/tabInsert")}>
-            탭 추가
-          </button>
+          <button onClick={() => navigate("/admin/tabInsert")}>탭 추가</button>
           {isLoading ? (
             <p>로딩중...</p>
           ) : (
             <table>
               <thead>
                 <tr>
-                  <th>번호</th>
                   <th>탭 이름</th>
                   <th>카테고리</th>
                 </tr>
@@ -52,10 +50,7 @@ const TabList = () => {
               <tbody>
                 {tabList.map((tab, index) => (
                   <tr key={tab.id || index}>
-                    <td>{tab.id}</td>
-                    <td
-                      onClick={() => navigate(`/community/tabDetail/${tab.id}`)}
-                    >
+                    <td onClick={() => navigate(`/admin/tabDetail/${tab.id}`)}>
                       {tab.tabName}
                     </td>
                     <td>

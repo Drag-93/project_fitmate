@@ -1,7 +1,7 @@
-package org.spring.backend.admin.dto;
+package org.spring.backend.calendar.dto;
 
 import lombok.*;
-import org.spring.backend.admin.entity.PersonalScheduleEntity;
+import org.spring.backend.calendar.entity.PersonalScheduleEntity;
 import org.spring.backend.file.entity.FileEntity;
 import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDateTime;
@@ -23,7 +23,7 @@ public class PersonalScheduleDto {
 
     private String title;
 
-    private String content;
+    private String description;
 
     private LocalDateTime start;
 
@@ -48,7 +48,7 @@ public class PersonalScheduleDto {
                 .sourceId(entity.getId())
                 .eventType(entity.getEventType())
                 .title(entity.getTitle())
-                .content(entity.getContent())
+                .description(entity.getDescription())
                 .start(entity.getStart())
                 .end(entity.getEnd())
                 //WorkOut, Personal 은 수정 가능

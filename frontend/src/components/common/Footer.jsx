@@ -1,7 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../css/common/Footer.css";
 
 const Footer = () => {
+  //스크롤 버튼 -> scroll y ->300이면 top버튼 show
+  const [showTopBtn, setShowTopBtn] = useState(false);
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 300) {
+        setShowTopBtn(true);
+      } else {
+        setShowTopBtn(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+  //스크롤 최상위 버튼
+  const moveToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <>
       <div className="footer">
@@ -36,6 +59,14 @@ const Footer = () => {
               <li>안전거래를 보장하고 있습니다.</li>
             </ul>
           </div>
+          {/* 스크롤 버튼 */}
+          {showTopBtn && (
+            <button className="top-btn" onClick={moveToTop}>
+              Top ↑
+            </button>
+          )}
+          {/* 챗봇 */}
+          <ChatBot />
         </div>
       </div>
     </>

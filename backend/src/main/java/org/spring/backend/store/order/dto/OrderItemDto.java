@@ -1,7 +1,11 @@
 package org.spring.backend.store.order.dto;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import org.spring.backend.store.order.entity.OrderItemEntity;
 
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,6 +31,8 @@ public class OrderItemDto {
   private Long productId;
 
   private Long orderId;
+  
+  private LocalDate startDate;
 
   public static OrderItemDto toOrderItemDto(OrderItemEntity orderItemEntity) {
     return OrderItemDto.builder()
@@ -45,6 +51,7 @@ public class OrderItemDto {
                         .getNewFileName())
         .productId(orderItemEntity.getProductEntity().getId())
         .orderId(orderItemEntity.getOrderEntity().getId())
+        .startDate(orderItemEntity.getStartDate())
         .build();
   }
 }

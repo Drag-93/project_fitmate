@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CommunityService {
   void communityInsert(CommunityDto communityDto, String userEmail);
@@ -15,9 +16,13 @@ public interface CommunityService {
 
   void communityDelete(Long id, String userEmail);
 
+  void adminDelete(Long id);
+
   CommunityDto communityDetail(Long id, String userEmail);
 
   void updateHit(Long id);
 
-  Page<CommunityDto> findCommunityList(Long tabId, Long categoryId, Pageable pageable);
+  Map<String , Object> mainList();
+
+  Page<CommunityDto> findCommunityList(Long tabId, Long categoryId, String keyword, Pageable pageable);
 }
