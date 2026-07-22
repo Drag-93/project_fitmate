@@ -10,6 +10,13 @@ const TrainerMemberView = () => {
   const [memberData, setMemberData] = useState(null);
   const [subject, setSubject] = useState("");
   const [search, setSearch] = useState("");
+
+  //관심사를 한글로 바꿔주기위한 상수
+  const interestMap = {
+    DIET: "다이어트",
+    WORKOUT: "운동",
+    HEALTH: "건강관리",
+  };
   const handleSearchSubmit = (e) => {
     e.preventDefault(); // 폼 제출 시 페이지 새로고침 방지
     getMemberList(subject, search, 0);
@@ -21,11 +28,12 @@ const TrainerMemberView = () => {
   };
   const getMemberList = async (subject, search, page) => {
     //있을때나 없을때나 실행할수있게 설정
-    const url = `${API_SERVER_URL}/api/member/memberList?page=${page}&size=5&subject=${subject ? subject : ""}&search=${encodeURIComponent(search ? search : "")}`;
+    const url = `${API_SERVER_URL}/api/member/memberListSummary?page=${page}&size=5&subject=${subject ? subject : ""}&search=${encodeURIComponent(search ? search : "")}`;
     try {
       const res = await jwtAxios.get(url);
       setMemberData(res.data);
       console.log(res.data);
+      console.log(url);
     } catch (err) {
       alert("에러발생 : " + err);
     }
@@ -67,13 +75,15 @@ const TrainerMemberView = () => {
             <ul className="memberList-head">
               <li>이름</li>
               <li>관심사</li>
+              <li>구독여부</li>
               <li>상세보기</li>
             </ul>
             {memberData?.memberList?.map((el, idx) => {
               return (
                 <ul className="memberList-body" key={el.id}>
                   <li>{el.userName}</li>
-                  <li>{el.interest}</li>
+                  <li>{interestMap[el.interest] ?? "없음"}</li>
+                  <li>{el.subscribe === 0 ? "X" : "O"}</li>
                   <li onClick={() => navigate(`/admin/member/detail/${el.id}`)}>
                     {el.userName}
                   </li>

@@ -21,15 +21,20 @@ const PaymentSuccess = () => {
             <li>
               <button
                 onClick={() => {
-                  if (paymentInfo?.productType === "GOODS") {
+                  const type = paymentInfo?.productType;
+
+                  if (type === "GOODS") {
                     navigate('/order/list');
-                  } else if (paymentInfo?.productType === "PREMIUM") {
+                  } else if (type === "PREMIUM") {
                     navigate('/subscription/list');
+                  } else if (type === "PT") {
+                    // PT 상품은 바로 예약 페이지로 이동!
+                    navigate('/reservation');
                   } else {
-                    navigate('/fitness/list');
+                    navigate('/order/list');
                   }
                 }}
-              >구매 내역 확인</button>
+              >{paymentInfo?.productType === "PT" ? "PT 예약하러 가기" : "구매 내역 확인"}</button>
             </li>
           </ul>
         </div>

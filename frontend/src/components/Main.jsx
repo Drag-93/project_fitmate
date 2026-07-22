@@ -77,29 +77,6 @@ const Main = () => {
     getMainData();
   }, []);
 
-  //스크롤 버튼 -> scroll y ->300이면 top버튼 show
-  const [showTopBtn, setShowTopBtn] = useState(false);
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 300) {
-        setShowTopBtn(true);
-      } else {
-        setShowTopBtn(false);
-      }
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-  //스크롤 최상위 버튼
-  const moveToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
-
   return (
     <>
       {/* 팝업 모달 */}
@@ -371,12 +348,6 @@ const Main = () => {
               </div>
             </div>
           </div>
-          {/* 스크롤 버튼 */}
-          {showTopBtn && (
-            <button className="top-btn" onClick={moveToTop}>
-              Top ↑
-            </button>
-          )}
         </div>
       </div>
     </>

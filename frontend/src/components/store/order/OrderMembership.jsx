@@ -1,11 +1,20 @@
 import CommonCalendar from "../../common/calendar/CommonCalendar";
-import { kakaoPay } from "../../../apis/store/paymentApi";
+import { kakaoPay, normalPayment } from "../../../apis/store/paymentApi";
 import { createMembershipOrder } from "../../../apis/store/orderApi";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import PaymentMethod from "../order/PaymentMethod";
 
 const OrderMembership = ({ product }) => {
 
+  const navigate = useNavigate();
   const [startDate, setStartDate] = useState(null);
+  const [agree, setAgree] = useState(false);
+  const [payment, setPayment] = useState("kakao");
+
+  if (!product) {
+    return <div>상품 정보가 없습니다.</div>;
+  }
 
   const handleDateClick = (info) => {
     setStartDate(info.dateStr);
@@ -15,6 +24,11 @@ const OrderMembership = ({ product }) => {
 
     if (!startDate) {
       alert("이용 시작일을 선택해주세요.");
+      return;
+    }
+    // PREMIUM만 자동결제 동의 체크
+    if (product.productType === "PREMIUM" && !agree) {
+      alert("자동결제 및 이용약관에 동의해주세요.");
       return;
     }
 
@@ -29,18 +43,50 @@ const OrderMembership = ({ product }) => {
         return;
       }
 
-      const payment = await kakaoPay(orderId);
-      console.log("카카오 응답:", payment);
-      window.location.href = payment.approvalUrl;
+      // 카카오페이
+      if (payment === "kakao") {
+        const res = await kakaoPay(orderId);
+        window.location.href = res.approvalUrl;
+        return;
+      }
+
+      // 일반결제
+      if (payment === "card") {
+        const result = await normalPayment(orderId);
+        alert("결제가 완료되었습니다.");
+        navigate("/payment/success", {
+          state: result
+        });
+      }
     } catch (e) {
       console.log(e);
     }
   };
+  // 이용 종료일 / 다음 결제일 계산
+  const getEndDate = () => {
+    if (!startDate || !product.duration) return "";
 
-  if (!product) {
-    return <div>상품 정보가 없습니다.</div>;
-  }
+    const date = new Date(startDate);
+    date.setDate(date.getDate() + product.duration);
 
+    return date.toISOString().split("T")[0];
+  };
+
+  // PREMIUM 다음 결제일
+  const getNextPaymentDate = () => {
+    if (!startDate) return "";
+    const date = new Date(startDate);
+    const currentDay = date.getDate();
+    date.setMonth(date.getMonth() + 1);
+    // 월을 더했을 때 일수가 달라진 경우 (예: 1/31 -> 2월말) 조정
+    if (date.getDate() !== currentDay) {
+      date.setDate(0);
+    }
+    return date.toISOString().split("T")[0];
+  };
+  // 오늘 날짜 (00:00:00 기준)
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
   return (
 
     <div className="order-membership">
@@ -54,7 +100,7 @@ const OrderMembership = ({ product }) => {
             events={[]}
             onDateClick={handleDateClick}
             validRange={{
-              start: new Date(),
+              start: today, //시간 차이 문제 방지
             }}
           />
         </div>
@@ -62,9 +108,26 @@ const OrderMembership = ({ product }) => {
         <div className="selected-date">
           이용 시작일 : &nbsp;
           {startDate || " 선택해주세요."}
+
+          {/* GYM 이용 종료일 */}
+          {product.productType === "GYM" && (
+            <p>
+              이용 종료일 : &nbsp;
+              {startDate && product.duration
+                ? getEndDate()
+                : "-"}
+            </p>
+          )}
+
+          {/* PREMIUM 다음 결제일 */}
+          {product.productType === "PREMIUM" && (
+            <p>
+              다음 결제일 : &nbsp;
+              {startDate ? getNextPaymentDate() : "-"}
+            </p>
+          )}
         </div>
-
-
+        
         <div className="order-product">
           <h3>{product.productName}</h3>
 
@@ -82,12 +145,24 @@ const OrderMembership = ({ product }) => {
             결제금액 : {product.price.toLocaleString()}원
           </p>
         </div>
-
+        <PaymentMethod
+          payment={payment}
+          setPayment={setPayment}
+        />
         <hr />
-
+        {product.productType === "PREMIUM" && (
+          <label>
+            <input
+              type="checkbox"
+              checked={agree}
+              onChange={(e) => setAgree(e.target.checked)}
+            />
+            자동결제 및 이용약관 동의
+          </label>
+        )}
         <div className="order-payment">
           <button onClick={handlePayment}>
-            카카오페이 결제
+            결제하기
           </button>
         </div>
       </div>

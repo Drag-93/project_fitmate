@@ -16,37 +16,44 @@ const MemberUpdatePw = () => {
   const dispatch = useDispatch();
   // 정보수정 함수
   const onEditFn = async (e) => {
+    if (modalPwData === "") {
+      alert("비밀번호를 입력해주세요.");
+      return;
+    }
+    if (checkPwData === "") {
+      alert("비밀번호 확인을 입력해주세요.");
+      return;
+    }
+    //비밀번호 확인과 일치하는지 체크
+    if (modalPwData !== checkPwData) {
+      alert("비밀번호가 서로 다릅니다. 다시 입력해주세요.");
+      return;
+    }
     const agree = confirm("비밀번호를 수정하시겠습니까?");
     if (!agree) return;
     try {
-      // 이메일과 비밀번호를 변경하지 않았는지 체크
-      if (modalPwData !== checkPwData) {
-        alert("비밀번호가 서로 다릅니다. 다시 입력해주세요.");
-        return;
-      } else {
-        const formData = {
-          ...getData,
-          userPw: modalPwData,
-        };
-        const res = await jwtAxios.put(
-          `${API_SERVER_URL}/api/member/update`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
+      const formData = {
+        ...getData,
+        userPw: modalPwData,
+      };
+      const res = await jwtAxios.put(
+        `${API_SERVER_URL}/api/member/update`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
           },
-        );
-        if (res.data === "ok") {
-          alert("비밀번호 변경에 성공하였습니다. 다시 로그인해주세요.");
-          dispatch(logout());
-          navigate("/auth/login");
-        } else {
-          alert("비밀번호 변경에 실패하였습니다. 다시입력해주세요.");
-        }
+        },
+      );
+      if (res.data === "ok") {
+        alert("비밀번호 변경에 성공하였습니다. 다시 로그인해주세요.");
+        dispatch(logout());
+        navigate("/auth/login");
+      } else {
+        alert("비밀번호 변경에 실패하였습니다. 다시입력해주세요.");
       }
     } catch (err) {
-      console.error("회원가입 통신 에러:", err);
+      console.error("서버통신 에러:", err);
       alert("서버 연결에 실패하였습니다.");
     }
   };

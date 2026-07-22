@@ -52,7 +52,6 @@ public class SubscriptionEntity extends BasicTime {
   @Column(nullable = false)
   private LocalDateTime startDate;
 
-  @Column(nullable = false)
   private LocalDateTime endDate;
 
   private LocalDateTime nextPaymentDate;

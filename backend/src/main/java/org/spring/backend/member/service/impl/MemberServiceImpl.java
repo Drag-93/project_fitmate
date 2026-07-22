@@ -74,6 +74,21 @@ public class MemberServiceImpl implements MemberService {
         //멤버리스트 검색필터링기능
         return memberEntities.map(MemberDto::toMemberDto);
     }
+
+    @Override
+    public Page<MemberDto> memberListSummary(Pageable pageable, String subject, String search) {
+        if(subject==null||subject.isBlank()||search==null||search.isBlank()){
+            return memberRepository.findAll(pageable).map(MemberDto::toMemberDtoSummary);
+        }
+        Page<MemberEntity> memberEntities = switch (subject) {
+            case "userName" -> memberRepository.findByUserNameContaining(pageable, search);
+            case "interest" -> memberRepository.findByInterest(pageable, search);
+            default -> memberRepository.findAll(pageable);
+        };
+        //멤버리스트 검색필터링기능
+        return memberEntities.map(MemberDto::toMemberDtoSummary);
+    }
+
     @Override
     public MemberDto memberDetail(Long id) {
         MemberEntity memberEntity = memberRepository.findById(id)
@@ -82,10 +97,17 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public MemberDto memberSummary(Long id) {
+        MemberEntity memberEntity = memberRepository.findById(id)
+                .orElseThrow(()->new NoSuchElementException("회원아이디 없음"));
+        return MemberDto.toMemberDtoSummary(memberEntity);
+    }
+
+    @Override
     public MemberDto memberDetail(String userEmail) {
         MemberEntity memberEntity = memberRepository.findByUserEmail(userEmail)
                 .orElseThrow(()->new NoSuchElementException("회원아이디 없음"));
-        return MemberDto.toMemberDto(memberEntity);
+        return MemberDto.toMemberDtoSummary(memberEntity);
     }
 
     @Transactional
@@ -93,6 +115,7 @@ public class MemberServiceImpl implements MemberService {
     public void memberUpdate(MemberDto memberDto) throws IOException {
         MemberEntity originMemberEntity = memberRepository.findById(memberDto.getId())
                 .orElseThrow(()->new NoSuchElementException("회원아이디 없음"));
+
         if(!memberDto.getUserEmail().equals(originMemberEntity.getUserEmail())) {
             if (memberRepository.existsByUserEmail(memberDto.getUserEmail())) {
                 throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
@@ -107,6 +130,19 @@ public class MemberServiceImpl implements MemberService {
         originMemberEntity.setUserPhone(memberDto.getUserPhone());
         originMemberEntity.setSubscribe(memberDto.getSubscribe());
         originMemberEntity.setRole(memberDto.getRole());
+        //멤버 추가데이터에 저장할 데이터 세팅(데이터가 있을 경우에만)
+        if(memberDto.hasAdditionalData()){
+            //멤버 추가데이터 저장 로직
+            MemberAddEntity originMemberAddEntity =
+                    memberAddRepository.findById(originMemberEntity.getMemberAddEntity().getId())
+                            .orElseThrow(()->new NoSuchElementException("회원아이디 없음"));
+            originMemberAddEntity.setInterest(memberDto.getInterest());
+            originMemberAddEntity.setHeight(memberDto.getHeight());
+            originMemberAddEntity.setWeight(memberDto.getWeight());
+            originMemberAddEntity.setGoalWeight(memberDto.getGoalWeight());
+            originMemberAddEntity.setDailyCheck(memberDto.getDailyCheck());
+            originMemberAddEntity.setBadge(memberDto.getBadge());
+        }
 
 
         if(memberDto.getMemberFile() == null){

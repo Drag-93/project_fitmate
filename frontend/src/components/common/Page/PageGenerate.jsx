@@ -1,4 +1,4 @@
-import React from "react";
+import "../../css/common/PageGenerate.css";
 
 const PageGenerate = (props) => {
   const currentPage = props.currentPage; //현재페이지
@@ -12,7 +12,6 @@ const PageGenerate = (props) => {
   //페이지 번호 컴포넌트를 담을 빈 배열
   const pageNumbers = [];
 
-  console.log(currentPage);
   //버튼들을 배열에 push작업
   for (let i = startPage; i <= endPage; i++) {
     pageNumbers.push(

@@ -32,7 +32,7 @@ public class TrainerDto {
     private String profileImage; // 프로필 이미지
 
 
-    public static TrainerDto fromEntity(TrainerEntity trainer) {
+    public static TrainerDto toTrainerDto(TrainerEntity trainer) {
 
         return TrainerDto.builder()
                 .id(trainer.getId())

@@ -37,10 +37,27 @@ const ProductForm = ({ product, onSubmit }) => {
   const changeHandler = (e) => {
     const { name, value } = e.target;
 
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => {
+      const next = {
+        ...prev,
+        [name]: value,
+      };
+
+      if (name === "productType") {
+        if (value === "SUBSCRIPTION") {
+          next.billingType = "SUBSCRIPTION";
+        } else {
+          next.billingType = "ONE_TIME";
+        }
+        if (value !== "GYM") {
+          next.duration = "";
+        }
+        if (value !== "PT") {
+          next.sessionCount = "";
+        }
+      }
+      return next;
+    });
   };
 
   const submitHandler = (e) => {
@@ -97,16 +114,16 @@ const ProductForm = ({ product, onSubmit }) => {
 
       {/* PT / GYM 기간 */}
       {(formData.productType === "GYM") && (
-          <div>
-            <label>이용기간(일)</label>
-            <input
-              type="number"
-              name="duration"
-              value={formData.duration}
-              onChange={changeHandler}
-            />
-          </div>
-        )}
+        <div>
+          <label>이용기간(일)</label>
+          <input
+            type="number"
+            name="duration"
+            value={formData.duration}
+            onChange={changeHandler}
+          />
+        </div>
+      )}
 
       {/* PT 횟수 */}
       {formData.productType === "PT" && (

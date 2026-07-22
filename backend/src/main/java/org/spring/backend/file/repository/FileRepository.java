@@ -1,5 +1,6 @@
 package org.spring.backend.file.repository;
 
+import org.spring.backend.calendar.entity.PersonalScheduleEntity;
 import org.spring.backend.community.entity.CommunityEntity;
 import org.spring.backend.file.entity.FileEntity;
 import org.spring.backend.main.entity.PopupEntity;
@@ -21,4 +22,7 @@ public interface FileRepository extends JpaRepository<FileEntity, Long> {
     List<FileEntity> findByProductEntityOrderBySortOrderAsc(ProductEntity productEntity);
 
     Optional<FileEntity> findByPopupEntity(PopupEntity popupEntity);
+
+    Optional<FileEntity> findByPersonalScheduleEntity(PersonalScheduleEntity personalScheduleEntity);
+
 }
