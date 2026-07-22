@@ -52,7 +52,7 @@ private final TabRepository tabRepository;
         MemberEntity requester = memberRepository.findByUserEmail(requesterEmail)
                 .orElseThrow(() -> new NoSuchElementException("회원이 존재하지 않습니다"));
 
-        // ★ Role은 enum이므로 String과 비교하면 안 됨. enum끼리 비교해야 함.
+        // Role은 enum이므로 String과 비교하면 안 됨. enum끼리 비교해야 함.
         if (requester.getRole() != Role.ADMIN) {
             throw new AccessDeniedException(
                     "공지사항은 관리자만 작성/수정/삭제할 수 있습니다."
@@ -80,7 +80,6 @@ private final TabRepository tabRepository;
       CommunityEntity communityEntity = CommunityEntity.builder()
               .memberEntity(memberEntity)
               .title(communityDto.getTitle())
-
               .userName(communityDto.getUserName())
               .content(communityDto.getContent())
               .categoryEntity(categoryEntity)
@@ -214,13 +213,14 @@ private final TabRepository tabRepository;
     }
 
     @Override
+    @Transactional
     public Map<String, Object> mainList() {
         List<TabEntity> allTab = tabRepository.findAll();
         Map<Long, List<CommunityDto>> tabRanking = new LinkedHashMap<>();
         //탭별 top5 추출해서 채우기
         for (TabEntity tab : allTab){
             List<CommunityEntity> top5;
-            if (tab.getAdminOnly()){
+            if (Boolean.TRUE.equals(tab.getAdminOnly())){
                 top5 = communityRepository.findTop5ByCategoryEntity_TabEntity_IdOrderByCreateTimeDesc(tab.getId());
             }else{
                 top5 = communityRepository.findTop5ByCategoryEntity_TabEntity_IdOrderByHitDesc(tab.getId());

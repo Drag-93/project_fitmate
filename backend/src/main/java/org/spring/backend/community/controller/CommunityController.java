@@ -40,7 +40,7 @@ public class CommunityController {
   private final TabService tabService;
   private final WeatherService weatherService;
 
-  @GetMapping({"","/","main"})
+  @GetMapping({"","/","/main"})
   public ResponseEntity<?> mainList() {
     Map<String, Object> data = communityService.mainList();
 

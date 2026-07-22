@@ -38,7 +38,7 @@ const ReplyForm = ({ communityId, categoryName, onReplyAdd }) => {
     }
   };
 
-  const isQna = categoryName === "QNA";
+  const isQna = categoryName && categoryName.toLowerCase().includes("qna");
   const isAdmin = role === "ADMIN";
   const isBlocked = isQna && !isAdmin;
 

@@ -48,11 +48,21 @@ public class CommunityReplyServiceImpl implements CommunityReplyService {
         MemberEntity memberEntity = memberRepository.findByUserEmail(currentUsername)
                 .orElseThrow(() -> new IllegalArgumentException("로그인한 회원을 찾을 수 없습니다."));
 
+
         // 3. 게시글 정보 조회 (dto에 들어있는 communityId 사용)
         Long communityId = Long.parseLong(String.valueOf(dto.getCommunityId()));
         CommunityEntity communityEntity = communityRepository.findById(communityId)
                 .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
         checkReplyWritePermission(communityEntity, memberEntity.getUserEmail());
+
+
+        boolean isQna = communityEntity.getCategoryName() != null &&
+                communityEntity.getCategoryName().toUpperCase().contains("QNA");
+        boolean isAdmin = "ADMIN".equals(memberEntity.getRole().name()); // 회원의 권한 확인 방식에 맞게 수정
+
+        if (isQna && !isAdmin) {
+            throw new IllegalStateException("QNA 게시판에는 관리자만 댓글을 작성할 수 있습니다.");
+        }
 
         // 4. 엔티티 생성 시 조회한 memberEntity를 직접 사용
         CommunityReplyEntity replyEntity = CommunityReplyEntity.builder()

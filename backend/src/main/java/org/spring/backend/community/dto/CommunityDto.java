@@ -77,7 +77,7 @@ public class CommunityDto {
       return CommunityDto.builder()
               .id(communityEntity.getId())
               .userName(communityEntity.getUserName())
-              .title(communityEntity.getUserName())
+              .title(communityEntity.getTitle())
               .content(communityEntity.getContent())
               .categoryId(communityEntity.getId())
               .categoryName(communityEntity.getCategoryName())

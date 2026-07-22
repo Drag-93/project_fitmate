@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { API_SERVER_URL } from "../../apis/commonApi";
 import "../css/Community/CommunityMain.css";
+import jwtAxios from "../../apis/util/jwtUtil";
 
 // 배너 swiper 관련
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -38,7 +39,7 @@ const CommunityMain = () => {
     const fetchMainData = async () => {
       try {
         setIsLoading(true);
-        const res = await axios.get(`${API_SERVER_URL}/community/main`);
+        const res = await jwtAxios.get(`${API_SERVER_URL}/community/main`);
         if (res.data?.result) {
           setMainData(res.data.result);
         }

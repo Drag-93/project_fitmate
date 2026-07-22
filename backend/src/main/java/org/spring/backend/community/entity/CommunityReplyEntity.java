@@ -38,12 +38,12 @@ public class CommunityReplyEntity extends BasicTime {
     @Column(name = "member_id", insertable = false, updatable = false)
     private Long memberId;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="community_id")
     private CommunityEntity communityEntity;
 
   @JsonIgnore
-  @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "member_id")
   private MemberEntity memberEntity;
 }
