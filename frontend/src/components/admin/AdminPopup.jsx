@@ -33,6 +33,11 @@ const AdminPopup = () => {
   // 선택한 이미지 미리보기
   const [previewUrl, setPreviewUrl] = useState("");
 
+  // 종료시간 지난 팝업 강조
+  const isExpired = (endDate) => {
+    return new Date(endDate) < new Date();
+  };
+
   // 팝업 목록 조회
   // const getPopupList = async () => {
   //   try {
@@ -319,65 +324,74 @@ const AdminPopup = () => {
           <tbody>
             {popupData?.popupList.length === 0 ? (
               <tr>
-                <td colSpan={7} className="popup-empty">
+                <td colSpan={8} className="popup-empty">
                   등록된 팝업이 없습니다.
                 </td>
               </tr>
             ) : (
-              popupData?.popupList.map((popup) => (
-                <tr key={popup.id}>
-                  <td>{popup.id}</td>
+              popupData?.popupList.map((popup) => {
+                // 노출 종료일이 현재 시간보다 이전이면 true
+                const isExpired =
+                  popup.endDate && new Date(popup.endDate) < new Date();
 
-                  <td className="popup-title">{popup.title}</td>
+                return (
+                  <tr key={popup.id}>
+                    <td>{popup.id}</td>
 
-                  <td>
-                    <span
-                      className={
-                        popup.active
-                          ? "popup-status active"
-                          : "popup-status inactive"
-                      }
-                    >
-                      {popup.active ? "노출" : "미노출"}
-                    </span>
-                  </td>
+                    <td className="popup-title">{popup.title}</td>
 
-                  <td>{popup.sortOrder}</td>
-                  <td>{popup.newFileName ? "O" : "X"}</td>
-
-                  <td>
-                    {popup.startDate
-                      ? popup.startDate.replace("T", " ").slice(0, 16)
-                      : "-"}
-                  </td>
-
-                  <td>
-                    {popup.endDate
-                      ? popup.endDate.replace("T", " ").slice(0, 16)
-                      : "-"}
-                  </td>
-
-                  <td>
-                    <div className="popup-manage-btns">
-                      <button
-                        type="button"
-                        className="popup-update-btn"
-                        onClick={() => openUpdateModal(popup)}
+                    <td>
+                      <span
+                        className={
+                          !popup.active
+                            ? "popup-status inactive"
+                            : isExpired
+                              ? "popup-status expired"
+                              : "popup-status active"
+                        }
                       >
-                        수정
-                      </button>
+                        {popup.active ? "노출" : "미노출"}
+                      </span>
+                    </td>
 
-                      <button
-                        type="button"
-                        className="popup-delete-btn"
-                        onClick={() => openDeleteModal(popup)}
-                      >
-                        삭제
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
+                    <td>{popup.sortOrder}</td>
+
+                    <td>{popup.newFileName ? "O" : "X"}</td>
+
+                    <td>
+                      {popup.startDate
+                        ? popup.startDate.replace("T", " ").slice(0, 16)
+                        : "-"}
+                    </td>
+
+                    <td className={isExpired ? "popup-end-date expired" : ""}>
+                      {popup.endDate
+                        ? popup.endDate.replace("T", " ").slice(0, 16)
+                        : "-"}
+                    </td>
+
+                    <td>
+                      <div className="popup-manage-btns">
+                        <button
+                          type="button"
+                          className="popup-update-btn"
+                          onClick={() => openUpdateModal(popup)}
+                        >
+                          수정
+                        </button>
+
+                        <button
+                          type="button"
+                          className="popup-delete-btn"
+                          onClick={() => openDeleteModal(popup)}
+                        >
+                          삭제
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })
             )}
           </tbody>
         </table>

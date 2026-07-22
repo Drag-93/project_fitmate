@@ -28,9 +28,14 @@
     "react-dom": "^19.2.7",
     "react-redux": "^9.3.0",
     "react-router-dom": "^7.18.1",
+<<<<<<< HEAD
     "socket.io": "^4.8.3",
     "sockjs-client": "^1.6.1",
     "swiper": "^14.0.6"
+=======
+    "recharts": "^3.10.0",
+    "swiper": "^14.0.2"
+>>>>>>> yg
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",

@@ -1,6 +1,6 @@
-package org.spring.backend.main.repository;
+package org.spring.backend.admin.popup.repository;
 
-import org.spring.backend.main.entity.PopupEntity;
+import org.spring.backend.admin.popup.entity.PopupEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
