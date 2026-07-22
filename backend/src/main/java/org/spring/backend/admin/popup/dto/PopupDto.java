@@ -2,7 +2,6 @@ package org.spring.backend.admin.popup.dto;
 
 import lombok.*;
 import org.spring.backend.file.entity.FileEntity;
-import org.spring.backend.admin.popup.entity.PopupEntity;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
