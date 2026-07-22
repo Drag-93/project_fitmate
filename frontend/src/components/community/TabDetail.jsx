@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { API_SERVER_URL } from "../../apis/commonApi";
+import "../css/Community/TabDetail.css";
 
 const TabDetail = () => {
   const { id } = useParams();
@@ -14,15 +15,13 @@ const TabDetail = () => {
   const getTabDetail = async () => {
     try {
       setIsLoading(true);
-      const res = await axios.get(
-        `${API_SERVER_URL}/community/tabDetail/${id}`,
-      );
+      const res = await axios.get(`${API_SERVER_URL}/admin/tabDetail/${id}`);
       if (res.data?.tab) {
         setTab(res.data.tab);
       }
     } catch (error) {
       alert("탭이 존재하지 않습니다");
-      navigate("/community/tabList");
+      navigate("/admin/tabList");
     } finally {
       setIsLoading(false);
     }
@@ -70,7 +69,7 @@ const TabDetail = () => {
     try {
       setIsLoading(true);
       const res = await axios.put(
-        `${API_SERVER_URL}/community/tabUpdate/${id}`,
+        `${API_SERVER_URL}/admin/tabUpdate/${id}`,
         tab,
       );
       alert("수정되었습니다.");
@@ -88,9 +87,7 @@ const TabDetail = () => {
     if (!window.confirm("정말 삭제하시겠습니까?")) return;
     try {
       setIsLoading(true);
-      const res = await axios.delete(
-        `${API_SERVER_URL}/community/tabDelete/${id}`,
-      );
+      const res = await axios.delete(`${API_SERVER_URL}/admin/tabDelete/${id}`);
       if (res.data?.result) {
         setTab(res.data.result);
         navigate("/community/tabList");

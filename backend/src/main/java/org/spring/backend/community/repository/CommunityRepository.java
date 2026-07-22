@@ -5,13 +5,14 @@ import org.spring.backend.community.entity.CommunityEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Arrays;
 import java.util.List;
 
-public interface CommunityRepository extends JpaRepository<CommunityEntity, Long>{
+public interface CommunityRepository extends JpaRepository<CommunityEntity, Long>,JpaSpecificationExecutor<CommunityEntity>{
 
     Page<CommunityEntity> findByCategoryEntity_Id(Long categoryId, Pageable pageable);
 
@@ -38,4 +39,13 @@ public interface CommunityRepository extends JpaRepository<CommunityEntity, Long
     Page<CommunityEntity> findByContentContaining(Pageable pageable, String search);
     //작성자 검색
     Page<CommunityEntity> findByUserNameContaining(Pageable pageable, String search);
+
+    // 특정 탭의 조회수 top5
+    List<CommunityEntity> findTop5ByCategoryEntity_TabEntity_IdOrderByHitDesc(Long tabId);
+
+    // 특정 탭의 최신순 top5 (공지사항용)
+    List<CommunityEntity> findTop5ByCategoryEntity_TabEntity_IdOrderByCreateTimeDesc(Long tabId);
+
+    // 특정 탭 제외 전체 조회수 top5
+    List<CommunityEntity> findTop5ByCategoryEntity_TabEntity_IdNotOrderByHitDesc(Long tabId);
 }

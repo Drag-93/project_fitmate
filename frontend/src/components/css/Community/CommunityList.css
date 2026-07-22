@@ -1,54 +1,60 @@
-/* 전체 레이아웃 */
+/* ===========================
+   CommunityList.css
+=========================== */
+
 .communityList {
+  flex: 1;
   width: 100%;
-  max-width: 1000px;
-  margin: 40px auto;
-  padding: 0 20px;
+  margin: 30px 0;
+  padding: 0 30px;
+  box-sizing: border-box;
+}
+
+.communityList-con {
+  width: 100%;
 }
 
 .communityList-con h1 {
-  font-size: 24px;
+  font-size: 28px;
   margin-bottom: 20px;
   color: #333;
 }
 
-/* 게시글 작성 버튼 */
 .communityList-con button {
-  padding: 10px 20px;
-  background-color: #007bff;
+  padding: 10px 22px;
+  background: #007bff;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
   margin-bottom: 20px;
-  transition: background 0.3s;
 }
 
 .communityList-con button:hover {
-  background-color: #0056b3;
+  background: #0056b3;
 }
 
-/* 테이블 스타일 */
+/* 테이블 */
+
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 10px;
+  background: white;
+  border: 1px solid #ddd;
 }
 
 th,
 td {
-  padding: 15px;
+  padding: 16px;
+  border-bottom: 1px solid #eee;
   text-align: center;
-  border-bottom: 1px solid #ddd;
 }
 
 th {
-  background-color: #f8f9fa;
-  font-weight: 600;
-  color: #555;
+  background: #f8f9fa;
+  font-weight: bold;
 }
 
-/* 제목 스타일 (클릭 가능) */
 td:nth-child(3) {
   text-align: left;
   cursor: pointer;
@@ -60,32 +66,47 @@ td:nth-child(3):hover {
   text-decoration: underline;
 }
 
-/* 번호 및 기타 컬럼 너비 조정 */
 th:nth-child(1),
 td:nth-child(1) {
   width: 80px;
 }
+
 th:nth-child(2),
 td:nth-child(2) {
-  width: 150px;
+  width: 140px;
 }
+
 th:nth-child(4),
 td:nth-child(4) {
-  width: 120px;
+  width: 140px;
 }
+
 th:nth-child(5),
 td:nth-child(5) {
   width: 100px;
 }
 
-/* 반응형 처리 */
-@media (max-width: 768px) {
+/* 페이지네이션 */
+
+.pagination {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.pagination button {
+  padding: 8px 15px;
+}
+
+@media (max-width: 900px) {
   .communityList {
-    padding: 0 10px;
+    padding: 0 15px;
   }
+
   th,
   td {
-    padding: 10px;
+    padding: 12px;
     font-size: 14px;
   }
 }

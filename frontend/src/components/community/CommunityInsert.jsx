@@ -168,13 +168,19 @@ const CommunityInsert = () => {
       setDisplayName({ tab: targetTab?.tabName || "", category: "" });
     } else if (name === "categoryId") {
       const targetCat = categories.find((c) => String(c.id) === String(value));
+      const isAdmin = getCookie("member")?.role === "ADMIN";
+
+      // FAQ는 관리자만 작성 가능
+      if (targetCat?.categoryName === "FAQ" && !isAdmin) {
+        alert("FAQ는 관리자만 작성할 수 있습니다.");
+        return;
+      }
+
       setFormData((prev) => ({ ...prev, [name]: value }));
       setDisplayName((prev) => ({
         ...prev,
         category: targetCat?.categoryName || "",
       }));
-    } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
     }
   };
 

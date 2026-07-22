@@ -3,6 +3,7 @@ package org.spring.backend.community.controller;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.spring.backend.common.service.WeatherService;
 import org.spring.backend.community.dto.CategoryDto;
 import org.spring.backend.community.dto.CommunityDto;
 import org.spring.backend.community.dto.TabDto;
@@ -37,9 +38,19 @@ public class CommunityController {
 
   private final CommunityService communityService;
   private final TabService tabService;
+  private final WeatherService weatherService;
+
+  @GetMapping({"","/","main"})
+  public ResponseEntity<?> mainList() {
+    Map<String, Object> data = communityService.mainList();
+
+    Map<String, Object> map = new HashMap<>();
+    map.put("result", data);
+    return ResponseEntity.status(HttpStatus.OK).body(map);
+  }
 
   //게시글 리스트
-  @GetMapping({"","/","communityList"})
+  @GetMapping("communityList")
   public ResponseEntity<?> communityList( @PageableDefault(size = 10, sort = "createTime", direction = Sort.Direction.DESC)Pageable pageable,
                                          @RequestParam(required = false) String subject,
                                          @RequestParam(required = false) String search){
@@ -76,6 +87,13 @@ public class CommunityController {
     Map<String, String> map = new HashMap<>();
     map.put("result", "Delete");
       return ResponseEntity.status(HttpStatus.OK).body(map);
+  }
+  @DeleteMapping("/adminDelete/{id}")
+  public ResponseEntity<?> adminDelete(@PathVariable("id") Long id){
+    communityService.adminDelete(id);
+    Map<String, String> map = new HashMap<>();
+    map.put("result", "Delete");
+    return ResponseEntity.status(HttpStatus.OK).body(map);
   }
 
   //게시글 수정
@@ -142,48 +160,6 @@ public class CommunityController {
 
     return ResponseEntity.status(HttpStatus.OK).body(map);
   }
-
-  
-  // 탭생성
-  @PostMapping("/tabInsert")
-  public ResponseEntity<?> tabInsert(@RequestBody List<TabDto> tabDto) {
-    tabService.insertTab(tabDto);
-    Map<String, List<TabDto>> map = new HashMap<>();
-    
-    map.put("tab", tabDto);
-    return ResponseEntity.status(HttpStatus.OK).body(map);
-  }
-  
-  //탭 삭제
-  @DeleteMapping("/tabDelete/{id}")
-  public ResponseEntity<?> tabDelete(@PathVariable("id") Long id){
-    
-    tabService.tabDelete(id);
-    Map<String, String> map = new HashMap<>();
-    map.put("result", "Delete");
-    return ResponseEntity.status(HttpStatus.OK).body(map);
-  }
-  
-  //탭 수정
-      @PutMapping("/tabUpdate/{id}")
-      public ResponseEntity<?> tabUpdate(@PathVariable("id") Long id, @RequestBody TabDto tabDto){
-        tabDto.setId(id);
-        Map<String, TabDto> map = new HashMap<>();
-        
-        tabService.tabUpdate(tabDto);
-        map.put("result", tabDto);
-        return ResponseEntity.status(HttpStatus.OK).body(map);
-      }
-      
-      //탭 상세 // 
-      @GetMapping("/tabDetail/{id}")
-      public ResponseEntity<?> tabDetail(@PathVariable("id") Long id){
-        Map<String, TabDto> map = new HashMap<>();
-
-        TabDto tabDto = tabService.tabDetail(id);
-        map.put("tab", tabDto);
-        return ResponseEntity.status(HttpStatus.OK).body(map);
-      }
       
       //탭 상세보기 이동
       @GetMapping("tabList/{id}")
@@ -208,11 +184,22 @@ public class CommunityController {
       @GetMapping("/tclist")
       public ResponseEntity<?> tcList(@RequestParam(value="tabId", required = false) Long tabId,
                                    @RequestParam(value = "categoryId", required = false) Long categoryId,
+                                      @RequestParam(value="keyword", required = false) String keyword,
                                       @PageableDefault(size=10,sort = "createTime", direction = Sort.Direction.DESC) Pageable pageable){
-        Page<CommunityDto> page = communityService.findCommunityList(tabId, categoryId, pageable);
+        Page<CommunityDto> page = communityService.findCommunityList(tabId, categoryId, keyword, pageable);
 
         Map<String, Object> map = new HashMap<>();
         map.put("result", page);
         return ResponseEntity.status(HttpStatus.OK).body(map);
       }
+
+
+        @GetMapping("/weather")
+        public ResponseEntity<?> getWeather(@RequestParam("city") String city) {
+          Map<String, Object> weatherResult = weatherService.getWeather(city);
+
+          Map<String, Object> map = new HashMap<>();
+          map.put("result", weatherResult);
+          return ResponseEntity.status(HttpStatus.OK).body(map);
+        }
     }

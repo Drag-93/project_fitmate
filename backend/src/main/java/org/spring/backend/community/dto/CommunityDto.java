@@ -81,6 +81,8 @@ public class CommunityDto {
               .content(communityEntity.getContent())
               .categoryId(communityEntity.getId())
               .categoryName(communityEntity.getCategoryName())
+              .tabId(communityEntity.getTabId())
+              .tabName(communityEntity.getTabName())
               .reply(communityEntity.getReply())
               .userEmail(communityEntity.getUserEmail())
               .hasFile(communityEntity.getHasFile())

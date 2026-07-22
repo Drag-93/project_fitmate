@@ -1,0 +1,19 @@
+/* CommunityMainPage.css */
+
+.community-wrapper {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+}
+
+/* 왼쪽 메뉴 */
+.community-left {
+  width: 220px;
+  flex-shrink: 0;
+}
+
+/* 오른쪽 메인 */
+.comMain {
+  flex: 1;
+  min-width: 0;
+}
