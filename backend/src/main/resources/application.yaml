@@ -42,9 +42,17 @@ spring:
       port: 6379
       host: localhost
 
-rabbitmq.queue.name: ec2.queue
-rabbitmq.exchange.name: ec2.exchange
-rabbitmq.question.routing.key: ec2.routing.#
+#rabbitmq ec2세팅
+rabbitmq:
+  queue:
+    question: ec2.queue
+    notification: notification.queue
+  exchange:
+    name: ec2.exchange
+  routing:
+    key:
+      question: ec2.routing.#
+      notification: ec2.notification.#
 
 #로그 설정
 logging:

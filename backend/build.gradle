@@ -15,6 +15,7 @@ java {
 
 repositories {
 	mavenCentral()
+	maven { url 'https://jitpack.io' } // KOMORAN 의존성 라이브러리 빌드용
 }
 
 dependencies {
@@ -44,6 +45,17 @@ dependencies {
 
 	//redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	//Websocket + Rabbitmq
+	implementation 'org.springframework.boot:spring-boot-starter-websocket' //Websocket
+	implementation 'org.springframework.boot:spring-boot-starter-amqp' //RabbitMQ
+	implementation 'io.projectreactor.netty:reactor-netty'
+
+	//한국어 형태소 분석기 KOMORAN (최신 스프링 부트 충돌 방지 설정 추가)
+	implementation('com.github.shineware:komoran:3.3.9') {
+		// 내부 구형 jackson 라이브러리가 최신 Spring Boot와 충돌하므로 제외 처리
+		exclude group: 'com.fasterxml.jackson.core'
+	}
 }
 
 tasks.named('test') {
