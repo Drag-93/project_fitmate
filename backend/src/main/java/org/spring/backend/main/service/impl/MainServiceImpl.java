@@ -37,7 +37,7 @@ public class MainServiceImpl implements MainService {
         // 공지사항 최신순 TOP 5
         List<CommunityDto> noticeList =
                 communityRepository
-                        .findTop5ByTapNameOrderByCreateTimeDesc("공지사항")
+                        .findTop5ByTabNameOrderByCreateTimeDesc("공지사항")
                         .stream()
                         .map(entity -> CommunityDto.builder()
                                 .id(entity.getId())
@@ -48,7 +48,7 @@ public class MainServiceImpl implements MainService {
         // 공지사항을 제외한 전체 게시글 조회수 높은 순 TOP 5
         List<CommunityDto> communityList =
                 communityRepository
-                        .findTop5ByTapNameNotOrderByHitDesc("공지사항")
+                        .findTop5ByTabNameNotOrderByHitDesc("공지사항")
                         .stream()
                         .map(entity -> CommunityDto.builder()
                                 .id(entity.getId())
@@ -89,12 +89,12 @@ public class MainServiceImpl implements MainService {
     public MainResponseDto getMainData(Interest interest) {
 
         String productCategory = interest.getProductCategory();
-        String communityCategory = interest.getCommunityCategory();
+        String communityTabName = interest.getCommunityTabName();
 
         // 공지사항은 사용자 관심사와 관계없이  최신순 TOP 5 조회
         List<CommunityDto> noticeList =
                 communityRepository
-                        .findTop5ByTapNameOrderByCreateTimeDesc("공지사항")
+                        .findTop5ByTabNameOrderByCreateTimeDesc("공지사항")
                         .stream()
                         .map(entity -> CommunityDto.builder()
                                 .id(entity.getId())
@@ -106,8 +106,8 @@ public class MainServiceImpl implements MainService {
 
         List<CommunityDto> communityList =
                 communityRepository
-                        .findTop5ByTapNameOrderByHitDesc(
-                                communityCategory
+                        .findTop5ByTabNameOrderByHitDesc(
+                                communityTabName
                         )
                         .stream()
                         .map(entity -> CommunityDto.builder()

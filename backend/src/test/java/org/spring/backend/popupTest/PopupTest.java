@@ -2,6 +2,7 @@ package org.spring.backend.popupTest;
 
 import org.junit.jupiter.api.Test;
 import org.spring.backend.admin.popup.dto.PopupDto;
+import org.spring.backend.admin.popup.service.PopupService;
 import org.spring.backend.main.service.MainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
 @SpringBootTest
 public class PopupTest {
     @Autowired
-    MainService mainService;
+    PopupService popupService;
 
     @Test
     void insert() throws IOException{
@@ -28,7 +29,7 @@ public class PopupTest {
                     .build();
 
             try{
-            mainService.insertPopup(popupDto);
+            popupService.insertPopup(popupDto);
             }catch (Exception e){
                 System.out.println(e.getMessage());
             }

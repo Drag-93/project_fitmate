@@ -20,18 +20,18 @@ public interface CommunityRepository extends JpaRepository<CommunityEntity, Long
 
 
     // 공지사항만 최신순 TOP 5
-    List<CommunityEntity> findTop5ByTapNameOrderByCreateTimeDesc(
-            String TapName
+    List<CommunityEntity> findTop5ByTabNameOrderByCreateTimeDesc(
+            String TabName
     );
 
     // 비회원용: notice 제외하고 조회수 높은순 TOP 5
-    List<CommunityEntity> findTop5ByTapNameNotOrderByHitDesc(
-            String TapName
+    List<CommunityEntity> findTop5ByTabNameNotOrderByHitDesc(
+            String TabName
     );
 
     // 로그인 회원용: 관심사 카테고리 기준 조회수 높은순 TOP 5
-    List<CommunityEntity> findTop5ByTapNameOrderByHitDesc(
-            String TapName
+    List<CommunityEntity> findTop5ByTabNameOrderByHitDesc(
+            String TabName
     );
     //제목 검색
     Page<CommunityEntity> findByTitleContaining(Pageable pageable, String search);
