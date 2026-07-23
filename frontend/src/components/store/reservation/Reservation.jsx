@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import jwtAxios from "../../../apis/util/jwtUtil";
-import "../../../components/css/store/reservation/reservation.css";
 import CommonCalendar from "../../common/calendar/CommonCalendar";
+import "../../../components/css/store/reservation/reservation.css";
 
 
 const Reservation = () => {
@@ -59,7 +59,7 @@ const Reservation = () => {
     try {
       // 해당 트레이너 + 해당 날짜의 가능 시간대 API 호출 (예시)
       const res = await Jwt.get(
-        `http://localhost:8090/api/reservation/available-slots`,
+        `/api/reservations/available-slots`,
         { params: { trainerId: selectedTrainer.id, date: dateStr } }
       );
       // 예: ["09:00", "10:00", "14:00", "15:00"]
@@ -98,7 +98,7 @@ const Reservation = () => {
     };
 
     try {
-      await jwtAxios.post("http://localhost:8090/api/reservation", data);
+      await jwtAxios.post("/api/reservations", data);
       alert("PT 예약이 성공적으로 완료되었습니다!");
     } catch (error) {
       console.log(error);

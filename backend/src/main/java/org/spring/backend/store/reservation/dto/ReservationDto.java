@@ -1,10 +1,13 @@
 package org.spring.backend.store.reservation.dto;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import org.spring.backend.store.reservation.entity.ReservationEntity;
 import org.spring.backend.store.reservation.type.ReservationStatus;
 
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,7 +23,9 @@ public class ReservationDto {
 
   private Long id;
 
-  private LocalDateTime reservationTime;
+  private LocalDate reservationDate;
+  
+  private LocalTime reservationTime;
 
   private ReservationStatus reservationStatus;
 
@@ -34,11 +39,14 @@ public class ReservationDto {
 
   private String trainerName;
 
+  private Long memberProductId;
+
   public static ReservationDto toReservationDto(
       ReservationEntity entity) {
 
     return ReservationDto.builder()
         .id(entity.getId())
+        .reservationDate(entity.getReservationDate())
         .reservationTime(entity.getReservationTime())
         .reservationStatus(entity.getReservationStatus())
         .memo(entity.getMemo())
@@ -46,6 +54,7 @@ public class ReservationDto {
         .memberName(entity.getMember().getUserName())
         .trainerId(entity.getTrainer().getId())
         .trainerName(entity.getTrainer().getMember().getUserName())
+        .memberProductId(entity.getMemberProduct().getId())
         .build();
   }
 }

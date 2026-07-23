@@ -17,6 +17,8 @@ import org.spring.backend.store.product.repository.ProductRepository;
 import org.spring.backend.store.product.type.BillingType;
 import org.spring.backend.store.product.type.ProductStatus;
 import org.spring.backend.store.product.type.ProductType;
+import org.spring.backend.store.reservation.entity.TrainerEntity;
+import org.spring.backend.store.reservation.repository.TrainerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -36,6 +38,9 @@ public class ProductsTest {
 
   @Autowired
   private OrderItemRepository orderItemRepository;
+
+  @Autowired
+  private TrainerRepository trainerRepository;
 
   @Test
   void insert() {
@@ -199,5 +204,48 @@ public class ProductsTest {
     orderItemRepository.save(item2);
     orderItemRepository.save(item3);
 
+  }
+  @Test
+  void trainerTest() {
+
+    MemberEntity member1 = memberRepository.findById(1L)
+            .orElseThrow();
+
+    MemberEntity member2 = memberRepository.findById(2L)
+            .orElseThrow();
+
+    MemberEntity member3 = memberRepository.findById(3L)
+            .orElseThrow();
+
+    TrainerEntity trainer1 = TrainerEntity.builder()
+            .member(member1)
+            .career("5년")
+            .specialty("웨이트 트레이닝")
+            .introduce("체형 교정과 근력 향상을 전문으로 지도합니다.")
+            .certificate("생활스포츠지도사 2급")
+            .profileImage("/upload/trainer/profile1.jpg")
+            .build();
+
+    TrainerEntity trainer2 = TrainerEntity.builder()
+            .member(member2)
+            .career("7년")
+            .specialty("다이어트 · 체형관리")
+            .introduce("개인 맞춤형 다이어트 프로그램을 제공합니다.")
+            .certificate("NASM-CPT")
+            .profileImage("/upload/trainer/profile2.jpg")
+            .build();
+
+    TrainerEntity trainer3 = TrainerEntity.builder()
+            .member(member3)
+            .career("10년")
+            .specialty("재활 운동 · 기능성 트레이닝")
+            .introduce("부상 예방과 재활 운동을 전문으로 지도합니다.")
+            .certificate("재활운동전문가")
+            .profileImage("/upload/trainer/profile3.jpg")
+            .build();
+
+    trainerRepository.save(trainer1);
+    trainerRepository.save(trainer2);
+    trainerRepository.save(trainer3);
   }
 }

@@ -40,6 +40,5 @@ export const createMembershipOrder = async (data) => {
     `${API_SERVER_URL}/api/order/subscription`,
     data
   );
-  console.log("주문 생성 응답:", res);
   return res.data;
 };
