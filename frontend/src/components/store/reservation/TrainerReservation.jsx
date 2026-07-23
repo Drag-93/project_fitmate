@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import jwtAxios from "../../../apis/util/jwtUtil";
 
 const TrainerReservation = () => {
 
@@ -12,7 +12,7 @@ const TrainerReservation = () => {
   // 트레이너 예약 조회
   const getReservationList = async () => {
     try {
-      const res = await axios.get(
+      const res = await jwtAxios.get(
         "http://localhost:8090/api/reservation/trainer"
       );
       setReservations(res.data);
@@ -25,7 +25,7 @@ const TrainerReservation = () => {
   const changeStatus = async (id, status) => {
 
     try {
-      await axios.put(
+      await jwtAxios.put(
         `http://localhost:8090/api/reservation/${id}`,
         {
           reservationStatus: status

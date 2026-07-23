@@ -27,7 +27,14 @@ const toSubscriptionRouter = () => {
         </Suspense>
       ),
     },
-    
+    {
+      path: "premium",
+      element: (
+        <Suspense fallback={Loading}>
+          <SubscriptionPage />
+        </Suspense>
+      ),
+    },
   ];
 };
 

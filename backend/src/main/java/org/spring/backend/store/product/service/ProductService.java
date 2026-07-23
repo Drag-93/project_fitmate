@@ -33,4 +33,5 @@ public interface ProductService {
   // 이미지 전체삭제
   void deleteImages(Long productId);
 
+  ProductDto getPremiumProduct();
 }
