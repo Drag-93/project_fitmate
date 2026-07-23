@@ -3,7 +3,6 @@ package org.spring.backend.admin.controller;
 import lombok.RequiredArgsConstructor;
 import org.spring.backend.admin.popup.dto.PopupDto;
 import org.spring.backend.admin.popup.service.PopupService;
-import org.spring.backend.main.service.MainService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;

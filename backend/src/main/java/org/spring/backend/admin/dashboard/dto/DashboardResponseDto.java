@@ -1,7 +1,5 @@
 package org.spring.backend.admin.dashboard.dto;
 import lombok.*;
-import org.spring.backend.community.dto.CommunityDto;
-import org.spring.backend.store.product.dto.ProductDto;
 
 import java.util.List;
 
