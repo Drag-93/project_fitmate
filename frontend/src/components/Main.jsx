@@ -10,6 +10,7 @@ import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import CommonMap from "./common/map/CommonMap";
 
 const Main = () => {
   //로그인 여부 판단
