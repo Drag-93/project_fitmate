@@ -212,4 +212,12 @@ public class OrderServiceImpl implements OrderService {
                 return order.getId();
         }
 
+        @Override
+        public List<OrderDto> adminOrderList() {
+
+                return orderRepository.findAll()
+                                .stream()
+                                .map(OrderDto::toOrderDto)
+                                .toList();
+        }
 }

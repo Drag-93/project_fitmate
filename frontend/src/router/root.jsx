@@ -10,6 +10,7 @@ import toOrderRouter from "./store/toOrderRouter";
 import toPaymentRouter from "./store/toPaymentRouter";
 import toMemberRouter from "./toMemberRouter";
 import toReservationRouter from "./store/toReservationRouter";
+import toSubscriptionRouter from "./store/toSubscriptionRouter";
 
 const Loading = (
   <div className="loading">
@@ -86,6 +87,15 @@ const root = createBrowserRouter([
       </Suspense>
     ),
     children: toReservationRouter(),
+  },
+    {
+    path: "subscription",
+    element: (
+      <Suspense fallback={Loading}>
+        <StoreLayout />
+      </Suspense>
+    ),
+    children: toSubscriptionRouter(),
   },
   {
     path: "community",

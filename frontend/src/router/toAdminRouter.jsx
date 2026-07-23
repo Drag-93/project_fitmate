@@ -24,6 +24,9 @@ const AdminProductInsertPage = lazy(
 const AdminProductDetailPage = lazy(
   () => import("../page/store/product/admin/AdminProductDetailPage"),
 );
+const AdminOrderListPage = lazy(
+  () => import("../page/store/order/admin/AdminOrderListPage"),
+);
 const AdminCommunityPage = lazy(
   () => import("../page/admin/AdminCommunityPage"),
 );
@@ -110,7 +113,7 @@ const toAdminRouter = () => {
       path: "order",
       element: (
         <Suspense fallback={Loading}>
-          <AdminProductListPage />
+          <AdminOrderListPage />
         </Suspense>
       ),
     },

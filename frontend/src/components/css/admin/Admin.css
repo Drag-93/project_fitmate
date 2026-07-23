@@ -531,6 +531,29 @@
   color: #9ca3af !important;
   text-align: center !important;
 }
+/* 현재 노출 중 */
+.popup-status.active {
+  color: #198754;
+  background-color: #e8f7ee;
+}
+
+/* 관리자가 미노출로 설정 */
+.popup-status.inactive {
+  color: #dc3545;
+  background-color: #fdecec;
+}
+
+/* active는 true지만 노출 기간이 종료됨 */
+.popup-status.expired {
+  color: #777;
+  background-color: #eeeeee;
+}
+
+/* 종료일도 함께 흐리게 표시 */
+.popup-end-date.expired {
+  color: #dc3545;
+  font-weight: 600;
+}
 
 /* =====================================================
    노출 상태

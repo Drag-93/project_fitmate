@@ -1,15 +1,15 @@
 package org.spring.backend.community.repository;
 
-import org.spring.backend.community.dto.CommunityDto;
 import org.spring.backend.community.entity.CommunityEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
-import java.util.Arrays;
+import io.lettuce.core.dynamic.annotation.Param;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface CommunityRepository extends JpaRepository<CommunityEntity, Long>,JpaSpecificationExecutor<CommunityEntity>{
@@ -55,4 +55,8 @@ public interface CommunityRepository extends JpaRepository<CommunityEntity, Long
     LIMIT 5
     """)
     List<CommunityEntity> findTop5ByCategoryEntity_TabEntity_IdNotOrderByHitDesc(@Param("tabId") Long tabId);
+
+    
+     //오늘 작성된 글 개수
+    Long countByCreateTimeGreaterThanEqualAndCreateTimeLessThanAndTabNameNot(LocalDateTime startOfToday, LocalDateTime startOfTomorrow, String tabName);
 }

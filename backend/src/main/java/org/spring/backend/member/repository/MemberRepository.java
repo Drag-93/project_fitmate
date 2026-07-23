@@ -1,5 +1,6 @@
 package org.spring.backend.member.repository;
 
+import org.spring.backend.common.Role;
 import org.spring.backend.member.entity.MemberEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,4 +38,10 @@ public interface MemberRepository extends JpaRepository<MemberEntity, Long> {
                     "INNER JOIN m.memberAddEntity a " +
                     "WHERE a.interest LIKE CONCAT('%', :search, '%')")
     Page<MemberEntity> findByInterest(Pageable pageable, @Param("search") String search);
+
+    //구독 유지중인 회원 수
+    Long countByRoleAndSubscribe(Role role, Integer subscribe);
+
+    //Role에 따른 회원 수
+    Long countByRole(Role role);
 }
