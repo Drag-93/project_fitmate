@@ -75,7 +75,7 @@ const CommunityMain = () => {
     const fetchMainData = async () => {
       try {
         setIsLoading(true);
-        const res = await jwtAxios.get(`${API_SERVER_URL}/community/main`);
+        const res = await axios.get(`${API_SERVER_URL}/community/main`);
         if (res.data?.result) {
           setMainData(res.data.result);
         }

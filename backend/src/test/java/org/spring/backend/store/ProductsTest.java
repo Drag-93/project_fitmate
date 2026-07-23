@@ -22,6 +22,9 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+
 @SpringBootTest
 public class ProductsTest {
 
@@ -39,7 +42,7 @@ public class ProductsTest {
 
   @Test
   void insert() {
-    for (int i = 2; i <10; i++) {
+    for (int i = 11; i < 13; i++) {
 
       ProductEntity productEntity = ProductEntity.builder()
               .productName("상품" + i)
@@ -57,7 +60,7 @@ public class ProductsTest {
 
   @Test
   void insert2() {
-    for (int i = 2; i <10; i++) {
+    for (int i = 11; i < 13; i++) {
 
       ProductEntity productEntity = ProductEntity.builder()
               .productName("헬스장 이용권" + i)
@@ -76,7 +79,7 @@ public class ProductsTest {
 
   @Test
   void insert3() {
-    for (int i = 2; i <10; i++) {
+    for (int i = 11; i < 13; i++) {
 
       ProductEntity productEntity = ProductEntity.builder()
               .productName("PT이용권" + i)

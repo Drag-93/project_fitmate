@@ -10,9 +10,7 @@ export default function RoutineResult({ result }) {
       <div className="panel result-panel empty-state">
         <p className="eyebrow">02 — 결과</p>
         <h2 className="panel-title">아직 비어있음</h2>
-        <p className="muted">
-          왼쪽에서 부위를 고르고 루틴을 생성하면 여기 뜹니다.
-        </p>
+        <p className="muted">왼쪽에서 부위를 고르고 루틴을 생성.</p>
       </div>
     );
   }
