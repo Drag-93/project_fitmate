@@ -56,9 +56,9 @@ const AdminProductListPage = () => {
   if (loading) { return <div>Loading...</div>; }
 
   return (
-    <div className="admin-product-page">
+    <div className="admin-product-list-page">
       <h2 className="title">상품 관리</h2>
-      <button className="admin-product-insert"
+      <button className="admin-product-insert-btn"
         onClick={() => navigate("/admin/product/insert")}
       >
         상품 등록
