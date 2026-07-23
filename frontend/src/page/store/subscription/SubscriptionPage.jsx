@@ -1,8 +1,9 @@
 import React from 'react'
+import PremiumCard from '../../../components/store/subscription/PremiumCard'
 
 const SubscriptionPage = () => {
   return (
-    <div>SubscriptionPage</div>
+    <PremiumCard/>
   )
 }
 

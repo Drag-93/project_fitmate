@@ -8,6 +8,7 @@ import org.spring.backend.member.repository.MemberRepository;
 import org.spring.backend.store.payment.repository.PaymentRepository;
 import org.spring.backend.store.product.entity.ProductEntity;
 import org.spring.backend.store.product.repository.ProductRepository;
+import org.spring.backend.store.product.type.ProductType;
 import org.spring.backend.store.subscription.dto.SubscriptionDto;
 import org.spring.backend.store.subscription.entity.SubscriptionEntity;
 import org.spring.backend.store.subscription.repository.SubscriptionRepository;
@@ -27,6 +28,42 @@ public class SubscriptionServiceImpl implements SubscriptionService {
   private final MemberRepository memberRepository;
   private final ProductRepository productRepository;
   private final PaymentRepository paymentRepository;
+
+  @Override
+  public void insertPremiumSubscription(Long memberId) {
+
+    // 회원 조회
+    MemberEntity memberEntity = memberRepository.findById(memberId)
+        .orElseThrow(() -> new RuntimeException("회원 없음"));
+
+    // 프리미엄 상품 조회
+    ProductEntity premiumProduct = productRepository
+        .findFirstByProductType(ProductType.PREMIUM)
+        .orElseThrow(() -> new RuntimeException("프리미엄 상품 없음"));
+
+    // 이미 구독 중인지 확인
+    boolean exists = subscriptionRepository
+        .existsByMemberEntityAndProductEntityAndSubscriptionStatus(
+            memberEntity,
+            premiumProduct,
+            SubscriptionStatus.ACTIVE);
+
+    if (exists) {
+      throw new RuntimeException("이미 프리미엄 구독 중입니다.");
+    }
+
+    // 구독 생성
+    SubscriptionEntity subscription = SubscriptionEntity.builder()
+        .memberEntity(memberEntity)
+        .productEntity(premiumProduct)
+        .subscriptionStatus(SubscriptionStatus.ACTIVE)
+        .startDate(LocalDateTime.now())
+        .endDate(LocalDateTime.now().plusMonths(1))
+        .nextPaymentDate(LocalDateTime.now().plusMonths(1))
+        .build();
+
+    subscriptionRepository.save(subscription);
+  }
 
   @Override
   public void insertSubscription(Long memberId, Long productId, SubscriptionDto subscriptionDto) {
@@ -81,6 +118,10 @@ public class SubscriptionServiceImpl implements SubscriptionService {
   public void cancelSubscription(Long memberId, Long subscriptionId) {
     SubscriptionEntity subscription = subscriptionRepository.findById(subscriptionId)
         .orElseThrow(() -> new IllegalArgumentException("구독 상품이 존재하지 않습니다."));
+
+    if (!subscription.getMemberEntity().getId().equals(memberId)) {
+      throw new IllegalArgumentException("접근 권한이 없습니다.");
+    }
 
     subscription.setSubscriptionStatus(SubscriptionStatus.CANCELED);
     subscription.setNextPaymentDate(null);

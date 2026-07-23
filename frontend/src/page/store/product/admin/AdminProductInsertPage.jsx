@@ -79,12 +79,17 @@ const AdminProductInsertPage = () => {
 
     } catch(e){
       console.error(e);
-      alert("상품 등록 실패");
+    
+      if(e.response?.data){
+        alert(e.response.data);
+      } else {
+        alert("상품 등록 실패");
+      }
     }
   };
 
   return (
-    <div className="admin-product-insert">
+    <div className="admin-product-insert-page">
 
       <h2> 상품 등록 </h2>
 

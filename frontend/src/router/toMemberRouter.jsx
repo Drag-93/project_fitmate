@@ -7,6 +7,9 @@ const MemberUpdatePwPage = lazy(
   () => import("../page/member/MemberUpdatePwPage"),
 );
 const MySchedulePage = lazy(() => import("../page/member/MySchedulePage"));
+const OrderListPage = lazy(() => import("../page/store/order/OrderListPage"));
+const MySubscriptionPage = lazy(() => import("../page/store/subscription/MysubscriptionPage"));
+const ReservationPage = lazy(() => import("../page/store/reservation/ReservationPage"));
 
 const toMemberRouter = () => {
   return [
@@ -31,6 +34,30 @@ const toMemberRouter = () => {
       element: (
         <Suspense fallback={Loading}>
           <MySchedulePage />
+        </Suspense>
+      ),
+    },
+    {
+      path: "subscription",
+      element: (
+        <Suspense fallback={Loading}>
+          <MySubscriptionPage />
+        </Suspense>
+      ),
+    },
+    {
+      path: "orderList",
+      element: (
+        <Suspense fallback={Loading}>
+          <OrderListPage />
+        </Suspense>
+      ),
+    },
+    {
+      path: "reservation",
+      element: (
+        <Suspense fallback={Loading}>
+          <ReservationPage />
         </Suspense>
       ),
     },

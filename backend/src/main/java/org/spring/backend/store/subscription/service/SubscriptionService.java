@@ -8,6 +8,8 @@ public interface SubscriptionService {
       // 구독 생성 (구독 시작)
     void insertSubscription(Long memberId, Long productId, SubscriptionDto subscriptionDto);
 
+    public void insertPremiumSubscription(Long memberId);
+
     // 내 구독 목록
     List<SubscriptionDto> subscriptionList(Long memberId);
 

@@ -3,6 +3,8 @@ package org.spring.backend.store.product.controller;
 import java.util.List;
 
 import org.spring.backend.store.product.dto.ProductDto;
+import org.spring.backend.store.product.entity.ProductEntity;
+import org.spring.backend.store.product.repository.ProductRepository;
 import org.spring.backend.store.product.service.ProductService;
 import org.spring.backend.store.product.type.ProductType;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequiredArgsConstructor
 public class ProductController {
   private final ProductService productService;
+  private final ProductRepository productRepository;
 
   // 상품 상세 조회
   @GetMapping("/{productId}")
@@ -93,5 +96,18 @@ public class ProductController {
 
     return ResponseEntity.ok(
         productService.productList(productType, pageable));
+  }
+
+  @GetMapping("/premium")
+  public ResponseEntity<ProductDto> getPremiumProduct(){
+  
+      ProductEntity product =
+          productRepository.findFirstByProductType(ProductType.PREMIUM)
+          .orElseThrow(() ->
+              new IllegalArgumentException("프리미엄 상품 없음"));
+  
+      return ResponseEntity.ok(
+          ProductDto.toProductDto(product)
+      );
   }
 }

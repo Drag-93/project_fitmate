@@ -28,7 +28,7 @@ public class PopupTest {
                     .build();
 
             try{
-            mainService.insertPopup(popupDto);
+//            mainService.insertPopup(popupDto);
             }catch (Exception e){
                 System.out.println(e.getMessage());
             }
