@@ -54,23 +54,6 @@
   color: #fff;
 }
 
-/* TipTap 에디터 본문 스타일 */
-.tiptap-content {
-  min-height: 300px;
-  padding: 15px;
-  border: 1px solid #ccc;
-  border-radius: 0 0 4px 4px;
-  background-color: #fff;
-}
-
-/* 에디터 내부 이미지 크기 조절 (중요) */
-.tiptap-content img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-  margin: 10px 0;
-}
-
 /* 버튼 영역 */
 button[type="submit"] {
   margin-top: 20px;

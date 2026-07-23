@@ -27,6 +27,12 @@ const AdminProductDetailPage = lazy(
 const AdminCommunityPage = lazy(
   () => import("../page/admin/AdminCommunityPage"),
 );
+const AdminCommunityDetailPage = lazy(
+  () => import("../page/admin/AdminCommunityDetailPage"),
+);
+const AdminNoticeWritePage = lazy(
+  () => import("../page/admin/AdminNoticeWritePage"),
+);
 
 const toAdminRouter = () => {
   return [
@@ -153,6 +159,22 @@ const toAdminRouter = () => {
       element: (
         <Suspense fallback={Loading}>
           <TabDetailPage />
+        </Suspense>
+      ),
+    },
+    {
+      path: "comumnity/detail/:id",
+      element: (
+        <Suspense fallback={Loading}>
+          <AdminCommunityDetailPage />
+        </Suspense>
+      ),
+    },
+    {
+      path: "comumnity/insert",
+      element: (
+        <Suspense fallback={Loading}>
+          <AdminNoticeWritePage />
         </Suspense>
       ),
     },

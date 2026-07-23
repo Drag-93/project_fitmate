@@ -20,18 +20,18 @@ public interface CommunityRepository extends JpaRepository<CommunityEntity, Long
 
 
     // 공지사항만 최신순 TOP 5
-    List<CommunityEntity> findTop5ByCategoryNameOrderByCreateTimeDesc(
-            String categoryName
+    List<CommunityEntity> findTop5ByTapNameOrderByCreateTimeDesc(
+            String TapName
     );
 
     // 비회원용: notice 제외하고 조회수 높은순 TOP 5
-    List<CommunityEntity> findTop5ByCategoryNameNotOrderByHitDesc(
-            String categoryName
+    List<CommunityEntity> findTop5ByTapNameNotOrderByHitDesc(
+            String TapName
     );
 
     // 로그인 회원용: 관심사 카테고리 기준 조회수 높은순 TOP 5
-    List<CommunityEntity> findTop5ByCategoryNameOrderByHitDesc(
-            String categoryName
+    List<CommunityEntity> findTop5ByTapNameOrderByHitDesc(
+            String TapName
     );
     //제목 검색
     Page<CommunityEntity> findByTitleContaining(Pageable pageable, String search);
@@ -47,5 +47,12 @@ public interface CommunityRepository extends JpaRepository<CommunityEntity, Long
     List<CommunityEntity> findTop5ByCategoryEntity_TabEntity_IdOrderByCreateTimeDesc(Long tabId);
 
     // 특정 탭 제외 전체 조회수 top5
-    List<CommunityEntity> findTop5ByCategoryEntity_TabEntity_IdNotOrderByHitDesc(Long tabId);
+    @Query("""
+    SELECT c FROM CommunityEntity c
+    WHERE c.tabId <> :tabId
+      AND UPPER(c.categoryName) NOT LIKE '%QNA%'
+    ORDER BY c.hit DESC
+    LIMIT 5
+    """)
+    List<CommunityEntity> findTop5ByCategoryEntity_TabEntity_IdNotOrderByHitDesc(@Param("tabId") Long tabId);
 }

@@ -1,6 +1,8 @@
 package org.spring.backend.admin.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.spring.backend.community.dto.TabDto;
+import org.spring.backend.community.service.TabService;
 import org.spring.backend.main.dto.PopupDto;
 import org.spring.backend.main.service.MainService;
 import org.spring.backend.member.dto.MemberDto;
@@ -22,7 +24,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AdminController {
     private final MainService mainService;
-
+    private final TabService tabService;
 
 
 
@@ -91,4 +93,47 @@ public class AdminController {
         return ResponseEntity.ok("ok");
     }
 //=======================popup=======================
+
+
+    // 탭생성
+    @PostMapping("/tabInsert")
+    public ResponseEntity<?> tabInsert(@RequestBody List<TabDto> tabDto) {
+        tabService.insertTab(tabDto);
+        Map<String, List<TabDto>> map = new HashMap<>();
+
+        map.put("tab", tabDto);
+        return ResponseEntity.status(HttpStatus.OK).body(map);
+    }
+
+    //탭 삭제
+    @DeleteMapping("/tabDelete/{id}")
+    public ResponseEntity<?> tabDelete(@PathVariable("id") Long id){
+
+        tabService.tabDelete(id);
+        Map<String, String> map = new HashMap<>();
+        map.put("result", "Delete");
+        return ResponseEntity.status(HttpStatus.OK).body(map);
+    }
+
+    //탭 수정
+    @PutMapping("/tabUpdate/{id}")
+    public ResponseEntity<?> tabUpdate(@PathVariable("id") Long id, @RequestBody TabDto tabDto){
+        tabDto.setId(id);
+        Map<String, TabDto> map = new HashMap<>();
+
+        tabService.tabUpdate(tabDto);
+        map.put("result", tabDto);
+        return ResponseEntity.status(HttpStatus.OK).body(map);
+    }
+
+    //탭 상세 //
+    @GetMapping("/tabDetail/{id}")
+    public ResponseEntity<?> tabDetail(@PathVariable("id") Long id){
+        Map<String, TabDto> map = new HashMap<>();
+
+        TabDto tabDto = tabService.tabDetail(id);
+        map.put("tab", tabDto);
+        return ResponseEntity.status(HttpStatus.OK).body(map);
+    }
+
 }

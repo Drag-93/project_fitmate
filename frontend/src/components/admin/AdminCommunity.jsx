@@ -1,16 +1,16 @@
 import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import jwtAxios from "../../apis/util/jwtUtil";
+import jwtAxios from "../../apis/util/jwtUtil.jsx";
 import { API_SERVER_URL } from "../../apis/commonApi";
 import "../css/admin/AdminCommunity.css";
 import { getCookie } from "../../apis/util/cookieUtil";
 import TabList from "../community/TabList.jsx";
 import PageGenerate from "../common/Page/PageGenerate.jsx";
+import AdminNoticeWrite from "./community/AdminNoticeWrite.jsx";
+import AdminCommunityDetail from "./community/AdminCommunityDetail.jsx";
 
 const AdminCommunity = () => {
-  const navigate = useNavigate();
-
+  const [openModal, setOpenModal] = useState(false);
   const [tabs, setTabs] = useState([]);
   const [categories, setCategories] = useState([]);
 
@@ -27,6 +27,10 @@ const AdminCommunity = () => {
   const [totalElements, setTotalElements] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const size = 20;
+
+  // 모달 상태
+  const [writeTabId, setWriteTabId] = useState(null);
+  const [detailId, setDetailId] = useState(null);
 
   const pageGroupSize = 10;
   const currentGroup = Math.floor(page / pageGroupSize);
@@ -100,6 +104,7 @@ const AdminCommunity = () => {
     }
   };
 
+  //엔터키 적용
   const handleKeyDown = (e) => {
     if (e.key === "Enter") handleSearch();
   };
@@ -108,23 +113,22 @@ const AdminCommunity = () => {
     setPage(newPage);
   };
 
+  // 작성 모달 오픈
   const noticeWrite = () => {
     const noticeTab = tabs.find((tab) => tab.adminOnly);
     if (!noticeTab) {
       alert("공지사항 탭이 존재하지 않습니다. 탭 관리에서 먼저 생성해주세요.");
       return;
     }
-    navigate("/community/insert", {
-      state: { tabId: noticeTab.id },
-    });
+    setWriteTabId(noticeTab.id);
   };
-
+  // 선택
   const toggleSelect = (id) => {
     setSelectedIds((prev) =>
       prev.includes(id) ? prev.filter((v) => v !== id) : [...prev, id],
     );
   };
-
+  //전체 선택
   const toggleSelectAll = (e) => {
     if (e.target.checked) {
       setSelectedIds(list.map((item) => item.id));
@@ -132,7 +136,7 @@ const AdminCommunity = () => {
       setSelectedIds([]);
     }
   };
-
+  //게시글 1개 삭제
   const handleDeleteOne = async (id) => {
     if (!window.confirm("이 게시글을 삭제하시겠습니까?")) return;
     try {
@@ -143,7 +147,7 @@ const AdminCommunity = () => {
       alert("삭제 실패");
     }
   };
-
+  //선택 게시글 삭제
   const handleDeleteSelected = async () => {
     if (selectedIds.length === 0) {
       alert("삭제할 게시글을 선택해주세요");
@@ -243,7 +247,7 @@ const AdminCommunity = () => {
             선택 삭제
           </button>
         </div>
-
+        {/* 내용부 */}
         {isLoading ? (
           <p>목록을 불러오는 중입니다</p>
         ) : (
@@ -291,9 +295,18 @@ const AdminCommunity = () => {
                       <td>{item.categoryName}</td>
                       <td
                         className="admin-title-cell"
-                        onClick={() => navigate(`/community/detail/${item.id}`)}
+                        onClick={() => setDetailId(item.id)}
                       >
-                        {item.title}
+                        {item.thumbnail ? (
+                          <img
+                            className="board-item-thumb"
+                            src={item.thumbnail}
+                            alt=""
+                          />
+                        ) : (
+                          <div className="board-item-thumb board-item-thumb-empty" />
+                        )}
+                        <p>{item.title}</p>
                       </td>
                       <td>{item.userName}</td>
                       <td>{item.hit}</td>
@@ -331,6 +344,32 @@ const AdminCommunity = () => {
           <TabList />
         </div>
       </div>
+
+      {/* 작성 모달 */}
+      {writeTabId && (
+        <AdminNoticeWrite
+          tabId={writeTabId}
+          tabs={tabs}
+          categories={categories}
+          onClose={() => setWriteTabId(null)}
+          onSuccess={() => {
+            setWriteTabId(null);
+            fetchList();
+          }}
+        />
+      )}
+
+      {/* 상세보기 모달 */}
+      {detailId && (
+        <AdminCommunityDetail
+          id={detailId}
+          onClose={() => setDetailId(null)}
+          onDeleted={() => {
+            setDetailId(null);
+            fetchList();
+          }}
+        />
+      )}
     </div>
   );
 };

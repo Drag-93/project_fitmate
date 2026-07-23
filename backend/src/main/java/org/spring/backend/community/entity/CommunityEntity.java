@@ -30,6 +30,7 @@ public class CommunityEntity extends BasicTime {
 
     private String title;
 
+    @Column(columnDefinition = "LONGTEXT")
     private String content;
 
     private Long tabId;
@@ -47,6 +48,8 @@ public class CommunityEntity extends BasicTime {
     private int hit;
 
     private String originalFileName;
+
+    private String thumbnail;
 
 
     @ManyToOne(fetch = FetchType.LAZY)

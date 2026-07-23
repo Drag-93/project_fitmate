@@ -3,6 +3,8 @@ package org.spring.backend.community.service.impl;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.spring.backend.common.Role;
@@ -67,51 +69,49 @@ private final TabRepository tabRepository;
 
     @Override
     public void communityInsert(CommunityDto communityDto, String userEmail) {
-      MemberEntity memberEntity = memberRepository.findByUserEmail(userEmail)
-              .orElseThrow(()->new NoSuchElementException("회원이 존재하지 않습니다"));
+        MemberEntity memberEntity = memberRepository.findByUserEmail(userEmail)
+                .orElseThrow(()->new NoSuchElementException("회원이 존재하지 않습니다"));
 
-      CategoryEntity categoryEntity = categoryRepository.findById(communityDto.getCategoryId())
-              .orElseThrow(()->new NoSuchElementException("존재하지 않는 카테고리입니다."));
+        CategoryEntity categoryEntity = categoryRepository.findById(communityDto.getCategoryId())
+                .orElseThrow(()->new NoSuchElementException("존재하지 않는 카테고리입니다."));
 
-      checkTabWritePermission(categoryEntity.getTabEntity(), userEmail);
+        checkTabWritePermission(categoryEntity.getTabEntity(), userEmail);
 
-      boolean hasFile = communityDto.getAttachFile() != null && !communityDto.getAttachFile().isEmpty();
+        boolean hasFile = communityDto.getAttachFile() != null && !communityDto.getAttachFile().isEmpty();
 
-      CommunityEntity communityEntity = CommunityEntity.builder()
-              .memberEntity(memberEntity)
-              .title(communityDto.getTitle())
-              .userName(communityDto.getUserName())
-              .content(communityDto.getContent())
-              .categoryEntity(categoryEntity)
-              .categoryName(categoryEntity.getCategoryName())
-              .tabId(categoryEntity.getTabEntity().getId())
-              .tabName(categoryEntity.getTabEntity().getTabName())
-              .userEmail(communityDto.getUserEmail())
-              .hasFile(hasFile?1:0)
-              .hit(0)
-              .reply(0)
-              .build();
+        CommunityEntity communityEntity = CommunityEntity.builder()
+                .memberEntity(memberEntity)
+                .title(communityDto.getTitle())
+                .userName(communityDto.getUserName())
+                .content(communityDto.getContent())
+                .categoryEntity(categoryEntity)
+                .categoryName(categoryEntity.getCategoryName())
+                .tabId(categoryEntity.getTabEntity().getId())
+                .tabName(categoryEntity.getTabEntity().getTabName())
+                .userEmail(communityDto.getUserEmail())
+                .hasFile(hasFile?1:0)
+                .hit(0)
+                .reply(0)
+                .thumbnail(extractThumbnail(communityDto.getContent()))
+                .build();
 
-      CommunityEntity saveCommunity = communityRepository.save(communityEntity);
-      if (hasFile){
-          try {
-              String originalFilename = communityDto.getAttachFile().getOriginalFilename();
-              String newFileName = generateUniqueFileName(originalFilename);
-              String filePath = path + "/" + newFileName;
+        CommunityEntity saveCommunity = communityRepository.save(communityEntity);
+        if (hasFile){
+            try {
+                String originalFilename = communityDto.getAttachFile().getOriginalFilename();
+                String newFileName = generateUniqueFileName(originalFilename);
+                String filePath = path + "/" + newFileName;
 
-              File fileDir = new File(path);
-              if (!fileDir.exists()) fileDir.mkdirs();
+                File fileDir = new File(path);
+                if (!fileDir.exists()) fileDir.mkdirs();
 
-              communityDto.getAttachFile().transferTo(new File(filePath));
+                communityDto.getAttachFile().transferTo(new File(filePath));
 
-
-              // 3. 파일 엔티티 저장
-              fileHandler.insertFile(filePath, TableType.COMMUNITY, saveCommunity.getId(), communityDto.getAttachFile());
-          } catch (IOException e) {
-              // 파일 저장 실패 시 예외 처리 (트랜잭션에 의해 게시글도 롤백됨)
-              throw new RuntimeException("파일 저장 중 오류 발생", e);
-          }
-      }
+                fileHandler.insertFile(filePath, TableType.COMMUNITY, saveCommunity.getId(), communityDto.getAttachFile());
+            } catch (IOException e) {
+                throw new RuntimeException("파일 저장 중 오류 발생", e);
+            }
+        }
     }
 
     @Override
@@ -139,25 +139,32 @@ private final TabRepository tabRepository;
     @Override
     @Transactional
     public void communityUpdate(Long id, CommunityDto communityDto, String userEmail) {
+        //멤버조회
         MemberEntity memberEntity = memberRepository.findByUserEmail(userEmail)
                 .orElseThrow(() -> new NoSuchElementException("회원이 존재하지 않습니다"));
-
+        //게시글 조회
         CommunityEntity entity = communityRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("게시글을 찾을 수 없습니다: " + id));
 
         checkManage(entity.getUserEmail(), userEmail);
-        checkTabWritePermission(entity.getCategoryEntity().getTabEntity(), userEmail);
+
+        // 카테고리 조회
+        CategoryEntity categoryEntity = categoryRepository.findById(communityDto.getCategoryId())
+                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 카테고리입니다."));
+        //탭 작성 권한 있는지 확인
+        checkTabWritePermission(categoryEntity.getTabEntity(), userEmail);
 
         entity.setTitle(communityDto.getTitle());
         entity.setContent(communityDto.getContent());
         entity.setHasFile(communityDto.getHasFile());
+        entity.setThumbnail(extractThumbnail(communityDto.getContent()));
 
-        CategoryEntity categoryEntity = categoryRepository.findById(communityDto.getCategoryId())
-                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 카테고리입니다."));
         entity.setCategoryEntity(categoryEntity);
         entity.setCategoryName(categoryEntity.getCategoryName());
-        entity.setTabId(communityDto.getTabId());
-        entity.setTabName(communityDto.getTabName());
+
+        entity.setTabId(categoryEntity.getTabEntity().getId());
+        entity.setTabName(categoryEntity.getTabEntity().getTabName());
+
         entity.setUserName(memberEntity.getUserName());
     }
 
@@ -284,6 +291,7 @@ private final TabRepository tabRepository;
                 .tabName(el.getCategoryEntity().getTabEntity().getTabName())
                 .createTime(el.getCreateTime())
                 .hit(el.getHit())
+                .thumbnail(el.getThumbnail())
                 .build()
         );
     }
@@ -302,5 +310,14 @@ private final TabRepository tabRepository;
         }
     }
 
+    //썸네일 추출 서식
+    private static final Pattern IMG_SRC_PATTERN =
+            Pattern.compile("<img[^>]+src=[\"']([^\"']+)[\"']", Pattern.CASE_INSENSITIVE);
 
+    // content(HTML) 안에서 첫 번째 이미지 src를 뽑아 썸네일로 사용
+    private String extractThumbnail(String content) {
+        if (content == null || content.isBlank()) return null;
+        Matcher matcher = IMG_SRC_PATTERN.matcher(content);
+        return matcher.find() ? matcher.group(1) : null;
+    }
 }

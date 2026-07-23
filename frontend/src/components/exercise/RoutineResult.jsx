@@ -10,7 +10,9 @@ export default function RoutineResult({ result }) {
       <div className="panel result-panel empty-state">
         <p className="eyebrow">02 — 결과</p>
         <h2 className="panel-title">아직 비어있음</h2>
-        <p className="muted">왼쪽에서 부위를 고르고 루틴을 생성하면 여기 뜹니다.</p>
+        <p className="muted">
+          왼쪽에서 부위를 고르고 루틴을 생성하면 여기 뜹니다.
+        </p>
       </div>
     );
   }
@@ -31,7 +33,7 @@ export default function RoutineResult({ result }) {
   return (
     <div className="panel result-panel">
       <p className="eyebrow">02 — 결과</p>
-      <h2 className="panel-title">{result.name} 루틴</h2>
+      <h2 className="panel-title">{result.nameKo} 루틴</h2>
 
       <ol className="exercise-list">
         {result.exerciseDetails?.map((ex, i) => {
@@ -40,16 +42,28 @@ export default function RoutineResult({ result }) {
           return (
             <li key={i} className="exercise-card">
               <div className="exercise-info" style={{ width: "100%" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span className="exercise-index">SET {String(i + 1).padStart(2, '0')}</span>
-                  
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <span className="exercise-index">
+                    SET {String(i + 1).padStart(2, "0")}
+                  </span>
+
                   {/* 사진 보기 / 닫기 토글 버튼 */}
                   {ex.id && (
                     <button
                       type="button"
                       className="toggle-btn"
                       onClick={() => toggleImage(i)}
-                      style={{ cursor: "pointer", padding: "4px 8px", fontSize: "12px" }}
+                      style={{
+                        cursor: "pointer",
+                        padding: "4px 8px",
+                        fontSize: "12px",
+                      }}
                     >
                       {isImageVisible ? "사진 닫기 🔼" : "사진 보기 🔽"}
                     </button>
@@ -61,9 +75,9 @@ export default function RoutineResult({ result }) {
                   {ex.target} · {ex.equipment}
                 </p>
                 <div className="badge-row">
-                  <span className="badge">{ex.sets} SETS</span>
-                  <span className="badge">{ex.reps} REPS</span>
-                  <span className="badge">{ex.restSeconds}s REST</span>
+                  <span className="badge">{ex.reps}회, </span>
+                  <span className="badge">{ex.sets}세트, </span>
+                  <span className="badge">{ex.restSeconds}초 휴식</span>
                 </div>
 
                 {/* '사진 보기'를 눌렀을 때만 나타나는 GIF 이미지 영역 */}

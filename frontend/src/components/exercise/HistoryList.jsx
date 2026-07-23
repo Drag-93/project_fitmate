@@ -7,7 +7,7 @@ export default function HistoryList({ newRoutine }) {
   const [page, setPage] = useState(0);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  
+
   // 열려있는 히스토리 아이템의 ID들을 관리하는 상태
   const [expandedIds, setExpandedIds] = useState(new Set());
 
