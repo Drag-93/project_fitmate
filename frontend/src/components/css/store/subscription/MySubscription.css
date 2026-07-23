@@ -1,0 +1,91 @@
+/* 메인 컨테이너 */
+.my-subscription-page {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* 혜택 및 정보 박스 */
+.subscription-info,
+.benefit-box,
+.premium-guide {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.benefit-box ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.benefit-box li {
+  margin-bottom: 8px;
+}
+
+/* 버튼 스타일 */
+.payment-history-btn,
+.subscribe-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.cancel-btn {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* 모달 오버레이 및 창 스타일 */
+.modal-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.payment-modal {
+  background-color: #fff;
+  padding: 24px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.payment-modal h3 {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.payment-modal p {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.payment-modal button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 12px;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}

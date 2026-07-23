@@ -151,7 +151,7 @@ const Header = () => {
                 </li>
                 <li>
                   <Link to={`/store/index`}>구독상품</Link>
-                  <Link to="/products?productType=PREMIUM">프리미엄</Link>
+                  <Link to="/products/premium">FitMate Plus+</Link>
                   <Link to="/products?productType=GYM">헬스장</Link>
                   <Link to="/products?productType=PT">PT</Link>
                 </li>
