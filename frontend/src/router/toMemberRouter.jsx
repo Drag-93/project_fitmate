@@ -10,6 +10,7 @@ const MySchedulePage = lazy(() => import("../page/member/MySchedulePage"));
 const OrderListPage = lazy(() => import("../page/store/order/OrderListPage"));
 const MySubscriptionPage = lazy(() => import("../page/store/subscription/MysubscriptionPage"));
 const ReservationPage = lazy(() => import("../page/store/reservation/ReservationPage"));
+const MembershipPage = lazy(() => import("../page/store/subscription/MembershipPage"));
 
 const toMemberRouter = () => {
   return [
@@ -54,10 +55,18 @@ const toMemberRouter = () => {
       ),
     },
     {
-      path: "reservation",
+      path: "pt",
       element: (
         <Suspense fallback={Loading}>
           <ReservationPage />
+        </Suspense>
+      ),
+    },
+    {
+      path: "memberships",
+      element: (
+        <Suspense fallback={Loading}>
+          <MembershipPage />
         </Suspense>
       ),
     },

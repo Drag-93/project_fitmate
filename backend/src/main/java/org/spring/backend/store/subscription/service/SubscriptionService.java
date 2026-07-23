@@ -24,4 +24,7 @@ public interface SubscriptionService {
 
     // 다음 결제일 갱신 (자동결제용)
     void updateNextPaymentDate(Long subscriptionId);
+
+    // 프리미엄 여부
+    public boolean isPremium(Long memberId) ;
 }
