@@ -8,6 +8,8 @@ public interface SubscriptionService {
       // 구독 생성 (구독 시작)
     void insertSubscription(Long memberId, Long productId, SubscriptionDto subscriptionDto);
 
+    public void insertPremiumSubscription(Long memberId);
+
     // 내 구독 목록
     List<SubscriptionDto> subscriptionList(Long memberId);
 
@@ -22,4 +24,7 @@ public interface SubscriptionService {
 
     // 다음 결제일 갱신 (자동결제용)
     void updateNextPaymentDate(Long subscriptionId);
+
+    // 프리미엄 여부
+    public boolean isPremium(Long memberId) ;
 }

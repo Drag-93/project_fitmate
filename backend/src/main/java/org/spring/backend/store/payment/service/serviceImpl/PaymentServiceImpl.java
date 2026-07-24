@@ -372,6 +372,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     paymentRepository.save(payment);
     createSubscription(payment);
+    cartService.deletePurchasedItems(order.getId());
 
     List<OrderItemDto> orderItems = order.getOrderItemEntities()
         .stream()
