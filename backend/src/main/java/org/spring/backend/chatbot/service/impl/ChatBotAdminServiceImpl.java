@@ -34,6 +34,7 @@ public class ChatBotAdminServiceImpl implements ChatBotAdminService {
         chatRepository.save(ChatEntity.builder()
                 .resStr(chatDto.getResStr())
                 .search(chatDto.getSearch())
+                .keywordType(chatDto.getKeywordType())
                 .build());
     }
 
@@ -62,6 +63,7 @@ public class ChatBotAdminServiceImpl implements ChatBotAdminService {
                 .id(chatEntity.getId())
                 .resStr(chatDto.getResStr())
                 .search(chatDto.getSearch())
+                .keywordType(chatDto.getKeywordType())
                 .build());
     }
 
@@ -80,6 +82,22 @@ public class ChatBotAdminServiceImpl implements ChatBotAdminService {
                 .content(answerDto.getContent())
                 .chatEntity(chatEntity) //부모 엔티티 매핑
                 .build());
+    }
+
+    @Override
+    @Transactional
+    public void deleteChat(Long id) {
+        chatRepository.findById(id)
+                .orElseThrow(()->new NoSuchElementException("존재하지 않는 Chat입니다."));
+        chatRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public void deleteAnswer(Long id) {
+        answerRepository.findById(id)
+                .orElseThrow(()->new NoSuchElementException("존재하지 않는 Answer입니다."));
+        answerRepository.deleteById(id);
     }
 
     @Override

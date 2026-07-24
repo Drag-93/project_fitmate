@@ -5,6 +5,7 @@ import axios from "axios";
 const initChatData = {
   resStr: "",
   search: "",
+  keywordType: "CATEGORY",
 };
 const initAnswerData = {
   name: "",
@@ -111,6 +112,20 @@ const ChatBotInsertModal = ({ url, setIsBool, id, getList }) => {
                     name="resStr"
                     value={chatData.resStr}
                   />
+                </span>
+              </li>
+              <li>
+                <span>카테고리</span>
+                <span>
+                  <select
+                    name="keywordType"
+                    id="keywordType"
+                    value={chatData.keywordType}
+                    onChange={onChangeFn}
+                  >
+                    <option value="CATEGORY">대주제</option>
+                    <option value="ACTION">세부행동</option>
+                  </select>
                 </span>
               </li>
             </>

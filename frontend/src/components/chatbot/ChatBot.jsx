@@ -134,14 +134,9 @@ const ChatBot = () => {
           // 3. 화면 출력 함수 호출 (text에는 합친 문자열, time에는 서버 전달 시간 지정)
           showMessageFn({
             sender: "bot",
-            text: fullText,
-            time:
-              body.formattedTime ||
-              body.time ||
-              new Date().toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              }),
+            text: body.responseText,
+            answers: body.answerList || [], // answerList 배열을 그대로 전달
+            time: body.formattedTime || body.time,
           });
         });
         stompClient.current.subscribe(`/topic/notification`, (message) => {
@@ -214,8 +209,22 @@ const ChatBot = () => {
                               />
                             </div>
                             <div className="message">
-                              {/* msg.text를 우선 출력하고, msg.content도 처리 */}
-                              {msg.text || msg.content}
+                              {/* 1. 기본 시스템 메시지 */}
+                              <div>{msg.text}</div>
+
+                              {/* 2. 세부 답변 목록이 존재할 경우 하나씩 줄바꿈하여 출력 */}
+                              {msg.answers && msg.answers.length > 0 && (
+                                <div
+                                  className="answer-list"
+                                  style={{ marginTop: "8px" }}
+                                >
+                                  {msg.answers.map((answer, index) => (
+                                    <div key={index} className="answer-item">
+                                      {answer}
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
                             </div>
                             <div className="time">{msg.time}</div>
                           </div>

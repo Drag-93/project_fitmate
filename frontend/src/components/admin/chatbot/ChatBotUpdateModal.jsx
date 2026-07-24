@@ -6,13 +6,14 @@ import { API_SERVER_URL } from "../../../apis/commonApi";
 const initChatData = {
   resStr: "",
   search: "",
+  keywordType: "CATEGORY",
 };
 const initAnswerData = {
   name: "",
   content: "",
 };
 
-const ChatBotUpdateModal = ({ id, url, setIsBool, isAnswer, getChatList }) => {
+const ChatBotUpdateModal = ({ id, url, setIsBool, isAnswer, getList }) => {
   // console.log(id);
   //대주제 저장용 data
   const [chatData, setChatData] = useState(initChatData);
@@ -22,6 +23,10 @@ const ChatBotUpdateModal = ({ id, url, setIsBool, isAnswer, getChatList }) => {
   const getUrl = isAnswer
     ? `${API_SERVER_URL}/api/chatbot/detail/answer/${id}`
     : `${API_SERVER_URL}/api/chatbot/detail/chat/${id}`;
+
+  const deleteUrl = isAnswer
+    ? `${API_SERVER_URL}/api/chatbot/delete/answer/${id}`
+    : `${API_SERVER_URL}/api/chatbot/delete/chat/${id}`;
 
   //기본 데이터 onChange함수
   const onChangeFn = (e) => {
@@ -36,6 +41,7 @@ const ChatBotUpdateModal = ({ id, url, setIsBool, isAnswer, getChatList }) => {
   const getDataFn = async () => {
     try {
       const res = await axios.get(getUrl);
+      console.log(res.data.result);
       if (isAnswer) {
         setAnswerData(res.data.result);
       } else {
@@ -61,6 +67,23 @@ const ChatBotUpdateModal = ({ id, url, setIsBool, isAnswer, getChatList }) => {
       });
       if (res.data === "ok") {
         alert("저장에 성공하였습니다.");
+        getList("", "", 0);
+        setIsBool(false);
+      }
+    } catch (err) {
+      console.error("통신 에러:", err);
+      alert("서버 연결에 실패하였습니다.");
+    }
+  };
+
+  //삭제
+  const onDeleteFn = async () => {
+    const agree = confirm("데이터를 삭제하시겠습니까?");
+    if (!agree) return;
+    try {
+      const res = await axios.delete(deleteUrl);
+      if (res.data === "ok") {
+        alert("삭제에 성공하였습니다.");
         getList("", "", 0);
         setIsBool(false);
       }
@@ -133,6 +156,20 @@ const ChatBotUpdateModal = ({ id, url, setIsBool, isAnswer, getChatList }) => {
                   />
                 </span>
               </li>
+              <li>
+                <span>카테고리</span>
+                <span>
+                  <select
+                    name="keywordType"
+                    id="keywordType"
+                    value={chatData.keywordType}
+                    onChange={onChangeFn}
+                  >
+                    <option value="CATEGORY">대주제</option>
+                    <option value="ACTION">세부행동</option>
+                  </select>
+                </span>
+              </li>
             </>
           )}
           <li>
@@ -155,6 +192,7 @@ const ChatBotUpdateModal = ({ id, url, setIsBool, isAnswer, getChatList }) => {
               초기화
             </button>
             <button onClick={() => setIsBool(false)}>취소</button>
+            <button onClick={onDeleteFn}>삭제</button>
           </li>
         </ul>
       </div>

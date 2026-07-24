@@ -56,7 +56,7 @@ const AdminChatBot = () => {
         <ChatBotInsertModal
           url={insertUrl}
           setIsBool={setIsBoolInsert}
-          getChatList={getChatList}
+          getList={getChatList}
         />
       )}
       {isBoolUpdate === true && (
@@ -64,7 +64,7 @@ const AdminChatBot = () => {
           id={id}
           url={updateUrl}
           setIsBool={setIsBoolUpdate}
-          getChatList={getChatList}
+          getList={getChatList}
           isAnswer={false}
         />
       )}
@@ -97,7 +97,9 @@ const AdminChatBot = () => {
               </div>
             </div>
             <div className="chatInsert">
-              <button onClick={() => setIsBool(true)}>검색단어생성</button>
+              <button onClick={() => setIsBoolInsert(true)}>
+                검색단어생성
+              </button>
             </div>
             <div className="chatList">
               <ul className="chatList-head">

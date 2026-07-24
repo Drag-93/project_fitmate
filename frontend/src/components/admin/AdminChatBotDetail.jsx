@@ -60,7 +60,7 @@ const AdminChatBotDetail = () => {
       {isBoolUpdate === true && (
         <ChatBotUpdateModal
           id={answerId}
-          url={insertUrl}
+          url={updateUrl}
           setIsBool={setIsBoolUpdate}
           getList={getAnswerList}
           isAnswer={true}
@@ -111,8 +111,8 @@ const AdminChatBotDetail = () => {
                   {chatList.map((el, idx) => {
                     return (
                       <ul className="chatList-body" key={idx}>
-                        <li>{el.search}</li>
-                        <li>{el.resStr}</li>
+                        <li>{el.name}</li>
+                        <li>{el.content}</li>
                         <li>
                           <button
                             onClick={() => {
@@ -120,7 +120,7 @@ const AdminChatBotDetail = () => {
                               setAnswerId(el.id);
                             }}
                           >
-                            상세보기
+                            수정
                           </button>
                         </li>
                       </ul>

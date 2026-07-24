@@ -1,6 +1,7 @@
 package org.spring.backend.chatbot.repository;
 
 import org.spring.backend.chatbot.entity.ChatEntity;
+import org.spring.backend.chatbot.enumtype.KeywordType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,4 +14,6 @@ public interface ChatRepository extends JpaRepository<ChatEntity, Long> {
     Page<ChatEntity> findBySearchContaining(Pageable pageable, String search);
 
     Page<ChatEntity> findByResStrContaining(Pageable pageable, String search);
+
+    Optional<ChatEntity> findBySearchAndKeywordType(String noun, KeywordType keywordType);
 }

@@ -18,6 +18,12 @@ public interface ChatBotAdminService {
     //답변 수정
     void updateAnswer(AnswerDto answerDto, Long chatId);
 
+    //대주제 삭제
+    void deleteChat(Long id);
+
+    //답변 삭제
+    void deleteAnswer(Long id);
+
     //대주제 상세
     ChatDto detailChat(Long id);
 
