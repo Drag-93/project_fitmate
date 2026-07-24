@@ -30,7 +30,7 @@ const MyReservationList = () => {
     if (!window.confirm('정말로 이 예약을 취소하시겠습니까?')) return;
 
     try {
-      await jwtAxios.patch(`/api/reservations/${reservationId}/cancel`);
+      await jwtAxios.put(`/api/reservations/${reservationId}/member-cancel`);
       alert('예약이 성공적으로 취소되었습니다.');
       // 목록 다시 로드 (또는 상태 업데이트)
       fetchMyReservations();

@@ -140,5 +140,11 @@ public class SubscriptionServiceImpl implements SubscriptionService {
             ? subscription.getNextPaymentDate().plusMonths(1)
             : LocalDateTime.now().plusMonths(1));
   }
+  @Override
+  public boolean isPremium(Long memberId) {
 
+    return subscriptionRepository.existsByMemberEntity_IdAndSubscriptionStatus(
+            memberId,
+            SubscriptionStatus.ACTIVE);
+}
 }

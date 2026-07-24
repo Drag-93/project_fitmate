@@ -16,5 +16,7 @@ public interface SubscriptionRepository extends JpaRepository<SubscriptionEntity
         ProductEntity productEntity,
         SubscriptionStatus subscriptionStatus
 );
+
+  boolean existsByMemberEntity_IdAndSubscriptionStatus(Long memberId, SubscriptionStatus active);
   
 }
