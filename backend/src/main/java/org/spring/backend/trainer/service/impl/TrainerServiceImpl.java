@@ -1,14 +1,14 @@
-package org.spring.backend.store.reservation.service.impl;
+package org.spring.backend.trainer.service.impl;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.spring.backend.member.entity.MemberEntity;
 import org.spring.backend.member.repository.MemberRepository;
-import org.spring.backend.store.reservation.dto.TrainerDto;
-import org.spring.backend.store.reservation.entity.TrainerEntity;
-import org.spring.backend.store.reservation.repository.TrainerRepository;
-import org.spring.backend.store.reservation.service.TrainerService;
+import org.spring.backend.trainer.dto.TrainerDto;
+import org.spring.backend.trainer.entity.TrainerEntity;
+import org.spring.backend.trainer.repository.TrainerRepository;
+import org.spring.backend.trainer.service.TrainerService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,5 +67,41 @@ public class TrainerServiceImpl implements TrainerService {
     return trainers.stream()
         .map(TrainerDto::toTrainerDto)
         .collect(Collectors.toList());
+  }
+
+  @Override
+  @Transactional
+  public void createTrainerByRoleChange(MemberEntity member) {
+
+    // 이미 트레이너면 생성 X
+    if (trainerRepository.findByMemberId(member.getId()).isPresent()) {
+      return;
+    }
+
+    TrainerEntity trainerEntity = TrainerEntity.builder()
+        .member(member)
+        .career("미등록")
+        .specialty("미등록")
+        .introduce("미등록")
+        .certificate("미등록")
+        .build();
+
+    trainerRepository.save(trainerEntity);
+  }
+
+  @Override
+  @Transactional
+  public TrainerDto updateTrainer(Long memberId, TrainerDto trainerDto) {
+
+    TrainerEntity trainer = trainerRepository.findByMemberId(memberId)
+        .orElseThrow(() -> new IllegalArgumentException("해당 회원의 트레이너 정보가 없습니다."));
+
+    trainer.setCareer(trainerDto.getCareer());
+    trainer.setSpecialty(trainerDto.getSpecialty());
+    trainer.setIntroduce(trainerDto.getIntroduce());
+    trainer.setCertificate(trainerDto.getCertificate());
+    trainer.setProfileImage(trainerDto.getProfileImage());
+
+    return TrainerDto.toTrainerDto(trainer);
   }
 }

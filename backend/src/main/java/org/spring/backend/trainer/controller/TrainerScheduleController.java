@@ -1,9 +1,9 @@
-package org.spring.backend.store.reservation.controller;
+package org.spring.backend.trainer.controller;
 
 import java.util.List;
 
-import org.spring.backend.store.reservation.dto.TrainerScheduleDto;
-import org.spring.backend.store.reservation.service.TrainerScheduleService;
+import org.spring.backend.trainer.dto.TrainerScheduleDto;
+import org.spring.backend.trainer.service.TrainerScheduleService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

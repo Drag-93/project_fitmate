@@ -17,8 +17,8 @@ import org.spring.backend.store.product.repository.ProductRepository;
 import org.spring.backend.store.product.type.BillingType;
 import org.spring.backend.store.product.type.ProductStatus;
 import org.spring.backend.store.product.type.ProductType;
-import org.spring.backend.store.reservation.entity.TrainerEntity;
-import org.spring.backend.store.reservation.repository.TrainerRepository;
+import org.spring.backend.trainer.entity.TrainerEntity;
+import org.spring.backend.trainer.repository.TrainerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -43,11 +43,8 @@ public class ProductsTest {
 
   @Test
   void insert() {
-<<<<<<< HEAD
-    for (int i = 11; i < 13; i++) {
-=======
     for (int i = 0; i < 2; i++) {
->>>>>>> lhs
+
 
       ProductEntity productEntity = ProductEntity.builder()
               .productName("상품" + i)
@@ -65,20 +62,7 @@ public class ProductsTest {
 
   @Test
   void insert2() {
-<<<<<<< HEAD
-    for (int i = 11; i < 13; i++) {
 
-      ProductEntity productEntity = ProductEntity.builder()
-              .productName("헬스장 이용권" + i)
-              .description("헬스장 이용권" + i + "설명입니다.")
-              .price(10000 + i)
-              .productType(ProductType.GYM)
-              .billingType(BillingType.ONE_TIME)
-              .productStatus(ProductStatus.ACTIVE)
-              .category("헬스장")
-              .duration(30)
-              .build();
-=======
     for (int i = 0; i < 2; i++) {
 
       ProductEntity productEntity = ProductEntity.builder()
@@ -91,27 +75,13 @@ public class ProductsTest {
           .category("헬스장")
           .duration(30)
           .build();
->>>>>>> lhs
-
       productRepository.save(productEntity);
     }
   }
 
   @Test
   void insert3() {
-<<<<<<< HEAD
-    for (int i = 11; i < 13; i++) {
 
-      ProductEntity productEntity = ProductEntity.builder()
-              .productName("PT이용권" + i)
-              .description("PT이용권" + i + "설명입니다.")
-              .price(10000 + i)
-              .productType(ProductType.PT)
-              .billingType(BillingType.ONE_TIME)
-              .productStatus(ProductStatus.ACTIVE)
-              .category("PT")
-              .sessionCount(20)
-=======
     for (int i = 0; i < 2; i++) {
 
       ProductEntity productEntity = ProductEntity.builder()
@@ -141,7 +111,6 @@ public class ProductsTest {
               .billingType(BillingType.SUBSCRIPTION)
               .productStatus(ProductStatus.ACTIVE)
               .category("Premium")
->>>>>>> lhs
               .build();
 
       productRepository.save(productEntity);
@@ -178,7 +147,7 @@ public class ProductsTest {
     OrderItemEntity item1 = OrderItemEntity.builder()
         .price(9900)
         .quantity(1)
-        .productName("FitMate Plus+ 프리미엄")
+        .productName("프리미엄")
         .startDate(LocalDate.now())
         .productEntity(product1)
         .orderEntity(order1)

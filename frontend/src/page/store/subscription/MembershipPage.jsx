@@ -1,8 +1,9 @@
 import React from 'react'
+import Membership from '../../../components/store/subscription/Membership'
 
 const MembershipPage = () => {
   return (
-    <div>MembershipPage</div>
+    <Membership/>
   )
 }
 

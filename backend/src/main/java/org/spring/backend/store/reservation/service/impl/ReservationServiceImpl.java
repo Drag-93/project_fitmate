@@ -9,11 +9,11 @@ import org.spring.backend.store.MemberProduct.entity.MemberProductEntity;
 import org.spring.backend.store.MemberProduct.repository.MemberProductRepository;
 import org.spring.backend.store.reservation.dto.ReservationDto;
 import org.spring.backend.store.reservation.entity.ReservationEntity;
-import org.spring.backend.store.reservation.entity.TrainerEntity;
 import org.spring.backend.store.reservation.repository.ReservationRepository;
-import org.spring.backend.store.reservation.repository.TrainerRepository;
 import org.spring.backend.store.reservation.service.ReservationService;
 import org.spring.backend.store.reservation.type.ReservationStatus;
+import org.spring.backend.trainer.entity.TrainerEntity;
+import org.spring.backend.trainer.repository.TrainerRepository;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;

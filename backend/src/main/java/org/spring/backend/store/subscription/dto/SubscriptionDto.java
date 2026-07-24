@@ -42,6 +42,8 @@ public class SubscriptionDto {
 
   private ProductType productType;
 
+  private String paymentMethod;
+
   public static SubscriptionDto toSubscriptionDto(SubscriptionEntity subscriptionEntity) {
     return SubscriptionDto.builder()
         .id(subscriptionEntity.getId())
@@ -64,6 +66,11 @@ public class SubscriptionDto {
             subscriptionEntity
                 .getProductEntity()
                 .getProductType())
+        .paymentMethod(
+            subscriptionEntity.getPaymentEntities()
+                .get(0)
+                .getPaymentMethod()
+                .name())
         .build();
   }
 }

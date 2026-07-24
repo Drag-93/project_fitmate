@@ -1,6 +1,6 @@
-package org.spring.backend.store.reservation.dto;
+package org.spring.backend.trainer.dto;
 
-import org.spring.backend.store.reservation.entity.TrainerEntity;
+import org.spring.backend.trainer.entity.TrainerEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

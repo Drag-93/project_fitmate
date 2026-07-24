@@ -29,14 +29,20 @@ const ProductListPage = () => {
 
   return (
     <>
-        <div className="product-list">
+      <div className="product-list">
         <div className="product-list-con">
-          {products.map(product => (
-            <ProductCard
-              key={product.id}
-              product={product}
-            />
-          ))}
+          {products.length === 0 ? (
+            <div className="no-product">
+              해당 카테고리에 상품이 없습니다.
+            </div>
+          ) : (
+            products.map(product => (
+              <ProductCard
+                key={product.id}
+                product={product}
+              />
+            ))
+          )}
         </div>
       </div>
     </>
