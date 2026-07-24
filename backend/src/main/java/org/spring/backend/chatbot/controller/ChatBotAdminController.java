@@ -115,5 +115,18 @@ public class ChatBotAdminController {
 
         return ResponseEntity.status(HttpStatus.OK).body(map);
     }
+    @DeleteMapping("/delete/chat/{id}")
+    public ResponseEntity<?> deleteChat(@PathVariable("id")Long id){
+        chatBotService.deleteChat(id);
+
+        return ResponseEntity.ok("ok");
+    }
+
+    @DeleteMapping("/delete/answer/{id}")
+    public ResponseEntity<?> deleteAnswer(@PathVariable("id")Long id){
+        chatBotService.deleteAnswer(id);
+
+        return ResponseEntity.ok("ok");
+    }
 
 }

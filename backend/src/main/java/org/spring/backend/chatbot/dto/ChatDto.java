@@ -2,6 +2,7 @@ package org.spring.backend.chatbot.dto;
 
 import lombok.*;
 import org.spring.backend.chatbot.entity.ChatEntity;
+import org.spring.backend.chatbot.enumtype.KeywordType;
 
 import java.util.List;
 
@@ -17,6 +18,8 @@ public class ChatDto {
 
     private String search; //검색단어
 
+    private KeywordType keywordType;
+
     private List<AnswerDto> answerList;
 
     public static ChatDto toChatDtoSummary(ChatEntity chatEntity) {
@@ -24,6 +27,7 @@ public class ChatDto {
                 .id(chatEntity.getId())
                 .resStr(chatEntity.getResStr())
                 .search(chatEntity.getSearch())
+                .keywordType(chatEntity.getKeywordType())
                 .build();
     }
 }

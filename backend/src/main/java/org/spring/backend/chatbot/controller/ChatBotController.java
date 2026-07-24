@@ -3,11 +3,11 @@ package org.spring.backend.chatbot.controller;
 import kr.co.shineware.nlp.komoran.core.Komoran;
 import kr.co.shineware.nlp.komoran.model.KomoranResult;
 import lombok.RequiredArgsConstructor;
-import org.spring.backend.chatbot.config.Question;
 import org.spring.backend.chatbot.dto.StompAnalyzeRequest;
 import org.spring.backend.chatbot.dto.StompAnalyzeResponse;
 import org.spring.backend.chatbot.entity.AnswerEntity;
 import org.spring.backend.chatbot.entity.ChatEntity;
+import org.spring.backend.chatbot.enumtype.KeywordType;
 import org.spring.backend.chatbot.message.BotMessage;
 import org.spring.backend.chatbot.message.ClientMessage;
 import org.spring.backend.chatbot.repository.AnswerRepository;
@@ -23,6 +23,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -53,6 +54,8 @@ public class ChatBotController {
         //추출한 명사들을 List로 저장
         List<String> nouns = analyzeResult.getNouns();
 
+        System.out.println("Komoran 추출 명사 목록: " + nouns);
+
         String systemMessage = "질문을 분류하지 못했습니다.";
         //질문 리스트를 저장할 배열
         List<String> answerList = new ArrayList<>();
@@ -62,10 +65,22 @@ public class ChatBotController {
 
         //"서울 날씨" 처럼 대주제 키워드 포함 여부 DB 매칭
         for (String noun : nouns) {
-            var chatOpt = chatRepository.findBySearch(noun);
+            Optional<ChatEntity> chatOpt = chatRepository.findBySearchAndKeywordType(noun, KeywordType.CATEGORY);
+
             if (chatOpt.isPresent()) {
-                matchedChat = chatOpt.get();
-                break; // 가장 먼저 매칭된 대주제를 가지고 루프 탈출
+                matchedChat = chatOpt.get(); // "상품" 매칭 성공!
+                break;
+            }
+        }
+        //대주제가 아닌 세부키워드 포함 여부 확인
+        if (matchedChat == null) {
+            for (String noun : nouns) {
+                var chatOpt = chatRepository.findBySearchAndKeywordType(noun, KeywordType.ACTION);
+                System.out.println(chatOpt);
+                if (chatOpt.isPresent()) {
+                    matchedChat = chatOpt.get();
+                    break; // 세부 행동 키워드 매칭
+                }
             }
         }
         //비즈니스 검색 로직 분기
@@ -89,8 +104,9 @@ public class ChatBotController {
 
             //"날씨 알려줘" 처럼 세부 명사 매칭이 전혀 없는 경우 카테고리 전체 목록 로드
             if (!hasDetailMatch && matchedChat.getAnswerEntities() != null) {
+                answerList.add("원하시는 세부 항목을 함께 입력해주세요.");
                 for (AnswerEntity answer : matchedChat.getAnswerEntities()) {
-                    answerList.add("[" + answer.getName() + "] " + answer.getContent());
+                    answerList.add("[" + answer.getName() + "] ");
                 }
             }
 

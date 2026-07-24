@@ -19,7 +19,7 @@ public class KomoranConfig {
         //사용자 사전 주입 절차(기본 제공 사전 이외의 것들 등록필요시)
         try{
             //ClassPath기준으로 src/main/resource/user.dic파일 로드
-            ClassPathResource resource = new ClassPathResource("user.dic");
+             ClassPathResource resource = new ClassPathResource("user.dic");
             String userDicPath = resource.getFile().getAbsolutePath();
 
             //코모란 인스턴스에 사용자 사전 주입

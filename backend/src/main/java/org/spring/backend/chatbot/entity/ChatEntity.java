@@ -2,6 +2,7 @@ package org.spring.backend.chatbot.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.spring.backend.chatbot.enumtype.KeywordType;
 
 import java.util.List;
 
@@ -24,6 +25,11 @@ public class ChatEntity {
 
     @Column(nullable = false, unique = true)
     private String search; //검색단어
+
+    //키워드 타입 추가 (CATEGORY / ACTION)
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private KeywordType keywordType;
 
     //1:N
     @OneToMany(mappedBy = "chatEntity",
