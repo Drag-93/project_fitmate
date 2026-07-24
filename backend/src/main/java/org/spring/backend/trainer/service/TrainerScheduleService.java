@@ -1,8 +1,8 @@
-package org.spring.backend.store.reservation.service;
+package org.spring.backend.trainer.service;
 
 import java.util.List;
 
-import org.spring.backend.store.reservation.dto.TrainerScheduleDto;
+import org.spring.backend.trainer.dto.TrainerScheduleDto;
 
 public interface TrainerScheduleService {
 

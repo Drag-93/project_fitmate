@@ -2,6 +2,8 @@ package org.spring.backend.member.service.impl;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+
+import org.spring.backend.common.Role;
 import org.spring.backend.common.TableType;
 import org.spring.backend.file.handler.FileHandler;
 import org.spring.backend.member.dto.MemberDto;
@@ -10,6 +12,7 @@ import org.spring.backend.member.entity.MemberEntity;
 import org.spring.backend.member.repository.MemberAddRepository;
 import org.spring.backend.member.repository.MemberRepository;
 import org.spring.backend.member.service.MemberService;
+import org.spring.backend.trainer.service.TrainerService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +34,7 @@ public class MemberServiceImpl implements MemberService {
     private final MemberAddRepository memberAddRepository;
     private final FileHandler fileHandler;
     private final RedisTemplate<String, String> redisTemplate;
+    private final TrainerService trainerService;
 
     @Value("${img.path.member}")
     private String filePath;
@@ -129,7 +133,6 @@ public class MemberServiceImpl implements MemberService {
         originMemberEntity.setUserAddress(memberDto.getUserAddress());
         originMemberEntity.setUserPhone(memberDto.getUserPhone());
         originMemberEntity.setSubscribe(memberDto.getSubscribe());
-        originMemberEntity.setRole(memberDto.getRole());
         //멤버 추가데이터에 저장할 데이터 세팅(데이터가 있을 경우에만)
         if(memberDto.hasAdditionalData()){
             //멤버 추가데이터 저장 로직
@@ -143,7 +146,15 @@ public class MemberServiceImpl implements MemberService {
             originMemberAddEntity.setDailyCheck(memberDto.getDailyCheck());
             originMemberAddEntity.setBadge(memberDto.getBadge());
         }
+        Role beforeRole = originMemberEntity.getRole();
 
+        originMemberEntity.setRole(memberDto.getRole());
+        
+        if(beforeRole != Role.TRAINER 
+                && memberDto.getRole() == Role.TRAINER){
+        
+            trainerService.createTrainerByRoleChange(originMemberEntity);
+        }
 
         if(memberDto.getMemberFile() == null){
             originMemberEntity.setProfilePhoto(memberDto.getProfilePhoto());
@@ -202,4 +213,6 @@ public class MemberServiceImpl implements MemberService {
         //이후 회원탈퇴 진행
         memberRepository.delete(memberEntity);
     }
+
+    
 }

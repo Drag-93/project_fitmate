@@ -1,26 +1,34 @@
 import React, { useEffect, useState } from "react";
 import "../../css/store/subscription/PremiumCard.css";
 import { useNavigate } from "react-router-dom";
-import jwtAxios from "../../../apis/util/jwtUtil";
+import axios from "axios";
 
 const PremiumCard = () => {
   const [premiumProduct, setPremiumProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    jwtAxios
+    axios
       .get("/api/product/premium")
       .then(res => {
         setPremiumProduct(res.data);
       })
       .catch(err => {
         console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
 
-  if (!premiumProduct) {
+  if (loading) {
     return <div>상품 불러오는 중...</div>;
+  }
+
+  if (!premiumProduct) {
+    return <div>상품 정보를 불러올 수 없습니다.</div>;
   }
   const benefits = [
     { title: "PT 상품 할인", desc: "모든 PT 강습권 최대 15% 추가 할인" },

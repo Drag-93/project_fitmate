@@ -333,7 +333,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     LocalDateTime startDate = orderItem.getStartDate().atStartOfDay();
-    
+
     SubscriptionEntity.SubscriptionEntityBuilder builder = SubscriptionEntity.builder()
         .memberEntity(order.getMemberEntity())
         .productEntity(product)
@@ -342,20 +342,17 @@ public class PaymentServiceImpl implements PaymentService {
 
     // PREMIUM : 매월 같은 날짜 자동결제
     if (product.getProductType() == ProductType.PREMIUM) {
-
-      builder.nextPaymentDate(
-          startDate.plusMonths(1));
+      builder.nextPaymentDate(startDate.plusMonths(1));
     }
     // GYM : 기간 종료일 저장
     if (product.getProductType() == ProductType.GYM) {
-
-      builder.endDate(
-          startDate.plusDays(
-              product.getDuration()));
+      builder.endDate(startDate.plusDays(product.getDuration()));
     }
 
-    subscriptionRepository.save(
-        builder.build());
+    SubscriptionEntity subscription = subscriptionRepository.save(builder.build());
+
+    // 결제와 구독 연결
+    paymentEntity.setSubscriptionEntity(subscription);
   }
 
   public PaymentSuccessDto normalPayment(Long orderId) {
@@ -372,8 +369,14 @@ public class PaymentServiceImpl implements PaymentService {
 
     paymentRepository.save(payment);
     createSubscription(payment);
-    cartService.deletePurchasedItems(order.getId());
+    ProductType productType = order.getOrderItemEntities()
+        .get(0)
+        .getProductEntity()
+        .getProductType();
 
+    if (productType == ProductType.GOODS) {
+      cartService.deletePurchasedItems(order.getId());
+    }
     List<OrderItemDto> orderItems = order.getOrderItemEntities()
         .stream()
         .map(OrderItemDto::toOrderItemDto)

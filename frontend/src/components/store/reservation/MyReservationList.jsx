@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import jwtAxios from '../../../apis/util/jwtUtil'; 
-import '../../css/store/reservation/MyReservationList.css'; 
+import '../../css/store/reservation/myReservationList.css'; 
 
 const MyReservationList = () => {
   const [reservations, setReservations] = useState([]);
@@ -15,6 +15,10 @@ const MyReservationList = () => {
       setReservations(res.data || []);
     } catch (err) {
       console.error('내 예약 목록 조회 실패:', err);
+      console.error(err);
+      console.error("status:", err.response?.status);
+      console.error("data:", err.response?.data);
+      console.error("message:", err.message);
       setError('예약 내역을 불러오는데 실패했습니다.');
     } finally {
       setLoading(false);

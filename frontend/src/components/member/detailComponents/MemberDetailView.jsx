@@ -96,10 +96,13 @@ const MemberDetailView = ({ member, updateFn, memberDelete, navigate }) => {
       <div className="infoSection">
         <h3>서비스 바로가기</h3>
         <ul className="linkList">
-          {member.result?.role === "TRAINER" ? (
-            <li>
-              <Link to="/reservation/trainer">PT 관리</Link>
-            </li>
+
+          {member?.role === "TRAINER" ? (
+            <>
+              <li><Link to="/trainer/pt">PT 예약 관리</Link></li>
+              <li><Link to="/trainer/profile">프로필 관리</Link></li>
+              <li><Link to="/trainer/schedule">수업 일정</Link></li>
+            </>
           ) : (
             <>
               <li>

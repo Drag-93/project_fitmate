@@ -17,8 +17,8 @@ import org.spring.backend.store.product.repository.ProductRepository;
 import org.spring.backend.store.product.type.BillingType;
 import org.spring.backend.store.product.type.ProductStatus;
 import org.spring.backend.store.product.type.ProductType;
-import org.spring.backend.store.reservation.entity.TrainerEntity;
-import org.spring.backend.store.reservation.repository.TrainerRepository;
+import org.spring.backend.trainer.entity.TrainerEntity;
+import org.spring.backend.trainer.repository.TrainerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -146,7 +146,7 @@ public class ProductsTest {
     OrderItemEntity item1 = OrderItemEntity.builder()
         .price(9900)
         .quantity(1)
-        .productName("FitMate Plus+ 프리미엄")
+        .productName("프리미엄")
         .startDate(LocalDate.now())
         .productEntity(product1)
         .orderEntity(order1)

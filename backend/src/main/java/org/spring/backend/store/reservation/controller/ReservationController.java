@@ -8,6 +8,8 @@ import org.spring.backend.member.repository.MemberRepository;
 import org.spring.backend.store.reservation.dto.ReservationDto;
 import org.spring.backend.store.reservation.service.ReservationService;
 import org.spring.backend.store.reservation.type.ReservationStatus;
+import org.spring.backend.trainer.entity.TrainerEntity;
+import org.spring.backend.trainer.repository.TrainerRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,6 +24,7 @@ public class ReservationController {
 
   private final ReservationService reservationService;
   private final MemberRepository memberRepository;
+  private final TrainerRepository trainerRepository;
 
   // 공통 회원 조회
   private MemberEntity getAuthenticatedMember(CustomUserDetails user) {
@@ -69,13 +72,18 @@ public class ReservationController {
         reservationService.getMemberReservation(memberId));
   }
 
-  // 트레이너 예약 조회
-  @GetMapping("/trainer/{trainerId}")
+  // 트레이너 본인 예약 조회
+  @GetMapping("/trainer")
   public ResponseEntity<List<ReservationDto>> getTrainerReservation(
-      @PathVariable Long trainerId) {
+      @AuthenticationPrincipal CustomUserDetails user) {
+
+    MemberEntity member = getAuthenticatedMember(user);
+
+    TrainerEntity trainer = trainerRepository.findByMemberId(member.getId())
+        .orElseThrow();
 
     return ResponseEntity.ok(
-        reservationService.getTrainerReservation(trainerId));
+        reservationService.getTrainerReservation(trainer.getId()));
   }
 
   // 회원 예약 시간 변경

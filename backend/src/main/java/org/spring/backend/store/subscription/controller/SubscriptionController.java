@@ -54,7 +54,7 @@ public class SubscriptionController {
         }
 
         // 내 구독 목록
-        @GetMapping("/list")
+        @GetMapping("/my")
         public ResponseEntity<List<SubscriptionDto>> subscriptionList(
                         @AuthenticationPrincipal CustomUserDetails user) {
 

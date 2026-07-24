@@ -7,10 +7,6 @@ const ReservationPage = lazy(
 const ReservationDetailPage = lazy(
   () => import("../../page/store/reservation/ReservationDetailPage")
 );
-const TrainerReservationPage = lazy(
-  () => import("../../page/store/reservation/TrainerReservationPage")
-);
-
 
 const toReservationRouter = () => {
 
@@ -23,10 +19,7 @@ const toReservationRouter = () => {
       path: ":id",
       element: <ReservationDetailPage />
     },
-    {
-      path: "trainer",
-      element: <TrainerReservationPage />
-    }
+
   ];
 
 };

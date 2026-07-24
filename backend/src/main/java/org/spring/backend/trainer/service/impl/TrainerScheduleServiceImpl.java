@@ -1,14 +1,15 @@
-package org.spring.backend.store.reservation.service.impl;
+
+package org.spring.backend.trainer.service.impl;
 
 import java.util.List;
 
-import org.spring.backend.store.reservation.dto.TrainerScheduleDto;
-import org.spring.backend.store.reservation.entity.TrainerEntity;
-import org.spring.backend.store.reservation.entity.TrainerScheduleEntity;
-import org.spring.backend.store.reservation.repository.TrainerRepository;
-import org.spring.backend.store.reservation.repository.TrainerScheduleRepository;
-import org.spring.backend.store.reservation.service.TrainerScheduleService;
 import org.spring.backend.store.reservation.type.ScheduleStatus;
+import org.spring.backend.trainer.dto.TrainerScheduleDto;
+import org.spring.backend.trainer.entity.TrainerEntity;
+import org.spring.backend.trainer.entity.TrainerScheduleEntity;
+import org.spring.backend.trainer.repository.TrainerRepository;
+import org.spring.backend.trainer.repository.TrainerScheduleRepository;
+import org.spring.backend.trainer.service.TrainerScheduleService;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;

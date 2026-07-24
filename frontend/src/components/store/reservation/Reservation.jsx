@@ -26,7 +26,7 @@ const Reservation = () => {
   // 트레이너 목록 조회
   const getTrainerList = async () => {
     try {
-      const res = await jwtAxios.get("http://localhost:8090/api/trainer/list");
+      const res = await jwtAxios.get("/api/trainer/list");
       setTrainers(res.data);
     } catch (error) {
       console.log("트레이너 목록 조회 실패:", error);
@@ -35,7 +35,7 @@ const Reservation = () => {
   // 내 활성 PT 이용권 조회 (remainingCount > 0 인 것만)
   const getMyPtProducts = async () => {
     try {
-      const res = await jwtAxios.get("http://localhost:8090/api/member-products/active-pt");
+      const res = await jwtAxios.get("/api/member-products/active-pt");
       setMyProducts(res.data);
       // 이용권이 1개만 있다면 자동 선택
       if (res.data.length === 1) {

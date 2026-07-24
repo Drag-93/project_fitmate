@@ -8,6 +8,7 @@ import org.spring.backend.member.entity.MemberEntity;
 import org.spring.backend.store.MemberProduct.entity.MemberProductEntity;
 import org.spring.backend.store.product.entity.ProductEntity;
 import org.spring.backend.store.reservation.type.ReservationStatus;
+import org.spring.backend.trainer.entity.TrainerEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

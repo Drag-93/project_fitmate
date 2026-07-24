@@ -1,4 +1,4 @@
-package org.spring.backend.store.reservation.entity;
+package org.spring.backend.trainer.entity;
 
 import org.spring.backend.common.BasicTime;
 import org.spring.backend.member.entity.MemberEntity;

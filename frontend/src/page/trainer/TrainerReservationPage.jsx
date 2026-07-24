@@ -1,5 +1,5 @@
 import React from 'react'
-import TrainerReservation from '../../../components/store/reservation/TrainerReservation'
+import TrainerReservation from '../../components/trainer/TrainerReservation'
 
 const TrainerReservationPage = () => {
   return (
