@@ -1,11 +1,17 @@
 package org.spring.backend.exercise;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ExerciseService {
@@ -14,9 +20,20 @@ public class ExerciseService {
     private final ExerciseRepository exerciseRepository;
     private final ExerciseSyncService syncService;
     private final ValidValuesService validValuesService;
-    private final ExerciseTranslationService translationService; // ★ 추가
+    private final ExerciseTranslationService translationService;
+    private final ObjectMapper objectMapper;
+
+    // ★ 추가 - 캐시에 없는 부위를 요청받았을 때 그 자리에서 RapidAPI를 호출할지 여부.
+    // 기본값 false: 지금은 DB에 이미 캐싱된 것만 사용하고, RapidAPI는 호출하지 않는다.
+    // application.properties에 exercisedb.auto-sync-on-demand=true 를 넣으면 다시 켤 수 있다.
+    // 꺼져 있는 동안 데이터를 채우고 싶으면 관리자용 POST /sync/{target}, /sync/all을 수동으로 호출하면 된다.
+    @Value("${exercisedb.auto-sync-on-demand:false}")
+    private boolean autoSyncOnDemand;
 
     private static final int MAX_EXERCISES_PER_ROUTINE = 5;
+    private static final int RECENT_PLAN_COUNT_FOR_EXCLUSION = 3; // ★ 추가 - 메인 추천에서 제외할 최근 루틴 개수
+    private static final int PERSONALIZED_PICK_COUNT = 5;         // ★ 추가 - 메인 추천 운동 개수
+    private static final int MAX_HISTORY_PER_USER = 5;            // ★ 추가 - 사용자당 보관할 최근 루틴 개수
 
     //부위에 해당하는 장비만 추출
     public Map<String, String> getEquipmentsMapByTarget(String target) {
@@ -57,11 +74,14 @@ public class ExerciseService {
                     "'" + equipment + "'는 지원하지 않는 equipment 값입니다.");
         }
 
-        // 1. 로컬 캐시에 없으면 그때만 동기화 (RapidAPI 무료 티어 rate limit 보호)
-        // ★ 동기화 직후 번역까지 함께 실행 (관리자 sync 엔드포인트와 동일하게 맞춤)
+        // 1. 로컬 캐시에 없으면, 설정이 켜져 있을 때만 그 자리에서 동기화 (지금은 기본 꺼짐)
         if (!syncService.isCached(muscle)) {
-            syncService.syncByTarget(muscle);
-            translationService.translateMissingNames();
+            if (autoSyncOnDemand) {
+                syncService.syncByTarget(muscle);
+                translationService.translateMissingNames();
+            } else {
+                log.info("자동 동기화 비활성화 상태 - DB 캐시만 사용합니다: target={}", muscle);
+            }
         }
 
         // 2. equipment가 지정된 경우만 부위+장비로 조회, 없으면 부위 전체 조회
@@ -88,33 +108,103 @@ public class ExerciseService {
         List<Exercise> selected = deduped.subList(0, Math.min(MAX_EXERCISES_PER_ROUTINE, deduped.size()));
 
         // 4. 부위별 규칙으로 세트/렙/휴식 부여
+        List<ExerciseDetail> details = buildDetails(selected);
+
+        String routineText = buildComplexRoutine(details);
+
+        // ★ 추가 - 화면 타이틀용 한글 부위명은 선택된 운동의 targetKo에서 가져온다 (없으면 muscle 그대로)
+        String nameKo = selected.isEmpty() ? muscle : displayTarget(selected.get(0));
+
+        // ★ 추가 - 히스토리에서 상세를 복원할 수 있도록 exerciseDetails를 JSON으로 함께 저장
+        String detailsJson = serializeDetails(details);
+
+        ExercisePlan plan = planRepository.save(
+                new ExercisePlan(userEmail, muscle, nameKo, "", routineText, detailsJson));
+
+        enforceHistoryLimit(userEmail); // ★ 추가 - 최근 5개 초과분 삭제
+
+        return new RoutineResult(plan, details);
+    }
+
+    /**
+     * ★ 추가 - 사용자당 히스토리를 최근 MAX_HISTORY_PER_USER개로 유지한다.
+     * 그보다 오래된 것들은 이 시점에 실제로 DB에서 삭제한다 (단순 화면 표시 제한이 아님).
+     */
+    private void enforceHistoryLimit(String userEmail) {
+        List<ExercisePlan> all = planRepository.findByUserEmailOrderByIdDesc(userEmail);
+        if (all.size() > MAX_HISTORY_PER_USER) {
+            List<ExercisePlan> overflow = all.subList(MAX_HISTORY_PER_USER, all.size());
+            planRepository.deleteAll(overflow);
+        }
+    }
+
+    /**
+     * ★ 추가 - 메인 페이지 "오늘의 추천 운동"용.
+     * 로그인한 사용자의 최근 루틴 3개에 등장했던 운동은 제외하고,
+     * 캐싱된 운동 전체 중에서 무작위로 5개를 뽑아준다.
+     * ExercisePlan을 새로 저장하지 않고, RapidAPI 호출도 하지 않는다 (전부 로컬 DB 기반).
+     */
+    public List<ExerciseDetail> personalizedQuickPick(String userEmail) {
+        List<ExercisePlan> recentPlans = planRepository
+                .findByUserEmailOrderByIdDesc(userEmail, PageRequest.of(0, RECENT_PLAN_COUNT_FOR_EXCLUSION))
+                .getContent();
+
+        Set<String> recentExerciseIds = recentPlans.stream()
+                .flatMap(plan -> deserializeDetails(plan.getExerciseDetailsJson()).stream())
+                .map(ExerciseDetail::getId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+
+        List<Exercise> pool = new ArrayList<>(exerciseRepository.findAll());
+        pool.removeIf(ex -> recentExerciseIds.contains(ex.getId()));
+        Collections.shuffle(pool);
+
+        List<Exercise> picked = pool.subList(0, Math.min(PERSONALIZED_PICK_COUNT, pool.size()));
+        return buildDetails(picked);
+    }
+
+    /** Exercise 목록 -> 부위별 규칙으로 세트/렙/휴식이 붙은 ExerciseDetail 목록 변환 (공통 로직 추출) */
+    private List<ExerciseDetail> buildDetails(List<Exercise> exercises) {
         List<ExerciseDetail> details = new ArrayList<>();
-        for (Exercise ex : selected) {
-            Prescription p = PRESCRIPTION_BY_BODY_PART.getOrDefault(
-                    ex.getBodyPart().toLowerCase(), DEFAULT_PRESCRIPTION);
+        for (Exercise ex : exercises) {
+            String bodyPartKey = ex.getBodyPart() == null ? "" : ex.getBodyPart().toLowerCase();
+            Prescription p = PRESCRIPTION_BY_BODY_PART.getOrDefault(bodyPartKey, DEFAULT_PRESCRIPTION);
             details.add(ExerciseDetail.builder()
                     .id(ex.getId())
                     .name(displayName(ex))
-                    .target(displayTarget(ex))       // ★ 영문 대신 한글 번역 반영
-                    .equipment(displayEquipment(ex)) // ★ 영문 대신 한글 번역 반영
+                    .target(displayTarget(ex))
+                    .equipment(displayEquipment(ex))
                     .sets(p.sets())
                     .reps(p.reps())
                     .restSeconds(p.restSeconds())
                     .build());
         }
-
-        String routineText = buildComplexRoutine(details);
-
-        ExercisePlan plan = planRepository.save(
-                new ExercisePlan(userEmail, muscle, "", routineText));
-
-        return new RoutineResult(plan, details);
+        return details;
     }
 
     public List<ExercisePlan> getHistory(String userEmail, int page, int size) {
         return planRepository
                 .findByUserEmailOrderByIdDesc(userEmail, PageRequest.of(page, size))
                 .getContent();
+    }
+
+    private String serializeDetails(List<ExerciseDetail> details) {
+        try {
+            return objectMapper.writeValueAsString(details);
+        } catch (Exception e) {
+            log.warn("exerciseDetails 직렬화 실패. routine 텍스트만 저장됩니다: {}", e.getMessage());
+            return null;
+        }
+    }
+
+    private List<ExerciseDetail> deserializeDetails(String json) {
+        if (json == null || json.isBlank()) return List.of();
+        try {
+            return objectMapper.readValue(json, new TypeReference<List<ExerciseDetail>>() {});
+        } catch (Exception e) {
+            log.warn("exerciseDetails 역직렬화 실패: {}", e.getMessage());
+            return List.of();
+        }
     }
 
     /**
@@ -124,6 +214,16 @@ public class ExerciseService {
     private String displayName(Exercise ex) {
         String nameKo = ex.getNameKo();
         return (nameKo != null && !nameKo.isBlank()) ? nameKo : ex.getName();
+    }
+
+    private String displayTarget(Exercise ex) {
+        String targetKo = ex.getTargetKo();
+        return (targetKo != null && !targetKo.isBlank()) ? targetKo : ex.getTarget();
+    }
+
+    private String displayEquipment(Exercise ex) {
+        String equipKo = ex.getEquipKo();
+        return (equipKo != null && !equipKo.isBlank()) ? equipKo : ex.getEquipment();
     }
 
     private String buildComplexRoutine(List<ExerciseDetail> exercises) {
@@ -146,14 +246,4 @@ public class ExerciseService {
 
     /** 컨트롤러에서 plan + 상세 목록을 함께 응답으로 변환할 수 있도록 감싸는 결과 객체 */
     public record RoutineResult(ExercisePlan plan, List<ExerciseDetail> details) {}
-
-    private String displayTarget(Exercise ex) {
-        String targetKo = ex.getTargetKo(); // 만약 엔티티 필드명이 다르다면 확인해주세요 (예: targetKo)
-        return (targetKo != null && !targetKo.isBlank()) ? targetKo : ex.getTarget();
-    }
-
-    private String displayEquipment(Exercise ex) {
-        String equipKo = ex.getEquipKo(); // 엔티티의 한글 장비 필드명
-        return (equipKo != null && !equipKo.isBlank()) ? equipKo : ex.getEquipment();
-    }
 }

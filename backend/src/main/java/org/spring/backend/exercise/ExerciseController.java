@@ -67,6 +67,18 @@ public class ExerciseController {
     }
 
     /**
+     * ★ 추가 - 메인 페이지 "오늘의 추천 운동"용.
+     * 로그인한 사용자의 최근 루틴 3개에서 등장한 운동을 제외하고,
+     * 캐싱된 운동 중 5개를 무작위로 반환한다. 저장 없음, RapidAPI 호출 없음
+     * (전부 로컬 DB 기반이라 쿼터 걱정 없이 자주 호출해도 된다).
+     */
+    @GetMapping("/quick-pick/personalized")
+    public ResponseEntity<?> personalizedQuickPick(Authentication auth) {
+        List<ExerciseDetail> picks = exerciseService.personalizedQuickPick(auth.getName());
+        return ResponseEntity.ok(picks);
+    }
+
+    /**
      * 특정 부위를 동기화하고, 이어서 번역까지 함께 처리한다 (관리자 전용).
      */
     @PreAuthorize("hasRole('ADMIN')")

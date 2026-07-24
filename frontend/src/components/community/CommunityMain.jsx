@@ -1,8 +1,10 @@
 import axios from "axios";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { API_SERVER_URL } from "../../apis/commonApi";
 import "../css/Community/CommunityMain.css";
 import jwtAxios from "../../apis/util/jwtUtil";
+import { getCookie } from "../../apis/util/cookieUtil";
+import { useNavigate } from "react-router-dom";
 
 //날씨 지역 목록
 const CITIES = [
@@ -18,47 +20,6 @@ const CITIES = [
   { code: "Jeju", label: "제주" }, //제주
 ];
 
-//운동추천
-const getExerciseRecommendation = (weather) => {
-  if (!weather) {
-    return {
-      title: "날씨 정보를 불러오는 중",
-      desc: "잠시 후 추천 운동이 표시됩니다",
-    };
-  }
-
-  const temp = weather.main?.temp;
-  const main = weather.weather?.[0]?.main;
-  const rainLike = ["Rain", "Thunderstorm", "Drizzle", "Snow"]; // 비 눈 등
-
-  if (rainLike.includes(main)) {
-    //비나 눈일때
-    return {
-      title: "실내 클라이밍 / 홈트레이닝 추천",
-      desc: "비/눈 소식이 있어요. 실내 클라이밍이나 홈트레이닝을 추천드려요",
-    };
-  }
-  if (temp >= 28) {
-    //온도가 28 이상
-    return {
-      title: "수영 / 실내 운동 추천",
-      desc: "더운 날씨예요. 수영이나 실내 운동으로 더위를 피하세요.",
-    };
-  }
-  if (temp <= 5) {
-    // 온도 5 이하
-    return {
-      title: "실내 유산소 / 웨이트 트레이닝 추천",
-      desc: "추운 날씨예요. 실내 유산소, 웨이트 트레이닝으로 추위를 피하세요.",
-    };
-  }
-  return {
-    //이외
-    title: "야외 러닝 / 등산 추천",
-    desc: "야외에서 운동하기 좋은 날씨예요. 가벼운 러닝이나 등산을 추천드려요.",
-  };
-};
-
 const CommunityMain = () => {
   const [mainData, setMainData] = useState({
     byTab: {},
@@ -66,10 +27,16 @@ const CommunityMain = () => {
     tabs: [],
   });
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   const [weatherMap, setWeatherMap] = useState({});
   const [isWeatherLoading, setIsWeatherLoading] = useState(true);
   const [selectedCity, setSelectedCity] = useState("Seoul");
+
+  // ★ 변경 - 날씨 기반 추천 대신, 로그인 사용자의 최근 루틴 3개를 제외한 운동 5개를 무작위로 받아온다.
+  const [personalizedPicks, setPersonalizedPicks] = useState([]);
+  const [isPickLoading, setIsPickLoading] = useState(true);
+  const [pickError, setPickError] = useState(null);
 
   useEffect(() => {
     const fetchMainData = async () => {
@@ -88,7 +55,7 @@ const CommunityMain = () => {
     fetchMainData();
   }, []);
 
-  //지역별 날씨 불러오기
+  //지역별 날씨 불러오기 (날씨 카드는 그대로 유지, 추천 운동과는 더 이상 연결되지 않음)
   const fetchAllWeather = async () => {
     try {
       setIsWeatherLoading(true);
@@ -117,12 +84,35 @@ const CommunityMain = () => {
     fetchAllWeather();
   }, []);
 
-  const selectedWeather = weatherMap[selectedCity];
+  // ★ 추가 - 최근 루틴 3개를 제외한 운동 5개 무작위 조회.
+  // 로그인 사용자 기준 개인화라 jwtAxios 사용, 비로그인 시 401을 받으면 안내 문구로 대체.
+  useEffect(() => {
+    const member = getCookie("member");
+    if (!member?.access) {
+      setIsPickLoading(false);
+      setPersonalizedPicks([]);
+      return;
+    }
 
-  const recommendation = useMemo(
-    () => getExerciseRecommendation(selectedWeather),
-    [selectedWeather],
-  );
+    const fetchPersonalizedPicks = async () => {
+      try {
+        setIsPickLoading(true);
+        setPickError(null);
+        const res = await jwtAxios.get(
+          `${API_SERVER_URL}/api/exercise/quick-pick/personalized`,
+        );
+        setPersonalizedPicks(res.data || []);
+      } catch (err) {
+        console.error("추천 운동을 불러오지 못했습니다.", err);
+        setPickError("추천 운동을 불러오지 못했습니다.");
+      } finally {
+        setIsPickLoading(false);
+      }
+    };
+    fetchPersonalizedPicks();
+  }, []);
+
+  const selectedWeather = weatherMap[selectedCity];
 
   const EXCLUDED_CATEGORY_KEYWORDS = ["QNA"]; //추가로 제외할 카테고리 이름
   const boardCards = [
@@ -131,9 +121,7 @@ const CommunityMain = () => {
       tabName: "전체게시판 추천글",
       list: mainData.all.filter((item) => {
         const tab = mainData.tabs.find((t) => t.id === item.tabId);
-        // 공지사항(adminOnly) 탭 제외
         if (tab?.adminOnly) return false;
-        // 카테고리명에 지정한 이름 포함되어 있으면 제외
         const categoryName = item.categoryName || "";
         const isExcluded = EXCLUDED_CATEGORY_KEYWORDS.some((keyword) =>
           categoryName.toUpperCase().includes(keyword.toUpperCase()),
@@ -148,6 +136,16 @@ const CommunityMain = () => {
       list: mainData.byTab?.[tab.id] || [],
     })),
   ];
+
+  const handleWriteClick = () => {
+    const member = getCookie("member");
+    if (!member?.access) {
+      alert("로그인이 필요한 기능입니다");
+      navigate("/auth/login");
+      return;
+    }
+    navigate("/community/routine");
+  };
 
   return (
     <div className="comMain">
@@ -197,19 +195,42 @@ const CommunityMain = () => {
               </div>
             </div>
 
-            {/* 날씨 기반 추천 운동 */}
+            {/*최근 루틴 3개를 제외한 운동 5개 무작위 추천 */}
             <div className="board-card recommend-card">
               <div className="board-card-header">
                 <h3>오늘의 추천 운동</h3>
               </div>
               <div className="board-card-body recommend-card-body">
-                <p className="recommend-title">{recommendation.title}</p>
-                <p className="recommend-desc">{recommendation.desc}</p>
+                {!getCookie("member")?.access ? (
+                  <p className="board-card-empty">
+                    로그인하면 최근에 안 한 운동 위주로 추천해드려요.
+                  </p>
+                ) : isPickLoading ? (
+                  <p className="board-card-empty">추천 운동을 불러오는 중...</p>
+                ) : pickError ? (
+                  <p className="board-card-empty">{pickError}</p>
+                ) : personalizedPicks.length === 0 ? (
+                  <p className="board-card-empty">추천할 운동이 없습니다.</p>
+                ) : (
+                  <ul className="recommend-exercise-list">
+                    {personalizedPicks.map((ex) => (
+                      <li key={ex.id} className="recommend-exercise-item">
+                        <span className="recommend-exercise-name">
+                          {ex.name}
+                        </span>
+                        <span className="recommend-exercise-meta muted">
+                          {ex.target} · {ex.equipment} · {ex.sets}세트 {ex.reps}
+                          회
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
             </div>
 
             {/* 운동 루틴 이동 */}
-            <a href="/community/routine" className="board-card routine-card">
+            <div className="board-card routine-card" onClick={handleWriteClick}>
               <div className="board-card-header">
                 <h3>운동 루틴</h3>
               </div>
@@ -220,7 +241,7 @@ const CommunityMain = () => {
                   alt="운동 루틴 바로가기"
                 />
               </div>
-            </a>
+            </div>
           </div>
         </div>
 
