@@ -24,8 +24,8 @@ public class ExerciseImageService {
 
     private final ExerciseDbClient exerciseDbClient;
 
-    // application.yml에서 설정 (기본값: 프로젝트 루트의 gif-cache 폴더)
-    @Value("${img.path.exercise")
+    // application.yml에서 설정
+    @Value("${img.path.exercise}")
     private String cacheDir;
 
     /**

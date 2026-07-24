@@ -26,7 +26,7 @@ const PaymentSuccess = () => {
                   if (type === "GOODS") {
                     navigate('/order/list');
                   } else if (type === "PREMIUM") {
-                    navigate('/subscription/list');
+                    navigate('/mypage/subscription');
                   } else if (type === "PT") {
                     // PT 상품은 바로 예약 페이지로 이동!
                     navigate('/reservation');

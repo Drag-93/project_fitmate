@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.spring.backend.file.entity.FileEntity;
 import org.spring.backend.store.product.entity.ProductEntity;
+import org.spring.backend.store.product.type.ProductType;
 import org.spring.backend.store.subscription.entity.SubscriptionEntity;
 import org.spring.backend.store.subscription.type.SubscriptionStatus;
 
@@ -39,6 +40,10 @@ public class SubscriptionDto {
 
   private String productImage;
 
+  private ProductType productType;
+
+  private String paymentMethod;
+
   public static SubscriptionDto toSubscriptionDto(SubscriptionEntity subscriptionEntity) {
     return SubscriptionDto.builder()
         .id(subscriptionEntity.getId())
@@ -57,6 +62,15 @@ public class SubscriptionDto {
                 .findFirst()
                 .map(FileEntity::getNewFileName)
                 .orElse(null))
+        .productType(
+            subscriptionEntity
+                .getProductEntity()
+                .getProductType())
+        .paymentMethod(
+            subscriptionEntity.getPaymentEntities()
+                .get(0)
+                .getPaymentMethod()
+                .name())
         .build();
   }
 }

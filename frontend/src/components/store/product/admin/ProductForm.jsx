@@ -44,7 +44,7 @@ const ProductForm = ({ product, onSubmit }) => {
       };
 
       if (name === "productType") {
-        if (value === "SUBSCRIPTION") {
+        if (value === "PREMIUM") {
           next.billingType = "SUBSCRIPTION";
         } else {
           next.billingType = "ONE_TIME";
@@ -108,7 +108,7 @@ const ProductForm = ({ product, onSubmit }) => {
           <option value="PT">PT</option>
           <option value="GYM">GYM</option>
           <option value="GOODS">GOODS</option>
-          <option value="SUBSCRIPTION">SUBSCRIPTION</option>
+          <option value="PREMIUM">PREMIUM</option>
         </select>
       </div>
 

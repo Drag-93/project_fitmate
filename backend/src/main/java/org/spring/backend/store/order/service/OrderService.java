@@ -28,4 +28,7 @@ public interface OrderService {
 
       // 구독 타입 주문생성
       Long insertSubscriptionOrder(Long memberId, SubscriptionOrderRequestDto request);
+
+      //관리자 주문목록 전체조회
+      List<OrderDto> adminOrderList();
 }

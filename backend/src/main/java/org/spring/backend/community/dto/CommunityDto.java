@@ -53,7 +53,7 @@ public class CommunityDto {
 
   private Long tabId;
 
-
+    private String thumbnail;
 
   private MemberEntity memberEntity;
 
@@ -72,6 +72,7 @@ public class CommunityDto {
         this.tabId=entity.getCategoryEntity().getTabEntity().getId();
         this.tabName=entity.getCategoryEntity().getTabEntity().getTabName();
         this.reply= entity.getReply();
+        this.thumbnail = entity.getThumbnail();
     }
     public static CommunityDto toCommunityDto(CommunityEntity communityEntity){
       return CommunityDto.builder()
@@ -90,6 +91,7 @@ public class CommunityDto {
               .updateTime(communityEntity.getUpdateTime())
               .hit(communityEntity.getHit())
               .originalFileName(communityEntity.getOriginalFileName())
+              .thumbnail(communityEntity.getThumbnail())
               .build();
     }
 }

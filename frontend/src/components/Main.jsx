@@ -216,7 +216,7 @@ const Main = () => {
                           // style={{ display: `flex`, justifyContent: `end` }}
                         >
                           <a
-                            href={`/store/detail/${bestProduct.id}`}
+                            href={`/products/detail/${bestProduct.id}`}
                             style={{ display: "flex", flexDirection: "column" }}
                           >
                             <img
@@ -266,7 +266,7 @@ const Main = () => {
                   {Array.isArray(otherProducts) &&
                     otherProducts.map((product) => (
                       <li key={product.id}>
-                        <a href={`/store/detail/${product.id}`}>
+                        <a href={`/products/detail/${product.id}`}>
                           <img
                             src={`${API_SERVER_URL}/upload/product/${product.newFileName}`}
                             alt={product.productName}

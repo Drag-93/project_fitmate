@@ -10,17 +10,17 @@ package org.spring.backend.common;
         public String getProductCategory() {
             return switch (this) {
                 case DIET -> "다이어트";
-                case WORKOUT -> "운동";
-                case HEALTH -> "건강관리";
+                case WORKOUT -> "헬스장";
+                case HEALTH -> "PT";
             };
         }
 
         //community 카테고리
-        public String getCommunityCategory() {
+        public String getCommunityTabName() {
             return switch (this) {
-                case DIET -> "다이어트";
-                case WORKOUT -> "운동";
-                case HEALTH -> "건강";
+                case DIET -> "자유게시판";
+                case WORKOUT -> "자유게시판";
+                case HEALTH -> "자유게시판";
             };
         }
     }

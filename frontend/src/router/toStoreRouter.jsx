@@ -4,10 +4,6 @@ import { Navigate } from "react-router-dom";
 // const Loading = <div className="loading">...Loading</div>;
 
 const StoreIndexPage = lazy(() => import("../page/store/StoreIndexPage"));
-const AdminProductListPage = lazy(() => import("../page/store/product/admin/AdminProductListPage"));
-const AdminProductUpdatePage = lazy(() => import("../page/store/product/admin/AdminProductUpdatePage"));
-const AdminProductInsertPage = lazy(() => import("../page/store/product/admin/AdminProductInsertPage"));
-const AdminProductDetailPage = lazy(() => import("../page/store/product/admin/AdminProductDetailPage"));
 
 const toStoreRouter = () => {
   return [

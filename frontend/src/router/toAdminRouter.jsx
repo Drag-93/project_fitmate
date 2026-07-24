@@ -24,13 +24,26 @@ const AdminProductInsertPage = lazy(
 const AdminProductDetailPage = lazy(
   () => import("../page/store/product/admin/AdminProductDetailPage"),
 );
+const AdminOrderListPage = lazy(
+  () => import("../page/store/order/admin/AdminOrderListPage"),
+);
 const AdminCommunityPage = lazy(
   () => import("../page/admin/AdminCommunityPage"),
 );
+<<<<<<< HEAD
 const AdminChatBotPage = lazy(() => import("../page/admin/AdminChatBotPage"));
 const AdminChatBotDetailPage = lazy(
   () => import("../page/admin/AdminChatBotDetailPage"),
 );
+=======
+const AdminCommunityDetailPage = lazy(
+  () => import("../page/admin/AdminCommunityDetailPage"),
+);
+const AdminNoticeWritePage = lazy(
+  () => import("../page/admin/AdminNoticeWritePage"),
+);
+
+>>>>>>> cdb4357d4cbd528c08f567ce6a41d4c44e34e3a6
 const toAdminRouter = () => {
   return [
     {
@@ -107,7 +120,7 @@ const toAdminRouter = () => {
       path: "order",
       element: (
         <Suspense fallback={Loading}>
-          <AdminProductListPage />
+          <AdminOrderListPage />
         </Suspense>
       ),
     },
@@ -159,20 +172,35 @@ const toAdminRouter = () => {
         </Suspense>
       ),
     },
+<<<<<<< HEAD
     //챗봇의 Chat, Answer CRUD를 담당하는 Page
     {
       path: "chatbot",
       element: (
         <Suspense fallback={Loading}>
           <AdminChatBotPage />
+=======
+    {
+      path: "comumnity/detail/:id",
+      element: (
+        <Suspense fallback={Loading}>
+          <AdminCommunityDetailPage />
+>>>>>>> cdb4357d4cbd528c08f567ce6a41d4c44e34e3a6
         </Suspense>
       ),
     },
     {
+<<<<<<< HEAD
       path: "chatbot/detail/:id",
       element: (
         <Suspense fallback={Loading}>
           <AdminChatBotDetailPage />
+=======
+      path: "comumnity/insert",
+      element: (
+        <Suspense fallback={Loading}>
+          <AdminNoticeWritePage />
+>>>>>>> cdb4357d4cbd528c08f567ce6a41d4c44e34e3a6
         </Suspense>
       ),
     },

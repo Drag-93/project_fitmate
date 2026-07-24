@@ -26,4 +26,8 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 
   boolean existsByProductName(String productName);
 
+  @EntityGraph(attributePaths = "fileEntities")
+  Optional<ProductEntity> findFirstByProductType(ProductType productType);
+
+  boolean existsByProductType(ProductType productType);
 }

@@ -92,7 +92,16 @@ const CommunityList = ({ params, tab }) => {
                     <td
                       onClick={() => navigate(`/community/detail/${item.id}`)}
                     >
-                      {item.title}
+                      {item.thumbnail ? (
+                        <img
+                          className="board-item-thumb"
+                          src={item.thumbnail}
+                          alt=""
+                        />
+                      ) : (
+                        <div className="board-item-thumb board-item-thumb-empty" />
+                      )}
+                      <p>{item.title}</p>
                     </td>
                     <td>{item.userName}</td>
                     <td>{item.hit}</td>

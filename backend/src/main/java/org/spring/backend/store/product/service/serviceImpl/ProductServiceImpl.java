@@ -40,10 +40,16 @@ public class ProductServiceImpl implements ProductService {
   public void insertProduct(ProductDto productDto, MultipartFile thumbnail, List<MultipartFile> main,
       List<MultipartFile> details) {
 
-    if(productRepository.existsByProductName(productDto.getProductName())) {
+    if (productRepository.existsByProductName(productDto.getProductName())) {
       throw new IllegalArgumentException("이미 등록된 상품입니다.");
     }
+    // PREMIUM 상품 중복 등록 방지
+    if (productDto.getProductType() == ProductType.PREMIUM
+        && productRepository.existsByProductType(ProductType.PREMIUM)) {
 
+      throw new IllegalArgumentException(
+          "프리미엄 상품은 하나만 등록 가능합니다.");
+    }
 
     ProductEntity productEntity = ProductEntity.builder()
         .productName(productDto.getProductName())
@@ -215,11 +221,21 @@ public class ProductServiceImpl implements ProductService {
       fileHandler.deleteProductFiles(itemPath, productId);
 
       ProductEntity productEntity = productRepository.findById(productId)
-              .orElseThrow(() -> new NoSuchElementException("상품이 없습니다."));
+          .orElseThrow(() -> new NoSuchElementException("상품이 없습니다."));
       productEntity.getFileEntities().clear();
 
     } catch (IOException e) {
       throw new RuntimeException("상품 이미지 전체 삭제 실패", e);
     }
+  }
+
+  public ProductDto getPremiumProduct() {
+
+    ProductEntity product = productRepository
+        .findFirstByProductType(ProductType.PREMIUM)
+        .orElseThrow(
+            () -> new RuntimeException("프리미엄 상품 없음"));
+
+    return ProductDto.toProductDto(product);
   }
 }

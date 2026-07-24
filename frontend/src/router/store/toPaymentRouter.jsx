@@ -1,5 +1,4 @@
 import React, { lazy, Suspense } from "react";
-import KakaoPayApproval from "../../components/store/payment/KakaoPayApproval";
 
 const Loading = <div className="loading">...Loading</div>;
 
@@ -7,6 +6,7 @@ const PaymentSuccessPage = lazy(() => import("../../page/store/payment/PaymentSu
 const PaymentPage = lazy(() => import("../../page/store/payment/PaymentPage"));
 const PaymentFailPage = lazy(() => import("../../page/store/payment/PaymentFailPage"));
 const PaymentListPage = lazy(() => import("../../page/store/payment/PaymentListPage"));
+const KakaoPayApproval = lazy(() => import("../../components/store/payment/KakaoPayApproval"));
 
 
 const toPaymentRouter = () => {

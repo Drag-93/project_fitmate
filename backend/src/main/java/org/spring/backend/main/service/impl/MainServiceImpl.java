@@ -89,7 +89,7 @@ public class MainServiceImpl implements MainService {
     public MainResponseDto getMainData(Interest interest) {
 
         String productCategory = interest.getProductCategory();
-        String communityCategory = interest.getCommunityCategory();
+        String communityTabName = interest.getCommunityTabName();
 
         // 공지사항은 사용자 관심사와 관계없이  최신순 TOP 5 조회
         List<CommunityDto> noticeList =
@@ -106,8 +106,8 @@ public class MainServiceImpl implements MainService {
 
         List<CommunityDto> communityList =
                 communityRepository
-                        .findTop5ByCategoryNameOrderByHitDesc(
-                                communityCategory
+                        .findTop5ByTabNameOrderByHitDesc(
+                                communityTabName
                         )
                         .stream()
                         .map(entity -> CommunityDto.builder()

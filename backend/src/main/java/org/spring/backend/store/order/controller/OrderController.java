@@ -11,6 +11,7 @@ import org.spring.backend.store.order.dto.SubscriptionOrderRequestDto;
 import org.spring.backend.store.order.service.OrderService;
 import org.spring.backend.store.order.type.DeliveryStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -117,4 +118,5 @@ public class OrderController {
 
     return ResponseEntity.ok(orderId);
   }
+
 }

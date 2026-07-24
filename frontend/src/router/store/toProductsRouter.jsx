@@ -8,7 +8,9 @@ const ProductListPage = lazy(
 const ProductDetailPage = lazy(
   () => import("../../page/store/product/ProductDetailPage"),
 );
-
+const SubscriptionPage = lazy(
+  () => import("../../page/store/subscription/SubscriptionPage")
+);
 const toProductsRouter = () => {
   return [
     {
@@ -24,6 +26,14 @@ const toProductsRouter = () => {
       element: (
         <Suspense fallback={Loading}>
           <ProductDetailPage />
+        </Suspense>
+      ),
+    },
+    {
+      path: "premium",
+      element: (
+        <Suspense fallback={Loading}>
+          <SubscriptionPage />
         </Suspense>
       ),
     },

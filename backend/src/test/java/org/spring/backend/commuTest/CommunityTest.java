@@ -26,7 +26,7 @@ public class CommunityTest {
 
     @Test
     void insert(){
-        CategoryEntity fixedCategory = categoryRepository.findById(Long.valueOf(105))
+        CategoryEntity fixedCategory = categoryRepository.findById(Long.valueOf(102))
                 .orElseThrow(() -> new RuntimeException("구매 카테고리가 없습니다."));
         for (int i = 0; i < 10; i++) {
             communityRepository.save(CommunityEntity.builder()

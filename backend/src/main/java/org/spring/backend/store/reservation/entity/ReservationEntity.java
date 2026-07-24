@@ -1,11 +1,14 @@
 package org.spring.backend.store.reservation.entity;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 import org.spring.backend.common.BasicTime;
 import org.spring.backend.member.entity.MemberEntity;
+import org.spring.backend.store.MemberProduct.entity.MemberProductEntity;
 import org.spring.backend.store.product.entity.ProductEntity;
 import org.spring.backend.store.reservation.type.ReservationStatus;
+import org.spring.backend.trainer.entity.TrainerEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,7 +41,10 @@ public class ReservationEntity extends BasicTime {
   private Long id;
 
   @Column(nullable = false)
-  private LocalDateTime reservationTime; // 예약 날짜
+  private LocalDate reservationDate;// 예약 날짜
+
+  @Column(nullable = false)
+  private LocalTime reservationTime;// 예약 시간
 
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
@@ -57,8 +63,12 @@ public class ReservationEntity extends BasicTime {
   @JoinColumn(name = "trainer_id", nullable = false)
   private TrainerEntity trainer;
 
-   // PT 상품
+  // PT 상품
   @ManyToOne
   @JoinColumn(name = "product_id")
   private ProductEntity ProductEntity;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "member_product_id")
+  private MemberProductEntity memberProduct;
 }
