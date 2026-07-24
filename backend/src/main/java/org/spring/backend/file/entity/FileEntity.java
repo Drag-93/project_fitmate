@@ -4,12 +4,12 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.spring.backend.calendar.entity.PersonalScheduleEntity;
 import org.spring.backend.common.BasicTime;
-import org.spring.backend.common.TableType;
+import org.spring.backend.file.enumtype.TableType;
 import org.spring.backend.community.entity.CommunityEntity;
 import org.spring.backend.admin.popup.entity.PopupEntity;
 import org.spring.backend.member.entity.MemberEntity;
-import org.spring.backend.store.product.entity.ProductEntity;
-import org.spring.backend.store.product.type.ImageType;
+import org.spring.backend.shop.product.entity.ProductEntity;
+import org.spring.backend.shop.product.type.ImageType;
 
 @Getter
 @Setter

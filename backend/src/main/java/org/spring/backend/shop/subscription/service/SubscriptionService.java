@@ -1,8 +1,8 @@
-package org.spring.backend.store.subscription.service;
+package org.spring.backend.shop.subscription.service;
 
 import java.util.List;
 
-import org.spring.backend.store.subscription.dto.SubscriptionDto;
+import org.spring.backend.shop.subscription.dto.SubscriptionDto;
 
 public interface SubscriptionService {
       // 구독 생성 (구독 시작)

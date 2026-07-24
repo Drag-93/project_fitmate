@@ -7,8 +7,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import org.spring.backend.common.Role;
-import org.spring.backend.common.TableType;
+import org.spring.backend.member.enumtype.Role;
+import org.spring.backend.file.enumtype.TableType;
 import org.spring.backend.community.dto.CommunityDto;
 import org.spring.backend.community.dto.TabDto;
 import org.spring.backend.community.entity.CategoryEntity;

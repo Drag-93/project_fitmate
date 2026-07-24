@@ -3,8 +3,8 @@ package org.spring.backend.member.service.impl;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
-import org.spring.backend.common.Role;
-import org.spring.backend.common.TableType;
+import org.spring.backend.member.enumtype.Role;
+import org.spring.backend.file.enumtype.TableType;
 import org.spring.backend.file.handler.FileHandler;
 import org.spring.backend.member.dto.MemberDto;
 import org.spring.backend.member.entity.MemberAddEntity;

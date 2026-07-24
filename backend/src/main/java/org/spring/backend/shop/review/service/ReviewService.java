@@ -1,8 +1,8 @@
-package org.spring.backend.store.review.service;
+package org.spring.backend.shop.review.service;
 
 import java.util.List;
 
-import org.spring.backend.store.review.dto.ReviewDto;
+import org.spring.backend.shop.review.dto.ReviewDto;
 
 public interface ReviewService {
       // 리뷰 작성

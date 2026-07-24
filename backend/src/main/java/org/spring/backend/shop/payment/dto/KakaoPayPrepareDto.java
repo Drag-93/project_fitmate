@@ -1,6 +1,6 @@
-package org.spring.backend.store.payment.dto;
+package org.spring.backend.shop.payment.dto;
 
-import org.spring.backend.store.payment.entity.KakaoPayPrepareEntity;
+import org.spring.backend.shop.payment.entity.KakaoPayPrepareEntity;
 
 import lombok.*;
 

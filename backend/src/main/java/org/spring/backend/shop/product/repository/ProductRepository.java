@@ -1,10 +1,10 @@
-package org.spring.backend.store.product.repository;
+package org.spring.backend.shop.product.repository;
 
 import java.util.List;
 import java.util.Optional;
 
-import org.spring.backend.store.product.entity.ProductEntity;
-import org.spring.backend.store.product.type.ProductType;
+import org.spring.backend.shop.product.entity.ProductEntity;
+import org.spring.backend.shop.product.type.ProductType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;

@@ -1,13 +1,13 @@
-package org.spring.backend.store.reservation.controller;
+package org.spring.backend.shop.reservation.controller;
 
 import java.util.List;
 
 import org.spring.backend.member.entity.MemberEntity;
 import org.spring.backend.member.jwt.CustomUserDetails;
 import org.spring.backend.member.repository.MemberRepository;
-import org.spring.backend.store.reservation.dto.ReservationDto;
-import org.spring.backend.store.reservation.service.ReservationService;
-import org.spring.backend.store.reservation.type.ReservationStatus;
+import org.spring.backend.shop.reservation.dto.ReservationDto;
+import org.spring.backend.shop.reservation.service.ReservationService;
+import org.spring.backend.shop.reservation.type.ReservationStatus;
 import org.spring.backend.trainer.entity.TrainerEntity;
 import org.spring.backend.trainer.repository.TrainerRepository;
 import org.springframework.http.HttpStatus;

@@ -1,9 +1,9 @@
-package org.spring.backend.store.notification.controller;
+package org.spring.backend.shop.notification.controller;
 
 import java.util.List;
 
-import org.spring.backend.store.notification.dto.NotificationDto;
-import org.spring.backend.store.notification.service.NotificationService;
+import org.spring.backend.shop.notification.dto.NotificationDto;
+import org.spring.backend.shop.notification.service.NotificationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

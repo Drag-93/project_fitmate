@@ -1,9 +1,9 @@
-package org.spring.backend.store.MemberProduct.repository;
+package org.spring.backend.shop.MemberProduct.repository;
 
 import java.util.List;
 
 import org.spring.backend.member.entity.MemberEntity;
-import org.spring.backend.store.MemberProduct.entity.MemberProductEntity;
+import org.spring.backend.shop.MemberProduct.entity.MemberProductEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -1,6 +1,6 @@
 package org.spring.backend.main.service;
 
-import org.spring.backend.common.Interest;
+import org.spring.backend.member.enumtype.Interest;
 import org.spring.backend.main.dto.MainResponseDto;
 
 public interface MainService {

@@ -1,4 +1,4 @@
-package org.spring.backend.common;
+package org.spring.backend.file.enumtype;
 
 
 public enum TableType {

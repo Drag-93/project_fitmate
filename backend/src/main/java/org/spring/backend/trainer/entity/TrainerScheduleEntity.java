@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import org.spring.backend.common.BasicTime;
 import org.spring.backend.member.entity.MemberEntity;
-import org.spring.backend.store.reservation.type.ScheduleStatus;
+import org.spring.backend.shop.reservation.type.ScheduleStatus;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -5,7 +5,7 @@ import org.spring.backend.community.entity.CommunityEntity;
 import org.spring.backend.file.entity.FileEntity;
 import org.spring.backend.admin.popup.entity.PopupEntity;
 import org.spring.backend.member.entity.MemberEntity;
-import org.spring.backend.store.product.entity.ProductEntity;
+import org.spring.backend.shop.product.entity.ProductEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

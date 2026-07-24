@@ -1,12 +1,12 @@
-package org.spring.backend.store.payment.entity;
+package org.spring.backend.shop.payment.entity;
 
 import java.time.LocalDateTime;
 
 import org.spring.backend.common.BasicTime;
-import org.spring.backend.store.order.entity.OrderEntity;
-import org.spring.backend.store.payment.type.PaymentMethod;
-import org.spring.backend.store.payment.type.PaymentStatus;
-import org.spring.backend.store.subscription.entity.SubscriptionEntity;
+import org.spring.backend.shop.order.entity.OrderEntity;
+import org.spring.backend.shop.payment.type.PaymentMethod;
+import org.spring.backend.shop.payment.type.PaymentStatus;
+import org.spring.backend.shop.subscription.entity.SubscriptionEntity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

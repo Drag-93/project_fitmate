@@ -1,12 +1,12 @@
-package org.spring.backend.store.subscription.controller;
+package org.spring.backend.shop.subscription.controller;
 
 import java.util.List;
 
 import org.spring.backend.member.entity.MemberEntity;
 import org.spring.backend.member.jwt.CustomUserDetails;
 import org.spring.backend.member.repository.MemberRepository;
-import org.spring.backend.store.subscription.dto.SubscriptionDto;
-import org.spring.backend.store.subscription.service.SubscriptionService;
+import org.spring.backend.shop.subscription.dto.SubscriptionDto;
+import org.spring.backend.shop.subscription.service.SubscriptionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;

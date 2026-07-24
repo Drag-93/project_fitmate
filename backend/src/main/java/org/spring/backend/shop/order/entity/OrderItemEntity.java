@@ -1,10 +1,10 @@
-package org.spring.backend.store.order.entity;
+package org.spring.backend.shop.order.entity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.spring.backend.common.BasicTime;
-import org.spring.backend.store.product.entity.ProductEntity;
+import org.spring.backend.shop.product.entity.ProductEntity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

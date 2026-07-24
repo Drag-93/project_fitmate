@@ -3,7 +3,7 @@ package org.spring.backend.trainer.service.impl;
 
 import java.util.List;
 
-import org.spring.backend.store.reservation.type.ScheduleStatus;
+import org.spring.backend.shop.reservation.type.ScheduleStatus;
 import org.spring.backend.trainer.dto.TrainerScheduleDto;
 import org.spring.backend.trainer.entity.TrainerEntity;
 import org.spring.backend.trainer.entity.TrainerScheduleEntity;

@@ -1,10 +1,10 @@
-package org.spring.backend.store.order.service;
+package org.spring.backend.shop.order.service;
 
 import java.util.List;
 
-import org.spring.backend.store.order.dto.OrderDto;
-import org.spring.backend.store.order.dto.SubscriptionOrderRequestDto;
-import org.spring.backend.store.order.type.DeliveryStatus;
+import org.spring.backend.shop.order.dto.OrderDto;
+import org.spring.backend.shop.order.dto.SubscriptionOrderRequestDto;
+import org.spring.backend.shop.order.type.DeliveryStatus;
 
 public interface OrderService {
 

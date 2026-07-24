@@ -1,4 +1,4 @@
-package org.spring.backend.store.payment.controller;
+package org.spring.backend.shop.payment.controller;
 
 import java.util.HashMap;
 import java.util.List;
@@ -7,9 +7,9 @@ import java.util.Map;
 import org.spring.backend.member.entity.MemberEntity;
 import org.spring.backend.member.jwt.CustomUserDetails;
 import org.spring.backend.member.repository.MemberRepository;
-import org.spring.backend.store.payment.dto.PaymentDto;
-import org.spring.backend.store.payment.dto.PaymentSuccessDto;
-import org.spring.backend.store.payment.service.PaymentService;
+import org.spring.backend.shop.payment.dto.PaymentDto;
+import org.spring.backend.shop.payment.dto.PaymentSuccessDto;
+import org.spring.backend.shop.payment.service.PaymentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;

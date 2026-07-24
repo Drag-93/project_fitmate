@@ -1,9 +1,9 @@
-package org.spring.backend.store.order.dto;
+package org.spring.backend.shop.order.dto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import org.spring.backend.store.order.entity.OrderItemEntity;
+import org.spring.backend.shop.order.entity.OrderItemEntity;
 
 import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;

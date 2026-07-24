@@ -2,20 +2,19 @@ package org.spring.backend.main.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.spring.backend.admin.popup.service.PopupService;
-import org.spring.backend.common.Interest;
+import org.spring.backend.member.enumtype.Interest;
 import org.spring.backend.community.dto.CommunityDto;
 import org.spring.backend.community.repository.CommunityRepository;
 import org.spring.backend.main.dto.MainResponseDto;
 import org.spring.backend.admin.popup.dto.PopupDto;
 import org.spring.backend.main.service.MainService;
-import org.spring.backend.store.order.repository.OrderItemRepository;
-import org.spring.backend.store.product.dto.ProductDto;
+import org.spring.backend.shop.order.repository.OrderItemRepository;
+import org.spring.backend.shop.product.dto.ProductDto;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service

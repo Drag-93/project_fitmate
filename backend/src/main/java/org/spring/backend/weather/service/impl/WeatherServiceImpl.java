@@ -1,10 +1,10 @@
-package org.spring.backend.common.weather.service.impl;
+package org.spring.backend.weather.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.spring.backend.common.weather.service.WeatherService;
-import org.spring.backend.common.weather.entity.WeatherEntity;
-import org.spring.backend.common.weather.repository.WeatherRepository;
+import org.spring.backend.weather.service.WeatherService;
+import org.spring.backend.weather.entity.WeatherEntity;
+import org.spring.backend.weather.repository.WeatherRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;

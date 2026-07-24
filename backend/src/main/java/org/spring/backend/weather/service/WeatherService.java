@@ -1,4 +1,4 @@
-package org.spring.backend.common.weather.service;
+package org.spring.backend.weather.service;
 
 import java.util.Map;
 

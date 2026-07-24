@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.spring.backend.common.Interest;
+import org.spring.backend.member.enumtype.Interest;
 import org.spring.backend.member.entity.MemberAddEntity;
 import org.spring.backend.member.entity.MemberEntity;
 

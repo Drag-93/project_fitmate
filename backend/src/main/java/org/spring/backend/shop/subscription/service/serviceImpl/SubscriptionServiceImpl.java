@@ -1,19 +1,19 @@
-package org.spring.backend.store.subscription.service.serviceImpl;
+package org.spring.backend.shop.subscription.service.serviceImpl;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 import org.spring.backend.member.entity.MemberEntity;
 import org.spring.backend.member.repository.MemberRepository;
-import org.spring.backend.store.payment.repository.PaymentRepository;
-import org.spring.backend.store.product.entity.ProductEntity;
-import org.spring.backend.store.product.repository.ProductRepository;
-import org.spring.backend.store.product.type.ProductType;
-import org.spring.backend.store.subscription.dto.SubscriptionDto;
-import org.spring.backend.store.subscription.entity.SubscriptionEntity;
-import org.spring.backend.store.subscription.repository.SubscriptionRepository;
-import org.spring.backend.store.subscription.service.SubscriptionService;
-import org.spring.backend.store.subscription.type.SubscriptionStatus;
+import org.spring.backend.shop.payment.repository.PaymentRepository;
+import org.spring.backend.shop.product.entity.ProductEntity;
+import org.spring.backend.shop.product.repository.ProductRepository;
+import org.spring.backend.shop.product.type.ProductType;
+import org.spring.backend.shop.subscription.dto.SubscriptionDto;
+import org.spring.backend.shop.subscription.entity.SubscriptionEntity;
+import org.spring.backend.shop.subscription.repository.SubscriptionRepository;
+import org.spring.backend.shop.subscription.service.SubscriptionService;
+import org.spring.backend.shop.subscription.type.SubscriptionStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -1,8 +1,8 @@
-package org.spring.backend.store.notification.service;
+package org.spring.backend.shop.notification.service;
 
 import java.util.List;
 
-import org.spring.backend.store.notification.dto.NotificationDto;
+import org.spring.backend.shop.notification.dto.NotificationDto;
 
 public interface NotificationService {
       // 알림 생성

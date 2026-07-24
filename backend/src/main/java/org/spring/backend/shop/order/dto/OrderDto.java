@@ -1,12 +1,12 @@
-package org.spring.backend.store.order.dto;
+package org.spring.backend.shop.order.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.spring.backend.store.order.entity.OrderEntity;
-import org.spring.backend.store.order.type.DeliveryStatus;
-import org.spring.backend.store.order.type.OrderStatus;
-import org.spring.backend.store.payment.dto.PaymentDto;
+import org.spring.backend.shop.order.entity.OrderEntity;
+import org.spring.backend.shop.order.type.DeliveryStatus;
+import org.spring.backend.shop.order.type.OrderStatus;
+import org.spring.backend.shop.payment.dto.PaymentDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

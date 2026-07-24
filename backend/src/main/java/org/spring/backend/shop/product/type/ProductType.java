@@ -1,4 +1,4 @@
-package org.spring.backend.store.product.type;
+package org.spring.backend.shop.product.type;
 
 public enum ProductType {
   PT,

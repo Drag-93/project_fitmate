@@ -3,7 +3,7 @@ package org.spring.backend.member.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.spring.backend.common.BasicTime;
-import org.spring.backend.common.Interest;
+import org.spring.backend.member.enumtype.Interest;
 import org.spring.backend.member.dto.MemberAddDto;
 
 @Getter

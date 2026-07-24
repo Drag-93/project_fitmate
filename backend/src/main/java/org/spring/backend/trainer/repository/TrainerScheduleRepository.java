@@ -2,7 +2,7 @@ package org.spring.backend.trainer.repository;
 
 import java.util.List;
 
-import org.spring.backend.store.reservation.type.ScheduleStatus;
+import org.spring.backend.shop.reservation.type.ScheduleStatus;
 import org.spring.backend.trainer.entity.TrainerScheduleEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,13 +1,13 @@
-package org.spring.backend.store.product.dto;
+package org.spring.backend.shop.product.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 import org.spring.backend.file.dto.FileDto;
-import org.spring.backend.store.product.entity.ProductEntity;
-import org.spring.backend.store.product.type.BillingType;
-import org.spring.backend.store.product.type.ProductStatus;
-import org.spring.backend.store.product.type.ProductType;
+import org.spring.backend.shop.product.entity.ProductEntity;
+import org.spring.backend.shop.product.type.BillingType;
+import org.spring.backend.shop.product.type.ProductStatus;
+import org.spring.backend.shop.product.type.ProductType;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;

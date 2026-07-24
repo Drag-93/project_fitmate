@@ -1,8 +1,8 @@
-package org.spring.backend.store.cart.service;
+package org.spring.backend.shop.cart.service;
 
 import java.util.List;
 
-import org.spring.backend.store.cart.dto.CartListDto;
+import org.spring.backend.shop.cart.dto.CartListDto;
 
 public interface CartService {
 

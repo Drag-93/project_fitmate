@@ -1,4 +1,4 @@
-package org.spring.backend.common.weather.dto;
+package org.spring.backend.weather.dto;
 
 public class WeatherDto {
 }

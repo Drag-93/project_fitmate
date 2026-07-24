@@ -1,4 +1,4 @@
-package org.spring.backend.store.payment.repository;
+package org.spring.backend.shop.payment.repository;
 
 public interface PaymentInterface {
   String getPaymentReadyJson();

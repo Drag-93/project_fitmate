@@ -1,10 +1,10 @@
-package org.spring.backend.store.payment.dto;
+package org.spring.backend.shop.payment.dto;
 
 import java.time.LocalDateTime;
 
-import org.spring.backend.store.payment.entity.PaymentEntity;
-import org.spring.backend.store.payment.type.PaymentMethod;
-import org.spring.backend.store.payment.type.PaymentStatus;
+import org.spring.backend.shop.payment.entity.PaymentEntity;
+import org.spring.backend.shop.payment.type.PaymentMethod;
+import org.spring.backend.shop.payment.type.PaymentStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

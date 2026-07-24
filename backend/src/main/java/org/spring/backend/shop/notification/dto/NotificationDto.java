@@ -1,8 +1,8 @@
-package org.spring.backend.store.notification.dto;
+package org.spring.backend.shop.notification.dto;
 
 import java.time.LocalDateTime;
 
-import org.spring.backend.store.notification.entity.NotificationEntity;
+import org.spring.backend.shop.notification.entity.NotificationEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,8 +1,8 @@
-package org.spring.backend.store.reservation.repository;
+package org.spring.backend.shop.reservation.repository;
 
 import java.util.List;
 
-import org.spring.backend.store.reservation.entity.ReservationEntity;
+import org.spring.backend.shop.reservation.entity.ReservationEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

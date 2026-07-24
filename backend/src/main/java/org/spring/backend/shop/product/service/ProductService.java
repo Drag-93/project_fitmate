@@ -1,11 +1,11 @@
-package org.spring.backend.store.product.service;
+package org.spring.backend.shop.product.service;
 
 import java.util.List;
 
-import org.spring.backend.store.product.dto.ProductDto;
-import org.spring.backend.store.product.entity.ProductEntity;
-import org.spring.backend.store.product.type.ImageType;
-import org.spring.backend.store.product.type.ProductType;
+import org.spring.backend.shop.product.dto.ProductDto;
+import org.spring.backend.shop.product.entity.ProductEntity;
+import org.spring.backend.shop.product.type.ImageType;
+import org.spring.backend.shop.product.type.ProductType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;

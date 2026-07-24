@@ -1,10 +1,10 @@
-package org.spring.backend.store.MemberProduct.controller;
+package org.spring.backend.shop.MemberProduct.controller;
 
 import java.util.List;
 
 import org.spring.backend.member.jwt.CustomUserDetails;
-import org.spring.backend.store.MemberProduct.dto.MemberProductDto;
-import org.spring.backend.store.MemberProduct.service.MemberProductService;
+import org.spring.backend.shop.MemberProduct.dto.MemberProductDto;
+import org.spring.backend.shop.MemberProduct.service.MemberProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;

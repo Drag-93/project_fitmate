@@ -1,9 +1,9 @@
-package org.spring.backend.store.review.entity;
+package org.spring.backend.shop.review.entity;
 
 import org.spring.backend.common.BasicTime;
 import org.spring.backend.member.entity.MemberEntity;
-import org.spring.backend.store.order.entity.OrderItemEntity;
-import org.spring.backend.store.product.entity.ProductEntity;
+import org.spring.backend.shop.order.entity.OrderItemEntity;
+import org.spring.backend.shop.product.entity.ProductEntity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

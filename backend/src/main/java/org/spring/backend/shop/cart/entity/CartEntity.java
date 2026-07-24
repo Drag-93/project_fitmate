@@ -1,10 +1,10 @@
-package org.spring.backend.store.cart.entity;
+package org.spring.backend.shop.cart.entity;
 
 import java.util.List;
 
 import org.spring.backend.common.BasicTime;
 import org.spring.backend.member.entity.MemberEntity;
-import org.spring.backend.store.payment.entity.PaymentEntity;
+import org.spring.backend.shop.payment.entity.PaymentEntity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

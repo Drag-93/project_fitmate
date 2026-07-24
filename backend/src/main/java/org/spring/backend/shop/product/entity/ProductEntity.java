@@ -1,4 +1,4 @@
-package org.spring.backend.store.product.entity;
+package org.spring.backend.shop.product.entity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,9 +6,9 @@ import java.util.List;
 import org.spring.backend.common.BasicTime;
 import org.spring.backend.file.entity.FileEntity;
 import org.spring.backend.member.entity.MemberEntity;
-import org.spring.backend.store.product.type.BillingType;
-import org.spring.backend.store.product.type.ProductStatus;
-import org.spring.backend.store.product.type.ProductType;
+import org.spring.backend.shop.product.type.BillingType;
+import org.spring.backend.shop.product.type.ProductStatus;
+import org.spring.backend.shop.product.type.ProductType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

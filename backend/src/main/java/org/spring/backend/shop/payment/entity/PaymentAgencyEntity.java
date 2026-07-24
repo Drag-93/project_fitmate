@@ -1,4 +1,4 @@
-package org.spring.backend.store.payment.entity;
+package org.spring.backend.shop.payment.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

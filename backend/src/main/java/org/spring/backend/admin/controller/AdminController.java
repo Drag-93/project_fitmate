@@ -3,19 +3,12 @@ package org.spring.backend.admin.controller;
 import lombok.RequiredArgsConstructor;
 import org.spring.backend.community.dto.TabDto;
 import org.spring.backend.community.service.TabService;
-import org.spring.backend.admin.popup.dto.PopupDto;
-import org.spring.backend.admin.popup.service.PopupService;
-import org.spring.backend.store.order.dto.OrderDto;
-import org.spring.backend.store.order.service.OrderService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
+import org.spring.backend.shop.order.dto.OrderDto;
+import org.spring.backend.shop.order.service.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +18,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AdminController {
     private final TabService tabService;
-    private final PopupService popupService;
     private final OrderService orderService;
 
 //=======================popup=======================

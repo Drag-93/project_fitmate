@@ -1,11 +1,11 @@
-package org.spring.backend.store.cart.controller;
+package org.spring.backend.shop.cart.controller;
 
 import java.util.List;
 
 import org.spring.backend.member.jwt.CustomUserDetails;
-import org.spring.backend.store.cart.dto.CartDto;
-import org.spring.backend.store.cart.dto.CartListDto;
-import org.spring.backend.store.cart.service.CartService;
+import org.spring.backend.shop.cart.dto.CartDto;
+import org.spring.backend.shop.cart.dto.CartListDto;
+import org.spring.backend.shop.cart.service.CartService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;

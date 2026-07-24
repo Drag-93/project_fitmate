@@ -1,4 +1,4 @@
-package org.spring.backend.store.reservation.type;
+package org.spring.backend.shop.reservation.type;
 
 public enum ReservationStatus {
   RESERVED,   // 예약 완료

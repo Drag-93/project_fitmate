@@ -1,12 +1,12 @@
-package org.spring.backend.store.order.repository;
+package org.spring.backend.shop.order.repository;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
-import org.spring.backend.store.order.entity.OrderEntity;
-import org.spring.backend.store.order.entity.OrderItemEntity;
-import org.spring.backend.store.product.entity.ProductEntity;
+import org.spring.backend.shop.order.entity.OrderEntity;
+import org.spring.backend.shop.order.entity.OrderItemEntity;
+import org.spring.backend.shop.product.entity.ProductEntity;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

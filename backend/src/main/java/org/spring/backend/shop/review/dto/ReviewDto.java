@@ -1,8 +1,8 @@
-package org.spring.backend.store.review.dto;
+package org.spring.backend.shop.review.dto;
 
 import java.time.LocalDateTime;
 
-import org.spring.backend.store.review.entity.ReviewEntity;
+import org.spring.backend.shop.review.entity.ReviewEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

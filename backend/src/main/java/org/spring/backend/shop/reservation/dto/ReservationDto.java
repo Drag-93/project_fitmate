@@ -1,11 +1,11 @@
-package org.spring.backend.store.reservation.dto;
+package org.spring.backend.shop.reservation.dto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-import org.spring.backend.store.reservation.entity.ReservationEntity;
-import org.spring.backend.store.reservation.type.ReservationStatus;
+import org.spring.backend.shop.reservation.entity.ReservationEntity;
+import org.spring.backend.shop.reservation.type.ReservationStatus;
 
 import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;

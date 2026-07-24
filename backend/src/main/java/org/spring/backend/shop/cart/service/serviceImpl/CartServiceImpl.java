@@ -1,22 +1,22 @@
-package org.spring.backend.store.cart.service.serviceImpl;
+package org.spring.backend.shop.cart.service.serviceImpl;
 
 import java.util.List;
 import java.util.Optional;
 
 import org.spring.backend.member.entity.MemberEntity;
 import org.spring.backend.member.repository.MemberRepository;
-import org.spring.backend.store.cart.dto.CartDto;
-import org.spring.backend.store.cart.dto.CartListDto;
-import org.spring.backend.store.cart.entity.CartEntity;
-import org.spring.backend.store.cart.entity.CartListEntity;
-import org.spring.backend.store.cart.repository.CartListRepository;
-import org.spring.backend.store.cart.repository.CartRepository;
-import org.spring.backend.store.cart.service.CartService;
-import org.spring.backend.store.order.entity.OrderEntity;
-import org.spring.backend.store.order.entity.OrderItemEntity;
-import org.spring.backend.store.order.repository.OrderRepository;
-import org.spring.backend.store.product.entity.ProductEntity;
-import org.spring.backend.store.product.repository.ProductRepository;
+import org.spring.backend.shop.cart.dto.CartDto;
+import org.spring.backend.shop.cart.dto.CartListDto;
+import org.spring.backend.shop.cart.entity.CartEntity;
+import org.spring.backend.shop.cart.entity.CartListEntity;
+import org.spring.backend.shop.cart.repository.CartListRepository;
+import org.spring.backend.shop.cart.repository.CartRepository;
+import org.spring.backend.shop.cart.service.CartService;
+import org.spring.backend.shop.order.entity.OrderEntity;
+import org.spring.backend.shop.order.entity.OrderItemEntity;
+import org.spring.backend.shop.order.repository.OrderRepository;
+import org.spring.backend.shop.product.entity.ProductEntity;
+import org.spring.backend.shop.product.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

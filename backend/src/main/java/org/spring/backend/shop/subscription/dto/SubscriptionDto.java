@@ -1,14 +1,14 @@
-package org.spring.backend.store.subscription.dto;
+package org.spring.backend.shop.subscription.dto;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Optional;
 
 import org.spring.backend.file.entity.FileEntity;
-import org.spring.backend.store.product.entity.ProductEntity;
-import org.spring.backend.store.product.type.ProductType;
-import org.spring.backend.store.subscription.entity.SubscriptionEntity;
-import org.spring.backend.store.subscription.type.SubscriptionStatus;
+import org.spring.backend.shop.product.entity.ProductEntity;
+import org.spring.backend.shop.product.type.ProductType;
+import org.spring.backend.shop.subscription.entity.SubscriptionEntity;
+import org.spring.backend.shop.subscription.type.SubscriptionStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

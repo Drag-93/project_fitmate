@@ -1,13 +1,13 @@
-package org.spring.backend.store.order.entity;
+package org.spring.backend.shop.order.entity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.spring.backend.common.BasicTime;
 import org.spring.backend.member.entity.MemberEntity;
-import org.spring.backend.store.order.type.DeliveryStatus;
-import org.spring.backend.store.order.type.OrderStatus;
-import org.spring.backend.store.payment.entity.PaymentEntity;
+import org.spring.backend.shop.order.type.DeliveryStatus;
+import org.spring.backend.shop.order.type.OrderStatus;
+import org.spring.backend.shop.payment.entity.PaymentEntity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

@@ -1,4 +1,4 @@
-package org.spring.backend.store.subscription.entity;
+package org.spring.backend.shop.subscription.entity;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -6,9 +6,9 @@ import java.util.List;
 
 import org.spring.backend.common.BasicTime;
 import org.spring.backend.member.entity.MemberEntity;
-import org.spring.backend.store.payment.entity.PaymentEntity;
-import org.spring.backend.store.product.entity.ProductEntity;
-import org.spring.backend.store.subscription.type.SubscriptionStatus;
+import org.spring.backend.shop.payment.entity.PaymentEntity;
+import org.spring.backend.shop.product.entity.ProductEntity;
+import org.spring.backend.shop.subscription.type.SubscriptionStatus;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

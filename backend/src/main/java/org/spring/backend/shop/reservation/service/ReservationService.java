@@ -1,9 +1,9 @@
-package org.spring.backend.store.reservation.service;
+package org.spring.backend.shop.reservation.service;
 
 import java.util.List;
 
-import org.spring.backend.store.reservation.dto.ReservationDto;
-import org.spring.backend.store.reservation.type.ReservationStatus;
+import org.spring.backend.shop.reservation.dto.ReservationDto;
+import org.spring.backend.shop.reservation.type.ReservationStatus;
 
 public interface ReservationService {
     // 예약 생성

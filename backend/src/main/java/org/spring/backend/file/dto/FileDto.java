@@ -4,13 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.spring.backend.common.TableType;
+import org.spring.backend.file.enumtype.TableType;
 import org.spring.backend.community.entity.CommunityEntity;
 import org.spring.backend.file.entity.FileEntity;
 import org.spring.backend.admin.popup.entity.PopupEntity;
 import org.spring.backend.member.entity.MemberEntity;
-import org.spring.backend.store.product.entity.ProductEntity;
-import org.spring.backend.store.product.type.ImageType;
+import org.spring.backend.shop.product.entity.ProductEntity;
+import org.spring.backend.shop.product.type.ImageType;
 
 import java.time.LocalDateTime;
 

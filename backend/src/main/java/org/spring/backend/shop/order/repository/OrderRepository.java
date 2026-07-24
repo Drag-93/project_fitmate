@@ -1,9 +1,9 @@
-package org.spring.backend.store.order.repository;
+package org.spring.backend.shop.order.repository;
 
 import java.util.List;
 import java.util.Optional;
 
-import org.spring.backend.store.order.entity.OrderEntity;
+import org.spring.backend.shop.order.entity.OrderEntity;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

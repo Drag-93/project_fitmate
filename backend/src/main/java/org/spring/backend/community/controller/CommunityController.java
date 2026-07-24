@@ -3,7 +3,7 @@ package org.spring.backend.community.controller;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.spring.backend.common.weather.service.WeatherService;
+import org.spring.backend.weather.service.WeatherService;
 import org.spring.backend.community.dto.CategoryDto;
 import org.spring.backend.community.dto.CommunityDto;
 import org.spring.backend.community.dto.TabDto;

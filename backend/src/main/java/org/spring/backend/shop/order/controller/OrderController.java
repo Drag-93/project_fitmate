@@ -1,15 +1,15 @@
-package org.spring.backend.store.order.controller;
+package org.spring.backend.shop.order.controller;
 
 import java.util.List;
 
 import org.spring.backend.member.entity.MemberEntity;
 import org.spring.backend.member.jwt.CustomUserDetails;
 import org.spring.backend.member.repository.MemberRepository;
-import org.spring.backend.store.order.dto.CartOrderRequestDto;
-import org.spring.backend.store.order.dto.OrderDto;
-import org.spring.backend.store.order.dto.SubscriptionOrderRequestDto;
-import org.spring.backend.store.order.service.OrderService;
-import org.spring.backend.store.order.type.DeliveryStatus;
+import org.spring.backend.shop.order.dto.CartOrderRequestDto;
+import org.spring.backend.shop.order.dto.OrderDto;
+import org.spring.backend.shop.order.dto.SubscriptionOrderRequestDto;
+import org.spring.backend.shop.order.service.OrderService;
+import org.spring.backend.shop.order.type.DeliveryStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

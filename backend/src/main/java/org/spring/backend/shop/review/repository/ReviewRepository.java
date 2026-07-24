@@ -1,8 +1,8 @@
-package org.spring.backend.store.review.repository;
+package org.spring.backend.shop.review.repository;
 
 import java.util.List;
 
-import org.spring.backend.store.review.entity.ReviewEntity;
+import org.spring.backend.shop.review.entity.ReviewEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> {

@@ -1,7 +1,7 @@
 package org.spring.backend.member.jwt;
 
 import lombok.RequiredArgsConstructor;
-import org.spring.backend.common.Role;
+import org.spring.backend.member.enumtype.Role;
 import org.spring.backend.member.entity.MemberAddEntity;
 import org.spring.backend.member.entity.MemberEntity;
 import org.spring.backend.member.repository.MemberRepository;

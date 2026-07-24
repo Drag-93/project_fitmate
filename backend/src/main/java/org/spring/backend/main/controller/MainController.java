@@ -1,7 +1,7 @@
 package org.spring.backend.main.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.spring.backend.common.Interest;
+import org.spring.backend.member.enumtype.Interest;
 import org.spring.backend.main.dto.MainResponseDto;
 import org.spring.backend.main.service.MainService;
 import org.spring.backend.member.entity.MemberEntity;

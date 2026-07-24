@@ -1,4 +1,4 @@
-package org.spring.backend.store.order.dto;
+package org.spring.backend.shop.order.dto;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package org.spring.backend.store.notification.service.serviceImpl;
+package org.spring.backend.shop.notification.service.serviceImpl;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -7,12 +7,12 @@ import javax.management.Notification;
 
 import org.spring.backend.member.entity.MemberEntity;
 import org.spring.backend.member.repository.MemberRepository;
-import org.spring.backend.store.notification.dto.NotificationDto;
-import org.spring.backend.store.notification.entity.NotificationEntity;
-import org.spring.backend.store.notification.repository.NotificationRepository;
-import org.spring.backend.store.notification.service.NotificationService;
-import org.spring.backend.store.subscription.entity.SubscriptionEntity;
-import org.spring.backend.store.subscription.repository.SubscriptionRepository;
+import org.spring.backend.shop.notification.dto.NotificationDto;
+import org.spring.backend.shop.notification.entity.NotificationEntity;
+import org.spring.backend.shop.notification.repository.NotificationRepository;
+import org.spring.backend.shop.notification.service.NotificationService;
+import org.spring.backend.shop.subscription.entity.SubscriptionEntity;
+import org.spring.backend.shop.subscription.repository.SubscriptionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

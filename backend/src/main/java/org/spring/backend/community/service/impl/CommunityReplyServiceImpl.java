@@ -1,7 +1,7 @@
 package org.spring.backend.community.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.spring.backend.common.Role;
+import org.spring.backend.member.enumtype.Role;
 import org.spring.backend.community.dto.CommunityReplyDto;
 import org.spring.backend.community.entity.CategoryEntity;
 import org.spring.backend.community.entity.CommunityEntity;

@@ -3,7 +3,7 @@ package org.spring.backend.main.dto;
 import lombok.*;
 import org.spring.backend.admin.popup.dto.PopupDto;
 import org.spring.backend.community.dto.CommunityDto;
-import org.spring.backend.store.product.dto.ProductDto;
+import org.spring.backend.shop.product.dto.ProductDto;
 
 import java.util.List;
 

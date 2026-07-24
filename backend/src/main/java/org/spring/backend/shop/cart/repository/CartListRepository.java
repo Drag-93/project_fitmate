@@ -1,9 +1,9 @@
-package org.spring.backend.store.cart.repository;
+package org.spring.backend.shop.cart.repository;
 
 import java.util.List;
 import java.util.Optional;
 
-import org.spring.backend.store.cart.entity.CartListEntity;
+import org.spring.backend.shop.cart.entity.CartListEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CartListRepository extends JpaRepository<CartListEntity, Long> {

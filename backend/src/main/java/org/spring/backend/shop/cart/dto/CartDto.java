@@ -1,4 +1,4 @@
-package org.spring.backend.store.cart.dto;
+package org.spring.backend.shop.cart.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;

@@ -1,9 +1,9 @@
-package org.spring.backend.store.cart.dto;
+package org.spring.backend.shop.cart.dto;
 
 import java.time.LocalDateTime;
 
-import org.spring.backend.store.cart.entity.CartListEntity;
-import org.spring.backend.store.product.type.ImageType;
+import org.spring.backend.shop.cart.entity.CartListEntity;
+import org.spring.backend.shop.product.type.ImageType;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

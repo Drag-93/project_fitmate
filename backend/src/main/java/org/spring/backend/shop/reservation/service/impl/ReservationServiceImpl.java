@@ -1,17 +1,17 @@
-package org.spring.backend.store.reservation.service.impl;
+package org.spring.backend.shop.reservation.service.impl;
 
 import java.util.List;
 
-import org.spring.backend.common.Role;
+import org.spring.backend.member.enumtype.Role;
 import org.spring.backend.member.entity.MemberEntity;
 import org.spring.backend.member.repository.MemberRepository;
-import org.spring.backend.store.MemberProduct.entity.MemberProductEntity;
-import org.spring.backend.store.MemberProduct.repository.MemberProductRepository;
-import org.spring.backend.store.reservation.dto.ReservationDto;
-import org.spring.backend.store.reservation.entity.ReservationEntity;
-import org.spring.backend.store.reservation.repository.ReservationRepository;
-import org.spring.backend.store.reservation.service.ReservationService;
-import org.spring.backend.store.reservation.type.ReservationStatus;
+import org.spring.backend.shop.MemberProduct.entity.MemberProductEntity;
+import org.spring.backend.shop.MemberProduct.repository.MemberProductRepository;
+import org.spring.backend.shop.reservation.dto.ReservationDto;
+import org.spring.backend.shop.reservation.entity.ReservationEntity;
+import org.spring.backend.shop.reservation.repository.ReservationRepository;
+import org.spring.backend.shop.reservation.service.ReservationService;
+import org.spring.backend.shop.reservation.type.ReservationStatus;
 import org.spring.backend.trainer.entity.TrainerEntity;
 import org.spring.backend.trainer.repository.TrainerRepository;
 import org.springframework.stereotype.Service;

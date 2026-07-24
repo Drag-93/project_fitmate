@@ -1,4 +1,4 @@
-package org.spring.backend.store.MemberProduct.service.serviceImpl;
+package org.spring.backend.shop.MemberProduct.service.serviceImpl;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -6,11 +6,11 @@ import java.util.List;
 
 import org.spring.backend.member.entity.MemberEntity;
 import org.spring.backend.member.repository.MemberRepository;
-import org.spring.backend.store.MemberProduct.dto.MemberProductDto;
-import org.spring.backend.store.MemberProduct.entity.MemberProductEntity;
-import org.spring.backend.store.MemberProduct.repository.MemberProductRepository;
-import org.spring.backend.store.MemberProduct.service.MemberProductService;
-import org.spring.backend.store.product.entity.ProductEntity;
+import org.spring.backend.shop.MemberProduct.dto.MemberProductDto;
+import org.spring.backend.shop.MemberProduct.entity.MemberProductEntity;
+import org.spring.backend.shop.MemberProduct.repository.MemberProductRepository;
+import org.spring.backend.shop.MemberProduct.service.MemberProductService;
+import org.spring.backend.shop.product.entity.ProductEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

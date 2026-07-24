@@ -1,19 +1,18 @@
-package org.spring.backend.store.product.service.serviceImpl;
+package org.spring.backend.shop.product.service.serviceImpl;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import org.spring.backend.common.TableType;
-import org.spring.backend.file.entity.FileEntity;
+import org.spring.backend.file.enumtype.TableType;
 import org.spring.backend.file.handler.FileHandler;
 import org.spring.backend.file.repository.FileRepository;
-import org.spring.backend.store.product.dto.ProductDto;
-import org.spring.backend.store.product.entity.ProductEntity;
-import org.spring.backend.store.product.repository.ProductRepository;
-import org.spring.backend.store.product.service.ProductService;
-import org.spring.backend.store.product.type.ImageType;
-import org.spring.backend.store.product.type.ProductType;
+import org.spring.backend.shop.product.dto.ProductDto;
+import org.spring.backend.shop.product.entity.ProductEntity;
+import org.spring.backend.shop.product.repository.ProductRepository;
+import org.spring.backend.shop.product.service.ProductService;
+import org.spring.backend.shop.product.type.ImageType;
+import org.spring.backend.shop.product.type.ProductType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

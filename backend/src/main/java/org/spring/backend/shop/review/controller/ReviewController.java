@@ -1,9 +1,9 @@
-package org.spring.backend.store.review.controller;
+package org.spring.backend.shop.review.controller;
 
 import java.util.List;
 
-import org.spring.backend.store.review.dto.ReviewDto;
-import org.spring.backend.store.review.service.ReviewService;
+import org.spring.backend.shop.review.dto.ReviewDto;
+import org.spring.backend.shop.review.service.ReviewService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

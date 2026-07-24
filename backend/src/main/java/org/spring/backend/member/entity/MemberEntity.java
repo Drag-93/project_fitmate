@@ -9,13 +9,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.spring.backend.common.Role;
+import org.spring.backend.member.enumtype.Role;
 import org.spring.backend.community.entity.CommunityEntity;
 import org.spring.backend.community.entity.CommunityReplyEntity;
 import org.spring.backend.file.entity.FileEntity;
 import org.spring.backend.member.dto.MemberDto;
-import org.spring.backend.store.order.entity.OrderEntity;
-import org.spring.backend.store.subscription.entity.SubscriptionEntity;
+import org.spring.backend.shop.order.entity.OrderEntity;
+import org.spring.backend.shop.subscription.entity.SubscriptionEntity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

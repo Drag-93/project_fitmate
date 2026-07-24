@@ -1,10 +1,10 @@
-package org.spring.backend.store.payment.service;
+package org.spring.backend.shop.payment.service;
 
 import java.util.List;
 
-import org.spring.backend.store.payment.dto.PaymentDto;
-import org.spring.backend.store.payment.dto.PaymentSuccessDto;
-import org.spring.backend.store.payment.entity.PaymentEntity;
+import org.spring.backend.shop.payment.dto.PaymentDto;
+import org.spring.backend.shop.payment.dto.PaymentSuccessDto;
+import org.spring.backend.shop.payment.entity.PaymentEntity;
 
 public interface PaymentService {
 

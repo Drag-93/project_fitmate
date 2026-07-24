@@ -5,7 +5,7 @@ import org.spring.backend.admin.popup.dto.PopupDto;
 import org.spring.backend.admin.popup.entity.PopupEntity;
 import org.spring.backend.admin.popup.repository.PopupRepository;
 import org.spring.backend.admin.popup.service.PopupService;
-import org.spring.backend.common.TableType;
+import org.spring.backend.file.enumtype.TableType;
 import org.spring.backend.file.entity.FileEntity;
 import org.spring.backend.file.handler.FileHandler;
 import org.spring.backend.file.repository.FileRepository;

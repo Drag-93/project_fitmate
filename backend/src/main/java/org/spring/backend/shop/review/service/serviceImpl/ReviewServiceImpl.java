@@ -1,20 +1,20 @@
-package org.spring.backend.store.review.service.serviceImpl;
+package org.spring.backend.shop.review.service.serviceImpl;
 
 import java.util.List;
 
 import org.spring.backend.member.entity.MemberEntity;
 import org.spring.backend.member.repository.MemberRepository;
-import org.spring.backend.store.order.entity.OrderEntity;
-import org.spring.backend.store.order.entity.OrderItemEntity;
-import org.spring.backend.store.order.repository.OrderItemRepository;
-import org.spring.backend.store.order.repository.OrderRepository;
-import org.spring.backend.store.order.type.OrderStatus;
-import org.spring.backend.store.product.entity.ProductEntity;
-import org.spring.backend.store.product.repository.ProductRepository;
-import org.spring.backend.store.review.dto.ReviewDto;
-import org.spring.backend.store.review.entity.ReviewEntity;
-import org.spring.backend.store.review.repository.ReviewRepository;
-import org.spring.backend.store.review.service.ReviewService;
+import org.spring.backend.shop.order.entity.OrderEntity;
+import org.spring.backend.shop.order.entity.OrderItemEntity;
+import org.spring.backend.shop.order.repository.OrderItemRepository;
+import org.spring.backend.shop.order.repository.OrderRepository;
+import org.spring.backend.shop.order.type.OrderStatus;
+import org.spring.backend.shop.product.entity.ProductEntity;
+import org.spring.backend.shop.product.repository.ProductRepository;
+import org.spring.backend.shop.review.dto.ReviewDto;
+import org.spring.backend.shop.review.entity.ReviewEntity;
+import org.spring.backend.shop.review.repository.ReviewRepository;
+import org.spring.backend.shop.review.service.ReviewService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

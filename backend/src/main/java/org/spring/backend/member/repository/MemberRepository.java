@@ -1,6 +1,6 @@
 package org.spring.backend.member.repository;
 
-import org.spring.backend.common.Role;
+import org.spring.backend.member.enumtype.Role;
 import org.spring.backend.member.entity.MemberEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

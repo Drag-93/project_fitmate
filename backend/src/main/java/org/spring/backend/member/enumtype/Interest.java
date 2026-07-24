@@ -1,4 +1,4 @@
-package org.spring.backend.common;
+package org.spring.backend.member.enumtype;
 
     public enum Interest {
         //Interest Enum 구분

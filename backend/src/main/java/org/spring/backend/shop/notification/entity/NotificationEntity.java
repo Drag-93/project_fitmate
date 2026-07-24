@@ -1,8 +1,8 @@
-package org.spring.backend.store.notification.entity;
+package org.spring.backend.shop.notification.entity;
 
 import org.spring.backend.common.BasicTime;
 import org.spring.backend.member.entity.MemberEntity;
-import org.spring.backend.store.subscription.entity.SubscriptionEntity;
+import org.spring.backend.shop.subscription.entity.SubscriptionEntity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

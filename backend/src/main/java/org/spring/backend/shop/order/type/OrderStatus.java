@@ -1,4 +1,4 @@
-package org.spring.backend.store.order.type;
+package org.spring.backend.shop.order.type;
 
 public enum OrderStatus {
   PENDING, SUCCESS, CANCELED;

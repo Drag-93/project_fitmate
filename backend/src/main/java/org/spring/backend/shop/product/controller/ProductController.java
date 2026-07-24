@@ -1,12 +1,12 @@
-package org.spring.backend.store.product.controller;
+package org.spring.backend.shop.product.controller;
 
 import java.util.List;
 
-import org.spring.backend.store.product.dto.ProductDto;
-import org.spring.backend.store.product.entity.ProductEntity;
-import org.spring.backend.store.product.repository.ProductRepository;
-import org.spring.backend.store.product.service.ProductService;
-import org.spring.backend.store.product.type.ProductType;
+import org.spring.backend.shop.product.dto.ProductDto;
+import org.spring.backend.shop.product.entity.ProductEntity;
+import org.spring.backend.shop.product.repository.ProductRepository;
+import org.spring.backend.shop.product.service.ProductService;
+import org.spring.backend.shop.product.type.ProductType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;

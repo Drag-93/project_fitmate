@@ -1,9 +1,9 @@
-package org.spring.backend.store.payment.dto;
+package org.spring.backend.shop.payment.dto;
 
 import java.util.List;
 
-import org.spring.backend.store.order.dto.OrderItemDto;
-import org.spring.backend.store.product.type.ProductType;
+import org.spring.backend.shop.order.dto.OrderItemDto;
+import org.spring.backend.shop.product.type.ProductType;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

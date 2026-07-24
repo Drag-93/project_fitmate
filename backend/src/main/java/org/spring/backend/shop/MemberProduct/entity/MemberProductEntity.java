@@ -1,10 +1,10 @@
-package org.spring.backend.store.MemberProduct.entity;
+package org.spring.backend.shop.MemberProduct.entity;
 
 import java.time.LocalDateTime;
 
 import org.spring.backend.common.BasicTime;
 import org.spring.backend.member.entity.MemberEntity;
-import org.spring.backend.store.product.entity.ProductEntity;
+import org.spring.backend.shop.product.entity.ProductEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

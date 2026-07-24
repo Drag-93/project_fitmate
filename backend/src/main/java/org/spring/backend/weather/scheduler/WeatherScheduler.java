@@ -1,8 +1,8 @@
-package org.spring.backend.common.weather.scheduler;
+package org.spring.backend.weather.scheduler;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.spring.backend.common.weather.service.impl.WeatherServiceImpl;
+import org.spring.backend.weather.service.impl.WeatherServiceImpl;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 

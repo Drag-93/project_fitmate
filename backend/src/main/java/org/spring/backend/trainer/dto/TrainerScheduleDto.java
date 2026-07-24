@@ -2,7 +2,7 @@ package org.spring.backend.trainer.dto;
 
 import java.time.LocalDateTime;
 
-import org.spring.backend.store.reservation.type.ScheduleStatus;
+import org.spring.backend.shop.reservation.type.ScheduleStatus;
 import org.spring.backend.trainer.entity.TrainerScheduleEntity;
 
 import lombok.AllArgsConstructor;

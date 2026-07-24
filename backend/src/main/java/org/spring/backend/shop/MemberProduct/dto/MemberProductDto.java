@@ -1,11 +1,11 @@
-package org.spring.backend.store.MemberProduct.dto;
+package org.spring.backend.shop.MemberProduct.dto;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.spring.backend.file.entity.FileEntity;
-import org.spring.backend.store.MemberProduct.entity.MemberProductEntity;
-import org.spring.backend.store.product.entity.ProductEntity;
+import org.spring.backend.shop.MemberProduct.entity.MemberProductEntity;
+import org.spring.backend.shop.product.entity.ProductEntity;
 
 import java.util.Collections;
 import lombok.AllArgsConstructor;

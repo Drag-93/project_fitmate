@@ -1,13 +1,13 @@
-package org.spring.backend.store.reservation.entity;
+package org.spring.backend.shop.reservation.entity;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 import org.spring.backend.common.BasicTime;
 import org.spring.backend.member.entity.MemberEntity;
-import org.spring.backend.store.MemberProduct.entity.MemberProductEntity;
-import org.spring.backend.store.product.entity.ProductEntity;
-import org.spring.backend.store.reservation.type.ReservationStatus;
+import org.spring.backend.shop.MemberProduct.entity.MemberProductEntity;
+import org.spring.backend.shop.product.entity.ProductEntity;
+import org.spring.backend.shop.reservation.type.ReservationStatus;
 import org.spring.backend.trainer.entity.TrainerEntity;
 
 import jakarta.persistence.Column;

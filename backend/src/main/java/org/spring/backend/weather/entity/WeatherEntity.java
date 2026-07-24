@@ -1,4 +1,4 @@
-package org.spring.backend.common.weather.entity;
+package org.spring.backend.weather.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

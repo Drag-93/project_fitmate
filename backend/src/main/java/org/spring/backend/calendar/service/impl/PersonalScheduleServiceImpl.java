@@ -5,7 +5,7 @@ import org.spring.backend.calendar.dto.PersonalScheduleDto;
 import org.spring.backend.calendar.entity.PersonalScheduleEntity;
 import org.spring.backend.calendar.repository.PersonalScheduleRepository;
 import org.spring.backend.calendar.service.PersonalScheduleService;
-import org.spring.backend.common.TableType;
+import org.spring.backend.file.enumtype.TableType;
 import org.spring.backend.file.handler.FileHandler;
 import org.spring.backend.member.entity.MemberEntity;
 import org.spring.backend.member.repository.MemberRepository;
