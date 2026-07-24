@@ -63,7 +63,32 @@ export default function RoutineForm({ onGenerated }) {
       const result = await generateRoutine({ target, equip });
       onGenerated(result);
     } catch (e) {
-      setError(e.message);
+      console.error("에러 객체 확인:", e);
+
+      let errorMessage = "알 수 없는 오류가 발생했습니다.";
+
+      const status = e.response?.status;
+      const data = e.response?.data;
+
+      // 백엔드에서 보낸 에러 코드나 상태(400, 429 등)에 따라 원하는 메시지로 변경합니다.
+      if (
+        status === 429 ||
+        data === "RATE_LIMIT_EXCEEDED" ||
+        (typeof data === "string" && data.includes("너무 잦습니다"))
+      ) {
+        errorMessage =
+          "루틴 생성 요청이 너무 잦습니다. 1분 후 다시 시도해주세요.";
+      } else if (status === 400) {
+        errorMessage = "잘못된 요청입니다. 입력값을 확인해주세요.";
+      } else if (status === 500) {
+        errorMessage = "서버에 오류가 발생했습니다. 잠시 후 다시 시도해주세요.";
+      } else if (typeof data === "string") {
+        errorMessage = data;
+      } else if (data?.message) {
+        errorMessage = data.message;
+      }
+
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
