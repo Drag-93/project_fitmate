@@ -1,4 +1,5 @@
 import React from 'react'
+import { API_SERVER_URL } from '../../../apis/commonApi';
 
 const ProductDetail = ({
   product,
@@ -20,7 +21,7 @@ const ProductDetail = ({
       {/* 메인 이미지 */}
       {main && (
         <img
-          src={`http://localhost:8090/upload/product/${main.newFileName}`}
+          src={`${API_SERVER_URL}/upload/product/${main.newFileName}`}
           alt={product.productName}
           className="main-image"
         />
@@ -78,7 +79,7 @@ const ProductDetail = ({
       {details.map(detail => (
         <img
           key={detail.id}
-          src={`http://localhost:8090/upload/product/${detail.newFileName}`}
+          src={`${API_SERVER_URL}/upload/product/${detail.newFileName}`}
           alt="상세"
           className="detail-image"
         />

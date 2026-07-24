@@ -21,9 +21,6 @@ const AdminProductUpdatePage = lazy(
 const AdminProductInsertPage = lazy(
   () => import("../page/shop/product/admin/AdminProductInsertPage"),
 );
-const AdminProductDetailPage = lazy(
-  () => import("../page/shop/product/admin/AdminProductDetailPage"),
-);
 const AdminOrderListPage = lazy(
   () => import("../page/shop/order/admin/AdminOrderListPage"),
 );
@@ -133,14 +130,6 @@ const toAdminRouter = () => {
       element: (
         <Suspense fallback={Loading}>
           <AdminProductInsertPage />
-        </Suspense>
-      ),
-    },
-    {
-      path: "product/detail/:productId",
-      element: (
-        <Suspense fallback={Loading}>
-          <AdminProductDetailPage />
         </Suspense>
       ),
     },

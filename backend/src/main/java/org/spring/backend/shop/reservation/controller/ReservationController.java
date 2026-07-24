@@ -146,4 +146,12 @@ public class ReservationController {
     return ResponseEntity.ok().build();
   }
 
+  @GetMapping("/reserved-times")
+  public ResponseEntity<List<String>> getReservedTimes(
+      @RequestParam Long trainerId,
+      @RequestParam String date) {
+
+    return ResponseEntity.ok(
+        reservationService.getReservedTimes(trainerId, date));
+  }
 }

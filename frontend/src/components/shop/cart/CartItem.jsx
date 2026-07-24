@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { API_SERVER_URL } from "../../../apis/commonApi";
 import ConfirmModal from "./ConfirmModal";
 
 const CartItem = ({
@@ -24,7 +25,7 @@ const CartItem = ({
         {item.productImage ? (
           <img
             className="productImage"
-            src={`http://localhost:8090/upload/product/${item.productImage}`}
+            src={`${API_SERVER_URL}/upload/product/${item.productImage}`}
             alt={item.productName}
           />
 

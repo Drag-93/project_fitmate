@@ -1,4 +1,5 @@
 import React from 'react';
+import { API_SERVER_URL } from '../../../apis/commonApi';
 
 const ProductList = ({ cartItems }) => {
 
@@ -18,7 +19,7 @@ const ProductList = ({ cartItems }) => {
 
             {imageUrl && (
             <img
-              src={`http://localhost:8090${imageUrl}`}
+              src={`${API_SERVER_URL}${imageUrl}`}
               alt={item.productName}
             />)}
 

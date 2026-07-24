@@ -3,7 +3,6 @@ import React, { lazy, Suspense } from "react";
 const Loading = <div className="loading">...Loading</div>;
 
 const PaymentSuccessPage = lazy(() => import("../../page/shop/payment/PaymentSuccessPage"));
-const PaymentPage = lazy(() => import("../../page/shop/payment/PaymentPage"));
 const PaymentFailPage = lazy(() => import("../../page/shop/payment/PaymentFailPage"));
 const PaymentListPage = lazy(() => import("../../page/shop/payment/PaymentListPage"));
 const KakaoPayApproval = lazy(() => import("../../components/shop/payment/KakaoPayApproval"));
@@ -11,14 +10,6 @@ const KakaoPayApproval = lazy(() => import("../../components/shop/payment/KakaoP
 
 const toPaymentRouter = () => {
   return [
-    {
-      path: "",
-      element: (
-        <Suspense fallback={Loading}>
-          <PaymentPage />
-        </Suspense>
-      ),
-    },
     {
       path: "fail",
       element: (

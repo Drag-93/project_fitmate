@@ -11,6 +11,7 @@ import {
 import ProductForm from "../../../../components/shop/product/admin/ProductForm";
 import ImageUpload from "../../../../components/shop/product/admin/ImageUpload";
 import "../../../../css/shop/product/admin/productAdmin.css";
+import { API_SERVER_URL } from "../../../../apis/commonApi";
 
 const AdminProductUpdatePage = () => {
   const { productId } = useParams();
@@ -127,7 +128,7 @@ const AdminProductUpdatePage = () => {
         {product.fileDtos?.map((file) => (
           <div key={file.id}>
             <img
-              src={`http://localhost:8090/upload/product/${file.newFileName}`}
+              src={`${API_SERVER_URL}/upload/product/${file.newFileName}`}
               width="100"
             />
 

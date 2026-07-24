@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { API_SERVER_URL } from "../../../apis/commonApi";
 
 const OrderList = ({ orders }) => {
 
@@ -50,7 +51,7 @@ const OrderList = ({ orders }) => {
                 {/* 하나의 주문 카드 안에 들어있는 여러 상품들 출력 */}
                 {order.orderItemDtos?.map((item) => {
                   const imageSrc = item.productImage
-                    ? `http://localhost:8090/upload/product/${item.productImage}`
+                    ? `${API_SERVER_URL}/upload/product/${item.productImage}`
                     : null;
 
                   return (

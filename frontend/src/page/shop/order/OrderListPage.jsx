@@ -10,7 +10,7 @@ const OrderListPage = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await jwtAxios.get("http://localhost:8090/api/order/list");
+        const res = await jwtAxios.get("/api/order/list");
         setOrders(res.data);
       } catch (err) {
         console.error(err);

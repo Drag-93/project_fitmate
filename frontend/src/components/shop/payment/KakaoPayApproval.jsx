@@ -14,7 +14,7 @@ const KakaoPayApproval = () => {
     const approval = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8090/api/payment/approval/${paymentId}?pg_token=${pgToken}`
+          `/api/payment/approval/${paymentId}?pg_token=${pgToken}`
         );
         if (!response.ok) {
           const errorText = await response.text();

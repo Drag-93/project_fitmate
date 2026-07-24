@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "../../../../apis/util/jwtUtil";
 import "../../../../css/shop/order/admin/adminOrderList.css";
+import { API_SERVER_URL } from "../../../../apis/commonApi";
 
 const AdminOrderList = () => {
   const [orders, setOrders] = useState([]);
@@ -11,7 +12,7 @@ const AdminOrderList = () => {
 
   const getOrders = async () => {
     try {
-      const res = await axios.get("http://localhost:8090/admin/orderList");
+      const res = await axios.get(`${API_SERVER_URL}/admin/orderList`);
 
       setOrders(res.data);
     } catch (error) {
@@ -21,7 +22,7 @@ const AdminOrderList = () => {
 
   const changeStatus = async (id, status) => {
     try {
-      await axios.patch(`http://localhost:8090/admin/orderList/${id}`, {
+      await axios.patch(`${API_SERVER_URL}/admin/orderList/${id}`, {
         orderStatus: status,
       });
 

@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
+import { API_SERVER_URL } from "../../../../apis/commonApi";
 
 const ProductRow = ({ product, onEdit, onDelete }) => {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ const ProductRow = ({ product, onEdit, onDelete }) => {
         <Link to={`/products/detail/${product.id}`}>
           {thumbnail ? (
             <img
-              src={`http://localhost:8090/upload/product/${thumbnail.newFileName}`}
+              src={`${API_SERVER_URL}/upload/product/${thumbnail.newFileName}`}
               alt={product.productName}
               width={80}
               height={80}

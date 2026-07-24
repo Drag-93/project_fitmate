@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import jwtAxios from "../../../apis/util/jwtUtil";
 import CommonCalendar from "../../common/calendar/CommonCalendar";
 import "../../../css/shop/reservation/reservation.css";
+import { API_SERVER_URL } from "../../../apis/commonApi";
 
 
 const Reservation = () => {
@@ -10,6 +11,7 @@ const Reservation = () => {
   const [selectedProduct, setSelectedProduct] = useState(null); // 선택한 이용권
   const [trainers, setTrainers] = useState([]);
   const [selectedTrainer, setSelectedTrainer] = useState(null);
+  const [reservedSlots, setReservedSlots] = useState([]);
 
   const [selectedDate, setSelectedDate] = useState(""); // 선택한 날짜 (YYYY-MM-DD)
   const [availableSlots, setAvailableSlots] = useState([]); // 해당 날짜의 예약 가능 시간 목록
@@ -58,7 +60,7 @@ const Reservation = () => {
 
     try {
       // 해당 트레이너 + 해당 날짜의 가능 시간대 API 호출 (예시)
-      const res = await Jwt.get(
+      const res = await jwtAxios.get(
         `/api/reservations/available-slots`,
         { params: { trainerId: selectedTrainer.id, date: dateStr } }
       );
@@ -150,7 +152,7 @@ const Reservation = () => {
                 <img
                   src={
                     trainer.profileImage
-                      ? `http://localhost:8090${trainer.profileImage}`
+                      ? `${API_SERVER_URL}${trainer.profileImage}`
                       : "/images/default.png"
                   }
                   alt="trainer"
@@ -179,16 +181,31 @@ const Reservation = () => {
               <div className="time-slot-box">
                 <h4>{selectedDate} 예약 가능 시간</h4>
                 <div className="time-slots">
-                  {availableSlots.map((timeStr) => (
-                    <button
-                      key={timeStr}
-                      type="button"
-                      className={reservationTime === timeStr ? "time-btn active" : "time-btn"}
-                      onClick={() => setReservationTime(timeStr)}
-                    >
-                      {timeStr}
-                    </button>
-                  ))}
+                  {availableSlots.map((timeStr) => {
+                    const reserved = reservedSlots.includes(timeStr);
+
+                    return (
+                      <button
+                        key={timeStr}
+                        type="button"
+                        disabled={reserved}
+                        className={
+                          reserved
+                            ? "time-btn disabled"
+                            : reservationTime === timeStr
+                              ? "time-btn active"
+                              : "time-btn"
+                        }
+                        onClick={() => {
+                          if (!reserved) {
+                            setReservationTime(timeStr);
+                          }
+                        }}
+                      >
+                        {reserved ? `${timeStr} (예약완료)` : timeStr}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             )}

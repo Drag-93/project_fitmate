@@ -1,5 +1,6 @@
 package org.spring.backend.shop.reservation.service.impl;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.spring.backend.member.enumtype.Role;
@@ -181,7 +182,20 @@ public class ReservationServiceImpl implements ReservationService {
 
     reservation.setReservationStatus(
         ReservationStatus.CANCEL);
-
   }
 
+  @Override
+  public List<String> getReservedTimes(Long trainerId, String date) {
+
+    LocalDate reservationDate = LocalDate.parse(date);
+
+    return reservationRepository
+        .findByTrainer_IdAndReservationDateAndReservationStatus(
+            trainerId,
+            reservationDate,
+            ReservationStatus.RESERVED)
+        .stream()
+        .map(r -> r.getReservationTime().toString())
+        .toList();
+  }
 }

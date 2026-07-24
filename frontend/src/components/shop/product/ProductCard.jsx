@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 
 import "../../../css/shop/product/productCard.css"
+import { API_SERVER_URL } from "../../../apis/commonApi";
 
 const ProductCard = ({ product }) => {
 
@@ -15,7 +16,7 @@ const ProductCard = ({ product }) => {
       onClick={() => navigate(`/products/detail/${product.id}`)}
     >
       {thumbnail ? (<img
-            src={`http://localhost:8090/upload/product/${thumbnail.newFileName}`}
+            src={`${API_SERVER_URL}/upload/product/${thumbnail.newFileName}`}
             alt={product.productName}/>
         ) : (
           <div>이미지 없음</div>)}
