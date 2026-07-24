@@ -14,11 +14,11 @@ public class Receiver {
 
     //요청에 대한 응답
     @RabbitListener(queues = "${rabbitmq.queue.question}")
-    public void receiveQuestion(Question question){
+    public void receiveQuestion(String question){
         String src = "<div class='msg>"+
                 "<div class='head-img'><img src='/imgages/chat.png'>" +
                 "<span style='color:#f80;font-weight:bold;'>RabbitMQ</span></div>"+
-                "<div class='message'>" + question.getQuestion() + "에 대한 답자입니다.</div>"+
+                "<div class='message'>" + question + "에 대한 답자입니다.</div>"+
                 "</div>";
         simpMessagingTemplate.convertAndSend("topic/question",
                 Answer.builder().message(src).build());

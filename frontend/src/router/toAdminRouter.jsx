@@ -27,7 +27,10 @@ const AdminProductDetailPage = lazy(
 const AdminCommunityPage = lazy(
   () => import("../page/admin/AdminCommunityPage"),
 );
-
+const AdminChatBotPage = lazy(() => import("../page/admin/AdminChatBotPage"));
+const AdminChatBotDetailPage = lazy(
+  () => import("../page/admin/AdminChatBotDetailPage"),
+);
 const toAdminRouter = () => {
   return [
     {
@@ -153,6 +156,23 @@ const toAdminRouter = () => {
       element: (
         <Suspense fallback={Loading}>
           <TabDetailPage />
+        </Suspense>
+      ),
+    },
+    //챗봇의 Chat, Answer CRUD를 담당하는 Page
+    {
+      path: "chatbot",
+      element: (
+        <Suspense fallback={Loading}>
+          <AdminChatBotPage />
+        </Suspense>
+      ),
+    },
+    {
+      path: "chatbot/detail/:id",
+      element: (
+        <Suspense fallback={Loading}>
+          <AdminChatBotDetailPage />
         </Suspense>
       ),
     },

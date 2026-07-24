@@ -82,6 +82,15 @@ const AdminLeft = ({ isMobile, show, onClose }) => {
               팝업
             </NavLink>
           </li>
+          <li>
+            <NavLink
+              to={"/admin/chatbot"}
+              className={linkClass}
+              onClick={onClose}
+            >
+              챗봇관리
+            </NavLink>
+          </li>
         </ul>
       </div>
     </div>

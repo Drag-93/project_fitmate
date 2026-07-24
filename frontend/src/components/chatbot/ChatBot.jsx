@@ -94,9 +94,9 @@ const ChatBot = () => {
     questionRef.current?.focus();
   };
 
+  //소켓통신 연결 함수
   const onConnectFn = async () => {
     setIsOpen(true);
-    alert("접속!");
     //웹소켓 연결
     const socket = new SockJS(`${API_SERVER_URL}/chatEndpoint`);
     //STOMP 클라이언트 생성
@@ -111,8 +111,10 @@ const ChatBot = () => {
           {},
           JSON.stringify({ content: "hello" }),
         );
+        //백엔드에서 지정한 응답들 구독
         stompClient.current.subscribe(`/topic/message`, (message) => {
           const body = JSON.parse(message.body);
+          //챗봇 응답이 text(응답)과 time(시간)으로 나눠져있음
           showMessageFn({ sender: "bot", text: body.content, time: body.time });
         });
         stompClient.current.subscribe(`/topic/greetings`, (message) => {
@@ -121,7 +123,26 @@ const ChatBot = () => {
         });
         stompClient.current.subscribe(`/topic/question`, (message) => {
           const body = JSON.parse(message.body);
-          showMessageFn({ sender: "bot", text: body.content, time: body.time });
+          // 1. 기본 시스템 메시지 (responseText)
+          let fullText = body.responseText || body.content || "";
+
+          // 2. answerList(세부 답변 목록)가 존재하면 텍스트 뒤에 덧붙이기
+          if (body.answerList && body.answerList.length > 0) {
+            fullText += "\n\n" + body.answerList.join("\n");
+          }
+
+          // 3. 화면 출력 함수 호출 (text에는 합친 문자열, time에는 서버 전달 시간 지정)
+          showMessageFn({
+            sender: "bot",
+            text: fullText,
+            time:
+              body.formattedTime ||
+              body.time ||
+              new Date().toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              }),
+          });
         });
         stompClient.current.subscribe(`/topic/notification`, (message) => {
           const body = JSON.parse(message.body);
@@ -139,6 +160,7 @@ const ChatBot = () => {
     setMessages((prevMessages) => [...prevMessages, message]);
   };
 
+  //웹소켓 종료함수
   const disconnectFn = () => {
     setIsOpen(false);
     if (stompClient.current) {
@@ -192,7 +214,7 @@ const ChatBot = () => {
                               />
                             </div>
                             <div className="message">
-                              {/* msg.text를 우선 출력하고, 혹시 백엔드에서 객체 그대로 들어올 경우를 대비해 msg.content도 처리 */}
+                              {/* msg.text를 우선 출력하고, msg.content도 처리 */}
                               {msg.text || msg.content}
                             </div>
                             <div className="time">{msg.time}</div>
@@ -215,14 +237,23 @@ const ChatBot = () => {
                       ref={questionRef}
                       value={question}
                       onChange={(e) => setQuestion(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault(); // 페이지 새로고침 방지
+                          if (!e.nativeEvent.isComposing) {
+                            // 한글 중복/오작동 방지
+                            rabbitMsgSendClickFn(e);
+                          }
+                        }
+                      }}
                     />
-                    <button
+                    {/* <button
                       id="btn-msg-send"
                       type="button"
                       onClick={msgSendClickFn}
                     >
                       전송
-                    </button>
+                    </button> */}
                     <button
                       id="rabbit-btn-msg-send"
                       type="button"
@@ -235,16 +266,9 @@ const ChatBot = () => {
               </div>
             )}
           </div>
-          {/* 💡 저작권 표시 (Footer) */}
+          {/* 저작권 표시 (Footer) */}
           <div className="chat-footer-attribution">
-            <a
-              href="https://www.flaticon.com/kr/free-icons/"
-              title="챗봇 아이콘"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              챗봇 아이콘 제작자: Magnific - Flaticon
-            </a>
+            챗봇 아이콘 제작자: Magnific - Flaticon
           </div>
         </div>
       </div>

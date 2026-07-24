@@ -11,8 +11,6 @@ import MemberDetailUpdateView from "./detailComponents/MemberDetailUpdateView";
 import MemberDetailView from "./detailComponents/MemberDetailView";
 import ChatBot from "../chatbot/chatbot";
 
-const API_URL = API_SERVER_URL;
-
 const MemberDetail = () => {
   //authSlice에 저장된 멤버데이터를 가져옴
   const { memberData } = useSelector((state) => state.loginSlice);
@@ -33,7 +31,7 @@ const MemberDetail = () => {
   //처음 시작 시 멤버데이터를 불러오기 위한 비동기 함수
   const getMemberDetail = async () => {
     //jwtAxios => jwtUtil의 axios함수(jwt토큰 중 access토큰과 refresh토큰을 비교하여 데이터를 불러옴)
-    const res = await jwtAxios.get(`${API_URL}/api/member/detail`, {
+    const res = await jwtAxios.get(`${API_SERVER_URL}/api/member/detail`, {
       headers: {
         "Cache-Control": "no-cache",
       },
@@ -68,7 +66,7 @@ const MemberDetail = () => {
   const memberDelete = async () => {
     if (!confirm("회원탈퇴를 하시겠습니까?")) return;
     try {
-      const res = await jwtAxios.delete(`${API_URL}/api/member/quit`);
+      const res = await jwtAxios.delete(`${API_SERVER_URL}/api/member/quit`);
       if (res.data === "ok") {
         dispatch(logout());
         alert("회원탈퇴 성공");

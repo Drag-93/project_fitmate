@@ -10,6 +10,7 @@ import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFacto
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
+import org.springframework.amqp.support.converter.DefaultClassMapper;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Value;
@@ -89,8 +90,14 @@ public class RabbitMqConfig {
     }
     //JSON으로 자동 연결
     @Bean
-    public MessageConverter messageConverter(){
-        return new Jackson2JsonMessageConverter();
+    public MessageConverter messageConverter() {
+        DefaultClassMapper classMapper = new DefaultClassMapper();
+        classMapper.setTrustedPackages("*"); // 모든 패키지 허용
+
+        Jackson2JsonMessageConverter converter = new Jackson2JsonMessageConverter();
+        converter.setClassMapper(classMapper);
+
+        return converter;
     }
 
 }
