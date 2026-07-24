@@ -1,4 +1,4 @@
-import "../css/admin/AdminMember.css";
+import "../../css/admin/AdminMember.css";
 import { useSelector } from "react-redux";
 import AdminMemberView from "./member/AdminMemberView";
 import TrainerMemberView from "./member/TrainerMemberView";

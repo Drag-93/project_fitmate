@@ -7,10 +7,10 @@ const MemberUpdatePwPage = lazy(
   () => import("../page/member/MemberUpdatePwPage"),
 );
 const MySchedulePage = lazy(() => import("../page/member/MySchedulePage"));
-const OrderListPage = lazy(() => import("../page/store/order/OrderListPage"));
-const MySubscriptionPage = lazy(() => import("../page/store/subscription/MysubscriptionPage"));
-const ReservationPage = lazy(() => import("../page/store/reservation/ReservationPage"));
-const MembershipPage = lazy(() => import("../page/store/subscription/MembershipPage"));
+const OrderListPage = lazy(() => import("../page/shop/order/OrderListPage"));
+const MySubscriptionPage = lazy(() => import("../page/shop/subscription/MysubscriptionPage"));
+const ReservationPage = lazy(() => import("../page/shop/reservation/ReservationPage"));
+const MembershipPage = lazy(() => import("../page/shop/subscription/MembershipPage"));
 
 const toMemberRouter = () => {
   return [

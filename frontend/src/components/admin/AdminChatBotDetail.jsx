@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { API_SERVER_URL } from "../../apis/commonApi";
 import jwtAxios from "../../apis/util/jwtUtil";
-import "../css/admin/AdminChatBot.css";
+import "../../css/admin/AdminChatBot.css";
 import { useNavigate, useParams } from "react-router-dom";
 import PageGenerate from "../common/Page/PageGenerate";
 import ChatBotInsertModal from "./chatbot/ChatBotInsertModal";

@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
 import jwtAxios from "../../apis/util/jwtUtil.jsx";
 import { API_SERVER_URL } from "../../apis/commonApi";
-import "../css/admin/AdminCommunity.css";
+import "../../css/admin/AdminCommunity.css";
 import { getCookie } from "../../apis/util/cookieUtil";
 import TabList from "../community/TabList.jsx";
 import PageGenerate from "../common/Page/PageGenerate.jsx";

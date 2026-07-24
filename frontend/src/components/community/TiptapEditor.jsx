@@ -5,7 +5,7 @@ import Underline from "@tiptap/extension-underline";
 import Image from "@tiptap/extension-image";
 import jwtAxios from "../../apis/util/jwtUtil";
 import { API_SERVER_URL } from "../../apis/commonApi";
-import "../css/Community/Tiptap.css";
+import "../../css/Community/Tiptap.css";
 
 // 에디터 HTML에서 img 태그 개수 세기
 const countImages = (html) => (html.match(/<img/g) || []).length;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../css/common/Footer.css";
+import "../../css/common/Footer.css";
 import ChatBot from "../chatbot/chatbot";
 
 const Footer = () => {

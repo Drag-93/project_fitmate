@@ -1,4 +1,4 @@
-import "../../css/common/PageGenerate.css";
+import "../../../css/common/PageGenerate.css";
 
 const PageGenerate = (props) => {
   const currentPage = props.currentPage; //현재페이지

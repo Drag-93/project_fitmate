@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import CommonCalendar from "../common/calendar/CommonCalendar";
 import { API_SERVER_URL } from "../../apis/commonApi";
 import jwtAxios from "../../apis/util/jwtUtil";
-import "../css/member/MySchedule.css";
+import "../../css/member/MySchedule.css";
 
 // 일정 등록·수정 폼 초기값
 const initForm = {

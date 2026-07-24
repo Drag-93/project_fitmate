@@ -2,7 +2,7 @@ import { useState } from "react";
 import RoutineForm from "../../components/exercise/RoutineForm";
 import HistoryList from "../../components/exercise/HistoryList";
 import RoutineResult from "../../components/exercise/RoutineResult";
-import "../../components/css/Community/RoutinePage.css";
+import "../../css/Community/RoutinePage.css";
 
 export default function RoutinePage() {
   const [result, setResult] = useState(null);

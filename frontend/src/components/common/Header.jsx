@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "../css/common/Header.css";
+import "../../css/common/Header.css";
 import { useDispatch, useSelector } from "react-redux";
 import loginSlice, { logout, logoutAsync } from "../../store/slices/loginSlice";
 const Header = () => {

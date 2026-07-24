@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import jwtAxios from "../../apis/util/jwtUtil";
 import { API_SERVER_URL } from "../../apis/commonApi";
 
-import "../css/member/memberUpdatePw.css";
+import "../../css/member/memberUpdatePw.css";
 
 const MemberUpdatePw = () => {
   const location = useLocation();

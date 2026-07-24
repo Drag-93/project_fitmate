@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import "../css/chatbot/chatbot.css";
+import "../../css/chatbot/chatbot.css";
 import SockJS from "sockjs-client";
 import { Stomp } from "@stomp/stompjs";
 import { API_SERVER_URL } from "../../apis/commonApi";

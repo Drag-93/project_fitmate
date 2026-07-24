@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { API_SERVER_URL } from "../../apis/commonApi";
 import { Link, useNavigate } from "react-router-dom";
-import "../css/auth/join.css";
+import "../../css/auth/join.css";
 const initUserData = {
   userEmail: "",
   userPw: "",

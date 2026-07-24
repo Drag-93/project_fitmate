@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import "../css/Community/CommunityLeft.css";
+import "../../css/Community/CommunityLeft.css";
 import { API_SERVER_URL } from "../../apis/commonApi";
 
 const CommunityLeft = () => {

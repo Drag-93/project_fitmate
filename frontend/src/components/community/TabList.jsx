@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { API_SERVER_URL } from "../../apis/commonApi";
-import "../css/Community/TabList.css";
+import "../../css/Community/TabList.css";
 
 const TabList = () => {
   const navigate = useNavigate();

@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_SERVER_URL } from "../../apis/commonApi";
-import "../css/Community/TabInsert.css";
+import "../../css/Community/TabInsert.css";
 
 const TabInsert = () => {
   const navigate = useNavigate();

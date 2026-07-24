@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "../css/admin/AdminHeader.css";
+import "../../css/admin/AdminHeader.css";
 
 const AdminHeader = () => {
   return (

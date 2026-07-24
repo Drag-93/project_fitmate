@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { API_SERVER_URL } from "../apis/commonApi";
 import jwtAxios from "../apis/util/jwtUtil";
 import { useSelector } from "react-redux";
-import "../components/css/main/Main.css";
+import "../css/main/Main.css";
 //배너 swiper 관련
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
@@ -220,7 +220,8 @@ const Main = () => {
                             style={{ display: "flex", flexDirection: "column" }}
                           >
                             <img
-                              src={`${API_SERVER_URL}/upload/product/${bestProduct.newFileName}`}
+                              // src={`${API_SERVER_URL}/upload/product/${bestProduct.newFileName}`}
+                              src=""
                               alt={bestProduct.productName}
                               style={{
                                 width: `30vh`,
@@ -268,7 +269,8 @@ const Main = () => {
                       <li key={product.id}>
                         <a href={`/products/detail/${product.id}`}>
                           <img
-                            src={`${API_SERVER_URL}/upload/product/${product.newFileName}`}
+                            // src={`${API_SERVER_URL}/upload/product/${product.newFileName}`}
+                            src=""
                             alt={product.productName}
                             style={{
                               width: `10vh`,

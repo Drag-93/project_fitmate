@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import jwtAxios from "../../../../apis/util/jwtUtil";
 import { useNavigate, useParams } from "react-router-dom";
 import { API_SERVER_URL } from "../../../../apis/commonApi";
-import "../../../css/admin/AdminMemberDetail.css";
+import "../../../../css/admin/AdminMemberDetail.css";
 import { checkEmail, memberUpdate } from "../../../../apis/member/memberApi";
 const AdminMemberViewDetail = () => {
   //파라미터로 받는 id값

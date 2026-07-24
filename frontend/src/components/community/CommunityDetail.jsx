@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Reply from "./Reply";
-import "../css/Community/CommunityDetail.css";
+import "../../css/Community/CommunityDetail.css";
 import jwtAxios from "../../apis/util/jwtUtil";
 import { API_SERVER_URL } from "../../apis/commonApi";
 import { getCookie } from "../../apis/util/cookieUtil.jsx";

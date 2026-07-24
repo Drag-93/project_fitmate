@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import jwtAxios from "../../apis/util/jwtUtil";
-import "../../components/css/trainer/TrainerProfile.css";
+import "../../css/trainer/TrainerProfile.css";
 
 const TrainerProfile = () => {
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../../css/chatbot/chatBotModal.css";
+import "../../../css/chatbot/chatBotModal.css";
 import axios from "axios";
 import { API_SERVER_URL } from "../../../apis/commonApi";
 

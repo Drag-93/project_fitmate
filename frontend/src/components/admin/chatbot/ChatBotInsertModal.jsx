@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../../css/chatbot/chatBotModal.css";
+import "../../../css/chatbot/chatBotModal.css";
 import axios from "axios";
 
 const initChatData = {

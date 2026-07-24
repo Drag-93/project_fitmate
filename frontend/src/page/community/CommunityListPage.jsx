@@ -4,8 +4,8 @@ import { useParams } from "react-router-dom";
 import CommunityLeft from "../../components/community/CommunityLeft.jsx";
 import CommunityList from "../../components/community/CommunityList.jsx";
 import { API_SERVER_URL } from "../../apis/commonApi";
-import "../../components/css/Community/CommunityLeft.css";
-import "../../components/css/Community/CommunityList.css";
+import "../../css/Community/CommunityLeft.css";
+import "../../css/Community/CommunityList.css";
 
 const CommunityListPage = () => {
   const { tabId, categoryId } = useParams();

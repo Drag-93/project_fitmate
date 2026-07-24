@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import jwtAxios from "../../apis/util/jwtUtil";
-import "../../components/css/trainer/trainerReservation.css";
+import "../../css/trainer/trainerReservation.css";
 
 const TrainerReservation = () => {
   const [reservations, setReservations] = useState([]);

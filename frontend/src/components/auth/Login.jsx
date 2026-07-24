@@ -6,7 +6,7 @@ import {
   logout,
 } from "../../store/slices/loginSlice";
 import { useDispatch, useSelector } from "react-redux";
-import "../css/auth/login.css";
+import "../../css/auth/login.css";
 import { API_SERVER_URL } from "../../apis/commonApi";
 
 const Login = () => {

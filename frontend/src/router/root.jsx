@@ -1,16 +1,16 @@
 import React, { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
-import toStoreRouter from "./toStoreRouter";
+import toShopRouter from "./toShopRouter.jsx";
 import toCommunityRouter from "./toCommunityRouter";
 import toAdminRouter from "./toAdminRouter";
 import toAuthRouter from "./toAuthRouter";
-import toProductsRouter from "./store/toProductsRouter";
-import toCartRouter from "./store/toCartRouter";
-import toOrderRouter from "./store/toOrderRouter";
-import toPaymentRouter from "./store/toPaymentRouter";
+import toProductsRouter from "./shop/toProductsRouter";
+import toCartRouter from "./shop/toCartRouter";
+import toOrderRouter from "./shop/toOrderRouter";
+import toPaymentRouter from "./shop/toPaymentRouter";
 import toMemberRouter from "./toMemberRouter";
-import toReservationRouter from "./store/toReservationRouter";
-import toSubscriptionRouter from "./store/toSubscriptionRouter";
+import toReservationRouter from "./shop/toReservationRouter";
+import toSubscriptionRouter from "./shop/toSubscriptionRouter";
 import toTrainerRouter from "./toTrainerRouter";
 
 const Loading = (
@@ -20,7 +20,7 @@ const Loading = (
 );
 
 const MainPage = lazy(() => import("../page/MainPage"));
-const StoreLayout = lazy(() => import("../layout/StoreLayout"));
+const StoreLayout = lazy(() => import("../layout/./ShopLayout"));
 const CommunityLayout = lazy(() => import("../layout/CommunityLayout"));
 const AdminLayout = lazy(() => import("../layout/AdminLayout"));
 const AuthLayout = lazy(() => import("../layout/AuthLayout"));
@@ -42,7 +42,7 @@ const root = createBrowserRouter([
         <StoreLayout />
       </Suspense>
     ),
-    children: toStoreRouter(),
+    children: toShopRouter(),
   },
   {
     path: "products",
