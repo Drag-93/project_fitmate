@@ -11,7 +11,6 @@ const ProductTable = ({ products, onEdit, onDelete }) => {
           <th>상품명</th>
           <th>카테고리</th>
           <th>상품종류</th>
-          <th>결제방식</th>
           <th>가격</th>
           <th>상태</th>
           <th>관리</th>

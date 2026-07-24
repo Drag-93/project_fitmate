@@ -1,6 +1,4 @@
 import { useNavigate } from "react-router-dom";
-
-import "../../../css/shop/product/productCard.css"
 import { API_SERVER_URL } from "../../../apis/commonApi";
 
 const ProductCard = ({ product }) => {

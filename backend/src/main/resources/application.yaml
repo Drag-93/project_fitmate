@@ -60,14 +60,14 @@ logging:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
 
-img.path.product: file:///E:/fitmate/backend/product/
-img.path.community: file:///E:/fitmate/backend/community/
+img.path.product: file:///C:/fitmate/backend/product/
+img.path.community: file:///C:/fitmate/backend/community/
 #멤버의 파일저장경로
-img.path.member: file:///E:/fitmate/backend/member/
+img.path.member: file:///C:/fitmate/backend/member/
 #팝업 파일저장경로
-img.path.popup: file:///E:/fitmate/backend/popup/
-img.path.exercise: E:/fitmate/backend/exercise/
-img.path.schedule: file:///E:/fitmate/backend/schedule/
+img.path.popup: file:///C:/fitmate/backend/popup/
+img.path.exercise: file:///C:/fitmate/backend/exercise/
+img.path.schedule: file:///C:/fitmate/backend/schedule/
 
 #jwt의 암호화를 위한 시크릿 키
 jwt:

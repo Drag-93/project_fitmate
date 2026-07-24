@@ -5,6 +5,8 @@ import java.util.List;
 import org.spring.backend.shop.order.dto.OrderDto;
 import org.spring.backend.shop.order.dto.SubscriptionOrderRequestDto;
 import org.spring.backend.shop.order.type.DeliveryStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface OrderService {
 
@@ -29,6 +31,6 @@ public interface OrderService {
       // 구독 타입 주문생성
       Long insertSubscriptionOrder(Long memberId, SubscriptionOrderRequestDto request);
 
-      //관리자 주문목록 전체조회
-      List<OrderDto> adminOrderList();
+      // 관리자 주문목록 전체조회
+      Page<OrderDto> adminOrderList(Pageable pageable);
 }

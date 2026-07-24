@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { API_SERVER_URL } from "../../../apis/commonApi";
 import { Link } from "react-router-dom";
+import { checkSubscribe } from "../../../apis/shop/memberProductApi";
 
 const MemberDetailView = ({ member, updateFn, memberDelete, navigate }) => {
   //관심사를 한글로 바꿔주기위한 상수
@@ -9,6 +10,18 @@ const MemberDetailView = ({ member, updateFn, memberDelete, navigate }) => {
     WORKOUT: "운동",
     HEALTH: "건강관리",
   };
+  // 프리미엄 구독 여부
+  const [subscribe, setSubscribe] = useState(false);
+  useEffect(() => {
+    checkSubscribe()
+      .then((result) => {
+        console.log("구독 여부:", result);
+        setSubscribe(result);
+      })
+      .catch((err) => {
+        console.error("구독 확인 실패", err);
+      });
+  }, []);
   return (
     <div className="memberDetailContainer">
       {/* 1. 상단 프로필 헤더 */}
@@ -29,7 +42,7 @@ const MemberDetailView = ({ member, updateFn, memberDelete, navigate }) => {
         <div className="profileName">
           <h1>{member.userName} 님</h1>
           <span className="subscribeBadge">
-            {member.subscribe === 0 ? "미구독" : "구독중"}
+            {subscribe ? "구독중" : "미구독"}
           </span>
         </div>
       </div>
@@ -96,12 +109,17 @@ const MemberDetailView = ({ member, updateFn, memberDelete, navigate }) => {
       <div className="infoSection">
         <h3>서비스 바로가기</h3>
         <ul className="linkList">
-
           {member?.role === "TRAINER" ? (
             <>
-              <li><Link to="/trainer/pt">PT 예약 관리</Link></li>
-              <li><Link to="/trainer/profile">프로필 관리</Link></li>
-              <li><Link to="/trainer/schedule">수업 일정</Link></li>
+              <li>
+                <Link to="/trainer/pt">PT 예약 관리</Link>
+              </li>
+              <li>
+                <Link to="/trainer/profile">프로필 관리</Link>
+              </li>
+              <li>
+                <Link to="/trainer/schedule">수업 일정</Link>
+              </li>
             </>
           ) : (
             <>

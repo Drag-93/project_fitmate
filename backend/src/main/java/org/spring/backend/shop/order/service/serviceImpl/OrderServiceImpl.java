@@ -19,6 +19,8 @@ import org.spring.backend.shop.order.type.DeliveryStatus;
 import org.spring.backend.shop.order.type.OrderStatus;
 import org.spring.backend.shop.product.entity.ProductEntity;
 import org.spring.backend.shop.product.repository.ProductRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -213,11 +215,9 @@ public class OrderServiceImpl implements OrderService {
         }
 
         @Override
-        public List<OrderDto> adminOrderList() {
+        public Page<OrderDto> adminOrderList(Pageable pageable) {
 
-                return orderRepository.findAll()
-                                .stream()
-                                .map(OrderDto::toOrderDto)
-                                .toList();
+                return orderRepository.findAll(pageable)
+                                .map(OrderDto::toOrderDto);
         }
 }

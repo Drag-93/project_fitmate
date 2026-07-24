@@ -38,7 +38,7 @@
 }
 
 /* 상품 이미지 */
-.productImage {
+.cart-item .productImage {
   width: 120px;
   height: 120px;
   object-fit: cover;
@@ -47,7 +47,7 @@
 }
 
 /* 이미지 없을 때 */
-.no-image {
+.cart-item .no-image {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -62,20 +62,20 @@
   flex: 1;
 }
 
-.productName {
+.cart-item .productName {
   margin: 0 0 10px;
   font-size: 18px;
 }
 
-.price {
+.cart-item .price {
   margin: 0 0 15px;
   font-weight: bold;
 }
 
 
 /* 수량 버튼 */
-.minus,
-.plus {
+.cart-item .minus,
+.cart-item .plus {
   width: 30px;
   height: 30px;
   border: 1px solid #ccc;
@@ -83,7 +83,7 @@
   cursor: pointer;
 }
 
-.quantity {
+.cart-item .quantity {
   display: inline-block;
   width: 40px;
   text-align: center;
@@ -91,7 +91,7 @@
 
 
 /* 삭제 버튼 */
-.delete {
+.cart-item .delete {
   margin-top: 15px;
   padding: 8px 15px;
   border: none;
@@ -99,7 +99,9 @@
   cursor: pointer;
 }
 
-
+.cart-select-all span {
+  margin-left: 10px;
+}
 
 /* 결제 영역 */
 .cart-summary {

@@ -1,4 +1,4 @@
-@import url("../../../common/reset.css");
+@import url("../common/reset.css");
 .product-table {
   width: 100%;
   border-collapse: collapse;
@@ -13,13 +13,160 @@
   margin-top: 100px;
   padding: 30px;
 }
+
+/* ==========================================
+   Admin Product List Page Container
+   ========================================== */
+
+/* 페이지 전체 영역 레이아웃 */
 .admin-product-list-page {
   margin-left: 260px;
   margin-top: 100px;
-  padding: 30px;
+  padding: 40px 20px;
+  box-sizing: border-box;
+}
+.admin-product-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #f1f5f9;
+}
+/* 상품 등록 버튼 */
+.admin-product-insert-btn {
+  background-color: #2563eb;
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.2);
 }
 
+.admin-product-insert-btn:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
 
+/* ==========================================
+   Product Table Styling
+   ========================================== */
+
+.product-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.product-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #334155;
+}
+
+/* 테이블 헤더 */
+.product-table thead {
+  background-color: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.product-table th {
+  padding: 14px 12px;
+  font-weight: 600;
+  color: #475569;
+  white-space: nowrap;
+}
+
+/* 테이블 바디 Row */
+.product-table tbody tr {
+  border-bottom: 1px solid #f1f5f9;
+  transition: background-color 0.15s ease;
+}
+
+.product-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.product-table tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+.product-table td {
+  padding: 12px;
+  vertical-align: middle;
+}
+
+/* 데이터가 없을 때 */
+.product-table td[colspan] {
+  padding: 48px 0;
+  color: #94a3b8;
+  font-size: 0.95rem;
+}
+
+/* 썸네일 이미지 공통 스타일 */
+.product-table img {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+}
+
+/* 관리 버튼 (수정/삭제) 스타일 */
+.product-table .btn-edit,
+.product-table .btn-delete {
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  margin: 0 2px;
+  transition: background-color 0.2s;
+}
+
+.product-table .btn-edit {
+  background-color: #f1f5f9;
+  color: #334155;
+}
+
+.product-table .btn-edit:hover {
+  background-color: #e2e8f0;
+}
+
+.product-table .btn-delete {
+  background-color: #fef2f2;
+  color: #ef4444;
+}
+
+.product-table .btn-delete:hover {
+  background-color: #fee2e2;
+}
+
+/* 로딩 스타일 */
+.admin-loading {
+  text-align: center;
+  padding: 80px 0;
+  font-size: 1.1rem;
+  color: #64748b;
+  font-weight: 600;
+}
+.admin-product-header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
 /* 제목 + 버튼 */
 .admin-product-list-page .title {
   text-align: center;
@@ -217,26 +364,6 @@
   margin: 0 4px;
 }
 
-/* 수정 */
-.update {
-  background-color: #4a90e2;
-  color: white;
-}
-
-.update:hover {
-  background-color: #357abd;
-}
-
-/* 삭제 */
-.delete {
-  background-color: #e74c3c;
-  color: white;
-}
-
-.delete:hover {
-  background-color: #c0392b;
-}
-
 /* =======================폼 영역======================== */
 .product-form {
   width: 600px;
@@ -352,4 +479,57 @@
 
 .image-upload input[type="file"]:hover {
   border-color: #999;
+}
+/* =======================product-card ====================*/
+.product-card {
+  width: 250px;
+  cursor: pointer;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: white;
+  transition: 0.2s;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+}
+
+
+/* 상품 이미지 */
+.product-card img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  display: block;
+}
+
+
+/* 이미지 없을 때 */
+.product-card > div {
+  width: 100%;
+  height: 250px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f5f5f5;
+  color: #999;
+}
+
+
+/* 상품명 */
+.product-card h3 {
+  font-size: 18px;
+  margin: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+/* 가격 */
+.product-card p {
+  margin: 0 15px 15px;
+  font-size: 16px;
+  font-weight: bold;
 }

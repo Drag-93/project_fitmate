@@ -27,4 +27,14 @@ public class MemberProductController {
         return ResponseEntity.ok(
                 memberProductService.getActivePtProducts(user.getUsername()));
     }
+
+
+    @GetMapping("/subscribe")
+    public ResponseEntity<Boolean> checkSubscribe(
+            @AuthenticationPrincipal CustomUserDetails user) {
+
+        return ResponseEntity.ok(
+                memberProductService.checkSubscribe(user.getUsername())
+        );
+    }
 }

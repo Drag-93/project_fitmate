@@ -22,10 +22,7 @@ public interface ProductService {
   ProductDto productDetail(Long productId);
 
   // 카테고리별 조회, 전체조회
-  Page<ProductDto> productList(ProductType productType, Pageable pageable);
-
-  // 상품 검색
-  Page<ProductDto> searchProduct(String keyword, Pageable pageable);
+  Page<ProductDto> productList(ProductType productType, Pageable pageable, String search);
 
   // 이미지 한장만 삭제
   void deleteImage(Long productFileId);

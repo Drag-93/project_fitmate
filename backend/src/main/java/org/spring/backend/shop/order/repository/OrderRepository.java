@@ -32,4 +32,5 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
     WHERE o.id = :orderId
 """)
 Optional<OrderEntity> findDetailById(@Param("orderId") Long orderId);
+
 }

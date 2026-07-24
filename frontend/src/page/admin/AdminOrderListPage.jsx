@@ -1,5 +1,6 @@
 import React from 'react'
-import AdminOrderList from '../../../../components/shop/order/admin/AdminOrderList'
+import AdminOrderList from '../../components/admin/AdminOrderList'
+import "../../css/admin/AdminOrderList.css";
 
 
 const AdminOrderListPage = () => {

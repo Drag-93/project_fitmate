@@ -13,16 +13,16 @@ const TabInsertPage = lazy(() => import("../page/community/TabInsertPage"));
 const TabDetailPage = lazy(() => import("../page/community/TabDetailPage"));
 
 const AdminProductListPage = lazy(
-  () => import("../page/shop/product/admin/AdminProductListPage"),
+  () => import("../page/admin/AdminProductListPage"),
 );
 const AdminProductUpdatePage = lazy(
-  () => import("../page/shop/product/admin/AdminProductUpdatePage"),
+  () => import("../page/admin/AdminProductUpdatePage"),
 );
 const AdminProductInsertPage = lazy(
-  () => import("../page/shop/product/admin/AdminProductInsertPage"),
+  () => import("../page/admin/AdminProductInsertPage"),
 );
 const AdminOrderListPage = lazy(
-  () => import("../page/shop/order/admin/AdminOrderListPage"),
+  () => import("../page/admin/AdminOrderListPage"),
 );
 const AdminCommunityPage = lazy(
   () => import("../page/admin/AdminCommunityPage"),

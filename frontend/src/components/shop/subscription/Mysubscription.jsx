@@ -15,7 +15,7 @@ const MySubscription = () => {
 
   const getSubscriptionList = async () => {
     try {
-      const res = await jwtAxios.get("/api/subscription/list");
+      const res = await jwtAxios.get("/api/subscription/my");
       console.log(res.data);
       setSubscriptions(res.data || []);
     } catch (err) {

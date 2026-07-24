@@ -123,9 +123,13 @@ public class CartServiceImpl implements CartService {
     OrderEntity order = orderRepository.findById(orderId)
         .orElseThrow(() -> new IllegalArgumentException("주문이 존재하지 않습니다."));
 
-    CartEntity cart = cartRepository.findByMemberEntity_UserEmail(
-        order.getMemberEntity().getUserEmail())
-        .orElseThrow(() -> new IllegalArgumentException("장바구니가 존재하지 않습니다."));
+    Optional<CartEntity> cartOptional = cartRepository.findByMemberEntity_UserEmail(
+            order.getMemberEntity().getUserEmail()
+    );
+    if (cartOptional.isEmpty()) {
+      return;
+    }
+    CartEntity cart = cartOptional.get();
 
     for (OrderItemEntity orderItem : order.getOrderItemEntities()) {
 

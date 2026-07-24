@@ -6,12 +6,12 @@ import {
   updateProduct,
   deleteImage,
   deleteAllImages,
-} from "../../../../apis/shop/productApi";
+} from "../../apis/shop/productApi";
 
-import ProductForm from "../../../../components/shop/product/admin/ProductForm";
-import ImageUpload from "../../../../components/shop/product/admin/ImageUpload";
-import "../../../../css/shop/product/admin/productAdmin.css";
-import { API_SERVER_URL } from "../../../../apis/commonApi";
+import ProductForm from "../../components/shop/product/ProductForm";
+import ImageUpload from "../../components/shop/product/ImageUpload";
+import "../../css/admin/AdminProduct.css";
+import { API_SERVER_URL } from "../../apis/commonApi";
 
 const AdminProductUpdatePage = () => {
   const { productId } = useParams();

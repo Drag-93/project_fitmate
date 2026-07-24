@@ -20,8 +20,7 @@ public class AdminController {
     private final TabService tabService;
     private final OrderService orderService;
 
-//=======================popup=======================
-
+    // =======================popup=======================
 
     // 탭생성
     @PostMapping("/tabInsert")
@@ -33,9 +32,9 @@ public class AdminController {
         return ResponseEntity.status(HttpStatus.OK).body(map);
     }
 
-    //탭 삭제
+    // 탭 삭제
     @DeleteMapping("/tabDelete/{id}")
-    public ResponseEntity<?> tabDelete(@PathVariable("id") Long id){
+    public ResponseEntity<?> tabDelete(@PathVariable("id") Long id) {
 
         tabService.tabDelete(id);
         Map<String, String> map = new HashMap<>();
@@ -43,9 +42,9 @@ public class AdminController {
         return ResponseEntity.status(HttpStatus.OK).body(map);
     }
 
-    //탭 수정
+    // 탭 수정
     @PutMapping("/tabUpdate/{id}")
-    public ResponseEntity<?> tabUpdate(@PathVariable("id") Long id, @RequestBody TabDto tabDto){
+    public ResponseEntity<?> tabUpdate(@PathVariable("id") Long id, @RequestBody TabDto tabDto) {
         tabDto.setId(id);
         Map<String, TabDto> map = new HashMap<>();
 
@@ -54,9 +53,9 @@ public class AdminController {
         return ResponseEntity.status(HttpStatus.OK).body(map);
     }
 
-    //탭 상세 //
+    // 탭 상세 //
     @GetMapping("/tabDetail/{id}")
-    public ResponseEntity<?> tabDetail(@PathVariable("id") Long id){
+    public ResponseEntity<?> tabDetail(@PathVariable("id") Long id) {
         Map<String, TabDto> map = new HashMap<>();
 
         TabDto tabDto = tabService.tabDetail(id);
@@ -64,13 +63,4 @@ public class AdminController {
         return ResponseEntity.status(HttpStatus.OK).body(map);
     }
 
-    // 관리자 주문 전체 조회
-    @GetMapping("/orderList")
-    public ResponseEntity<List<OrderDto>> orderList() {
-
-        return ResponseEntity.ok(
-                orderService.adminOrderList()
-        );
-
-}
 }

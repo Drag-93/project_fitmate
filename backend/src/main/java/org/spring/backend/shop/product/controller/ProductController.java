@@ -88,26 +88,24 @@ public class ProductController {
     return ResponseEntity.ok().build();
   }
 
-  // 카테고리별 상품 조회, 전체조회
+  // 상품 조회, 검색, 페이징
   @GetMapping
   public ResponseEntity<Page<ProductDto>> productList(
-      @RequestParam(value = "productType", required = false) ProductType productType,
+      @RequestParam(required = false) String search,
+      @RequestParam(required = false) ProductType productType,
       Pageable pageable) {
 
     return ResponseEntity.ok(
-        productService.productList(productType, pageable));
+        productService.productList( productType, pageable, search));
   }
 
   @GetMapping("/premium")
-  public ResponseEntity<ProductDto> getPremiumProduct(){
-  
-      ProductEntity product =
-          productRepository.findFirstByProductType(ProductType.PREMIUM)
-          .orElseThrow(() ->
-              new IllegalArgumentException("프리미엄 상품 없음"));
-  
-      return ResponseEntity.ok(
-          ProductDto.toProductDto(product)
-      );
+  public ResponseEntity<ProductDto> getPremiumProduct() {
+
+    ProductEntity product = productRepository.findFirstByProductType(ProductType.PREMIUM)
+        .orElseThrow(() -> new IllegalArgumentException("프리미엄 상품이 존재하지 않습니다."));
+
+    return ResponseEntity.ok(
+        ProductDto.toProductDto(product));
   }
 }

@@ -11,6 +11,9 @@ import org.spring.backend.shop.MemberProduct.entity.MemberProductEntity;
 import org.spring.backend.shop.MemberProduct.repository.MemberProductRepository;
 import org.spring.backend.shop.MemberProduct.service.MemberProductService;
 import org.spring.backend.shop.product.entity.ProductEntity;
+import org.spring.backend.shop.product.type.ProductType;
+import org.spring.backend.shop.subscription.repository.SubscriptionRepository;
+import org.spring.backend.shop.subscription.type.SubscriptionStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +26,7 @@ public class MemberProductServiceImpl implements MemberProductService {
 
   private final MemberProductRepository memberProductRepository;
   private final MemberRepository memberRepository;
+  private final SubscriptionRepository subscriptionRepository;
 
   @Override
   @Transactional
@@ -57,5 +61,19 @@ public class MemberProductServiceImpl implements MemberProductService {
         .stream()
         .map(MemberProductDto::toMemberProductDto)
         .toList();
+  }
+
+  public boolean checkSubscribe(String email) {
+
+    MemberEntity member = memberRepository.findByUserEmail(email)
+        .orElseThrow(() -> new RuntimeException("회원이 존재하지 않습니다."));
+
+    return subscriptionRepository
+            .existsByMemberEntityAndProductEntity_ProductTypeAndSubscriptionStatus(
+                    member,
+                    ProductType.PREMIUM,
+                    SubscriptionStatus.ACTIVE
+            );
+            
   }
 }

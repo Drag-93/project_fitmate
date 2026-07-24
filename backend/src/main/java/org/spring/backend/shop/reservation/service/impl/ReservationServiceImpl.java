@@ -1,6 +1,7 @@
 package org.spring.backend.shop.reservation.service.impl;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.spring.backend.member.enumtype.Role;
@@ -47,14 +48,14 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     MemberProductEntity memberProduct = memberProductRepository.findById(reservationDto.getMemberProductId())
-        .orElseThrow(() -> new IllegalArgumentException("이용권 없음"));
+        .orElseThrow(() -> new IllegalArgumentException("이용권이 존재하지 않습니다."));
 
     if (!memberProduct.getMemberEntity().getId().equals(member.getId())) {
       throw new IllegalArgumentException("본인의 이용권만 사용할 수 있습니다.");
     }
 
     if (memberProduct.getRemainingCount() <= 0) {
-      throw new IllegalArgumentException("잔여 횟수 없음");
+      throw new IllegalArgumentException("잔여 횟수가 없습니다.");
     }
 
     memberProduct.setRemainingCount(
@@ -195,7 +196,8 @@ public class ReservationServiceImpl implements ReservationService {
             reservationDate,
             ReservationStatus.RESERVED)
         .stream()
-        .map(r -> r.getReservationTime().toString())
+        .map(r -> r.getReservationTime()
+            .format(DateTimeFormatter.ofPattern("HH:mm")))
         .toList();
   }
 }

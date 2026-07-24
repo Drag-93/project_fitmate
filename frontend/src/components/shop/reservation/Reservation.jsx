@@ -4,9 +4,7 @@ import CommonCalendar from "../../common/calendar/CommonCalendar";
 import "../../../css/shop/reservation/reservation.css";
 import { API_SERVER_URL } from "../../../apis/commonApi";
 
-
-const Reservation = () => {
-
+const Reservation = ({ onSuccess }) => {
   const [myProducts, setMyProducts] = useState([]); // 보유한 Active PT 이용권 목록
   const [selectedProduct, setSelectedProduct] = useState(null); // 선택한 이용권
   const [trainers, setTrainers] = useState([]);
@@ -14,7 +12,6 @@ const Reservation = () => {
   const [reservedSlots, setReservedSlots] = useState([]);
 
   const [selectedDate, setSelectedDate] = useState(""); // 선택한 날짜 (YYYY-MM-DD)
-  const [availableSlots, setAvailableSlots] = useState([]); // 해당 날짜의 예약 가능 시간 목록
   const [reservationTime, setReservationTime] = useState(""); // 최종 선택한 시간 (HH:mm)
   const [memo, setMemo] = useState("");
 
@@ -23,8 +20,19 @@ const Reservation = () => {
     getTrainerList();
     getMyPtProducts();
   }, []);
-
-
+  const timeSlots = [
+    "10:00",
+    "11:00",
+    "12:00",
+    "13:00",
+    "14:00",
+    "15:00",
+    "16:00",
+    "17:00",
+    "18:00",
+    "19:00",
+    "20:00",
+  ];
   // 트레이너 목록 조회
   const getTrainerList = async () => {
     try {
@@ -51,24 +59,23 @@ const Reservation = () => {
   const handleDateClick = async (info) => {
     const dateStr = info.dateStr;
     setSelectedDate(dateStr);
-    setReservationTime(""); // 날짜 바뀌면 선택했던 시간 초기화
-
+    setReservationTime("");
     if (!selectedTrainer) {
       alert("트레이너를 먼저 선택해 주세요.");
       return;
     }
-
     try {
-      // 해당 트레이너 + 해당 날짜의 가능 시간대 API 호출 (예시)
-      const res = await jwtAxios.get(
-        `/api/reservations/available-slots`,
-        { params: { trainerId: selectedTrainer.id, date: dateStr } }
-      );
-      // 예: ["09:00", "10:00", "14:00", "15:00"]
-      setAvailableSlots(res.data);
+      // 예약 가능한 시간
+      const res = await jwtAxios.get(`/api/reservations/reserved-times`, {
+        params: {
+          trainerId: selectedTrainer.id,
+          date: dateStr,
+        },
+      });
+      // 예약된 시간만 저장
+      setReservedSlots(res.data);
     } catch (error) {
-      // API 준비 전 테스트용 더미 타임슬롯 (필요시 제거)
-      setAvailableSlots(["10:00", "11:00", "14:00", "15:00", "16:00", "19:00"]);
+      console.log(error);
     }
   };
   // 예약 신청
@@ -94,14 +101,18 @@ const Reservation = () => {
     const data = {
       memberProductId: selectedProduct.id, // 핵심: 횟수 차감 대상 이용권 PK
       trainerId: selectedTrainer.id,
-      reservationDate: selectedDate,       // LocalDate (YYYY-MM-DD)
-      reservationTime: reservationTime,   // LocalTime (HH:mm)
-      memo: memo
+      reservationDate: selectedDate, // LocalDate (YYYY-MM-DD)
+      reservationTime: reservationTime, // LocalTime (HH:mm)
+      memo: memo,
     };
 
     try {
       await jwtAxios.post("/api/reservations", data);
+
       alert("PT 예약이 성공적으로 완료되었습니다!");
+      if (onSuccess) {
+        onSuccess();
+      }
     } catch (error) {
       console.log(error);
       alert(error.response?.data?.message || "예약에 실패했습니다.");
@@ -117,17 +128,25 @@ const Reservation = () => {
         <section className="product-section">
           <h3>사용할 이용권 선택</h3>
           {myProducts.length === 0 ? (
-            <p className="no-product">보유 중인 활성 PT 이용권이 없습니다. 먼저 이용권을 구매해 주세요.</p>
+            <p className="no-product">
+              보유 중인 활성 PT 이용권이 없습니다. 먼저 이용권을 구매해 주세요.
+            </p>
           ) : (
             <div className="product-list">
               {myProducts.map((prod) => (
                 <div
                   key={prod.id}
-                  className={selectedProduct?.id === prod.id ? "product-card active" : "product-card"}
+                  className={
+                    selectedProduct?.id === prod.id
+                      ? "product-card active"
+                      : "product-card"
+                  }
                   onClick={() => setSelectedProduct(prod)}
                 >
                   <h4>{prod.productName}</h4>
-                  <p>잔여 횟수: <strong>{prod.remainingCount}회</strong></p>
+                  <p>
+                    잔여 횟수: <strong>{prod.remainingCount}회</strong>
+                  </p>
                   <p>유효기간: ~ {prod.endDate}</p>
                 </div>
               ))}
@@ -142,7 +161,11 @@ const Reservation = () => {
             {trainers.map((trainer) => (
               <div
                 key={trainer.id}
-                className={selectedTrainer?.id === trainer.id ? "trainer-card active" : "trainer-card"}
+                className={
+                  selectedTrainer?.id === trainer.id
+                    ? "trainer-card active"
+                    : "trainer-card"
+                }
                 onClick={() => {
                   setSelectedTrainer(trainer);
                   setSelectedDate("");
@@ -158,8 +181,16 @@ const Reservation = () => {
                   alt="trainer"
                 />
                 <h4>{trainer.name}</h4>
-                <p>{trainer.specialty}</p>
-                <p>{trainer.career}</p>
+                <p>
+                  {trainer.specialty && trainer.specialty !== "미등록"
+                    ? trainer.specialty
+                    : ""}
+                </p>
+                <p>
+                  {trainer.career && trainer.career !== "미등록"
+                    ? trainer.career
+                    : ""}
+                </p>
               </div>
             ))}
           </div>
@@ -181,7 +212,7 @@ const Reservation = () => {
               <div className="time-slot-box">
                 <h4>{selectedDate} 예약 가능 시간</h4>
                 <div className="time-slots">
-                  {availableSlots.map((timeStr) => {
+                  {timeSlots.map((timeStr) => {
                     const reserved = reservedSlots.includes(timeStr);
 
                     return (
@@ -202,7 +233,7 @@ const Reservation = () => {
                           }
                         }}
                       >
-                        {reserved ? `${timeStr} (예약완료)` : timeStr}
+                        {reserved ? `${timeStr}` : timeStr}
                       </button>
                     );
                   })}
@@ -227,7 +258,12 @@ const Reservation = () => {
           <button
             className="reserve-submit-btn"
             onClick={handleReservation}
-            disabled={!selectedProduct || !selectedTrainer || !selectedDate || !reservationTime}
+            disabled={
+              !selectedProduct ||
+              !selectedTrainer ||
+              !selectedDate ||
+              !reservationTime
+            }
           >
             PT 1회 차감 후 예약 확정하기
           </button>
@@ -235,8 +271,6 @@ const Reservation = () => {
       </div>
     </div>
   );
-
 };
-
 
 export default Reservation;

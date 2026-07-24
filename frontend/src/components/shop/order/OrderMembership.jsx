@@ -6,36 +6,72 @@ import { useNavigate } from "react-router-dom";
 import PaymentMethod from "../order/PaymentMethod";
 
 const OrderMembership = ({ product }) => {
+  const productTypeMap = {
+    PT: "PT 이용권",
+    GYM: "헬스장 이용권",
+    PREMIUM: "FitMate Plus+",
+  };
 
   const navigate = useNavigate();
+
   const [startDate, setStartDate] = useState(null);
   const [agree, setAgree] = useState(false);
   const [payment, setPayment] = useState("kakao");
+  const [loading, setLoading] = useState(false);
 
   if (!product) {
     return <div>상품 정보가 없습니다.</div>;
   }
 
+  // 날짜 포맷
+  const formatDate = (date) => {
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
+      2,
+      "0",
+    )}-${String(date.getDate()).padStart(2, "0")}`;
+  };
+
+  // 오늘 날짜 (한국 기준)
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  // GYM 종료일 계산
+  const getEndDate = () => {
+    if (!startDate || !product.duration) return "-";
+
+    const date = new Date(startDate);
+    date.setDate(date.getDate() + product.duration);
+
+    return formatDate(date);
+  };
+
+  // 시작일 선택
   const handleDateClick = (info) => {
     setStartDate(info.dateStr);
   };
 
+  // 결제
   const handlePayment = async () => {
+    const isPremium = product.productType === "PREMIUM";
 
-    if (!startDate) {
+    if (!isPremium && !startDate) {
       alert("이용 시작일을 선택해주세요.");
       return;
     }
-    // PREMIUM만 자동결제 동의 체크
-    if (product.productType === "PREMIUM" && !agree) {
+
+    if (isPremium && !agree) {
       alert("자동결제 및 이용약관에 동의해주세요.");
       return;
     }
 
     try {
+      setLoading(true);
+
       const orderId = await createMembershipOrder({
         productId: product.id,
-        startDate
+        startDate: isPremium
+          ? new Date().toLocaleDateString("sv-SE")
+          : startDate,
       });
 
       if (!orderId) {
@@ -43,126 +79,98 @@ const OrderMembership = ({ product }) => {
         return;
       }
 
-      // 카카오페이
       if (payment === "kakao") {
         const res = await kakaoPay(orderId);
         window.location.href = res.approvalUrl;
         return;
       }
 
-      // 일반결제
       if (payment === "card") {
         const result = await normalPayment(orderId);
+
         alert("결제가 완료되었습니다.");
+
         navigate("/payment/success", {
-          state: result
+          state: result,
         });
       }
-    } catch (e) {
-      console.log(e);
+    } catch (error) {
+      console.log(error);
+      alert("결제 처리 중 오류가 발생했습니다.");
+    } finally {
+      setLoading(false);
     }
   };
-  // 이용 종료일 / 다음 결제일 계산
-  const getEndDate = () => {
-    if (!startDate || !product.duration) return "";
 
-    const date = new Date(startDate);
-    date.setDate(date.getDate() + product.duration);
-
-    return date.toISOString().split("T")[0];
-  };
-
-  // PREMIUM 다음 결제일
-  const getNextPaymentDate = () => {
-    if (!startDate) return "";
-    const date = new Date(startDate);
-    const currentDay = date.getDate();
-    date.setMonth(date.getMonth() + 1);
-    // 월을 더했을 때 일수가 달라진 경우 (예: 1/31 -> 2월말) 조정
-    if (date.getDate() !== currentDay) {
-      date.setDate(0);
-    }
-    return date.toISOString().split("T")[0];
-  };
-  // 오늘 날짜 (00:00:00 기준)
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const isPremium = product.productType === "PREMIUM";
+  
   return (
-
     <div className="order-membership">
       <div className="order-membership-con">
-
         <h2>결제하기</h2>
 
-        <div className="calendar-box">
+        {!isPremium && (
+          <>
+            <div className="calendar-box">
+              <CommonCalendar
+                events={[]}
+                onDateClick={handleDateClick}
+                validRange={{
+                  start: today,
+                }}
+              />
+            </div>
 
-          <CommonCalendar
-            events={[]}
-            onDateClick={handleDateClick}
-            validRange={{
-              start: today, //시간 차이 문제 방지
-            }}
-          />
-        </div>
+            <div className="selected-date">
+              이용 시작일 : {startDate || "선택해주세요."}
+              {product.productType === "GYM" && (
+                <p>이용 종료일 : {getEndDate()}</p>
+              )}
+            </div>
+          </>
+        )}
 
-        <div className="selected-date">
-          이용 시작일 : &nbsp;
-          {startDate || " 선택해주세요."}
+        {isPremium && (
+          <div className="selected-date">
+            이용 시작일 : {new Date().toLocaleDateString("sv-SE")}
+          </div>
+        )}
 
-          {/* GYM 이용 종료일 */}
-          {product.productType === "GYM" && (
-            <p>
-              이용 종료일 : &nbsp;
-              {startDate && product.duration
-                ? getEndDate()
-                : "-"}
-            </p>
-          )}
-
-          {/* PREMIUM 다음 결제일 */}
-          {product.productType === "PREMIUM" && (
-            <p>
-              다음 결제일 : &nbsp;
-              {startDate ? getNextPaymentDate() : "-"}
-            </p>
-          )}
-        </div>
-        
         <div className="order-product">
           <h3>{product.productName}</h3>
 
-          <p>상품 종류 : {product.productType}</p>
-
-          {product.duration > 0 && (
-            <p>이용기간 : {product.duration}일</p>
-          )}
-
+          <p>상품 종류 : {productTypeMap[product.productType]}</p>
+          {product.duration > 0 && <p>이용기간 : {product.duration}일</p>}
           {product.sessionCount > 0 && (
             <p>PT 횟수 : {product.sessionCount}회</p>
           )}
-
-          <p>
-            결제금액 : {product.price.toLocaleString()}원
-          </p>
+          <p>결제금액 : {product.price.toLocaleString()}원</p>
         </div>
-        <PaymentMethod
-          payment={payment}
-          setPayment={setPayment}
-        />
-        <hr />
-        {product.productType === "PREMIUM" && (
-          <label>
-            <input
-              type="checkbox"
-              checked={agree}
-              onChange={(e) => setAgree(e.target.checked)}
-            />
-            자동결제 및 이용약관 동의
-          </label>
+
+        <PaymentMethod payment={payment} setPayment={setPayment} />
+
+        {isPremium && (
+          <>
+            <hr />
+            <label>
+              <input
+                type="checkbox"
+                checked={agree}
+                onChange={(e) => setAgree(e.target.checked)}
+              />
+              FitMate Plus+ 자동결제 및 이용약관에 동의합니다.
+            </label>
+
+            <p className="payment-info">
+              ※ 매월 같은 날짜에 자동 결제되며, 마이페이지에서 구독 해지가
+              가능합니다.
+            </p>
+          </>
         )}
+
         <div className="order-payment">
-          <button onClick={handlePayment}>
-            결제하기
+          <button disabled={loading} onClick={handlePayment}>
+            {loading ? "결제 진행중..." : "결제하기"}
           </button>
         </div>
       </div>

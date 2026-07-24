@@ -151,7 +151,7 @@ public class PaymentServiceImpl implements PaymentService {
     OrderEntity orderEntity = paymentEntity.getOrderEntity();
     List<OrderItemEntity> items = orderEntity.getOrderItemEntities();
 
-    String productName = "상품 없음";
+    String productName = "상품이 존재하지 않습니다.";
 
     if (!items.isEmpty()) {
       if (items.size() == 1) {

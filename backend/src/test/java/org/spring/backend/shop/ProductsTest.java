@@ -101,12 +101,10 @@ public class ProductsTest {
 
   @Test
   void insert4() {
-    for (int i = 0; i < 1; i++) {
-
       ProductEntity productEntity = ProductEntity.builder()
-              .productName("프리미엄 구독" + i)
-              .description("프리미엄 구독" + i + "설명입니다.")
-              .price(10000 + i)
+              .productName("FitMate Plus+")
+              .description("FitMate Plus+ 설명입니다.")
+              .price(10000)
               .productType(ProductType.PREMIUM)
               .billingType(BillingType.SUBSCRIPTION)
               .productStatus(ProductStatus.ACTIVE)
@@ -114,7 +112,6 @@ public class ProductsTest {
               .build();
 
       productRepository.save(productEntity);
-    }
   }
 
   @Test

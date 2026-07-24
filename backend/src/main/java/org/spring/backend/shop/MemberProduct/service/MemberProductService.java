@@ -12,6 +12,5 @@ public interface MemberProductService {
 
   public List<MemberProductDto> getActivePtProducts(String email);
 
-
+  boolean checkSubscribe(String email);
 }
-

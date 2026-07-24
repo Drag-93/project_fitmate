@@ -171,7 +171,7 @@ public class ProductServiceImpl implements ProductService {
 
   @Override
   @Transactional(readOnly = true)
-  public Page<ProductDto> productList(ProductType productType, Pageable pageable) {
+  public Page<ProductDto> productList(ProductType productType, Pageable pageable, String search) {
 
     Page<ProductEntity> page;
 
@@ -194,14 +194,6 @@ public class ProductServiceImpl implements ProductService {
     return ProductDto.toProductDto(productEntity);
   }
 
-  @Override
-  @Transactional(readOnly = true)
-  public Page<ProductDto> searchProduct(String keyword, Pageable pageable) {
-
-    return productRepository
-        .findByProductNameContaining(keyword, pageable)
-        .map(ProductDto::toProductDto);
-  }
 
   @Override
   public void deleteImage(Long productFileId) {

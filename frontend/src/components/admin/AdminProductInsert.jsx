@@ -1,15 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { insertProduct } from "../../apis/shop/productApi";
+import ProductForm from "../../components/shop/product/ProductForm";
+import ImageUpload from "../../components/shop/product/ImageUpload";
 
-import { insertProduct } from "../../../../apis/shop/productApi";
-
-import ProductForm from "../../../../components/shop/product/admin/ProductForm";
-import ImageUpload from "../../../../components/shop/product/admin/ImageUpload";
-import "../../../../css/shop/product/admin/productAdmin.css";
-
-
-
-const AdminProductInsertPage = () => {
+const AdminProductInsert = () => {
 
   const navigate = useNavigate();
 
@@ -105,4 +100,4 @@ const AdminProductInsertPage = () => {
 };
 
 
-export default AdminProductInsertPage;
+export default AdminProductInsert;

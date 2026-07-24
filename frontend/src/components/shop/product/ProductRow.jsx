@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { API_SERVER_URL } from "../../../../apis/commonApi";
+import { API_SERVER_URL } from "../../../apis/commonApi";
 
 const ProductRow = ({ product, onEdit, onDelete }) => {
   const navigate = useNavigate();
@@ -32,7 +32,6 @@ const ProductRow = ({ product, onEdit, onDelete }) => {
       <td>{product.productName}</td>
       <td>{product.category}</td>
       <td>{product.productType}</td>
-      <td>{product.billingType}</td>
       <td>{product.price.toLocaleString()}원</td>
       <td>{product.productStatus}</td>
 
