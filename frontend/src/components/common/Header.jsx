@@ -42,7 +42,7 @@ const Header = () => {
   useEffect(() => {
     const fetchCommunityTabs = async () => {
       try {
-        const res = await axios.get(`${API_SERVER_URL}/community/tabList`);
+        const res = await axios.get(`${API_SERVER_URL}/api/community/tabList`);
         setCommunityTabs(res.data?.result || []);
       } catch (err) {
         console.error("커뮤니티 탭 로딩 실패", err);

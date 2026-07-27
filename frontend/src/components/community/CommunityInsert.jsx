@@ -52,8 +52,8 @@ const CommunityInsert = () => {
 
       try {
         const [tabRes, catRes, userRes] = await Promise.all([
-          axios.get(`${API_SERVER_URL}/community/tabList`),
-          axios.get(`${API_SERVER_URL}/community/category`),
+          axios.get(`${API_SERVER_URL}/api/community/tabList`),
+          axios.get(`${API_SERVER_URL}/api/community/category`),
           jwtAxios.get(`${API_SERVER_URL}/api/member/detail`),
         ]);
 

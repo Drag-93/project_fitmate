@@ -22,7 +22,7 @@ const CommunityListPage = () => {
   useEffect(() => {
     const fetchTabList = async () => {
       try {
-        const res = await axios.get(`${API_SERVER_URL}/community/tabList`);
+        const res = await axios.get(`${API_SERVER_URL}/api/community/tabList`);
         setTabList(res.data.result || []);
       } catch (err) {
         console.error("탭 목록 로드 실패", err);
@@ -35,7 +35,7 @@ const CommunityListPage = () => {
   useEffect(() => {
     const fetchCategoryList = async () => {
       try {
-        const res = await axios.get(`${API_SERVER_URL}/community/category`);
+        const res = await axios.get(`${API_SERVER_URL}/api/community/category`);
         setCategoryList(res.data.result || []);
       } catch (err) {
         console.error("카테고리 목록 로드 실패", err);

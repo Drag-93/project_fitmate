@@ -31,9 +31,9 @@ const CommunityUpdate = () => {
     const fetchData = async () => {
       try {
         const [tabRes, catRes, detailRes] = await Promise.all([
-          axios.get(`${API_SERVER_URL}/community/tabList`),
-          axios.get(`${API_SERVER_URL}/community/category`),
-          jwtAxios.get(`${API_SERVER_URL}/community/detail/${id}`),
+          axios.get(`${API_SERVER_URL}/api/community/tabList`),
+          axios.get(`${API_SERVER_URL}/api/community/category`),
+          jwtAxios.get(`${API_SERVER_URL}/api/community/detail/${id}`),
         ]);
         setTabs(tabRes.data.result);
         setCategories(catRes.data.result);

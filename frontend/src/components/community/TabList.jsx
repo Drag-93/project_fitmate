@@ -19,7 +19,7 @@ const TabList = () => {
   // 탭 목록 조회 (URL 파라미터의 tabId/categoryId가 있으면 서버에 필터 조건으로 전달)
   const fetchTabData = async () => {
     setIsLoading(true);
-    const url = `${API_SERVER_URL}/community/tabList`;
+    const url = `${API_SERVER_URL}/api/community/tabList`;
     try {
       const res = await axios.get(url, {
         params: {

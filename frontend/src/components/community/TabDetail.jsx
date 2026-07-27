@@ -21,7 +21,9 @@ const TabDetail = () => {
   const getTabDetail = async () => {
     try {
       setIsLoading(true);
-      const res = await axios.get(`${API_SERVER_URL}/admin/tabDetail/${id}`);
+      const res = await axios.get(
+        `${API_SERVER_URL}/api/admin/tabDetail/${id}`,
+      );
       if (res.data?.tab) {
         setTab(res.data.tab);
       }

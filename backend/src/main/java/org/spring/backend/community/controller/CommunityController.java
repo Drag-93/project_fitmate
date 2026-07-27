@@ -36,7 +36,7 @@ import org.springframework.http.ResponseEntity;
  */
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/community")
+@RequestMapping("/api/community")
 @Slf4j
 public class CommunityController {
 

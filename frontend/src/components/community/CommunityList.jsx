@@ -57,7 +57,7 @@ const CommunityList = ({ params, tab }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`${API_SERVER_URL}/community/tclist`, {
+        const res = await axios.get(`${API_SERVER_URL}/api/community/tclist`, {
           params: {
             tabId: params?.tabId,
             categoryId: params?.categoryId,

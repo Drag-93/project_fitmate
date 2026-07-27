@@ -50,7 +50,7 @@ const CommunityMain = () => {
     const fetchMainData = async () => {
       try {
         setIsLoading(true);
-        const res = await axios.get(`${API_SERVER_URL}/community/main`);
+        const res = await axios.get(`${API_SERVER_URL}/api/community/main`);
         if (res.data?.result) {
           setMainData(res.data.result);
         }
@@ -70,7 +70,9 @@ const CommunityMain = () => {
       setIsWeatherLoading(true);
       const results = await Promise.allSettled(
         CITIES.map((city) =>
-          axios.get(`${API_SERVER_URL}/community/weather?city=${city.code}`),
+          axios.get(
+            `${API_SERVER_URL}/api/community/weather?city=${city.code}`,
+          ),
         ),
       );
 

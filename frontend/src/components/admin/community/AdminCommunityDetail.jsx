@@ -22,7 +22,7 @@ const AdminCommunityDetail = ({ id, onClose, onDeleted }) => {
         setIsLoading(true);
         // count=true : 상세 조회 시 조회수(hit)를 증가시키기 위한 파라미터
         const res = await axios.get(
-          `${API_SERVER_URL}/community/detail/${id}?count=true`,
+          `${API_SERVER_URL}/api/community/detail/${id}?count=true`,
         );
         if (res.data?.community) setCommunity(res.data.community);
       } catch (err) {

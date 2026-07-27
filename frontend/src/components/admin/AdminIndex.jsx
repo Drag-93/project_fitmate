@@ -68,7 +68,7 @@ const AdminIndex = () => {
   /* ==================== 대시보드 조회 ==================== */
   const getDashboardData = async () => {
     try {
-      const res = await jwtAxios.get(`${API_SERVER_URL}/admin/dashboard`);
+      const res = await jwtAxios.get(`${API_SERVER_URL}/api/admin/dashboard`);
       setDashboardData({
         summary: res.data.summary || {
           totalMemberCount: 0,

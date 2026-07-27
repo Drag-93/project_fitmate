@@ -23,8 +23,12 @@ const CommunityLeft = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const tabRes = await axios.get(`${API_SERVER_URL}/community/tabList`);
-        const catRes = await axios.get(`${API_SERVER_URL}/community/category`);
+        const tabRes = await axios.get(
+          `${API_SERVER_URL}/api/community/tabList`,
+        );
+        const catRes = await axios.get(
+          `${API_SERVER_URL}/api/community/category`,
+        );
         setTabList(tabRes.data.result);
         setCategoryList(catRes.data.result);
       } catch (err) {

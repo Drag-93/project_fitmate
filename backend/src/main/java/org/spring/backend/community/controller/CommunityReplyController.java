@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/reply")
+@RequestMapping("/api/reply")
 public class CommunityReplyController {
     private final CommunityReplyService communityReplyService;
 

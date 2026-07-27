@@ -44,7 +44,7 @@ const ReplyList = ({ communityId, refreshKey }) => {
       setIsLoading(true);
       // count=false : 댓글 조회는 게시글 조회수에 영향을 주지 않음
       const res = await axios.get(
-        `${API_SERVER_URL}/reply/list/${communityId}?count=false`,
+        `${API_SERVER_URL}/api/reply/list/${communityId}?count=false`,
       );
       setReplies(res.data?.replies || res.data?.result || []);
     } catch (error) {

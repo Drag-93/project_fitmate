@@ -63,8 +63,8 @@ const AdminCommunity = () => {
     const fetchTcList = async () => {
       try {
         const [tabRes, catRes] = await Promise.all([
-          axios.get(`${API_SERVER_URL}/community/tabList`),
-          axios.get(`${API_SERVER_URL}/community/category`),
+          axios.get(`${API_SERVER_URL}/api/community/tabList`),
+          axios.get(`${API_SERVER_URL}/api/community/category`),
         ]);
         setTabs(tabRes.data.result || []);
         setCategories(catRes.data.result || []);
@@ -86,7 +86,7 @@ const AdminCommunity = () => {
   const fetchList = async () => {
     try {
       setIsLoading(true);
-      const res = await jwtAxios.get(`${API_SERVER_URL}/community/tclist`, {
+      const res = await jwtAxios.get(`${API_SERVER_URL}/api/community/tclist`, {
         params: {
           tabId: filters.tabId || undefined,
           categoryId: filters.categoryId || undefined,
@@ -144,14 +144,17 @@ const AdminCommunity = () => {
             : groupedByTab[tabId]?.page || 0;
 
         try {
-          const res = await jwtAxios.get(`${API_SERVER_URL}/community/tclist`, {
-            params: {
-              tabId,
-              keyword: filters.keyword || undefined,
-              page: currentPage,
-              size: GROUP_SIZE,
+          const res = await jwtAxios.get(
+            `${API_SERVER_URL}/api/community/tclist`,
+            {
+              params: {
+                tabId,
+                keyword: filters.keyword || undefined,
+                page: currentPage,
+                size: GROUP_SIZE,
+              },
             },
-          });
+          );
           const {
             content,
             totalPages: tp,
