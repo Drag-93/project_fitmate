@@ -12,7 +12,7 @@ const host = API_SERVER_URL; //백엔드 서버주소
 //액세스토큰 재 발급 함수
 const refreshJWT = async () => {
   const res = await axios.post(
-    `${host}/reissue`,
+    `${host}/api/reissue`,
     {},
     { withCredentials: true },
   );

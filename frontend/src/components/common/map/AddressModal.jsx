@@ -70,6 +70,7 @@ const AddressTest = () => {
 ====================================================================*/
 import React, { useEffect, useState } from "react";
 import CommonMap from "./CommonMap";
+import "../../../css/common/addressModal.css";
 
 const AddressModal = ({
   open,

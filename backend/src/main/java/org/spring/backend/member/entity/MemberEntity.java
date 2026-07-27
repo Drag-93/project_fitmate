@@ -98,4 +98,16 @@ public class MemberEntity extends BasicTime {
         .role(Role.MEMBER)
         .build();
   }
+  public static MemberEntity toInsertMemberAdminEntity(MemberDto memberDto, String encodePw) {
+    return MemberEntity.builder()
+        .userEmail(memberDto.getUserEmail())
+        .userPw(encodePw)
+        .userName(memberDto.getUserName())
+        .userAddress(memberDto.getUserAddress())
+        .userPhone(memberDto.getUserPhone())
+        .subscribe(0)
+        .profilePhoto(0)
+        .role(memberDto.getRole())
+        .build();
+  }
 }

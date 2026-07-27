@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import {
   loadMemberInit,
@@ -8,6 +8,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import "../../css/auth/login.css";
 import { API_SERVER_URL } from "../../apis/commonApi";
+import { useEffect } from "react";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -18,6 +19,8 @@ const Login = () => {
   const { memberData } = useSelector((state) => state.loginSlice);
   //이메일의 존재유무에 따라 true, false
   const isLogin = !!memberData?.result?.userEmail;
+  //현재 로그인 동작을 수행 중인지 추적하는 Flag (Ref)
+  const isLoggingIn = useRef(false);
 
   const [userEmail, setUserEmail] = useState("");
   const [userPw, setuserPw] = useState("");
@@ -43,6 +46,8 @@ const Login = () => {
     }
 
     try {
+      //로그인 함수 실행 시 true로 설정
+      isLoggingIn.current = true;
       const resultAction = await dispatch(
         loginPostAsync({ userEmail, userPw }),
       ).unwrap();
@@ -58,68 +63,69 @@ const Login = () => {
       console.error("로그인 실패:", err);
       alert("로그인에 실패하였습니다. 아이디 또는 비밀번호를 확인해주세요.");
       setuserPw("");
+      // 실패 시 다시 false로 초기화
+      isLoggingIn.current = false;
     }
   };
-  const logoutFn = () => {
-    dispatch(logout());
-    alert("로그아웃 되었습니다.");
-    navigate("/");
-  };
+  useEffect(() => {
+    if (isLogin && !isLoggingIn.current) {
+      alert("이미 로그인된 상태입니다.");
+      navigate("/", { replace: true });
+    }
+  }, [isLogin, navigate]);
+  if (isLogin) {
+    return null;
+  }
   return (
-    <>
-      <div className="login">
-        <div className="login-con">
-          <ul>
-            {isLogin ? (
-              <>
-                <li>로그인상태입니다.</li>
-                <button onClick={logoutFn}>로그아웃</button>
-              </>
-            ) : (
-              <>
-                <li>Login</li>
-                <li>
-                  <input
-                    type="email"
-                    name="userEmail"
-                    id="userEmail"
-                    placeholder="이메일을 입력해주세요"
-                    value={userEmail}
-                    onChange={onLoginFnId}
-                  />
-                </li>
-                <li>
-                  <input
-                    type="password"
-                    name="userPw"
-                    id="userPw"
-                    placeholder="비밀번호를 입력해주세요"
-                    value={userPw}
-                    onChange={onLoginFnPw}
-                    onKeyDown={(e) => e.key === "Enter" && onLoginFn()} //엔터키 입력시 로그인
-                  />
-                </li>
-                <li>
-                  <button onClick={onLoginFn}>로그인</button>
-                  <Link to="/auth/join">회원가입</Link>
-                </li>
-                <li>
-                  <Link to={`${API_SERVER_URL}/oauth2/authorization/google`}>
-                    <img src="" alt="구글로그인" />
-                  </Link>
-                  <Link to={`${API_SERVER_URL}/oauth2/authorization/naver`}>
-                    <img src="" alt="네이버로그인" />
-                  </Link>
-                  <Link to={`${API_SERVER_URL}/oauth2/authorization/kakao`}>
-                    <img src="" alt="카카오로그인" />
-                  </Link>
-                </li>
-              </>
-            )}
-          </ul>
-        </div>
+    <div className="login">
+      <div className="login-header">
+        <Link to="/">
+          <h1>
+            <img src="" alt="logo" />
+          </h1>
+        </Link>
       </div>
-    </>
+      <div className="login-con">
+        <ul>
+          <li>
+            <input
+              type="email"
+              name="userEmail"
+              id="userEmail"
+              placeholder="이메일을 입력해주세요"
+              value={userEmail}
+              onChange={onLoginFnId}
+            />
+          </li>
+          <li>
+            <input
+              type="password"
+              name="userPw"
+              id="userPw"
+              placeholder="비밀번호를 입력해주세요"
+              value={userPw}
+              onChange={onLoginFnPw}
+              onKeyDown={(e) => e.key === "Enter" && onLoginFn()} //엔터키 입력시 로그인
+            />
+          </li>
+          <li>
+            <button onClick={onLoginFn}>로그인</button>
+            <Link to="/auth/join">회원가입</Link>
+          </li>
+          <li>
+            <Link to={`${API_SERVER_URL}/oauth2/authorization/google`}>
+              <img src="/images/auth/google.png" alt="구글로그인" />
+            </Link>
+            <Link to={`${API_SERVER_URL}/oauth2/authorization/naver`}>
+              <img src="/images/auth/naver.png" alt="네이버로그인" />
+            </Link>
+            <Link to={`${API_SERVER_URL}/oauth2/authorization/kakao`}>
+              <img src="/images/auth/kakao.png" alt="카카오로그인" />
+            </Link>
+          </li>
+        </ul>
+      </div>
+    </div>
   );
 };
 
