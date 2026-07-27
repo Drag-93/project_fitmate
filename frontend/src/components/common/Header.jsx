@@ -4,6 +4,7 @@ import "../../css/common/Header.css";
 import { useDispatch, useSelector } from "react-redux";
 import loginSlice, { logout, logoutAsync } from "../../store/slices/loginSlice";
 import axios from "axios";
+import { API_SERVER_URL } from "../../apis/commonApi";
 
 const Header = () => {
   //변수 선언
@@ -41,7 +42,7 @@ const Header = () => {
   useEffect(() => {
     const fetchCommunityTabs = async () => {
       try {
-        const res = await axios.get("http://localhost:8090/community/tabList");
+        const res = await axios.get(`${API_SERVER_URL}/community/tabList`);
         setCommunityTabs(res.data?.result || []);
       } catch (err) {
         console.error("커뮤니티 탭 로딩 실패", err);
@@ -49,17 +50,19 @@ const Header = () => {
     };
     fetchCommunityTabs();
   }, []);
+  // 탭 이름으로 FAQ 탭 조회 - 탭 이름 변경되면 변경!
+  const faqTab = communityTabs.find((tab) => tab.tabName === "건의게시판");
 
-  //header 검색기능
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (!keyword.trim()) return;
+  //header 검색기능 -> 나중에 추가
+  // const handleSearch = (e) => {
+  //   e.preventDefault();
+  //   if (!keyword.trim()) return;
 
-    // 검색 페이지로 검색어를 포함해 이동
-    setIsSearchOpen(false);
-    navigate(`/search?search=${encodeURIComponent(keyword)}`); //검색어 encoding ->데이터에 포함된 특수문자나 공백이 URL의 구조를 깨뜨리거나 변조되는 것을 방지
-    setKeyword(""); // 입력창 비우기
-  };
+  //   // 검색 페이지로 검색어를 포함해 이동
+  //   setIsSearchOpen(false);
+  //   navigate(`/search?search=${encodeURIComponent(keyword)}`); //검색어 encoding ->데이터에 포함된 특수문자나 공백이 URL의 구조를 깨뜨리거나 변조되는 것을 방지
+  //   setKeyword(""); // 입력창 비우기
+  // };
   return (
     <>
       <div className="header" onMouseLeave={() => setActiveMenu(null)}>
@@ -73,6 +76,13 @@ const Header = () => {
                 <li onMouseEnter={() => setActiveMenu("community")}>
                   <Link to={`/community`}>게시판</Link>
                 </li>
+                <li>
+                  {faqTab ? (
+                    <Link to={`/community/tab/${faqTab.id}`}>FAQ</Link>
+                  ) : (
+                    <span>FAQ</span>
+                  )}
+                </li>
               </ul>
             </div>
             <div className="gnb-logo">
@@ -80,7 +90,8 @@ const Header = () => {
                 <h1>logo</h1>
               </Link>
             </div>
-            <div className={`header_search ${isSearchOpen ? "active" : ""}`}>
+            {/* 검색기능 -> 나중에 추가 */}
+            {/* <div className={`header_search ${isSearchOpen ? "active" : ""}`}>
               <form className="search-bar" onSubmit={handleSearch}>
                 <div className="search_box">
                   <input
@@ -103,10 +114,11 @@ const Header = () => {
                   ×
                 </span>
               </form>
-            </div>
+            </div> */}
             <div className="gnb-right">
               <ul>
-                <span
+                {/* 검색기능용 돋보기 아이콘 */}
+                {/* <span
                   className="header_auth_btn header_search_btn"
                   onClick={() => setIsSearchOpen(true)}
                 >
@@ -115,7 +127,7 @@ const Header = () => {
                     alt="돋보기 아이콘"
                     style={{ width: "25px", height: "25px" }}
                   />
-                </span>
+                </span> */}
                 {!isLogin && (
                   <>
                     <li>

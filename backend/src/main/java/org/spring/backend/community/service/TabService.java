@@ -27,4 +27,5 @@ public interface TabService {
 
   // 전체 카테고리 목록 조회 (탭 구분 없이 전체, 프론트에서 tabId로 클라이언트단 필터링)
   List<CategoryDto> categoryList();
+
 }
