@@ -1,6 +1,7 @@
 package org.spring.backend.member.service;
 
 import org.spring.backend.member.dto.MemberDto;
+import org.spring.backend.member.enumtype.Role;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -9,13 +10,14 @@ import java.util.List;
 
 public interface MemberService {
     void insertMember(MemberDto memberDto);
+    void insertAdminMember(MemberDto memberDto);
 
     boolean emailCheck(String userEmail);
 
     List<MemberDto> memberList();
 
     //관리자페이지 회원관리 시 사용할 멤버리스트
-    Page<MemberDto> memberList(Pageable pageable, String subject, String search);
+    Page<MemberDto> memberList(Pageable pageable, String subject, String search, Role role);
     //트레이너 회원관리 시 사용할 멤버리스트
     Page<MemberDto> memberListSummary(Pageable pageable, String subject, String search);
 
