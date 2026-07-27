@@ -1,69 +1,79 @@
-/* ==========================================
-   1. 전체 컨테이너 및 섹션 공통
-   ========================================== */
+@import url("../common/reset.css");
+
+/* ===========================
+   1. Outer Wrappers (MemberDetail.jsx 구조)
+=========================== */
+
+.memberDetail {
+  width: 100%;
+  padding: 40px 16px;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.memberDetail-con {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.memberInfo {
+  width: 100%;
+}
+
+/* ===========================
+   2. Inner Card Containers
+=========================== */
+
 .memberDetailContainer,
 .memberUpdateContainer {
-  max-width: 768px;
-  margin: 0 auto;
-  padding: 24px;
+  width: 100%;
+  padding: 32px 24px;
   background-color: #ffffff;
   border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e8e8e8;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
 }
 
-.infoSection {
-  background-color: #f8f9fa;
-  border: 1px solid #e9ecef;
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 24px;
-}
+/* ===========================
+   3. Profile Header & Photo Edit
+=========================== */
 
-.infoSection h3 {
-  font-size: 16px;
-  font-weight: 700;
-  color: #343a40;
-  margin-top: 0;
-  margin-bottom: 16px;
-  border-bottom: 2px solid #dee2e6;
-  padding-bottom: 8px;
-}
-
-/* ==========================================
-   2. 프로필 상단 영역 (사진 & 이름)
-   ========================================== */
 .profileHeader {
   display: flex;
   align-items: center;
   gap: 20px;
   padding-bottom: 24px;
+  border-bottom: 1px solid #f0f0f0;
   margin-bottom: 24px;
-  border-bottom: 1px solid #f1f3f5;
 }
 
-.profilePhotoEdit,
+.memberUpdateContainer .profileHeader {
+  justify-content: center;
+}
+
 .profilePhoto {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid #e8e8e8;
+  flex-shrink: 0;
+  background-color: #f8f9fa;
 }
 
-.profile-preview img,
 .profilePhoto img {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  border: 3px solid #e9ecef;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .profileName h1 {
+  margin: 0 0 6px 0;
   font-size: 22px;
   font-weight: 700;
-  color: #212529;
-  margin: 0 0 6px 0;
+  color: #222;
 }
 
 .subscribeBadge {
@@ -72,244 +82,354 @@
   font-size: 12px;
   font-weight: 600;
   border-radius: 20px;
-  background-color: #e7f5ff;
-  color: #1c7ed6;
+  background-color: #eef2ff;
+  color: #4b7bec;
 }
 
-/* 파일 업로드 버튼 커스텀 */
+.profilePhotoEdit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.profile-preview {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid #e8e8e8;
+  background-color: #f8f9fa;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.profile-preview img.prev-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .fileInputArea input[type="file"] {
   display: none;
 }
 
 .fileLabel {
   display: inline-block;
-  padding: 6px 12px;
+  padding: 6px 14px;
   font-size: 13px;
-  font-weight: 500;
-  color: #495057;
-  background-color: #e9ecef;
-  border-radius: 6px;
+  font-weight: 600;
+  color: #4b7bec;
+  background-color: #eef2ff;
+  border-radius: 20px;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s ease;
 }
 
 .fileLabel:hover {
-  background-color: #dee2e6;
+  background-color: #4b7bec;
+  color: #ffffff;
 }
 
-/* ==========================================
-   3. 정보 그리드 (일반 조회 / 수정 폼 공통)
-   ========================================== */
+/* ===========================
+   4. View Toggle Tab
+=========================== */
+
+.viewToggleTab {
+  display: flex;
+  background-color: #f1f3f5;
+  padding: 4px;
+  border-radius: 10px;
+  margin-bottom: 28px;
+  gap: 4px;
+}
+
+.viewToggleTab button {
+  flex: 1;
+  padding: 10px 0;
+  border: none;
+  background: transparent;
+  color: #666;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.viewToggleTab button.active {
+  background-color: #ffffff;
+  color: #4b7bec;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.viewToggleTab button:hover:not(.active) {
+  color: #333;
+}
+
+/* ===========================
+   5. Info Section & Grid (수정 및 주소 버튼 추가 적용)
+=========================== */
+
+.infoSection {
+  margin-bottom: 28px;
+}
+
+.infoSection h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 14px;
+  padding-left: 4px;
+}
+
 .infoGrid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 2열 배치 */
-  gap: 16px 20px;
-  list-style: none;
-  padding: 0;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
   margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .infoGrid li {
+  background-color: #f8f9fa;
+  padding: 12px 16px;
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
+  gap: 6px;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
 }
 
 .infoGrid li.fullWidth {
-  grid-column: span 2; /* 주소 등 길게 사용할 항목 */
+  grid-column: span 2;
+  position: relative; /* 주소찾기 버튼 배치를 위한 상대 경로 기준점 */
 }
 
-/* 일반 보기 모드 텍스트 */
+/* [상세보기 텍스트 스타일] */
 .infoGrid .label {
   font-size: 12px;
-  font-weight: 600;
-  color: #868e96;
-  margin-bottom: 4px;
+  color: #888;
+  font-weight: 500;
 }
 
 .infoGrid .value {
   font-size: 15px;
-  font-weight: 500;
-  color: #212529;
-  word-break: break-all;
+  color: #222;
+  font-weight: 600;
 }
 
-/* 수정 모드 Input 필드 */
-.infoGrid label {
+/* [수정 페이지 폼 스타일] */
+.memberUpdateContainer .infoGrid li:focus-within {
+  background-color: #ffffff;
+  border-color: #4b7bec;
+  box-shadow: 0 2px 8px rgba(75, 123, 236, 0.12);
+}
+
+.memberUpdateContainer .infoGrid li > span:first-child,
+.memberUpdateContainer .infoGrid li > label {
   font-size: 12px;
+  color: #888;
   font-weight: 600;
-  color: #495057;
-  margin-bottom: 6px;
-}
-
-.infoGrid input[type="text"],
-.infoGrid input[type="email"],
-.infoGrid input[type="number"] {
-  width: 100%;
-  padding: 10px 12px;
-  font-size: 14px;
-  border: 1px solid #ced4da;
-  border-radius: 6px;
-  box-sizing: border-box;
-  outline: none;
-  transition: border-color 0.2s;
-}
-
-.infoGrid input:focus {
-  border-color: #339af0;
-  box-shadow: 0 0 0 3px rgba(51, 154, 240, 0.15);
-}
-
-/* ==========================================
-   관심사 Dropdown (<select>) 전용 스타일
-   ========================================== */
-.infoGrid select {
-  width: 100%;
-  padding: 10px 12px;
-  font-size: 14px;
-  color: #212529;
-  background-color: #ffffff;
-  border: 1px solid #ced4da;
-  border-radius: 6px;
-  box-sizing: border-box;
-  outline: none;
   cursor: pointer;
-  transition:
-    border-color 0.2s,
-    box-shadow 0.2s;
-
-  /* 기본 화살표 디자인 깔끔하게 가다듬기 */
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%3868e96' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  background-size: 16px;
-  padding-right: 36px; /* 화살표와 텍스트 겹침 방지 */
 }
 
-/* 포커스 되었을 때 (클릭 시) */
-.infoGrid select:focus {
-  border-color: #339af0;
-  box-shadow: 0 0 0 3px rgba(51, 154, 240, 0.15);
-}
-
-/* 옵션(드롭다운 리스트) 스타일 */
-.infoGrid select option {
-  padding: 8px;
-  color: #212529;
-  background-color: #ffffff;
-}
-
-/* 선택 안 되었을 때("없음" 또는 비어있을 때) 글자색 옅게 처리 */
-.infoGrid select[value=""] {
-  color: #868e96;
-}
-
-/* ==========================================
-   4. 빠른 바로가기 링크 (일반 보기 모드 전용)
-   ========================================== */
-.linkList {
+/* 추가: 주소 찾기 버튼 스타일 및 정렬 */
+.memberUpdateContainer .infoGrid li.fullWidth {
   display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  list-style: none;
-  padding: 0;
-  margin: 0;
+  flex-direction: column;
 }
 
-.linkList a {
-  display: inline-block;
-  padding: 8px 16px;
-  background-color: #ffffff;
-  border: 1px solid #dee2e6;
-  border-radius: 8px;
-  color: #495057;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 500;
-  transition: all 0.2s;
-}
-
-.linkList a:hover {
-  background-color: #f1f3f5;
-  color: #212529;
-}
-
-/* ==========================================
-   5. 하단 버튼 영역 (공통)
-   ========================================== */
-.buttonArea {
+/* 주소 라벨 영역과 버튼을 가로 정렬하기 위한 상단 영역 처리 */
+.memberUpdateContainer .infoGrid li.fullWidth > span:first-child {
   display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 24px;
-  padding-top: 16px;
-  border-top: 1px solid #f1f3f5;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2px;
 }
 
-.buttonArea button {
-  padding: 10px 18px;
-  font-size: 14px;
+.memberUpdateContainer .infoGrid li.fullWidth button[type="button"] {
+  align-self: flex-end;
+  margin-top: -22px;
+  margin-bottom: 4px;
+  padding: 4px 10px;
+  font-size: 11px;
   font-weight: 600;
-  border-radius: 8px;
-  border: none;
+  color: #4b7bec;
+  background-color: #eef2ff;
+  border: 1px solid #4b7bec;
+  border-radius: 6px;
   cursor: pointer;
-  transition:
-    background 0.2s,
-    transform 0.1s;
+  transition: all 0.2s ease;
 }
 
-.buttonArea button:active {
-  transform: scale(0.98);
-}
-
-/* 버튼 개별 색상 지정 */
-.scheduleBtn,
-.saveBtn {
-  background-color: #339af0;
+.memberUpdateContainer .infoGrid li.fullWidth button[type="button"]:hover {
+  background-color: #4b7bec;
   color: #ffffff;
 }
 
-.scheduleBtn:hover,
-.saveBtn:hover {
-  background-color: #228be6;
+.memberUpdateContainer .infoGrid input[type="text"],
+.memberUpdateContainer .infoGrid input[type="email"],
+.memberUpdateContainer .infoGrid input[type="number"],
+.memberUpdateContainer .infoGrid select {
+  width: 100%;
+  height: 28px;
+  border: none;
+  background: transparent;
+  font-size: 15px;
+  font-weight: 600;
+  color: #222;
+  outline: none;
+  box-sizing: border-box;
 }
 
+.memberUpdateContainer .infoGrid input::placeholder {
+  color: #ccc;
+  font-weight: 400;
+}
+
+.memberUpdateContainer .infoGrid select {
+  cursor: pointer;
+}
+
+/* ===========================
+   6. Link List (Quick Links)
+=========================== */
+
+.linkList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.linkList li a {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  color: #333;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.linkList li a::after {
+  content: "›";
+  font-size: 18px;
+  color: #aaa;
+}
+
+.linkList li a:hover {
+  background-color: #eef2ff;
+  color: #4b7bec;
+}
+
+.linkList li a:hover::after {
+  color: #4b7bec;
+}
+
+/* ===========================
+   7. Button Area
+=========================== */
+
+.buttonArea {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.memberUpdateContainer .buttonArea {
+  grid-template-columns: 2fr 1fr 1fr;
+}
+
+.buttonArea button {
+  height: 46px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  border: 1px solid transparent;
+}
+
+.scheduleBtn,
 .pwBtn,
-.updateBtn,
 .cancelBtn {
   background-color: #f1f3f5;
   color: #495057;
 }
 
+.scheduleBtn:hover,
 .pwBtn:hover,
-.updateBtn:hover,
 .cancelBtn:hover {
   background-color: #e9ecef;
 }
 
+.updateBtn,
+.saveBtn {
+  background-color: #4b7bec;
+  color: #ffffff;
+}
+
+.updateBtn:hover,
+.saveBtn:hover {
+  background-color: #3867d6;
+  box-shadow: 0 4px 12px rgba(75, 123, 236, 0.25);
+}
+
 .deleteBtn {
-  background-color: #ffc9c9;
-  color: #c92a2a;
+  background-color: #ffffff;
+  border-color: #ff6b6b !important;
+  color: #ff6b6b;
 }
 
 .deleteBtn:hover {
-  background-color: #ffa8a8;
+  background-color: #fff5f5;
 }
 
-/* 모바일 대응 (반응형) */
+/* ===========================
+   8. Responsive
+=========================== */
+
 @media (max-width: 576px) {
-  .infoGrid {
-    grid-template-columns: 1fr; /* 모바일에선 1열로 세로 정렬 */
+  .memberDetail {
+    padding: 20px 12px;
   }
+
+  .memberDetailContainer,
+  .memberUpdateContainer {
+    padding: 24px 16px;
+  }
+
+  .profilePhoto {
+    width: 64px;
+    height: 64px;
+  }
+
+  .profileName h1 {
+    font-size: 18px;
+  }
+
+  .infoGrid {
+    grid-template-columns: 1fr;
+  }
+
   .infoGrid li.fullWidth {
     grid-column: span 1;
   }
-  .buttonArea {
-    flex-direction: column;
-  }
-  .buttonArea button {
-    width: 100%;
+
+  .buttonArea,
+  .memberUpdateContainer .buttonArea {
+    grid-template-columns: 1fr;
   }
 }

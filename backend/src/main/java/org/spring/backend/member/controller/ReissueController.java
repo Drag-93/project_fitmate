@@ -24,7 +24,7 @@ public class ReissueController {
 
     private final TokenValidationService tokenValidationService;
 
-    @PostMapping("/reissue")
+    @PostMapping("/api/reissue")
     @Transactional
     public ResponseEntity<?> reissue(HttpServletRequest request,
                                      HttpServletResponse response){

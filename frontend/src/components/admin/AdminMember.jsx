@@ -9,10 +9,10 @@ const AdminMember = () => {
     <>
       <div className="admin-member">
         <div className="admin-member-con">
-          {memberData?.result?.role === "ADMIN" ? (
+          {memberData?.result?.role !== "TRAINER" ? (
             <AdminMemberView />
           ) : (
-            memberData?.result?.role === "TRAINER" && <TrainerMemberView />
+            <TrainerMemberView />
           )}
         </div>
       </div>

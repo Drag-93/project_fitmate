@@ -1,16 +1,26 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { API_SERVER_URL } from "../../apis/commonApi";
 import { Link, useNavigate } from "react-router-dom";
 import "../../css/auth/join.css";
+import { useSelector } from "react-redux";
+import AddressModal from "../common/map/AddressModal";
 const initUserData = {
   userEmail: "",
   userPw: "",
   userName: "",
   gender: "MALE",
+  userAddress: "",
+  userPhone: "",
+  interest: "",
 };
 const Join = () => {
   const navigate = useNavigate();
+
+  const { memberData } = useSelector((state) => state.loginSlice);
+  //이메일의 존재유무에 따라 true, false
+  const isLogin = !!memberData?.result?.userEmail;
+
   // 회원가입정보를 담게될 변수
   const [joinData, setJoinData] = useState(initUserData);
   const onChangeFn = (e) => {
@@ -40,10 +50,11 @@ const Join = () => {
       return;
     }
     const formData = new FormData();
-    formData.append("userEmail", joinData.userEmail);
-    formData.append("userPw", joinData.userPw);
-    formData.append("userName", joinData.userName);
-
+    // joinData 객체의 모든 [key, value] 쌍을 반복문으로 추가
+    Object.entries(joinData).forEach(([key, value]) => {
+      // null이나 undefined가 들어가는 것을 방지
+      formData.append(key, value ?? "");
+    });
     try {
       const res = await axios.post(
         `${API_SERVER_URL}/api/member/join`,
@@ -92,12 +103,49 @@ const Join = () => {
       alert("서버 연결에 실패하였습니다.");
     }
   };
+
+  // 주소찾기 모달 열기 여부
+  const [open, setOpen] = useState(false);
+
+  // AddressModal에서 선택한 주소 반환
+  // 원하는 CRUD 폼에 맞게 자유롭게 저장하여 사용
+  const handleSelect = ({ address }) => {
+    setJoinData((prev) => ({
+      ...prev,
+      userAddress: address, // 기본 주소
+    }));
+  };
+
+  useEffect(() => {
+    if (isLogin) {
+      alert("이미 로그인된 상태입니다.");
+      navigate("/"); // 메인 페이지로 리다이렉트
+    }
+  }, [isLogin]);
+  if (isLogin) {
+    return null;
+  }
   return (
     <>
+      <AddressModal
+        open={open}
+        onClose={() => setOpen(false)}
+        onSelect={handleSelect}
+        mapWidth="100%"
+        mapHeight="400px"
+        mapLevel={3}
+      />
+
       <div className="join">
+        <div className="join-header">
+          <Link to="/">
+            <h1>
+              <img src="" alt="logo" />
+            </h1>
+          </Link>
+        </div>
         <div className="join-con">
           <ul>
-            <li>Join</li>
             <li>
               <input
                 type="email"
@@ -137,6 +185,44 @@ const Join = () => {
                 value={joinData.userName}
                 onChange={onChangeFn}
               />
+            </li>
+            <li className="address-item">
+              <button type="button" onClick={() => setOpen(true)}>
+                주소 찾기
+              </button>
+              <input
+                type="text"
+                name="userAddress"
+                id="userAddress"
+                placeholder="주소를 입력해주세요"
+                value={joinData.userAddress || ""}
+                onChange={onChangeFn}
+              />
+            </li>
+            <li>
+              <input
+                type="text"
+                name="userPhone"
+                id="userPhone"
+                placeholder="핸드폰번호를 입력해주세요"
+                value={joinData.userPhone}
+                onChange={onChangeFn}
+              />
+            </li>
+            <li>
+              <span>
+                <select
+                  name="interest"
+                  id="interest"
+                  value={joinData.interest}
+                  onChange={onChangeFn}
+                >
+                  <option value="">없음</option>
+                  <option value="DIET">다이어트</option>
+                  <option value="WORKOUT">운동</option>
+                  <option value="HEALTH">건강관리</option>
+                </select>
+              </span>
             </li>
             <li>
               <button onClick={onJoinFn}>회원가입</button>
