@@ -399,6 +399,9 @@ const AdminCommunity = () => {
     onToggleSelect,
     onToggleSelectAll,
     showTabColumn,
+    totalElements: rowTotalElements = 0,
+    page: rowPage = 0,
+    size: rowSize = 20,
   }) => {
     if (loading) {
       return <p>목록을 불러오는 중입니다</p>;
@@ -433,46 +436,50 @@ const AdminCommunity = () => {
               <td colSpan={showTabColumn ? 9 : 8}>게시글이 없습니다</td>
             </tr>
           ) : (
-            rows.map((item) => (
-              <tr key={item.id}>
-                <td>
-                  <input
-                    type="checkbox"
-                    checked={rowSelectedIds.includes(item.id)}
-                    onChange={() => onToggleSelect(item.id)}
-                  />
-                </td>
-                <td>{item.id}</td>
-                {showTabColumn && <td>{item.tabName}</td>}
-                <td>{item.categoryName}</td>
-                <td
-                  className="admin-title-cell"
-                  onClick={() => setDetailId(item.id)} // 제목 클릭 시 상세보기 모달 오픈
-                >
-                  {item.thumbnail ? (
-                    <img
-                      className="board-item-thumb"
-                      src={item.thumbnail}
-                      alt=""
+            rows.map((item, idx) => {
+              // 최신 글이 가장 큰 번호를 갖도록 계산 (전체 개수 - 이전 페이지들 - 현재 행 순서)
+              const displayNo = rowTotalElements - rowPage * rowSize - idx;
+              return (
+                <tr key={item.id}>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={rowSelectedIds.includes(item.id)}
+                      onChange={() => onToggleSelect(item.id)}
                     />
-                  ) : (
-                    <div className="board-item-thumb board-item-thumb-empty" />
-                  )}
-                  <p>{item.title}</p>
-                </td>
-                <td>{item.userName}</td>
-                <td>{item.hit}</td>
-                <td>{item.createTime?.split("T")[0] || ""}</td>
-                <td>
-                  <button
-                    type="button"
-                    onClick={() => handleDeleteOne(item.id)}
+                  </td>
+                  <td>{displayNo}</td>
+                  {showTabColumn && <td>{item.tabName}</td>}
+                  <td>{item.categoryName}</td>
+                  <td
+                    className="admin-title-cell"
+                    onClick={() => setDetailId(item.id)} // 제목 클릭 시 상세보기 모달 오픈
                   >
-                    삭제
-                  </button>
-                </td>
-              </tr>
-            ))
+                    {/* {item.thumbnail ? (
+                      <img
+                        className="board-item-thumb"
+                        src={item.thumbnail}
+                        alt=""
+                      />
+                    ) : (
+                      <div className="board-item-thumb board-item-thumb-empty" />
+                    )} */}
+                    <td>{item.title}</td>
+                  </td>
+                  <td>{item.userName}</td>
+                  <td>{item.hit}</td>
+                  <td>{item.createTime?.split("T")[0] || ""}</td>
+                  <td>
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteOne(item.id)}
+                    >
+                      삭제
+                    </button>
+                  </td>
+                </tr>
+              );
+            })
           )}
         </tbody>
       </table>
@@ -556,6 +563,9 @@ const AdminCommunity = () => {
               onToggleSelect: toggleSelect,
               onToggleSelectAll: toggleSelectAll,
               showTabColumn: false,
+              totalElements,
+              page,
+              size,
             })}
 
             {/* 페이지가 2개 이상일 때만 페이지네이션 컴포넌트 표시 */}
@@ -620,6 +630,9 @@ const AdminCommunity = () => {
                     onToggleSelect: (id) => toggleGroupSelect(tab.id, id),
                     onToggleSelectAll: (e) => toggleGroupSelectAll(tab.id, e),
                     showTabColumn: false,
+                    totalElements: group.totalElements,
+                    page: group.page,
+                    size: GROUP_SIZE,
                   })}
 
                   {/* 이 탭의 게시글이 GROUP_SIZE를 넘으면 탭별 페이지네이션 표시 */}
