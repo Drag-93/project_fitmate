@@ -145,5 +145,19 @@ public class MainServiceImpl implements MainService {
                 .build();
     }
 
+    // 게시판 탭별 베스트 게시글 조회
+    @Override
+    @Transactional(readOnly = true)
+    public List<CommunityDto> getBestCommunityList(String tabName) {
+
+        return communityRepository
+                .findTop5ByTabNameOrderByHitDesc(tabName)
+                .stream()
+                .map(entity -> CommunityDto.builder()
+                        .id(entity.getId())
+                        .title(entity.getTitle())
+                        .build())
+                .toList();
+    }
 
 }
