@@ -138,14 +138,12 @@ const Header = () => {
                     </li>
                   </>
                 )}
-                {isLogin && memberData?.result?.role === "ADMIN" && (
-                  // user?.userEmail === "test@email.com" && (
+                {isLogin && memberData?.result?.role !== "MEMBER" && (
                   <li>
                     <Link to="/admin">관리자</Link>
                   </li>
                 )}
                 {isLogin && memberData?.result?.role !== "ADMIN" && (
-                  // user?.userEmail === "test@email.com" && (
                   <li>
                     <Link to="/mypage">{memberData?.result?.userName}님</Link>
                   </li>
