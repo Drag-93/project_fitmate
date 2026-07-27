@@ -50,8 +50,8 @@ const Header = () => {
           <div className="nav-wrap">
             <div className="gnb-left">
               <ul>
-                <li onMouseEnter={() => setActiveMenu("store")}>
-                  <Link to={`/store`}>스토어</Link>
+                <li onMouseEnter={() => setActiveMenu("shop")}>
+                  <Link to={`/shop`}>스토어</Link>
                 </li>
                 <li onMouseEnter={() => setActiveMenu("community")}>
                   <Link to={`/community`}>게시판</Link>
@@ -141,16 +141,16 @@ const Header = () => {
             </div>
           </div>
           <div className={`header_depth ${activeMenu ? "active" : ""}`}>
-            {activeMenu === "store" && (
+            {activeMenu === "shop" && (
               <ul>
                 <li>
-                  <Link to={`/store/index`}>스토어</Link>
+                  <Link to={`/shop/index`}>스토어</Link>
                   <Link to="/products?productType=GOODS">운동기구</Link>
                   <Link to="/products?productType=GOODS">식품</Link>
                   <Link to="/products?productType=GOODS">스토어3</Link>
                 </li>
                 <li>
-                  <Link to={`/store/index`}>구독상품</Link>
+                  <Link to={`/shop/index`}>구독상품</Link>
                   <Link to="/products/premium">FitMate Plus+</Link>
                   <Link to="/products?productType=GYM">헬스장</Link>
                   <Link to="/products?productType=PT">PT</Link>
