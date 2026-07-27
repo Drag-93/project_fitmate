@@ -142,6 +142,7 @@ const toAdminRouter = () => {
       ),
     },
     {
+      // 탭 생성 페이지
       path: "tabInsert",
       element: (
         <Suspense fallback={Loading}>
@@ -150,6 +151,7 @@ const toAdminRouter = () => {
       ),
     },
     {
+      // 탭 상세/수정 페이지
       path: "tabDetail/:id",
       element: (
         <Suspense fallback={Loading}>
@@ -175,7 +177,8 @@ const toAdminRouter = () => {
       ),
     },
     {
-      path: "comumnity/detail/:id",
+      // 관리자 게시글 상세 페이지
+      path: "community/detail/:id",
       element: (
         <Suspense fallback={Loading}>
           <AdminCommunityDetailPage />
@@ -183,7 +186,8 @@ const toAdminRouter = () => {
       ),
     },
     {
-      path: "comumnity/insert",
+      // 관리자 공지사항 작성 페이지
+      path: "community/insert",
       element: (
         <Suspense fallback={Loading}>
           <AdminNoticeWritePage />

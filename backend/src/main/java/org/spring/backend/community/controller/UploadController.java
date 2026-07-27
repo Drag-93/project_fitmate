@@ -17,6 +17,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 게시글 본문(TiptapEditor)에 삽입되는 이미지 업로드 전용 컨트롤러
+ * 프론트: TiptapEditor.jsx의 handleImageUpload → POST /api/upload/image
+ * - 업로드된 파일을 디스크에 저장하고, 그 파일에 접근 가능한 URL을 반환
+ * - 반환된 URL은 에디터가 <img src="..."> 형태로 본문에 바로 삽입함
+ */
 @RestController
 @RequestMapping("/api/upload")
 @Slf4j
@@ -30,6 +36,12 @@ public class UploadController {
     // 기존 WebConfig가 매핑하는 URL 프리픽스와 동일하게 맞춤
     private static final String URL_PREFIX = "/upload/community/";
 
+    /**
+     * 이미지 업로드
+     * - 파일명 충돌 방지를 위해 UUID를 접두사로 붙여 저장 (originalFilename 그대로 쓰지 않음)
+     * - 저장 성공 시 { url: "/upload/community/{uuid}-{원본파일명}" } 형태로 응답
+     *   (프론트는 이 url 앞에 API_SERVER_URL을 붙여 <img src>로 사용)
+     */
     @PostMapping("/image")
     @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<Map<String, String>> uploadImage(
@@ -42,12 +54,14 @@ public class UploadController {
         try {
             String uploadDir = ensureTrailingSlash(stripFilePrefix(communityPath));
 
+            // 저장 디렉토리가 없으면 생성
             File dir = new File(uploadDir);
             if (!dir.exists()) {
                 dir.mkdirs();
             }
 
             String originalFilename = file.getOriginalFilename();
+            // UUID + 원본 파일명으로 새 파일명 생성 (동일 파일명 덮어쓰기 방지)
             String newFileName = UUID.randomUUID() + "-" + originalFilename;
 
             File destination = new File(uploadDir, newFileName);

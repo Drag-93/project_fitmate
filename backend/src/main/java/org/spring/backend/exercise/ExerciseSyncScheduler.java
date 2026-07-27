@@ -49,3 +49,9 @@
 //        log.info("ExerciseSyncScheduler: 재동기화 완료");
 //    }
 //}
+//
+// ⚠️ 정리 추천: 이 파일은 전체가 주석 처리되어 있어 현재 아무 동작도 하지 않는 죽은 코드입니다.
+// - 스케줄러 기능을 쓸 계획이 없다면: 이 파일을 삭제하고, ExerciseRepository.findDistinctTargets()도
+//   (이 스케줄러 전용 메서드이므로) 함께 정리하는 것을 권장합니다.
+// - 나중에 정말 자동 재동기화가 필요해지면: 위 주석을 해제하고 SchedulingConfig의 @EnableScheduling이
+//   실제로 적용되고 있는지 확인한 뒤 사용하면 됩니다.

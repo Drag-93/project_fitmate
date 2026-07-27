@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../../css/common/Header.css";
 import { useDispatch, useSelector } from "react-redux";
 import loginSlice, { logout, logoutAsync } from "../../store/slices/loginSlice";
+import axios from "axios";
+
 const Header = () => {
   //변수 선언
   const dispatch = useDispatch();
@@ -32,6 +34,21 @@ const Header = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   //메뉴 depth 기능 -> onMouseEnter시 오픈
   const [activeMenu, setActiveMenu] = useState(null);
+
+  // 커뮤니티 탭 + 카테고리 목록
+  const [communityTabs, setCommunityTabs] = useState([]);
+
+  useEffect(() => {
+    const fetchCommunityTabs = async () => {
+      try {
+        const res = await axios.get("http://localhost:8090/community/tabList");
+        setCommunityTabs(res.data?.result || []);
+      } catch (err) {
+        console.error("커뮤니티 탭 로딩 실패", err);
+      }
+    };
+    fetchCommunityTabs();
+  }, []);
 
   //header 검색기능
   const handleSearch = (e) => {
@@ -159,17 +176,34 @@ const Header = () => {
             )}
             {activeMenu === "community" && (
               <ul>
-                <li>
-                  <Link to={`/community/notice`}>공지사항</Link>
-                  <Link to={`/community/`}>자주 묻는 질문</Link>
-                  <Link to={`/community/qna`}>Q&A</Link>
-                </li>
+                {communityTabs.map((tab) => (
+                  <li key={tab.id}>
+                    <Link
+                      to={`/community/tab/${tab.id}`}
+                      onClick={() => setActiveMenu(null)}
+                    >
+                      {tab.tabName}
+                    </Link>
+                    {tab.categoryList?.map((cat) => (
+                      <Link
+                        key={cat.id}
+                        to={`/community/tab/${tab.id}/category/${cat.id}`}
+                        onClick={() => setActiveMenu(null)}
+                      >
+                        {cat.categoryName}
+                      </Link>
+                    ))}
+                  </li>
+                ))}
 
+                {/* 운동루틴을 마지막 li 항목으로 배치 */}
                 <li>
-                  {/* 카테고리 늘어나면 추가될 수 있도록 제작 */}
-                  <Link to={`/community`}>커뮤니티</Link>
-                  <Link to={`/community`}>카테고리1</Link>
-                  <Link to={`/community`}>카테고리2</Link>
+                  <Link
+                    to={`/community/routine`}
+                    onClick={() => setActiveMenu(null)}
+                  >
+                    운동루틴
+                  </Link>
                 </li>
               </ul>
             )}

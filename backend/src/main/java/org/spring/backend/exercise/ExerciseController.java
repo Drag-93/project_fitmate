@@ -10,10 +10,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 운동 루틴 생성/추천/히스토리/이미지 API 컨트롤러
+ * 프론트: RoutineForm.jsx, RoutineResult.jsx, HistoryList.jsx, RoutinePage.jsx가 이 컨트롤러를 호출
+ * ※ 필드 타입(ExerciseService, ExerciseSyncService 등)은 모두 인터페이스이며,
+ *   각각의 Impl 클래스(ExerciseServiceImpl 등)가 유일한 구현체라 Spring이 자동으로 주입함
+ */
 @Slf4j
 @RestController
 @RequestMapping("/api/exercise")
@@ -26,7 +31,7 @@ public class ExerciseController {
     private final ExerciseTranslationService translationService;
     private final ExerciseImageService exerciseImageService;
 
-    /** 프론트엔드 드롭다운 구성용 - 유효한 target/equip 목록 */
+    /** 프론트엔드 드롭다운 구성용 - 유효한 target/equip 목록 (RoutineForm.jsx 최초 로딩 시 호출) */
     @GetMapping("/options")
     public ResponseEntity<?> getOptions() {
         return ResponseEntity.ok(Map.of(
@@ -35,13 +40,18 @@ public class ExerciseController {
         ));
     }
 
-    // 부위에 해당하는 장비만 선택
+    // 부위에 해당하는 장비만 선택 (RoutineForm.jsx에서 타겟 부위 선택 시 장비 드롭다운을 다시 채움)
     @GetMapping("/options/equipments")
     public ResponseEntity<Map<String, String>> getEquipmentsByTarget(@RequestParam String target) {
         Map<String, String> equipMap = exerciseService.getEquipmentsMapByTarget(target);
         return ResponseEntity.ok(equipMap);
     }
 
+    /**
+     * 루틴 생성 요청
+     * 1) 레이트리밋 확인(사용자당 1분 5회) → 초과 시 429 계열 예외 발생
+     * 2) 부위/장비 조건으로 루틴 생성 후 응답
+     */
     @PostMapping("/recommend")
     public ResponseEntity<?> getRecommendation(@RequestBody ExerciseDto.Request request, Authentication auth) {
         if (!rateLimiterService.isAllowed(auth.getName())) {
@@ -53,7 +63,7 @@ public class ExerciseController {
         return ResponseEntity.ok(ExerciseDto.Response.from(result.plan(), result.details()));
     }
 
-    /** 로그인한 사용자의 과거 루틴 생성 히스토리를 최신순으로 반환 (페이지네이션) */
+    /** 로그인한 사용자의 과거 루틴 생성 히스토리를 최신순으로 반환 (페이지네이션, 최근 5개까지만 존재) */
     @GetMapping("/history")
     public ResponseEntity<?> getHistory(
             @RequestParam(defaultValue = "0") int page,
@@ -67,7 +77,7 @@ public class ExerciseController {
     }
 
     /**
-     * ★ 추가 - 메인 페이지 "오늘의 추천 운동"용.
+     * 메인 페이지 "오늘의 추천 운동"용.
      * 로그인한 사용자의 최근 루틴 3개에서 등장한 운동을 제외하고,
      * 캐싱된 운동 중 5개를 무작위로 반환한다. 저장 없음, RapidAPI 호출 없음
      * (전부 로컬 DB 기반이라 쿼터 걱정 없이 자주 호출해도 된다).
@@ -79,7 +89,7 @@ public class ExerciseController {
     }
 
     /**
-     * 특정 부위를 동기화하고, 이어서 번역까지 함께 처리한다 (관리자 전용).
+     * 특정 부위를 동기화하고, 이어서 번역까지 함께 처리한다 (관리자 전용, @PreAuthorize로 ADMIN 권한 강제).
      */
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/sync/{target}")
@@ -95,31 +105,19 @@ public class ExerciseController {
 
     /**
      * 유효한 모든 target을 순차 동기화하고, 전체 완료 후 번역까지 한 번에 처리한다 (관리자 전용).
+     * ✅ 수정: 기존에는 이 컨트롤러가 syncService.syncAllTargets(List)와 동일한 반복문+sleep 로직을
+     *    직접 다시 구현하고 있었음 (성공/실패 기록, 호출 간 0.5초 대기 등이 완전히 중복).
+     *    ExerciseSyncService.syncAllTargets(List<String>)를 그대로 호출하도록 바꿔 중복을 제거함.
+     *    동작 방식은 동일 (target별 성공 여부를 Map으로 반환, 호출 간 0.5초 대기).
      */
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/sync/all")
     public ResponseEntity<?> syncAllTargets() {
-        Map<String, Boolean> syncResult = new LinkedHashMap<>();
-
-        for (String target : validValuesService.getValidTargets()) {
-            try {
-                syncService.syncByTarget(target);
-                syncResult.put(target, true);
-                log.info("동기화 성공: {}", target);
-            } catch (Exception e) {
-                syncResult.put(target, false);
-                log.error("동기화 실패: {}", target, e);
-            }
-
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException ignored) {
-            }
-        }
+        Map<String, Boolean> syncResult = syncService.syncAllTargets(validValuesService.getAllValidTargets());
 
         int translatedCount = translationService.translateMissingNames();
 
-        Map<String, Object> response = new LinkedHashMap<>();
+        Map<String, Object> response = new java.util.LinkedHashMap<>();
         response.put("syncResult", syncResult);
         response.put("translatedCount", translatedCount);
         return ResponseEntity.ok(response);

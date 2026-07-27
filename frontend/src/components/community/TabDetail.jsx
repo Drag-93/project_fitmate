@@ -4,11 +4,17 @@ import { useNavigate, useParams } from "react-router-dom";
 import { API_SERVER_URL } from "../../apis/commonApi";
 import "../../css/Community/TabDetail.css";
 
+/**
+ * 관리자용 탭 상세/수정 페이지
+ * - 특정 탭의 이름, 관리자 전용 여부, 하위 카테고리 목록을 조회하고 수정 가능
+ * - 카테고리 추가/삭제는 화면에서 로컬 상태만 변경하고, 실제 저장(수정 버튼 클릭)
+ *   시점에 백엔드로 전체 목록을 보내 반영됨
+ */
 const TabDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [tab, setTab] = useState(null);
+  const [tab, setTab] = useState(null); // 탭 상세 데이터 (categoryList 포함)
   const [isLoading, setIsLoading] = useState(true);
 
   //상세정보 보기
@@ -26,13 +32,14 @@ const TabDetail = () => {
       setIsLoading(false);
     }
   };
+  // id가 있을 때만(라우트 진입 시) 탭 상세 조회
   useEffect(() => {
     if (id) {
       getTabDetail();
     }
   }, [id]);
 
-  // ---- 카테고리 이름 수정 ----
+  // ---- 카테고리 이름 수정: 배열에서 해당 인덱스의 categoryName만 교체 ----
   const handleCategoryNameChange = (index, value) => {
     const newList = [...(tab.categoryList || [])];
     newList[index] = { ...newList[index], categoryName: value };
@@ -57,7 +64,7 @@ const TabDetail = () => {
 
   //탭 수정
   const getTabUpdate = async () => {
-    // 빈 이름으로 저장되는 것 방지
+    // 빈 이름으로 저장되는 것 방지 (카테고리 이름이 하나라도 비어있으면 저장 차단)
     const hasEmptyName = (tab.categoryList || []).some(
       (cat) => !cat.categoryName?.trim(),
     );
@@ -110,6 +117,7 @@ const TabDetail = () => {
           ) : tab ? (
             <div className="detailbody">
               <ul>
+                {/* 관리자 전용(공지사항용) 탭 여부 체크박스 */}
                 <li>
                   <label>
                     <input
@@ -122,6 +130,7 @@ const TabDetail = () => {
                     관리자만 작성/삭제 가능 (공지사항용)
                   </label>
                 </li>
+                {/* 탭 이름 수정 */}
                 <li>
                   <label htmlFor="tabName">이름</label>
                   <input
@@ -133,6 +142,7 @@ const TabDetail = () => {
                     }
                   />
                 </li>
+                {/* 카테고리 목록: 이름 수정 / 개별 삭제 / 추가 */}
                 <li>
                   <label>카테고리</label>
                   <div className="category-edit-group">
@@ -162,6 +172,7 @@ const TabDetail = () => {
                     </button>
                   </div>
                 </li>
+                {/* 생성일/수정일 표시: 수정일이 있으면 수정일 우선 */}
                 <li>
                   <label>생성일</label>
                   <div className="view-box">

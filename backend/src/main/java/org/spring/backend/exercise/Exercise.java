@@ -27,8 +27,9 @@ public class Exercise {
     private String target;      // 주동 근육
     private String bodyPart;    // 대분류 부위
     private String equipment;
-    private String gifUrl;
+    private String gifUrl;      // 현재는 실사용 안 함 - GIF는 /api/exercise/image/{id}로 별도 조회 (ExerciseImageService)
 
+    // 아래 4개 컬럼은 ExerciseTranslationService가 채워주는 한글 번역 필드 (초기 동기화 직후엔 전부 null)
     @Column(name = "name_ko")
     private String nameKo;
 
@@ -41,6 +42,7 @@ public class Exercise {
     @Column(name = "body_ko")
     private String bodyKo;
 
+    // 신규 저장용 생성자 (ExerciseSyncServiceImpl에서 캐시에 없는 새 운동을 저장할 때 사용)
     public Exercise(String id, String name, String target, String bodyPart, String equipment, String gifUrl) {
         this.id = id;
         this.name = name;
@@ -50,7 +52,7 @@ public class Exercise {
         this.gifUrl = gifUrl;
     }
 
-    /** 동기화 시 필드 갱신용 (재호출 시 최신 데이터로 덮어쓰기) */
+    /** 동기화 시 필드 갱신용 (재호출 시 최신 데이터로 덮어쓰기, id/target은 그대로 유지) */
     public void update(String name, String bodyPart, String equipment, String gifUrl) {
         this.name = name;
         this.bodyPart = bodyPart;

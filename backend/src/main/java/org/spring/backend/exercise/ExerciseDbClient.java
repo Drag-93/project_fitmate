@@ -8,7 +8,8 @@ import org.springframework.web.client.RestClient;
 /**
  * RapidAPI ExerciseDB 호출을 한 군데로 모은 공통 클라이언트.
  * baseUrl과 인증 헤더를 여기서 한 번만 설정하고,
- * ExerciseSyncService / ValidValuesService는 이 클라이언트만 주입받아 쓴다.
+ * ExerciseSyncServiceImpl / ValidValuesServiceImpl / ExerciseImageServiceImpl은
+ * 이 클라이언트만 주입받아 쓴다.
  */
 @Component
 public class ExerciseDbClient {
@@ -25,7 +26,7 @@ public class ExerciseDbClient {
                 .build();
     }
 
-    /** /exercises/target/{target} */
+    /** /exercises/target/{target} - 특정 부위의 운동 목록 조회 (동기화용) */
     public JsonNode getExercisesByTarget(String target) {
         return restClient.get()
                 .uri(uriBuilder -> uriBuilder.path("/exercises/target/{target}").build(target))
@@ -33,7 +34,7 @@ public class ExerciseDbClient {
                 .body(JsonNode.class);
     }
 
-    /** /exercises/targetList */
+    /** /exercises/targetList - 유효한 target 전체 목록 (ValidValuesService 검증용) */
     public JsonNode getTargetList() {
         return restClient.get()
                 .uri("/exercises/targetList")
@@ -41,7 +42,7 @@ public class ExerciseDbClient {
                 .body(JsonNode.class);
     }
 
-    /** /exercises/equipmentList */
+    /** /exercises/equipmentList - 유효한 equipment 전체 목록 (ValidValuesService 검증용) */
     public JsonNode getEquipmentList() {
         return restClient.get()
                 .uri("/exercises/equipmentList")
@@ -50,7 +51,7 @@ public class ExerciseDbClient {
     }
 
     /**
-     * ★ 추가: /image - GIF 바이너리를 직접 스트리밍으로 받아온다.
+     * /image - GIF 바이너리를 직접 스트리밍으로 받아온다.
      * (목록 조회 응답엔 더 이상 gifUrl이 없어서, 화면에 보여주려면
      *  exerciseId로 이 엔드포인트를 따로 호출해야 함)
      *
