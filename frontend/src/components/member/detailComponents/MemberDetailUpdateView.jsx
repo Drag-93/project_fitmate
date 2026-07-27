@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { API_SERVER_URL } from "../../../apis/commonApi";
 import { checkEmail, memberUpdate } from "../../../apis/member/memberApi";
+import AddressModal from "../../common/map/AddressModal";
 
 const MemberDetailUpdateView = ({
   member,
@@ -64,170 +65,195 @@ const MemberDetailUpdateView = ({
       onSuccessToggle: () => setIsUpdate((prev) => !prev),
     });
   };
+
+  // 주소찾기 모달 열기 여부
+  const [open, setOpen] = useState(false);
+
+  // AddressModal에서 선택한 주소 반환
+  // 원하는 CRUD 폼에 맞게 자유롭게 저장하여 사용
+  const handleSelect = ({ address }) => {
+    setUpdateData((prev) => ({
+      ...prev,
+      userAddress: address, // 기본 주소
+    }));
+  };
   return (
-    <div className="memberUpdateContainer">
-      {/* 1. 프로필 사진 변경 섹션 */}
-      <div className="profileHeader">
-        <div className="profilePhotoEdit">
-          <div className="profile-preview">
-            {prevUrl ? (
-              <img
-                src={prevUrl}
-                alt="새 이미지 미리보기"
-                className="prev-img"
+    <>
+      <AddressModal
+        open={open}
+        onClose={() => setOpen(false)}
+        onSelect={handleSelect}
+        mapWidth="100%"
+        mapHeight="400px"
+        mapLevel={3}
+      />
+      <div className="memberUpdateContainer">
+        {/* 1. 프로필 사진 변경 섹션 */}
+        <div className="profileHeader">
+          <div className="profilePhotoEdit">
+            <div className="profile-preview">
+              {prevUrl ? (
+                <img
+                  src={prevUrl}
+                  alt="새 이미지 미리보기"
+                  className="prev-img"
+                />
+              ) : member?.newFileName ? (
+                <img
+                  src={`${API_SERVER_URL}/upload/member/${member.newFileName}`}
+                  alt="프로필 사진"
+                  className="prev-img"
+                />
+              ) : (
+                <img
+                  src="/images/member/wanderercreative-blank-profile-picture-973460.svg"
+                  alt="기본이미지"
+                  className="prev-img"
+                />
+              )}
+            </div>
+            <div className="fileInputArea">
+              <label htmlFor="memberFile" className="fileLabel">
+                사진 변경
+              </label>
+              <input
+                type="file"
+                name="memberFile"
+                id="memberFile"
+                onChange={onChangeFileFn}
+                accept="image/*"
               />
-            ) : member?.newFileName ? (
-              <img
-                src={`${API_SERVER_URL}/upload/member/${member.newFileName}`}
-                alt="프로필 사진"
-                className="prev-img"
-              />
-            ) : (
-              <img
-                src="/images/member/wanderercreative-blank-profile-picture-973460.svg"
-                alt="기본이미지"
-                className="prev-img"
-              />
-            )}
-          </div>
-          <div className="fileInputArea">
-            <label htmlFor="memberFile" className="fileLabel">
-              사진 변경
-            </label>
-            <input
-              type="file"
-              name="memberFile"
-              id="memberFile"
-              onChange={onChangeFileFn}
-              accept="image/*"
-            />
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* 2. 기본 계정 정보 수정 섹션 */}
-      <div className="infoSection">
-        <h3>기본 정보 수정</h3>
-        <ul className="infoGrid">
-          <li>
-            <span>유저명</span>
-            <input
-              type="text"
-              value={updateData.userName || ""}
-              id="userName"
-              name="userName"
-              onChange={onChangeFn}
-            />
-          </li>
-          <li>
-            <span>이메일</span>
-            <input
-              type="email"
-              value={updateData.userEmail || ""}
-              id="userEmail"
-              name="userEmail"
-              onChange={onChangeFn}
-            />
-          </li>
-          <li>
-            <span>전화번호</span>
-            <input
-              type="text"
-              value={updateData.userPhone || ""}
-              id="userPhone"
-              name="userPhone"
-              onChange={onChangeFn}
-              placeholder="010-0000-0000"
-            />
-          </li>
-          <li className="fullWidth">
-            <span>주소</span>
-            <input
-              type="text"
-              value={updateData.userAddress || ""}
-              id="userAddress"
-              name="userAddress"
-              onChange={onChangeFn}
-            />
-          </li>
-        </ul>
-      </div>
-
-      {/* 3. 신체 & 운동 프로필 수정 섹션 (추가된 5개 데이터) */}
-      <div className="infoSection">
-        <h3>신체 & 운동 프로필 수정</h3>
-        <ul className="infoGrid">
-          <li>
-            <label htmlFor="height">신장 (cm)</label>
-            <input
-              type="number"
-              value={updateData.height || ""}
-              id="height"
-              name="height"
-              onChange={onChangeFn}
-              placeholder="예: 175"
-            />
-          </li>
-          <li>
-            <label htmlFor="weight">현재 체중 (kg)</label>
-            <input
-              type="number"
-              value={updateData.weight || ""}
-              id="weight"
-              name="weight"
-              onChange={onChangeFn}
-              placeholder="예: 70"
-            />
-          </li>
-          <li>
-            <label htmlFor="goalWeight">목표 체중 (kg)</label>
-            <input
-              type="number"
-              value={updateData.goalWeight || ""}
-              id="goalWeight"
-              name="goalWeight"
-              onChange={onChangeFn}
-              placeholder="예: 65"
-            />
-          </li>
-          <li>
-            <span>관심사</span>
-            <span>
-              <select
-                name="interest"
-                id="interest"
-                value={updateData.interest || ""}
+        {/* 2. 기본 계정 정보 수정 섹션 */}
+        <div className="infoSection">
+          <h3>기본 정보 수정</h3>
+          <ul className="infoGrid">
+            <li>
+              <span>유저명</span>
+              <input
+                type="text"
+                value={updateData.userName || ""}
+                id="userName"
+                name="userName"
                 onChange={onChangeFn}
-              >
-                <option value="">없음</option>
-                <option value="DIET">다이어트</option>
-                <option value="WORKOUT">운동</option>
-                <option value="HEALTH">건강관리</option>
-              </select>
-            </span>
-          </li>
-        </ul>
-      </div>
+              />
+            </li>
+            <li>
+              <span>이메일</span>
+              <input
+                type="email"
+                value={updateData.userEmail || ""}
+                id="userEmail"
+                name="userEmail"
+                onChange={onChangeFn}
+              />
+            </li>
+            <li>
+              <span>전화번호</span>
+              <input
+                type="text"
+                value={updateData.userPhone || ""}
+                id="userPhone"
+                name="userPhone"
+                onChange={onChangeFn}
+                placeholder="010-0000-0000"
+              />
+            </li>
+            <li className="fullWidth">
+              <span>주소</span>
+              <button type="button" onClick={() => setOpen(true)}>
+                주소 찾기
+              </button>
+              <input
+                type="text"
+                value={updateData.userAddress || ""}
+                id="userAddress"
+                name="userAddress"
+                onChange={onChangeFn}
+              />
+            </li>
+          </ul>
+        </div>
 
-      {/* 4. 하단 버튼 영역 */}
-      <div className="buttonArea">
-        <button className="saveBtn" onClick={memberUpdateFn}>
-          저장하기
-        </button>
-        <button
-          className="cancelBtn"
-          onClick={() => {
-            setIsUpdate((prev) => !prev);
-            setPrevUrl("");
-          }}
-        >
-          취소
-        </button>
-        <button onClick={memberDelete} className="deleteBtn">
-          회원탈퇴
-        </button>
+        {/* 3. 신체 & 운동 프로필 수정 섹션 (추가된 5개 데이터) */}
+        <div className="infoSection">
+          <h3>신체 & 운동 프로필 수정</h3>
+          <ul className="infoGrid">
+            <li>
+              <label htmlFor="height">신장 (cm)</label>
+              <input
+                type="number"
+                value={updateData.height || ""}
+                id="height"
+                name="height"
+                onChange={onChangeFn}
+                placeholder="예: 175"
+              />
+            </li>
+            <li>
+              <label htmlFor="weight">현재 체중 (kg)</label>
+              <input
+                type="number"
+                value={updateData.weight || ""}
+                id="weight"
+                name="weight"
+                onChange={onChangeFn}
+                placeholder="예: 70"
+              />
+            </li>
+            <li>
+              <label htmlFor="goalWeight">목표 체중 (kg)</label>
+              <input
+                type="number"
+                value={updateData.goalWeight || ""}
+                id="goalWeight"
+                name="goalWeight"
+                onChange={onChangeFn}
+                placeholder="예: 65"
+              />
+            </li>
+            <li>
+              <span>관심사</span>
+              <span>
+                <select
+                  name="interest"
+                  id="interest"
+                  value={updateData.interest || ""}
+                  onChange={onChangeFn}
+                >
+                  <option value="">없음</option>
+                  <option value="DIET">다이어트</option>
+                  <option value="WORKOUT">운동</option>
+                  <option value="HEALTH">건강관리</option>
+                </select>
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        {/* 4. 하단 버튼 영역 */}
+        <div className="buttonArea">
+          <button className="saveBtn" onClick={memberUpdateFn}>
+            저장하기
+          </button>
+          <button
+            className="cancelBtn"
+            onClick={() => {
+              setIsUpdate((prev) => !prev);
+              setPrevUrl("");
+            }}
+          >
+            취소
+          </button>
+          <button onClick={memberDelete} className="deleteBtn">
+            회원탈퇴
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

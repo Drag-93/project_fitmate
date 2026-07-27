@@ -4,6 +4,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.spring.backend.member.dto.MemberDto;
+import org.spring.backend.member.enumtype.Role;
 import org.spring.backend.member.jwt.CustomUserDetails;
 import org.spring.backend.member.service.MemberService;
 import org.springframework.data.domain.Page;
@@ -35,6 +36,7 @@ public class MemberController {
 
         return ResponseEntity.ok("ok");
     }
+
 
     //초기 authSlice에 멤버데이터를 넣기 위한 api
     @GetMapping("/init/{userEmail:.+}") //이메일 특성상 test@email.com으로 들어오기에 .뒤까지 읽을수 있게 설정
@@ -97,12 +99,34 @@ public class MemberController {
             return ResponseEntity.ok("ok");
         }
     }
-    @GetMapping("/memberList")
+
+    //일반 회원이 아닌사람만 접근가능 api
+
+    @PostMapping("/admin/insert")
+    public ResponseEntity<?> insert(@ModelAttribute MemberDto memberDto){
+        // 회원가입 비즈니스 로직 실행
+        memberService.insertAdminMember(memberDto);
+
+        return ResponseEntity.ok("ok");
+    }
+
+    @GetMapping("/admin/memberList")
     public ResponseEntity<?> memberList(@PageableDefault(page = 0, size = 5, sort="id",
     direction = Sort.Direction.ASC)Pageable pageable,
                                         @RequestParam(value = "subject",required = false)String subject,
+                                        @RequestParam(value = "role",required = false)String roleStr,
                                         @RequestParam(value = "search", required = false)String search){
-        Page<MemberDto> memberList = memberService.memberList(pageable, subject, search);
+        // String -> Role Enum 변환 (null이거나 유효하지 않은 문자열 처리)
+        Role role = Role.MEMBER;
+        if (roleStr != null && !roleStr.trim().isEmpty() && !"ALL".equalsIgnoreCase(roleStr)) {
+            try {
+                role = Role.valueOf(roleStr.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                // 잘못된 Enum 문자열이 들어왔을 때 처리 (예: null 세팅 또는 예외 던지기)
+                role = null;
+            }
+        }
+        Page<MemberDto> memberList = memberService.memberList(pageable, subject, search, role);
 
         int newPage = memberList.getNumber(); //현재페이지
         int totalPage = memberList.getTotalPages(); //전체페이지
@@ -121,7 +145,7 @@ public class MemberController {
         response.put("endPage", endPage);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
-    @GetMapping("/memberListSummary")
+    @GetMapping("/admin/memberListSummary")
     public ResponseEntity<?> memberListSummary(@PageableDefault(page = 0, size = 5, sort="id",
                                                 direction = Sort.Direction.ASC)Pageable pageable,
                                         @RequestParam(value = "subject",required = false)String subject,
@@ -145,7 +169,7 @@ public class MemberController {
         response.put("endPage", endPage);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
-    @GetMapping("/detail/{id}")
+    @GetMapping("/admin/detail/{id}")
     public ResponseEntity<?> adminMemberDetail(@PathVariable("id")Long id){
         MemberDto memberDto = memberService.memberDetail(id);
 
@@ -155,7 +179,7 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK).body(map);
     }
 
-    @GetMapping("/summary/{id}")
+    @GetMapping("/admin/summary/{id}")
     public ResponseEntity<?> trainerMemberSummary(@PathVariable("id")Long id){
         MemberDto memberDto = memberService.memberSummary(id);
 
@@ -163,5 +187,11 @@ public class MemberController {
         map.put("result", memberDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(map);
+    }
+
+    @DeleteMapping("/admin/delete/{id}")
+    public ResponseEntity<?> deleteMember(@PathVariable("id")Long id) throws IOException {
+        memberService.memberDelete(id);
+        return ResponseEntity.ok("ok");
     }
 }

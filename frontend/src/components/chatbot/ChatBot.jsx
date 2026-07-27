@@ -193,8 +193,6 @@ const ChatBot = () => {
                   </div>
                   <div id="chat-content" ref={chatContentRef}>
                     {messages.map((msg, idx) => (
-                      // 💡 key값은 가능하면 msg.id 같은 고유값을 쓰는 것이 좋지만,
-                      // 임시로 idx를 쓸 경우 구조를 아래와 같이 데이터 중심으로 바꿉니다.
                       <div
                         key={msg.id || idx}
                         className={`msg-wrapper ${msg.sender}`}
@@ -256,6 +254,7 @@ const ChatBot = () => {
                         }
                       }}
                     />
+                    {/* webSocket전송버튼 */}
                     {/* <button
                       id="btn-msg-send"
                       type="button"

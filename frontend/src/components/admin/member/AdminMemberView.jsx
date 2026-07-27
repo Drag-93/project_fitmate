@@ -4,24 +4,27 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import PageGenerate from "../../common/Page/PageGenerate";
 import jwtAxios from "../../../apis/util/jwtUtil";
+import AdminMemberInsertModal from "./AdminMemberInsertModal";
 
 const AdminMemberView = () => {
   const navigate = useNavigate();
+  //멤버데이터 상태값
   const [memberData, setMemberData] = useState(null);
+  //필터 상태값
   const [subject, setSubject] = useState("");
+  //검색어 상태값
   const [search, setSearch] = useState("");
+  //기본검색어 중 권한값을 MEMBER로 초기화
+  const [role, setRole] = useState("MEMBER");
+  //모달창 플래그값
+  const [isBool, setIsBool] = useState(false);
   const handleSearchSubmit = (e) => {
     e.preventDefault(); // 폼 제출 시 페이지 새로고침 방지
     getMemberList(search, subject, 0);
-    // 선택된 조건이 없거나 검색어가 비어있으면 전체 목록으로 이동하거나 알림 처리
-    // if (!subject && search) {
-    //   alert("검색 필터를 선택해주세요.");
-    //   return;
-    // }
   };
   const getMemberList = async (search, subject, page) => {
     //있을때나 없을때나 실행할수있게 설정
-    const url = `${API_SERVER_URL}/api/member/memberList?page=${page}&size=5&subject=${subject ? subject : ""}&search=${encodeURIComponent(search ? search : "")}`;
+    const url = `${API_SERVER_URL}/api/member/admin/memberList?page=${page}&size=5&subject=${subject ? subject : ""}&role=${role}&search=${encodeURIComponent(search ? search : "")}`;
     // console.log(url);
     try {
       const res = await jwtAxios.get(url);
@@ -31,36 +34,74 @@ const AdminMemberView = () => {
       alert("에러발생 : " + err);
     }
   };
+  //권한버튼 누를때마다 새로 리스트를 받아오게 설정
   useEffect(() => {
     getMemberList("", "", 0);
-  }, []);
+  }, [role]);
 
   return memberData !== null ? (
     <>
-      <div className="search">
-        <div className="filters">
-          <form onSubmit={handleSearchSubmit}>
-            <select
-              name="subject"
-              value={subject}
-              onChange={(e) => setSubject(e.target.value)}
-            >
-              <option value="">::선택::</option>
-              <option value="userName">이름</option>
-              <option value="userEmail">이메일</option>
-              <option value="role">권한</option>
-            </select>
+      {isBool && (
+        <AdminMemberInsertModal
+          getMemberList={getMemberList}
+          setIsBool={setIsBool}
+        />
+      )}
+      <div className="header-con">
+        <div className="roleFilter">
+          <button
+            className={role === "MEMBER" ? "active" : ""}
+            onClick={() => setRole("MEMBER")}
+          >
+            일반회원
+          </button>
+          <button
+            className={role === "TRAINER" ? "active" : ""}
+            onClick={() => setRole("TRAINER")}
+          >
+            트레이너
+          </button>
+          <button
+            className={role === "MANAGER" ? "active" : ""}
+            onClick={() => setRole("MANAGER")}
+          >
+            매니저
+          </button>
+          <button
+            className={role === "ADMIN" ? "active" : ""}
+            onClick={() => setRole("ADMIN")}
+          >
+            관리자
+          </button>
+        </div>
+        <div className="search">
+          <div className="filters">
+            <form onSubmit={handleSearchSubmit}>
+              <select
+                name="subject"
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+              >
+                <option value="">::선택::</option>
+                <option value="userName">이름</option>
+                <option value="userEmail">이메일</option>
+                <option value="role">권한</option>
+              </select>
 
-            <input
-              type="text"
-              name="search"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="검색어를 입력하세요"
-            />
+              <input
+                type="text"
+                name="search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="검색어를 입력하세요"
+              />
 
-            <input type="submit" value="검색" />
-          </form>
+              <input type="submit" value="검색" />
+            </form>
+          </div>
+        </div>
+        <div className="insertMember">
+          <button onClick={() => setIsBool(true)}>회원추가</button>
         </div>
       </div>
       <div className="memberList">

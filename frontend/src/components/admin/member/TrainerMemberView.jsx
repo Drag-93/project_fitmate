@@ -28,7 +28,7 @@ const TrainerMemberView = () => {
   };
   const getMemberList = async (subject, search, page) => {
     //있을때나 없을때나 실행할수있게 설정
-    const url = `${API_SERVER_URL}/api/member/memberListSummary?page=${page}&size=5&subject=${subject ? subject : ""}&search=${encodeURIComponent(search ? search : "")}`;
+    const url = `${API_SERVER_URL}/api/member/admin/memberListSummary?page=${page}&size=5&subject=${subject ? subject : ""}&search=${encodeURIComponent(search ? search : "")}`;
     try {
       const res = await jwtAxios.get(url);
       setMemberData(res.data);

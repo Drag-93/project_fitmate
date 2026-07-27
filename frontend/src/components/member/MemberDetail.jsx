@@ -9,16 +9,13 @@ import { logout, logoutAsync } from "../../store/slices/loginSlice";
 import "../../css/member/memberDetail.css";
 import MemberDetailUpdateView from "./detailComponents/MemberDetailUpdateView";
 import MemberDetailView from "./detailComponents/MemberDetailView";
-import ChatBot from "../chatbot/chatbot";
 
 const MemberDetail = () => {
-  //authSlice에 저장된 멤버데이터를 가져옴
-  const { memberData } = useSelector((state) => state.loginSlice);
-
-  //member의 userEmail여부로 로그인이 되었는지 확인
-  const isLogin = !!memberData?.result?.userEmail;
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  //authSlice에 저장된 멤버데이터를 가져옴
+  const { memberData } = useSelector((state) => state.loginSlice);
 
   //처음 멤버데이터를 집어넣고, 마이페이지에 보여줄 데이터
   const [member, setMember] = useState(null);
@@ -82,15 +79,13 @@ const MemberDetail = () => {
 
   //처음 마이페이지 접속 시 authSlice에 저장된 member의 유저이메일의 유무로 데이터 가져오기
   useEffect(() => {
-    if (isLogin) {
-      getMemberDetail()
-        .then((data) => {
-          setMember(data.result);
-          // console.log(data);
-        })
-        .catch((err) => console.error(err));
-    }
-  }, [isLogin]);
+    getMemberDetail()
+      .then((data) => {
+        setMember(data.result);
+        // console.log(data);
+      })
+      .catch((err) => console.error(err));
+  }, []);
   return (
     <>
       <div className="memberDetail">
