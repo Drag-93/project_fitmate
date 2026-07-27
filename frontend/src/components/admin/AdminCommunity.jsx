@@ -315,7 +315,7 @@ const AdminCommunity = () => {
       // 선택된 각 게시글에 대해 삭제 요청을 병렬로 실행 (일부 실패해도 나머지는 계속 처리)
       const results = await Promise.allSettled(
         group.selectedIds.map((id) =>
-          jwtAxios.delete(`${API_SERVER_URL}/community/adminDelete/${id}`),
+          jwtAxios.delete(`${API_SERVER_URL}/api/community/adminDelete/${id}`),
         ),
       );
 
@@ -347,7 +347,9 @@ const AdminCommunity = () => {
   const handleDeleteOne = async (id) => {
     if (!window.confirm("이 게시글을 삭제하시겠습니까?")) return;
     try {
-      await jwtAxios.delete(`${API_SERVER_URL}/community/adminDelete/${id}`);
+      await jwtAxios.delete(
+        `${API_SERVER_URL}/api/community/adminDelete/${id}`,
+      );
       alert("삭제되었습니다");
       refreshAfterDelete();
     } catch (error) {
@@ -371,7 +373,7 @@ const AdminCommunity = () => {
     try {
       const results = await Promise.allSettled(
         selectedIds.map((id) =>
-          jwtAxios.delete(`${API_SERVER_URL}/community/adminDelete/${id}`),
+          jwtAxios.delete(`${API_SERVER_URL}/api/community/adminDelete/${id}`),
         ),
       );
 
