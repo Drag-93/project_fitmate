@@ -6,10 +6,12 @@
   width: 100%;
   min-height: 100vh;
   background: #f6f7f9;
+  margin: 0 auto;
 }
 
 .main-wrap {
-  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .main-top-con,
@@ -125,7 +127,7 @@
 .main-top {
   width: 100%;
   padding: 3rem 0 4rem;
-  background: #fff;
+  background: inherit;
 }
 
 .slides-container {
@@ -177,7 +179,7 @@
 
 .main-banner-swiper .swiper-button-prev::after,
 .main-banner-swiper .swiper-button-next::after {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   font-weight: 700;
 }
 
@@ -255,7 +257,7 @@
   color: #7a8490;
   background: #fff;
 
-  font-size: 1.7rem;
+  font-size: 1.3rem;
   font-weight: 700;
   text-align: center;
 
@@ -609,7 +611,7 @@
 }
 
 .main-bottom-itemList > ul > li:first-child > p:first-of-type {
-  font-size: 2rem;
+  font-size: 1.2rem;
 }
 
 /* ==================================================

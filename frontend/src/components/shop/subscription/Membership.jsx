@@ -19,7 +19,11 @@ const Membership = () => {
       setMemberships(res.data || []);
     } catch (err) {
       console.error("이용권 조회 실패:", err);
-    } finally {
+    
+      console.log("err 자체:", err);
+      console.log("response:", err?.response);
+      console.log("message:", err?.message);
+    }finally {
       setLoading(false);
     }
   };
@@ -108,7 +112,6 @@ const Membership = () => {
       {/* 이용권 리스트 */}
       {filteredMemberships.length === 0 ? (
         <div className="empty-membership">
-          <span className="empty-icon">🎟️</span>
           <p>보유 중인 이용권이 없습니다.</p>
         </div>
       ) : (
