@@ -177,7 +177,7 @@
   padding: 12px 28px;
   border: none;
   border-radius: 8px;
-  background-color: #4CAF50;
+  background-color: rgb(25, 40, 58);
   color: white;
   font-size: 16px;
   cursor: pointer;
@@ -185,7 +185,7 @@
 }
 
 .shop-btn:hover {
-  background-color: #43a047;
+  background-color: #0D1B2A;
 }
 
 

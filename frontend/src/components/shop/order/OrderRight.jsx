@@ -5,7 +5,38 @@ import { useNavigate } from 'react-router-dom';
 
 const OrderRight = ({ cartIds, orderData, totalPrice, payment }) => {
   const navigate = useNavigate();
-  
+
+  // 배송상품인지 확인
+  const isDeliveryProduct = () => {
+    console.log("주문 데이터:", orderData.orderItemDtos);
+    return orderData.orderItemDtos?.some(
+      (item) => item.productType === "GOODS"
+    );
+  };
+  // 배송정보 체크
+  const validateDeliveryInfo = () => {
+
+    if (!isDeliveryProduct()) {
+      return true; // 구독상품이면 체크 안함
+    }
+
+    if (!orderData.receiverName?.trim()) {
+      alert("받는 분을 입력해주세요.");
+      return false;
+    }
+
+    if (!orderData.receiverPhone?.trim()) {
+      alert("연락처를 입력해주세요.");
+      return false;
+    }
+
+    if (!orderData.receiverAddress?.trim()) {
+      alert("주소를 입력해주세요.");
+      return false;
+    }
+
+    return true;
+  };
   // 주문생성
   const createOrder = async () => {
     let orderId;
@@ -24,7 +55,12 @@ const OrderRight = ({ cartIds, orderData, totalPrice, payment }) => {
   // 결제
   const handlePayment = async () => {
     try {
+      // 배송상품이면 배송정보 확인
+      if (!validateDeliveryInfo()) {
+        return;
+      }
       const orderId = await createOrder();
+
       // 카카오페이
       if (payment === "kakao") {
         const res = await kakaoPay(orderId);
@@ -65,7 +101,9 @@ const OrderRight = ({ cartIds, orderData, totalPrice, payment }) => {
 
         <div className="priceRow">
           <span>배송비</span>
-          <span>0원</span>
+          <span>
+            {isDeliveryProduct() ? "3,000원" : "0원"}
+          </span>
         </div>
 
         {/* <div className="priceRow">
@@ -77,7 +115,12 @@ const OrderRight = ({ cartIds, orderData, totalPrice, payment }) => {
 
         <div className="totalPrice">
           <span>총 결제 금액</span>
-          <strong>{totalPrice.toLocaleString()}원</strong>
+          <strong>
+            {
+              (totalPrice + (isDeliveryProduct() ? 3000 : 0))
+                .toLocaleString()
+            }원
+          </strong>
         </div>
 
       </div>

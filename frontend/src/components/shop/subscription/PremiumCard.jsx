@@ -41,14 +41,12 @@ const PremiumCard = () => {
   return (
     <div className="premium-card-container">
       <div className="premium-badge">BEST VALUE</div>
-      <h3 className="premium-title">{premiumProduct.productName}</h3>
+      <h3 className="premium-title">FitMate Plus+</h3>
       <p className="premium-subtitle">운동의 질을 높이는 가장 완벽한 선택</p>
 
       {/* 가격 표시 */}
       <div className="price-box">
-        <span className="price-amount">
-          {premiumProduct.price.toLocaleString()}
-        </span>
+        <span className="price-amount">19,900</span>
         <span className="price-unit">원 / 월</span>
       </div>
 

@@ -58,7 +58,8 @@ const OrderPage = () => {
       ? [
         {
           productId: directItem.productId,
-          quantity: directItem.quantity
+          quantity: directItem.quantity,
+          productType: directItem.productType
         }
       ] : []
   };

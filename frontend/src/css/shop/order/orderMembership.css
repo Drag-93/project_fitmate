@@ -59,9 +59,9 @@
 
 /* 선택된 날짜 안내 */
 .selected-date {
-  background-color: #f0fdf4;
-  border: 1px solid #bbf7d0;
-  color: #166534;
+  background-color: #3a69ec25;
+  border: 1px solid #181c72;
+  color: #000000;
   padding: 14px 18px;
   border-radius: 10px;
   font-weight: 600;
@@ -71,7 +71,7 @@
 
 .selected-date p {
   margin-top: 6px;
-  color: #15803d;
+  color: #2e1ec2;
   font-size: 0.9rem;
 }
 

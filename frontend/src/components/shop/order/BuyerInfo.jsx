@@ -1,32 +1,14 @@
 import React, { useState } from 'react';
+import AddressModal from "../../../components/common/map/AddressModal";
 
 const BuyerInfo = ({ member, orderInfo, setOrderInfo }) => {
 
-  const [isEdit, setIsEdit] = useState(false);
-
+  const [addressOpen, setAddressOpen] = useState(false);
   const handleChange = (e) => {
     setOrderInfo({
       ...orderInfo,
       [e.target.name]: e.target.value
     });
-  };
-  const handleEditToggle = () => {
-
-    if (isEdit) { 
-      if (!orderInfo.receiverName?.trim()) {
-        alert("받는 분을 입력해주세요.");
-        return;
-      }
-      if (!orderInfo.receiverPhone?.trim()) {
-        alert("연락처를 입력해주세요.");
-        return;
-      }
-      if (!orderInfo.receiverAddress?.trim()) {
-        alert("주소를 입력해주세요.");
-        return;
-      }
-    }
-    setIsEdit(!isEdit);
   };
 
   return (
@@ -34,12 +16,6 @@ const BuyerInfo = ({ member, orderInfo, setOrderInfo }) => {
 
       <h2>
         배송 정보
-        <button
-          type="button"
-          onClick={handleEditToggle}
-        >
-          {isEdit ? "완료" : "변경하기"}
-        </button>
       </h2>
 
 
@@ -49,7 +25,6 @@ const BuyerInfo = ({ member, orderInfo, setOrderInfo }) => {
           name="receiverName"
           value={orderInfo.receiverName || ""}
           onChange={handleChange}
-          readOnly={!isEdit}
         />
       </div>
 
@@ -60,19 +35,24 @@ const BuyerInfo = ({ member, orderInfo, setOrderInfo }) => {
           name="receiverPhone"
           value={orderInfo.receiverPhone || ""}
           onChange={handleChange}
-          readOnly={!isEdit}
         />
       </div>
 
 
       <div className="inputBox">
         <label>주소</label>
+        <button
+          type="button"
+          onClick={() => setAddressOpen(true)}
+        >
+          주소 찾기
+        </button>
         <input
           name="receiverAddress"
           value={orderInfo.receiverAddress || ""}
-          onChange={handleChange}
-          readOnly={!isEdit}
+          readOnly
         />
+
       </div>
 
 
@@ -82,11 +62,20 @@ const BuyerInfo = ({ member, orderInfo, setOrderInfo }) => {
           name="deliveryMemo"
           value={orderInfo.deliveryMemo || ""}
           onChange={handleChange}
-          readOnly={!isEdit}
         />
       </div>
-
+      <AddressModal
+        open={addressOpen}
+        onClose={() => setAddressOpen(false)}
+        onSelect={({ zonecode, address }) => {
+          setOrderInfo({
+            ...orderInfo,
+            receiverAddress: `${address} (${zonecode})`
+          });
+        }}
+      />
     </div>
+
   );
 };
 
