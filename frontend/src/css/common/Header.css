@@ -1,302 +1,245 @@
+/* =========================
+   Header
+========================= */
+
 .header {
-  position: sticky;
-  top: 0;
+  position: relative;
+  z-index: 100;
   width: 100%;
   background: #fff;
-  border-bottom: 1px solid #eee;
-  z-index: 1000;
-}
-
-.header * {
-  box-sizing: border-box;
-}
-
-.header ul,
-.header li {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.header a {
-  color: #222;
-  text-decoration: none;
+  border-bottom: 1px solid #e7e9ec;
 }
 
 .header-con {
+  position: relative;
   width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
 }
 
+/* =========================
+   상단 네비게이션
+========================= */
+
 .nav-wrap {
-  height: 78px;
-  padding: 0 32px;
+  position: relative;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  width: min(128rem, calc(100% - 4rem));
+  height: 9rem;
+  margin: 0 auto;
 }
 
+/* 왼쪽 메뉴와 오른쪽 메뉴 영역을 동일하게 설정해서
+   가운데 로고가 화면 중앙에 오도록 구성 */
 .gnb-left,
 .gnb-right {
   flex: 1;
 }
 
-.gnb-left ul,
-.gnb-right ul {
+.gnb-left > ul,
+.gnb-right > ul {
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: 2.8rem;
 }
 
-.gnb-right ul {
+.gnb-right > ul {
   justify-content: flex-end;
 }
 
+.gnb-left li,
+.gnb-right li {
+  display: flex;
+  align-items: center;
+}
+
 .gnb-left a,
-.gnb-right a {
-  font-size: 15px;
-  font-weight: 500;
-  transition: color 0.2s ease;
+.gnb-left span,
+.gnb-right a,
+.header-logout-btn {
+  position: relative;
+
+  display: block;
+  padding: 1rem 0;
+
+  color: #333;
+  font-size: 1.5rem;
+  font-weight: 600;
+  white-space: nowrap;
+
+  transition:
+    color 0.2s ease,
+    opacity 0.2s ease;
 }
 
 .gnb-left a:hover,
-.gnb-right a:hover {
-  color: #35c75a;
+.gnb-right a:hover,
+.header-logout-btn:hover {
+  color: #0d1b2a;
 }
+
+/* 메뉴 hover 밑줄 */
+
+.gnb-left a::after,
+.gnb-right a::after {
+  content: "";
+
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+
+  width: 0;
+  height: 0.2rem;
+
+  background: #0d1b2a;
+
+  transform: translateX(-50%);
+  transition: width 0.2s ease;
+}
+
+.gnb-left a:hover::after,
+.gnb-right a:hover::after {
+  width: 100%;
+}
+
+/* =========================
+   가운데 로고
+========================= */
 
 .gnb-logo {
-  flex: 0 0 auto;
-}
-
-.gnb-logo h1 {
-  margin: 0;
-  font-size: 34px;
-  font-weight: 800;
-  letter-spacing: 1px;
-}
-
-/* 검색 */
-.header_search_btn {
-  cursor: pointer;
-  font-size: 14px;
-  color: #222;
-}
-
-.header_search {
   position: absolute;
-  top: 88px;
-  left: 50%;
-  transform: translateX(-50%);
-
-  width: 460px;
-  opacity: 0;
-  visibility: hidden;
-  transition: 0.25s ease;
-  z-index: 1001;
-}
-
-.header_search.active {
-  top: 96px;
-  opacity: 1;
-  visibility: visible;
-}
-
-.search-bar {
-  position: relative;
-  width: 100%;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 999px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
-}
-
-.search-close {
-  position: absolute;
-  right: 82px;
   top: 50%;
-  transform: translateY(-50%);
+  left: 50%;
 
-  width: 26px;
-  height: 26px;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  border-radius: 50%;
-  cursor: pointer;
-
-  font-size: 22px;
-  font-weight: 300;
-  color: #777;
-
-  transition: 0.2s;
+  transform: translate(-50%, -50%);
 }
 
-.search-close:hover {
-  background: #f2f2f2;
-  color: #111;
-}
-.search_box {
-  display: flex;
-  align-items: center;
+.gnb-logo a,
+.gnb-logo h1 {
+  display: block;
 }
 
-.search_box input {
-  flex: 1;
-  height: 52px;
-  padding: 0 20px;
-
-  border: none;
-  outline: none;
-
-  font-size: 15px;
+.gnb-logo img {
+  width: 18rem;
+  height: auto;
+  object-fit: contain;
 }
 
-.search-btn {
-  width: 72px;
-  height: 52px;
+/* JSX의 인라인 width / height보다
+   CSS로 관리하는 것이 좋습니다. */
 
-  border: none;
-  background: #222;
-  color: #fff;
+/* =========================
+   로그아웃 버튼
+========================= */
 
-  font-size: 14px;
-  cursor: pointer;
+.header-logout-btn {
+  padding: 1rem 0;
+  background: transparent;
 }
 
-.search-btn:hover {
-  background: #35c75a;
-}
+/* =========================
+   Depth 메뉴
+========================= */
 
-/* depth */
 .header_depth {
+  position: absolute;
+  top: 9rem;
+  left: 0;
+  z-index: 90;
+
+  width: 100%;
   max-height: 0;
   overflow: hidden;
+
+  visibility: hidden;
   opacity: 0;
 
-  border-top: 1px solid transparent;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.98);
+  border-top: 1px solid #eef0f2;
+  border-bottom: 1px solid #dfe3e7;
+  box-shadow: 0 1rem 2.4rem rgba(13, 27, 42, 0.08);
 
   transition:
-    max-height 0.32s ease,
-    opacity 0.25s ease,
-    border-color 0.25s ease;
+    max-height 0.25s ease,
+    opacity 0.2s ease,
+    visibility 0.2s ease;
 }
 
 .header_depth.active {
-  max-height: 220px;
+  max-height: 42rem;
+  visibility: visible;
   opacity: 1;
-  border-top-color: #eee;
 }
 
 .header_depth > ul {
-  min-height: 150px;
-  padding: 28px 32px;
-
   display: flex;
-  gap: 90px;
+  justify-content: center;
+  gap: 8rem;
+
+  width: min(100rem, calc(100% - 4rem));
+  margin: 0 auto;
+  padding: 3rem 0 3.5rem;
 }
 
 .header_depth > ul > li {
   display: flex;
   flex-direction: column;
-  gap: 13px;
-  min-width: 140px;
+  align-items: flex-start;
+  min-width: 14rem;
+  gap: 1rem;
+}
+
+.header_depth > ul > li > a:first-child {
+  margin-bottom: 0.5rem;
+
+  color: #0d1b2a;
+  font-size: 1.6rem;
+  font-weight: 700;
 }
 
 .header_depth a {
-  font-size: 14px;
-  font-weight: 400; /* ✅ 추가: 기본값을 명시적으로 normal로 고정 (아래 :first-child만 예외적으로 bold) */
-  color: #444;
-  transition: color 0.2s ease;
-}
+  color: #6b7280;
+  font-size: 1.4rem;
+  line-height: 1.5;
 
-.header_depth a:first-child {
-  margin-bottom: 4px;
-  font-size: 15px;
-  font-weight: 700;
-  color: #111;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .header_depth a:hover {
-  color: #35c75a;
+  color: #3b6ea8;
+  transform: translateX(0.4rem);
 }
 
-/* 커뮤니티 드롭다운 (탭 + 카테고리) - .header_depth > ul > li 와 동일한 톤으로 맞춤 */
-.community-depth {
-  min-height: 150px;
-  padding: 28px 32px;
+/* =========================
+   Header 반응형
+========================= */
 
-  display: flex;
-  gap: 90px;
-}
-
-.depth-column {
-  display: flex;
-  flex-direction: column;
-  gap: 13px;
-  min-width: 140px;
-}
-
-.depth-column-title {
-  margin-bottom: 4px;
-
-  font-size: 15px;
-  font-weight: 700; /* 탭 이름(예: 자유게시판)만 굵게 - 스토어의 :first-child(스토어/구독상품)와 동일한 톤 */
-  color: #111;
-  transition: color 0.2s ease;
-}
-
-.depth-column-title:hover {
-  color: #35c75a;
-}
-
-.depth-category-list {
-  display: flex;
-  flex-direction: column;
-  gap: 13px;
-}
-
-/* ✅ 수정: 하위 카테고리(예: 일상이야기, FAQ 등)가 굵게 보이던 문제 해결.
-   기존엔 font-weight를 지정하지 않아 상황에 따라 굵게 상속/렌더링될 여지가 있었음.
-   스토어 하위 항목(운동기구, 식품 등)과 동일하게 normal(400)로 명시 고정. */
-.depth-category-list a {
-  font-size: 14px;
-  font-weight: 400;
-  color: #444;
-  transition: color 0.2s ease;
-}
-
-.depth-category-list a:hover {
-  color: #35c75a;
-}
-
-/* 반응형 */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .nav-wrap {
-    height: auto;
-    padding: 20px;
-    flex-direction: column;
-    gap: 18px;
+    width: calc(100% - 3rem);
   }
 
-  .gnb-left ul,
-  .gnb-right ul {
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 18px;
+  .gnb-left > ul,
+  .gnb-right > ul {
+    gap: 1.8rem;
   }
 
-  .header_search {
-    width: calc(100% - 40px);
+  .gnb-left a,
+  .gnb-left span,
+  .gnb-right a,
+  .header-logout-btn {
+    font-size: 1.4rem;
+  }
+
+  .gnb-logo img {
+    width: 15rem;
   }
 
   .header_depth > ul {
-    flex-direction: column;
-    gap: 28px;
+    gap: 4rem;
   }
 }

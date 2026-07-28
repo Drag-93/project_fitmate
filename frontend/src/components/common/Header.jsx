@@ -87,7 +87,9 @@ const Header = () => {
             </div>
             <div className="gnb-logo">
               <Link to={`/`}>
-                <h1>logo</h1>
+                <h1>
+                  <img src="/images/main/가로로고.png" alt="logo" />
+                </h1>
               </Link>
             </div>
             {/* 검색기능 -> 나중에 추가 */}
