@@ -12,6 +12,9 @@ import org.spring.backend.member.entity.MemberEntity;
 import org.spring.backend.member.repository.MemberAddRepository;
 import org.spring.backend.member.repository.MemberRepository;
 import org.spring.backend.member.service.MemberService;
+import org.spring.backend.shop.reservation.dto.ReservationDto;
+import org.spring.backend.shop.reservation.entity.ReservationEntity;
+import org.spring.backend.shop.reservation.repository.ReservationRepository;
 import org.spring.backend.trainer.service.TrainerService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -35,6 +38,7 @@ public class MemberServiceImpl implements MemberService {
     private final FileHandler fileHandler;
     private final RedisTemplate<String, String> redisTemplate;
     private final TrainerService trainerService;
+    private final ReservationRepository reservationRepository;
 
     @Value("${img.path.member}")
     private String filePath;
@@ -97,17 +101,17 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Page<MemberDto> memberListSummary(Pageable pageable, String subject, String search) {
+    public Page<ReservationDto> memberListSummary(Pageable pageable, String subject, String search, Long trainerId) {
         if(subject==null||subject.isBlank()||search==null||search.isBlank()){
-            return memberRepository.findByRole(pageable, Role.MEMBER).map(MemberDto::toMemberDtoSummary);
+            return reservationRepository.findByTrainerId(trainerId,pageable).map(ReservationDto::toReservationDto);
         }
-        Page<MemberEntity> memberEntities = switch (subject) {
-            case "userName" -> memberRepository.findByRoleAndUserEmailContaining(pageable, search, Role.MEMBER);
-            case "interest" -> memberRepository.findByRoleAndInterest(pageable, search, Role.MEMBER);
-            default -> memberRepository.findByRole(pageable, Role.MEMBER);
+        Page<ReservationEntity> reservationEntities = switch (subject) {
+            case "userName" -> reservationRepository.findByTrainerIdAndUserName(trainerId,search,pageable);
+            case "interest" -> reservationRepository.findByTrainerIdAndUserName(trainerId, search ,pageable);
+            default -> reservationRepository.findByTrainerId(trainerId,pageable);
         };
         //멤버리스트 검색필터링기능
-        return memberEntities.map(MemberDto::toMemberDtoSummary);
+        return reservationEntities.map(ReservationDto::toReservationDto);
     }
 
     @Override

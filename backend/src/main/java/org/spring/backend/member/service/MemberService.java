@@ -2,6 +2,7 @@ package org.spring.backend.member.service;
 
 import org.spring.backend.member.dto.MemberDto;
 import org.spring.backend.member.enumtype.Role;
+import org.spring.backend.shop.reservation.dto.ReservationDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -19,7 +20,7 @@ public interface MemberService {
     //관리자페이지 회원관리 시 사용할 멤버리스트
     Page<MemberDto> memberList(Pageable pageable, String subject, String search, Role role);
     //트레이너 회원관리 시 사용할 멤버리스트
-    Page<MemberDto> memberListSummary(Pageable pageable, String subject, String search);
+    Page<ReservationDto> memberListSummary(Pageable pageable, String subject, String search, Long trainerId);
 
     //관리자페이지 회원관리 시 사용할 정보 조회
     MemberDto memberDetail(Long id);

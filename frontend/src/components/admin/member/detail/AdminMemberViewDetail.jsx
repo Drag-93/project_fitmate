@@ -6,6 +6,7 @@ import "../../../../css/admin/AdminMemberDetail.css";
 import { checkEmail, memberUpdate } from "../../../../apis/member/memberApi";
 import { useSelector } from "react-redux";
 import AddressModal from "../../../common/map/AddressModal";
+
 const AdminMemberViewDetail = () => {
   const { memberData } = useSelector((state) => state.loginSlice); //user 정보
   //파라미터로 받는 id값
@@ -103,10 +104,13 @@ const AdminMemberViewDetail = () => {
         return;
       }
     }
-
+    const updateData = {
+      ...memberViewData,
+      userPw: "",
+    };
     //이메일 변경 함수 실행
     memberUpdate({
-      memberData: memberViewData,
+      memberData: updateData,
       navigate,
       redirectUrl: "/admin/member", // 성공 시 바로 이동할 주소 주입
       apiUrl: API_SERVER_URL,

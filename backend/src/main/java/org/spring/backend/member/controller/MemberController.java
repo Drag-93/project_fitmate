@@ -7,6 +7,7 @@ import org.spring.backend.member.dto.MemberDto;
 import org.spring.backend.member.enumtype.Role;
 import org.spring.backend.member.jwt.CustomUserDetails;
 import org.spring.backend.member.service.MemberService;
+import org.spring.backend.shop.reservation.dto.ReservationDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -149,8 +150,11 @@ public class MemberController {
     public ResponseEntity<?> memberListSummary(@PageableDefault(page = 0, size = 5, sort="id",
                                                 direction = Sort.Direction.ASC)Pageable pageable,
                                         @RequestParam(value = "subject",required = false)String subject,
-                                        @RequestParam(value = "search", required = false)String search){
-        Page<MemberDto> memberList = memberService.memberListSummary(pageable, subject, search);
+                                        @RequestParam(value = "search", required = false)String search,
+        @AuthenticationPrincipal CustomUserDetails userDetails){
+        String userEmail = userDetails.getUsername();
+        MemberDto memberDto = memberService.memberDetail(userEmail);
+        Page<ReservationDto> memberList = memberService.memberListSummary(pageable, subject, search, memberDto.getId());
 
         int newPage = memberList.getNumber(); //현재페이지
         int totalPage = memberList.getTotalPages(); //전체페이지

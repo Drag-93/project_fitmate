@@ -84,8 +84,12 @@ const TrainerMemberView = () => {
                   <li>{el.userName}</li>
                   <li>{interestMap[el.interest] ?? "없음"}</li>
                   <li>{el.subscribe === 0 ? "X" : "O"}</li>
-                  <li onClick={() => navigate(`/admin/member/detail/${el.id}`)}>
-                    {el.userName}
+                  <li>
+                    <button
+                      onClick={() => navigate(`/admin/member/detail/${el.id}`)}
+                    >
+                      상세보기
+                    </button>
                   </li>
                 </ul>
               );
