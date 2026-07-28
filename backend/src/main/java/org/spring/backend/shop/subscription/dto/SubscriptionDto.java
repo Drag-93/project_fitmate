@@ -22,55 +22,66 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SubscriptionDto {
-  private Long id;
+        private Long id;
 
-  private SubscriptionStatus subscriptionStatus;
+        private SubscriptionStatus subscriptionStatus;
 
-  private LocalDateTime startDate;
+        private LocalDateTime startDate;
 
-  private LocalDateTime endDate;
+        private LocalDateTime endDate;
 
-  private LocalDateTime nextPaymentDate;
+        private LocalDateTime nextPaymentDate;
 
-  private LocalDateTime createTime;
+        private LocalDateTime createTime;
 
-  private Long productId;
+        private Long productId;
 
-  private String productName;
+        private String productName;
 
-  private String productImage;
+        private String productImage;
 
-  private ProductType productType;
+        private ProductType productType;
 
-  private String paymentMethod;
+        private String paymentMethod;
 
-  public static SubscriptionDto toSubscriptionDto(SubscriptionEntity subscriptionEntity) {
-    return SubscriptionDto.builder()
-        .id(subscriptionEntity.getId())
-        .subscriptionStatus(subscriptionEntity.getSubscriptionStatus())
-        .startDate(subscriptionEntity.getStartDate())
-        .endDate(subscriptionEntity.getEndDate())
-        .nextPaymentDate(subscriptionEntity.getNextPaymentDate())
-        .createTime(subscriptionEntity.getCreateTime())
-        .productId(subscriptionEntity.getProductEntity().getId())
-        .productName(subscriptionEntity.getProductEntity().getProductName())
-        .productImage(
-            Optional.ofNullable(subscriptionEntity.getProductEntity())
-                .map(ProductEntity::getFileEntities)
-                .orElse(Collections.emptyList())
-                .stream()
-                .findFirst()
-                .map(FileEntity::getNewFileName)
-                .orElse(null))
-        .productType(
-            subscriptionEntity
-                .getProductEntity()
-                .getProductType())
-        .paymentMethod(
-            subscriptionEntity.getPaymentEntities()
-                .get(0)
-                .getPaymentMethod()
-                .name())
-        .build();
-  }
+        private Integer totalCount;
+
+        private Integer remainingCount;
+
+        public static SubscriptionDto toSubscriptionDto(SubscriptionEntity subscriptionEntity) {
+                return SubscriptionDto.builder()
+                                .id(subscriptionEntity.getId())
+                                .subscriptionStatus(subscriptionEntity.getSubscriptionStatus())
+                                .startDate(subscriptionEntity.getStartDate())
+                                .endDate(subscriptionEntity.getEndDate())
+                                .nextPaymentDate(subscriptionEntity.getNextPaymentDate())
+                                .createTime(subscriptionEntity.getCreateTime())
+                                .productId(subscriptionEntity.getProductEntity().getId())
+                                .productName(subscriptionEntity.getProductEntity().getProductName())
+                                .productImage(
+                                                Optional.ofNullable(subscriptionEntity.getProductEntity())
+                                                                .map(ProductEntity::getFileEntities)
+                                                                .orElse(Collections.emptyList())
+                                                                .stream()
+                                                                .findFirst()
+                                                                .map(FileEntity::getNewFileName)
+                                                                .orElse(null))
+                                .productType(
+                                                subscriptionEntity
+                                                                .getProductEntity()
+                                                                .getProductType())
+                                .paymentMethod(
+                                                Optional.ofNullable(subscriptionEntity.getPaymentEntities())
+                                                                .orElse(Collections.emptyList())
+                                                                .stream()
+                                                                .findFirst()
+                                                                .map(payment -> payment.getPaymentMethod().name())
+                                                                .orElse(null))
+                                .totalCount(
+                                                subscriptionEntity.getMemberProductEntity().getTotalCount())
+
+                                .remainingCount(
+                                                subscriptionEntity.getMemberProductEntity().getRemainingCount())
+                                .build();
+        }
 }

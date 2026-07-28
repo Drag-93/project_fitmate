@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.spring.backend.common.BasicTime;
 import org.spring.backend.member.entity.MemberEntity;
+import org.spring.backend.shop.MemberProduct.entity.MemberProductEntity;
 import org.spring.backend.shop.payment.entity.PaymentEntity;
 import org.spring.backend.shop.product.entity.ProductEntity;
 import org.spring.backend.shop.subscription.type.SubscriptionStatus;
@@ -48,7 +49,7 @@ public class SubscriptionEntity extends BasicTime {
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
   private SubscriptionStatus subscriptionStatus;
-  
+
   @Column(nullable = false)
   private LocalDateTime startDate;
 
@@ -70,6 +71,9 @@ public class SubscriptionEntity extends BasicTime {
 
   @JsonIgnore
   @OneToMany(mappedBy = "subscriptionEntity", fetch = FetchType.LAZY)
-    private List<PaymentEntity> paymentEntities = new ArrayList<>();
+  private List<PaymentEntity> paymentEntities = new ArrayList<>();
 
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "member_product_id")
+  private MemberProductEntity memberProductEntity;
 }
