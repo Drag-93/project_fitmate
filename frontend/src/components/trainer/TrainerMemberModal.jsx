@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from "react";
-import jwtAxios from "../../../../apis/util/jwtUtil";
-import { useNavigate, useParams } from "react-router-dom";
-import { API_SERVER_URL } from "../../../../apis/commonApi";
+import { API_SERVER_URL } from "../../apis/commonApi";
+import jwtAxios from "../../apis/util/jwtUtil";
+import "../../css/trainer/trainerModal.css";
+import { maskPhone } from "../../apis/member/memberApi";
 
-const TrainerMemberViewDetail = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
-
+const TrainerMemberModal = ({ setIsBool, modalMemberId }) => {
   const [memberData, setMemberData] = useState(null);
   const getMemberList = async () => {
-    const url = `${API_SERVER_URL}/api/member/admin/summary/${id}`;
+    const url = `${API_SERVER_URL}/api/member/members/summary/${modalMemberId}`;
     try {
       const res = await jwtAxios.get(url);
       setMemberData(res.data.result);
-      console.log(res.data);
+      // console.log(res.data);
     } catch (err) {
       alert("에러발생 : " + err);
     }
@@ -21,31 +19,20 @@ const TrainerMemberViewDetail = () => {
   useEffect(() => {
     getMemberList();
   }, []);
-  return memberData !== null ? (
-    <>
-      <div className="memberDetail-con">
+  if (memberData === null) {
+    return "";
+  }
+  return (
+    <div className="trainerModal">
+      <div className="trainerModal-con">
+        <span onClick={() => setIsBool(false)}>X</span>
         <ul>
           <li>
-            <span>
-              <h1>{memberData.userName} 프로필</h1>
-            </span>
+            <h1>{memberData.userName} 회원님 상세정보</h1>
           </li>
           <li>
-            <span>이메일</span>
-            <span>{memberData.userEmail}</span>
-          </li>
-          <li>
-            <span>주소</span>
-            <span>{memberData.userAddress}</span>
-          </li>
-          <li>
-            <span>전화번호</span>
-            <span>{memberData.userPhone}</span>
-          </li>
-          <li>
-            <span>프로필사진</span>
-            <span className="profilePhoto">
-              {memberData.newFileName ? (
+            <span className="profile-preview">
+              {memberData && memberData.newFileName ? (
                 //파일을 아직 고르지 않았을때 & 기존에 저장된 이미지가 있을경우(기존 이미지)
                 <img
                   src={`${API_SERVER_URL}/upload/member/${memberData.newFileName}`}
@@ -63,13 +50,12 @@ const TrainerMemberViewDetail = () => {
             </span>
           </li>
           <li>
-            <span>구독여부</span>
-            <span>{memberData.subscribe === 0 ? "X" : "O"}</span>
+            <span>이름</span>
+            <span>{memberData.userName}</span>
           </li>
-        </ul>
-        <ul>
           <li>
-            <h1>회원 상세정보</h1>
+            <span>전화번호</span>
+            <span>{maskPhone(memberData.userPhone) || "정보 없음"}</span>
           </li>
           <li>
             <span>관심사</span>
@@ -78,7 +64,7 @@ const TrainerMemberViewDetail = () => {
           <li>
             <span>키</span>
             <span>
-              {memberData.height ? `${memberData.weight} cm` : "정보 없음"}
+              {memberData.height ? `${memberData.height} cm` : "정보 없음"}
             </span>
           </li>
           <li>
@@ -95,25 +81,10 @@ const TrainerMemberViewDetail = () => {
                 : "정보 없음"}
             </span>
           </li>
-          <li>
-            <span>출석체크</span>
-            <span>{memberData.dailyCheck || "정보 없음"}</span>
-          </li>
-          <li>
-            <span>뱃지</span>
-            <span>{memberData.badge || "정보 없음"}</span>
-          </li>
-        </ul>
-        <ul>
-          <li>
-            <button onClick={() => navigate("/admin/member")}>뒤로가기</button>
-          </li>
         </ul>
       </div>
-    </>
-  ) : (
-    <>회원정보를 불러오는 중입니다.</>
+    </div>
   );
 };
 
-export default TrainerMemberViewDetail;
+export default TrainerMemberModal;

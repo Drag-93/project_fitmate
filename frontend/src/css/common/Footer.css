@@ -1,68 +1,140 @@
+/* =========================
+   Footer
+========================= */
+
 .footer {
+  position: relative;
   width: 100%;
-  background: #222;
-  color: #bbb;
-  margin-top: 80px;
+  margin-top: auto;
+  color: #dce3ea;
+  background: #0d1b2a;
 }
 
 .footer-con {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 50px 30px;
+  position: relative;
 
-  display: flex;
-  justify-content: space-between;
-  gap: 50px;
+  display: grid;
+  grid-template-columns: 0.8fr 1.7fr 1.4fr 1.3fr;
+  gap: 4rem;
+
+  width: min(128rem, calc(100% - 4rem));
+  margin: 0 auto;
+  padding: 5rem 0;
 }
 
+/* =========================
+   Footer 공통
+========================= */
+
 .footer ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
 }
 
 .footer li {
-  margin-bottom: 8px;
-  font-size: 14px;
+  color: #aeb9c5;
+  font-size: 1.3rem;
   line-height: 1.6;
 }
 
-.footer-left {
-  min-width: 180px;
-}
+/* =========================
+   Footer 로고 영역
+========================= */
 
 .footer-left li {
-  font-size: 30px;
-  font-weight: 700;
   color: #fff;
-  letter-spacing: 1px;
+  font-size: 2.6rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
 }
 
-.footer-mid1,
-.footer-mid2,
-.footer-right {
-  flex: 1;
+/* =========================
+   Footer 정보 영역
+========================= */
+
+.footer-mid1 li:first-child,
+.footer-mid2 li:first-child,
+.footer-right li:first-child {
+  margin-bottom: 0.8rem;
+
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 700;
 }
+
 .footer-tel {
-  font-size: 24px;
+  color: #fff !important;
+  font-size: 2rem !important;
   font-weight: 700;
-  color: #fff;
-  margin: 10px 0;
 }
 
-.footer-right li:first-child,
-.footer-mid2 li:first-child {
-  font-weight: 600;
-  color: #fff;
+/* =========================
+   Top 버튼
+========================= */
+
+.top-btn {
+  position: fixed;
+  right: 3rem;
+  bottom: 3rem;
+  z-index: 200;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 5.6rem;
+  height: 5.6rem;
+
+  color: #0d1b2a;
+  background: #fff;
+  border: 1px solid rgba(13, 27, 42, 0.15);
+  border-radius: 50%;
+  box-shadow: 0 0.8rem 2rem rgba(0, 0, 0, 0.2);
+
+  font-size: 1.3rem;
+  font-weight: 700;
+
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease;
 }
 
-@media (max-width: 900px) {
+.top-btn:hover {
+  color: #fff;
+  background: #3b6ea8;
+  transform: translateY(-0.4rem);
+}
+
+/* =========================
+   Footer 반응형
+========================= */
+
+@media (max-width: 1024px) {
   .footer-con {
-    flex-direction: column;
-    gap: 30px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .footer-con {
+    grid-template-columns: 1fr;
+    width: calc(100% - 3rem);
+    padding: 4rem 0;
   }
 
   .footer-left {
-    min-width: auto;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .top-btn {
+    right: 1.8rem;
+    bottom: 1.8rem;
+
+    width: 5rem;
+    height: 5rem;
   }
 }

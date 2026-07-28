@@ -1,19 +1,209 @@
+@import url("../common/reset.css");
+
+/* ==========================================
+   회원 관리 공통 메인 컨테이너
+   ========================================== */
 .admin-member {
   position: relative;
-
   width: calc(100% - 260px);
   min-height: calc(100vh - 70px);
-
   margin-left: 260px;
   margin-top: 70px;
-
   padding: 32px;
   box-sizing: border-box;
-
   background-color: #f5f7fb;
 }
 
-/* 회원 상세 및 수정 컨테이너 */
+/* ==========================================
+   회원 목록 상단 헤더 영역 (필터, 검색, 버튼)
+   ========================================== */
+.header-con {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+/* 역할(Role) 필터 버튼 그룹 */
+.roleFilter {
+  display: flex;
+  gap: 8px;
+  background-color: #ffffff;
+  padding: 4px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.roleFilter button {
+  padding: 8px 16px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #64748b;
+  background-color: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.roleFilter button:hover {
+  color: #1e293b;
+  background-color: #f1f5f9;
+}
+
+.roleFilter button.active {
+  color: #ffffff;
+  background-color: #3b82f6;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.25);
+}
+
+/* 검색 필터 영역 */
+.search .filters form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search select,
+.search input[type="text"] {
+  padding: 8px 12px;
+  font-size: 0.88rem;
+  color: #334155;
+  background-color: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.search select:focus,
+.search input[type="text"]:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.search input[type="submit"] {
+  padding: 8px 16px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: #334155;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.search input[type="submit"]:hover {
+  background-color: #1e293b;
+}
+
+/* 회원추가 버튼 */
+.insertMember button {
+  padding: 8px 18px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: #10b981;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.insertMember button:hover {
+  background-color: #059669;
+}
+
+/* ==========================================
+   회원 목록 테이블 영역
+   ========================================== */
+.memberList {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  overflow: hidden;
+}
+
+.memberList ul {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+/* 그리드 컬럼 비율 설정 */
+.memberList li:nth-child(1) {
+  flex: 1.5;
+} /* 이름 */
+.memberList li:nth-child(2) {
+  flex: 3;
+} /* 이메일/예약상태 */
+.memberList li:nth-child(3) {
+  flex: 1.5;
+} /* 권한/예약날짜 */
+.memberList li:nth-child(4) {
+  flex: 1.5;
+} /* 상세보기 */
+
+/* 테이블 헤더 */
+.memberList-head {
+  background-color: #f8fafc;
+  border-bottom: 2px solid #e2e8f0;
+  font-weight: 700;
+  color: #475569;
+  font-size: 0.9rem;
+  padding: 14px 0;
+}
+
+/* 테이블 바디 (회원 리스트 행) */
+.memberList-body {
+  border-bottom: 1px solid #f1f5f9;
+  padding: 12px 0;
+  font-size: 0.9rem;
+  color: #334155;
+  transition: background-color 0.15s ease;
+}
+
+.memberList-body:hover {
+  background-color: #f8fafc;
+}
+
+.memberList-body button {
+  padding: 6px 12px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #475569;
+  background-color: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.memberList-body button:hover {
+  color: #ffffff;
+  background-color: #3b82f6;
+  border-color: #3b82f6;
+}
+
+/* 테이블 푸터 (페이지네이션 컨테이너) */
+.memberList-foot {
+  display: flex;
+  justify-content: center;
+  padding: 16px 0;
+  background-color: #ffffff;
+  border-top: 1px solid #e2e8f0;
+}
+
+/* ==========================================
+   회원 상세 및 수정 컨테이너 (어드민용)
+   ========================================== */
 .memberDetail-con {
   max-width: 1000px;
   margin: 20px auto;
@@ -23,10 +213,9 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   display: flex;
   gap: 30px;
-  flex-wrap: wrap; /* 화면이 좁아지면 아래로 떨어지게 설정 */
+  flex-wrap: wrap;
 }
 
-/* 좌측(기본데이터)과 우측(추가데이터) 구역 분할 */
 .memberDetail-con > ul {
   flex: 1;
   min-width: 450px;
@@ -39,7 +228,6 @@
   overflow: hidden;
 }
 
-/* 각 구역의 대제목 (회원데이터 / 추가데이터) */
 .memberDetail-con > ul > li:first-child {
   background-color: #f8fafc;
   border-bottom: 2px solid #cbd5e1;
@@ -53,7 +241,6 @@
   font-weight: 700;
 }
 
-/* 각 입력 항목 줄 (Row) */
 .memberDetail-con > ul > li:not(:first-child) {
   display: flex;
   align-items: center;
@@ -65,7 +252,6 @@
   border-bottom: none;
 }
 
-/* 항목 레이블 (고유번호, 이름, 이메일 등) */
 .memberDetail-con > ul > li > span:first-child {
   width: 110px;
   font-size: 0.9rem;
@@ -74,7 +260,6 @@
   flex-shrink: 0;
 }
 
-/* 입력창이 들어가는 우측 공간 */
 .memberDetail-con > ul > li > span:last-child {
   flex-grow: 1;
   display: flex;
@@ -82,7 +267,6 @@
   gap: 10px;
 }
 
-/* 입력 필드 공통 스타일 (text, email, password, number, select) */
 .memberDetail-con input[type="text"],
 .memberDetail-con input[type="email"],
 .memberDetail-con input[type="password"],
@@ -99,7 +283,6 @@
   box-sizing: border-box;
 }
 
-/* 고유번호와 같이 수정 불가능한 단순 텍스트 바인딩 영역 */
 .memberDetail-con
   > ul
   > li
@@ -110,7 +293,6 @@
   padding-left: 4px;
 }
 
-/* 포커스 되었을 때 효과 */
 .memberDetail-con input:focus,
 .memberDetail-con select:focus {
   outline: none;
@@ -118,7 +300,6 @@
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
 }
 
-/* 비밀번호 변경 버튼 스타일 */
 .memberDetail-con button {
   padding: 8px 14px;
   font-size: 0.85rem;
@@ -135,7 +316,6 @@
   background-color: #334155;
 }
 
-/* 프로필 이미지 미리보기 구역 */
 .profile-preview {
   display: flex;
   align-items: center;
@@ -151,18 +331,120 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-/* 파일 업로드 input 스타일 조정 */
 .memberDetail-con input[type="file"] {
   font-size: 0.85rem;
   color: #64748b;
 }
 
-/* 반응형 모바일 대응 */
-@media (max-width: 768px) {
-  .memberDetail-con {
-    padding: 10px;
+/* ==========================================
+   회원 정보 요약 컨테이너 (트레이너용)
+   ========================================== */
+.memberSummary-con {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fcfcfc;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.memberSummary-con > ul {
+  width: 100%;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.memberSummary-con > ul > li:first-child {
+  background-color: #f8fafc;
+  border-bottom: 2px solid #cbd5e1;
+  padding: 15px 20px;
+}
+
+.memberSummary-con h1 {
+  font-size: 1.1rem;
+  color: #1e293b;
+  margin: 0;
+  font-weight: 700;
+}
+
+.memberSummary-con > ul > li:not(:first-child) {
+  display: flex;
+  align-items: center;
+  padding: 14px 20px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.memberSummary-con > ul > li > span:first-child {
+  width: 110px;
+  font-size: 0.9rem;
+  color: #64748b;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.memberSummary-con > ul > li > span:last-child {
+  flex-grow: 1;
+  font-size: 0.95rem;
+  color: #1e293b;
+  font-weight: 500;
+}
+
+/* 뒤로가기 버튼 영역 (우측 정렬) */
+.memberSummary-con > ul > li:last-child {
+  border-bottom: none;
+  justify-content: flex-end;
+  background-color: #f8fafc;
+  padding: 16px 20px;
+}
+
+.memberSummary-con button {
+  padding: 9px 18px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: #475569;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.memberSummary-con button:hover {
+  background-color: #334155;
+  box-shadow: 0 2px 6px rgba(51, 65, 85, 0.2);
+}
+
+/* ==========================================
+   반응형 레이아웃 대응
+   ========================================== */
+@media (max-width: 992px) {
+  .header-con {
+    flex-direction: column;
+    align-items: stretch;
   }
-  .memberDetail-con > ul {
+  .roleFilter,
+  .search .filters form {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 768px) {
+  .memberDetail-con,
+  .memberSummary-con {
+    padding: 10px;
+    margin: 10px auto;
+  }
+  .memberDetail-con > ul,
+  .memberSummary-con > ul {
     min-width: 100%;
+  }
+  .memberSummary-con > ul > li {
+    padding: 12px 16px;
   }
 }

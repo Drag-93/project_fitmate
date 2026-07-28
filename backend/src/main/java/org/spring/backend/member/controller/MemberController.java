@@ -7,6 +7,8 @@ import org.spring.backend.member.dto.MemberDto;
 import org.spring.backend.member.enumtype.Role;
 import org.spring.backend.member.jwt.CustomUserDetails;
 import org.spring.backend.member.service.MemberService;
+import org.spring.backend.shop.reservation.dto.ReservationDto;
+import org.spring.backend.shop.reservation.service.ReservationService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -28,6 +30,7 @@ import java.util.Map;
 public class MemberController {
     private final MemberService memberService;
     private final RedisTemplate<String, String> redisTemplate;
+    private final ReservationService reservationService;
 
     @PostMapping("/join")
     public ResponseEntity<?> join(MemberDto memberDto){
@@ -100,6 +103,28 @@ public class MemberController {
         }
     }
 
+    @GetMapping("/members/summary/{id}")
+    public ResponseEntity<?> memberSummary(@PathVariable("id")Long id){
+        MemberDto memberDto = memberService.memberSummary(id);
+        List<ReservationDto> reservationDto = reservationService.getMemberReservation(id);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("result", memberDto);
+        map.put("resultReservation", reservationDto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(map);
+    }
+    @GetMapping("/trainers/summary/{id}")
+    public ResponseEntity<?> trainerSummary(@PathVariable("id")Long id){
+        MemberDto memberDto = memberService.trainerSummary(id);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("result", memberDto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(map);
+    }
+
+
     //일반 회원이 아닌사람만 접근가능 api
 
     @PostMapping("/admin/insert")
@@ -149,9 +174,12 @@ public class MemberController {
     public ResponseEntity<?> memberListSummary(@PageableDefault(page = 0, size = 5, sort="id",
                                                 direction = Sort.Direction.ASC)Pageable pageable,
                                         @RequestParam(value = "subject",required = false)String subject,
-                                        @RequestParam(value = "search", required = false)String search){
-        Page<MemberDto> memberList = memberService.memberListSummary(pageable, subject, search);
-
+                                        @RequestParam(value = "search", required = false)String search,
+        @AuthenticationPrincipal CustomUserDetails userDetails){
+        String userEmail = userDetails.getUsername();
+        MemberDto memberDto = memberService.memberDetail(userEmail);
+        Page<ReservationDto> memberList = memberService.memberListSummary(pageable, subject, search, memberDto.getId());
+        memberList.forEach(System.out::println);
         int newPage = memberList.getNumber(); //현재페이지
         int totalPage = memberList.getTotalPages(); //전체페이지
         int blockNum = 5; //한페이지에 보여질 페이지넘버의 수
@@ -179,15 +207,7 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK).body(map);
     }
 
-    @GetMapping("/admin/summary/{id}")
-    public ResponseEntity<?> trainerMemberSummary(@PathVariable("id")Long id){
-        MemberDto memberDto = memberService.memberSummary(id);
 
-        Map<String, MemberDto> map = new HashMap<>();
-        map.put("result", memberDto);
-
-        return ResponseEntity.status(HttpStatus.OK).body(map);
-    }
 
     @DeleteMapping("/admin/delete/{id}")
     public ResponseEntity<?> deleteMember(@PathVariable("id")Long id) throws IOException {

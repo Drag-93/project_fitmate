@@ -81,7 +81,7 @@ const Login = () => {
       <div className="login-header">
         <Link to="/">
           <h1>
-            <img src="" alt="logo" />
+            <img src="/images/main/라이트버전.png" alt="logo" />
           </h1>
         </Link>
       </div>

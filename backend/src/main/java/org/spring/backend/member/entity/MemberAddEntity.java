@@ -30,10 +30,6 @@ public class MemberAddEntity extends BasicTime {
 
     private float goalWeight;
 
-    private int dailyCheck;
-
-    private String badge;
-
     //1:1매칭관계
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "memberAddEntity")
     private MemberEntity memberEntity;
@@ -43,8 +39,6 @@ public class MemberAddEntity extends BasicTime {
                 .height(0)
                 .weight(0)
                 .goalWeight(0)
-                .dailyCheck(0)
-                .badge("")
                 .build();
     }
 
@@ -54,8 +48,6 @@ public class MemberAddEntity extends BasicTime {
                 .height(0)
                 .weight(0)
                 .goalWeight(0)
-                .dailyCheck(0)
-                .badge("")
                 .memberEntity(memberAddDto.getMemberEntity())
                 .build();
     }
