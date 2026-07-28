@@ -1,6 +1,7 @@
 package org.spring.backend.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.spring.backend.member.jwt.*;
 import org.spring.backend.member.repository.RefreshRepository;
@@ -56,10 +57,17 @@ public class SecurityConfig {
                 http.csrf(
                                 csrf -> csrf.disable())
                                 .authorizeHttpRequests(authorize -> authorize
-                                                .requestMatchers("/member/login", "/member/join").permitAll()
-                                                // .requestMatchers("/member/logout","/member/detail").authenticated()
-                                                // .requestMatchers("/admin/**").hasRole("ADMIN")
+                                                .requestMatchers("/api/member/login", "/api/member/join", "/api/member/email").permitAll()
+                                        // hasAnyRole -> hasAnyAuthority 로 변경 ("ROLE_" 접두사 없이 검사)
+                                        .requestMatchers(
+                                                "/api/member/admin/memberList",
+                                                "/api/member/admin/memberListSummary",
+                                                "/api/member/admin/summary/**"
+                                        ).hasAnyAuthority("TRAINER", "ADMIN", "MANAGER")
 
+                                        .requestMatchers("/api/member/admin/**").hasAnyAuthority("ADMIN", "MANAGER")
+                                        .requestMatchers("/admin/**").hasAnyAuthority("ADMIN", "MANAGER", "TRAINER")
+                                                 .requestMatchers("/api/member/**").authenticated()
                                                 .requestMatchers("/api/payment/kakao/pg/**").permitAll() // 카카오결제 임시허용
                                                 .anyRequest().permitAll())
                                 .formLogin(form -> form.disable())
@@ -77,7 +85,12 @@ public class SecurityConfig {
                                                 objectMapper, redisTemplate),
                                                 UsernamePasswordAuthenticationFilter.class) // Spring 기본 로그인 필터대신 사용
                                 .addFilterBefore(new CustomLogoutFilter(redisTemplate,tokenValidationService),
-                                                LogoutFilter.class); // 로그아웃 처리
+                                                LogoutFilter.class).exceptionHandling(exception -> exception
+                                .authenticationEntryPoint((request, response, authException) -> {
+                                        // 리다이렉트 대신 401 상태코드 반환
+                                        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+                                })
+                        ); // 로그아웃 처리
 
                 return http.build();
         }

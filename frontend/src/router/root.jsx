@@ -20,7 +20,7 @@ const Loading = (
 );
 
 const MainPage = lazy(() => import("../page/MainPage"));
-const StoreLayout = lazy(() => import("../layout/./ShopLayout"));
+const ShopLayout = lazy(() => import("../layout/./ShopLayout"));
 const CommunityLayout = lazy(() => import("../layout/CommunityLayout"));
 const AdminLayout = lazy(() => import("../layout/AdminLayout"));
 const AuthLayout = lazy(() => import("../layout/AuthLayout"));
@@ -36,10 +36,10 @@ const root = createBrowserRouter([
     ),
   },
   {
-    path: "store",
+    path: "shop",
     element: (
       <Suspense fallback={Loading}>
-        <StoreLayout />
+        <ShopLayout />
       </Suspense>
     ),
     children: toShopRouter(),
@@ -48,7 +48,7 @@ const root = createBrowserRouter([
     path: "products",
     element: (
       <Suspense fallback={Loading}>
-        <StoreLayout />
+        <ShopLayout />
       </Suspense>
     ),
     children: toProductsRouter(),
@@ -57,7 +57,7 @@ const root = createBrowserRouter([
     path: "cart",
     element: (
       <Suspense fallback={Loading}>
-        <StoreLayout />
+        <ShopLayout />
       </Suspense>
     ),
     children: toCartRouter(),
@@ -66,7 +66,7 @@ const root = createBrowserRouter([
     path: "order",
     element: (
       <Suspense fallback={Loading}>
-        <StoreLayout />
+        <ShopLayout />
       </Suspense>
     ),
     children: toOrderRouter(),
@@ -75,7 +75,7 @@ const root = createBrowserRouter([
     path: "payment",
     element: (
       <Suspense fallback={Loading}>
-        <StoreLayout />
+        <ShopLayout />
       </Suspense>
     ),
     children: toPaymentRouter(),
@@ -84,16 +84,16 @@ const root = createBrowserRouter([
     path: "reservation",
     element: (
       <Suspense fallback={Loading}>
-        <StoreLayout />
+        <ShopLayout />
       </Suspense>
     ),
     children: toReservationRouter(),
   },
-    {
+  {
     path: "subscription",
     element: (
       <Suspense fallback={Loading}>
-        <StoreLayout />
+        <ShopLayout />
       </Suspense>
     ),
     children: toSubscriptionRouter(),

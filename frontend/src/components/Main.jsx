@@ -10,14 +10,22 @@ import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import CommonCalendar from "./common/calendar/CommonCalendar";
+import { useNavigate } from "react-router-dom";
 
 const Main = () => {
+  const navigate = useNavigate();
   //로그인 여부 판단
   const user = useSelector((state) => state.loginSlice); //user 정보
   const isLogin = !!user?.userEmail;
   const API_URL = API_SERVER_URL;
-  // 게시글 리스트 변수
+
+  // 공지사항 / 베스트 메뉴
   const [selectMenu, setSelectMenu] = useState("notice");
+  // 베스트 내부 선택 탭
+  const [bestTab, setBestTab] = useState("추천");
+  // 최초 메인 조회에서 받은 추천 게시글 보관
+  const [defaultCommunityList, setDefaultCommunityList] = useState([]);
 
   // 추천기능 변수
   const [communityList, setCommunityList] = useState([]);
@@ -46,36 +54,94 @@ const Main = () => {
     setPopupList((prev) => prev.filter((popup) => popup.id !== popupId));
   };
 
+  //개인 캘린더 가져오기
+  const [calendarEvents, setCalendarEvents] = useState([]);
+  // 개인 일정 조회
+  const getCalendarList = async () => {
+    if (!isLogin) {
+      setCalendarEvents([]);
+      return;
+    }
+    try {
+      const res = await jwtAxios.get(`${API_URL}/api/calendar/scheduleList`, {
+        params: {
+          eventType: "ALL",
+        },
+      });
+      setCalendarEvents(res.data || []);
+      console.log(res.data);
+    } catch (err) {
+      console.error("캘린더 조회 오류:", err);
+      setCalendarEvents([]);
+    }
+  };
+
   // 추천 리스트 가져오는 함수
   const getMainData = async () => {
     try {
       const res = isLogin
-        ? await jwtAxios.get(`${API_URL}/api/main`) //로그인 상태일때 jwtAxios 사용
-        : await axios.get(`${API_URL}/api/main`); //비로그인 상태일때 그냥 axios 사용
+        ? await jwtAxios.get(`${API_URL}/api/main`)
+        : await axios.get(`${API_URL}/api/main`);
 
-      setCommunityList(res.data.communityList || []);
+      //선택한 탭 별 커뮤니티 리스트
+      const mainCommunityList = res.data.communityList || [];
+
+      setCommunityList(mainCommunityList);
+      setDefaultCommunityList(mainCommunityList);
+
+      //상품 리스트
       setProductList(res.data.productList || []);
+      //공지사항 리스트
       setNoticeList(res.data.noticeList || []);
 
-      //팝업
+      //팝업 관련
       const today = new Date().toISOString().slice(0, 10);
 
       const visiblePopupList = (res.data.popupList || []).filter((popup) => {
-        const today = new Date().toISOString().slice(0, 10);
         const hideDate = localStorage.getItem(`mainPopupHideDate_${popup.id}`);
 
         return hideDate !== today;
       });
 
       setPopupList(visiblePopupList.slice(0, 2));
-      console.log(res.data);
     } catch (err) {
-      console.error(err);
+      console.error("메인 데이터 조회 오류:", err);
     }
   };
+  // 선택한 게시판 탭의 조회수 높은 게시글 TOP 5 조회
+  const getBestCommunityList = async (tabName) => {
+    setBestTab(tabName);
+
+    // 추천 탭은 메인 최초 조회에서 받은 목록 다시 사용
+    if (tabName === "추천") {
+      setCommunityList(defaultCommunityList);
+      return;
+    }
+
+    try {
+      const res = await axios.get(`${API_URL}/api/main/community/best`, {
+        params: {
+          tabName,
+        },
+      });
+
+      setCommunityList(Array.isArray(res.data) ? res.data : []);
+    } catch (err) {
+      console.error("베스트 게시글 조회 오류:", err);
+      setCommunityList([]);
+    }
+  };
+
+  // 메인 데이터 조회
   useEffect(() => {
+    setBestTab("추천");
     getMainData();
-  }, []);
+  }, [isLogin]);
+
+  // 로그인 상태에 따라 개인 캘린더 조회
+  useEffect(() => {
+    getCalendarList();
+  }, [isLogin]);
 
   return (
     <>
@@ -190,23 +256,91 @@ const Main = () => {
                         </ul>
                       )}
                       {selectMenu === "best" && (
-                        <ul>
-                          {Array.isArray(communityList) &&
-                            communityList.map((community) => (
-                              <li key={community.id}>
-                                <a href={`/community/detail/${community.id}`}>
-                                  <p>{community.title}</p>
-                                </a>
-                              </li>
-                            ))}
-                        </ul>
+                        <div className="main-left-depth-best-header">
+                          {selectMenu === "best" && (
+                            <div className="main-left-depth-best-header">
+                              {/* 베스트 게시판 탭 */}
+                              {/* 추천 제외 탭 이름별 입력 */}
+                              <ul className="main-best-tab-list">
+                                <li
+                                  className={bestTab === "추천" ? "active" : ""}
+                                  onClick={() => getBestCommunityList("추천")}
+                                >
+                                  추천
+                                </li>
+                                <li
+                                  className={
+                                    bestTab === "운동정보" ? "active" : ""
+                                  }
+                                  onClick={() =>
+                                    getBestCommunityList("운동정보")
+                                  }
+                                >
+                                  운동게시판
+                                </li>
+                                <li
+                                  className={
+                                    bestTab === "자유게시판" ? "active" : ""
+                                  }
+                                  onClick={() =>
+                                    getBestCommunityList("자유게시판")
+                                  }
+                                >
+                                  자유게시판
+                                </li>
+                              </ul>
+                              {/* 선택된 탭의 게시글 */}
+                              <ul className="main-best-list">
+                                {Array.isArray(communityList) &&
+                                communityList.length > 0 ? (
+                                  communityList.map((community) => (
+                                    <li key={community.id}>
+                                      <a
+                                        href={`/community/detail/${community.id}`}
+                                      >
+                                        <p>{community.title}</p>
+                                      </a>
+                                    </li>
+                                  ))
+                                ) : (
+                                  <li className="main-best-empty">
+                                    등록된 게시글이 없습니다.
+                                  </li>
+                                )}
+                              </ul>
+                            </div>
+                          )}
+                        </div>
                       )}
                     </div>
                   </div>
                 </div>
               </div>
+              {/* 로그인 개인 캘린더 */}
+              {isLogin ? (
+                <CommonCalendar
+                  events={calendarEvents}
+                  showHeader={false}
+                  onDateClick={() => navigate("/mypage/schedule")}
+                  onEventClick={() => navigate("/mypage/schedule")}
+                />
+              ) : (
+                <div className="main-calendar-login">
+                  <h3>나의 운동 일정을 관리해 보세요</h3>
+                  <p>
+                    로그인하면 개인 일정과 PT일정 등을
+                    <br />
+                    캘린더에서 한눈에 확인할 수 있습니다.
+                  </p>
+
+                  <button type="button" onClick={() => navigate("/auth/login")}>
+                    로그인하고 일정 확인하기
+                  </button>
+                </div>
+              )}
+
               {/* 베스트셀러, 상품 이미지 -> 아래에 상품 있어서 없어도 되나 */}
-              <div className="main-right">
+              {/* <div className="main-right">
                 <div className="main-right-con">
                   <div className="main-right-slide">
                     <ul>
@@ -239,7 +373,7 @@ const Main = () => {
                     </ul>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
           {/* 이벤트, 상품 이미지 -> grid*/}
@@ -264,6 +398,32 @@ const Main = () => {
                     gap: "3rem",
                   }}
                 >
+                  {bestProduct && (
+                    <li
+                      key={bestProduct.id}
+                      // style={{ display: `flex`, justifyContent: `end` }}
+                    >
+                      <a
+                        href={`/products/detail/${bestProduct.id}`}
+                        style={{ display: "flex", flexDirection: "column" }}
+                      >
+                        <img
+                          // src={`${API_SERVER_URL}/upload/product/${bestProduct.newFileName}`}
+                          src=""
+                          alt={bestProduct.productName}
+                          style={{
+                            width: `30vh`,
+                            height: `30vh`,
+                          }}
+                        />
+                      </a>
+                      <p>{bestProduct.productName}</p>
+                      <span>{bestProduct.price?.toLocaleString()}원</span>
+                      <p>
+                        <del>베스트 상품 </del>
+                      </p>
+                    </li>
+                  )}
                   {Array.isArray(otherProducts) &&
                     otherProducts.map((product) => (
                       <li key={product.id}>

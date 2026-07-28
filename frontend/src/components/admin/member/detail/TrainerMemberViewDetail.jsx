@@ -9,7 +9,7 @@ const TrainerMemberViewDetail = () => {
 
   const [memberData, setMemberData] = useState(null);
   const getMemberList = async () => {
-    const url = `${API_SERVER_URL}/api/member/summary/${id}`;
+    const url = `${API_SERVER_URL}/api/member/admin/summary/${id}`;
     try {
       const res = await jwtAxios.get(url);
       setMemberData(res.data.result);

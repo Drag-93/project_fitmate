@@ -49,11 +49,29 @@ public class MemberServiceImpl implements MemberService {
         MemberEntity memberEntity = MemberEntity.toInsertMemberEntity(memberDto,passwordEncoder.encode(memberDto.getUserPw()));
         //추가 멤버데이터 저장을 위해 더미데이터 생성
         MemberAddEntity memberAdd = MemberAddEntity.createDefault();
+        memberAdd.setInterest(memberDto.getInterest());
 
         memberEntity.setMemberAddEntity(memberAdd);
         //추가 멤버데이터까지 새로 저장
         memberRepository.save(memberEntity);
     }
+
+    @Override
+    public void insertAdminMember(MemberDto memberDto) {
+        Optional<MemberEntity> optionalMemberEntity = memberRepository.findByUserEmail(memberDto.getUserEmail());
+        if(optionalMemberEntity.isPresent()) {
+            throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
+        }
+        //저장과 동시에 저장용 데이터 생성
+        MemberEntity memberEntity = MemberEntity.toInsertMemberAdminEntity(memberDto,passwordEncoder.encode(memberDto.getUserPw()));
+        //추가 멤버데이터 저장을 위해 더미데이터 생성
+        MemberAddEntity memberAdd = MemberAddEntity.createDefault();
+
+        memberEntity.setMemberAddEntity(memberAdd);
+        //추가 멤버데이터까지 새로 저장
+        memberRepository.save(memberEntity);
+    }
+
     @Override
     public boolean emailCheck(String userEmail) {
         return memberRepository.existsByUserEmail(userEmail);
@@ -65,15 +83,14 @@ public class MemberServiceImpl implements MemberService {
                 .collect(Collectors.toList());
     }
     @Override
-    public Page<MemberDto> memberList(Pageable pageable, String subject, String search) {
+    public Page<MemberDto> memberList(Pageable pageable, String subject, String search, Role role) {
         if(subject==null||subject.isBlank()||search==null||search.isBlank()){
-            return memberRepository.findAll(pageable).map(MemberDto::toMemberDto);
+            return memberRepository.findByRole(pageable, role).map(MemberDto::toMemberDto);
         }
         Page<MemberEntity> memberEntities = switch (subject) {
-            case "userName" -> memberRepository.findByUserNameContaining(pageable, search);
-            case "userEmail" -> memberRepository.findByUserEmailContaining(pageable, search);
-            case "role" -> memberRepository.findByRoleContaining(pageable, search);
-            default -> memberRepository.findAll(pageable);
+            case "userName" -> memberRepository.findByRoleAndUserNameContaining(pageable, search, role);
+            case "userEmail" -> memberRepository.findByRoleAndUserEmailContaining(pageable, search, role);
+            default -> memberRepository.findByRole(pageable,role);
         };
         //멤버리스트 검색필터링기능
         return memberEntities.map(MemberDto::toMemberDto);
@@ -82,12 +99,12 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Page<MemberDto> memberListSummary(Pageable pageable, String subject, String search) {
         if(subject==null||subject.isBlank()||search==null||search.isBlank()){
-            return memberRepository.findAll(pageable).map(MemberDto::toMemberDtoSummary);
+            return memberRepository.findByRole(pageable, Role.MEMBER).map(MemberDto::toMemberDtoSummary);
         }
         Page<MemberEntity> memberEntities = switch (subject) {
-            case "userName" -> memberRepository.findByUserNameContaining(pageable, search);
-            case "interest" -> memberRepository.findByInterest(pageable, search);
-            default -> memberRepository.findAll(pageable);
+            case "userName" -> memberRepository.findByRoleAndUserEmailContaining(pageable, search, Role.MEMBER);
+            case "interest" -> memberRepository.findByRoleAndInterest(pageable, search, Role.MEMBER);
+            default -> memberRepository.findByRole(pageable, Role.MEMBER);
         };
         //멤버리스트 검색필터링기능
         return memberEntities.map(MemberDto::toMemberDtoSummary);
@@ -150,7 +167,7 @@ public class MemberServiceImpl implements MemberService {
 
         originMemberEntity.setRole(memberDto.getRole());
         
-        if(beforeRole != Role.TRAINER 
+        if(beforeRole != Role.TRAINER
                 && memberDto.getRole() == Role.TRAINER){
         
             trainerService.createTrainerByRoleChange(originMemberEntity);

@@ -41,7 +41,7 @@ const AdminPopup = () => {
   // 팝업 목록 조회
   // const getPopupList = async () => {
   //   try {
-  //     const res = await jwtAxios.get(`${API_SERVER_URL}/admin/popupList`);
+  //     const res = await jwtAxios.get(`${API_SERVER_URL}/api/admin/popupList`);
 
   //     setPopupList(res.data.result || []);
   //   } catch (err) {
@@ -65,7 +65,7 @@ const AdminPopup = () => {
 
   const getPopupList = async (subject, search, page) => {
     //있을때나 없을때나 실행할수있게 설정
-    const url = `${API_SERVER_URL}/admin/popupList?page=${page}&size=5&subject=${subject ? subject : ""}&search=${encodeURIComponent(search ? search : "")}`;
+    const url = `${API_SERVER_URL}/api/admin/popupList?page=${page}&size=5&subject=${subject ? subject : ""}&search=${encodeURIComponent(search ? search : "")}`;
     try {
       const res = await jwtAxios.get(url);
       setPopupData(res.data);

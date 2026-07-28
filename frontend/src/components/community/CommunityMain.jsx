@@ -6,7 +6,7 @@ import jwtAxios from "../../apis/util/jwtUtil";
 import { getCookie } from "../../apis/util/cookieUtil";
 import { useNavigate } from "react-router-dom";
 
-//날씨 지역 목록
+//날씨 지역 목록 (지역별 날씨 카드의 select 옵션 + API 조회에 사용)
 const CITIES = [
   { code: "Seoul", label: "서울" }, //서울
   { code: "Suwon", label: "수원" }, //경기
@@ -20,7 +20,13 @@ const CITIES = [
   { code: "Jeju", label: "제주" }, //제주
 ];
 
+/**
+ * 커뮤니티 메인(홈) 페이지
+ * - 상단: 지역별 날씨 카드 / 개인화 추천 운동 카드 / 운동 루틴 바로가기 카드
+ * - 하단: 탭별 게시글 미리보기 카드 그리드 (전체게시판 + 각 탭)
+ */
 const CommunityMain = () => {
+  // 메인 화면에 필요한 게시글 데이터 (탭별 미리보기, 전체 추천글, 탭 목록)
   const [mainData, setMainData] = useState({
     byTab: {},
     all: [],
@@ -29,20 +35,22 @@ const CommunityMain = () => {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
-  const [weatherMap, setWeatherMap] = useState({});
+  // 지역별 날씨 정보 상태
+  const [weatherMap, setWeatherMap] = useState({}); // { cityCode: weatherData }
   const [isWeatherLoading, setIsWeatherLoading] = useState(true);
-  const [selectedCity, setSelectedCity] = useState("Seoul");
+  const [selectedCity, setSelectedCity] = useState("Seoul"); // 현재 선택된 지역
 
   // ★ 변경 - 날씨 기반 추천 대신, 로그인 사용자의 최근 루틴 3개를 제외한 운동 5개를 무작위로 받아온다.
   const [personalizedPicks, setPersonalizedPicks] = useState([]);
   const [isPickLoading, setIsPickLoading] = useState(true);
   const [pickError, setPickError] = useState(null);
 
+  // 메인 게시글 데이터(탭별 미리보기 + 전체 추천글) 조회
   useEffect(() => {
     const fetchMainData = async () => {
       try {
         setIsLoading(true);
-        const res = await axios.get(`${API_SERVER_URL}/community/main`);
+        const res = await axios.get(`${API_SERVER_URL}/api/community/main`);
         if (res.data?.result) {
           setMainData(res.data.result);
         }
@@ -56,12 +64,15 @@ const CommunityMain = () => {
   }, []);
 
   //지역별 날씨 불러오기 (날씨 카드는 그대로 유지, 추천 운동과는 더 이상 연결되지 않음)
+  // 모든 도시의 날씨를 병렬로 조회하고, 일부 도시가 실패해도 나머지는 정상 표시되도록 allSettled 사용
   const fetchAllWeather = async () => {
     try {
       setIsWeatherLoading(true);
       const results = await Promise.allSettled(
         CITIES.map((city) =>
-          axios.get(`${API_SERVER_URL}/community/weather?city=${city.code}`),
+          axios.get(
+            `${API_SERVER_URL}/api/community/weather?city=${city.code}`,
+          ),
         ),
       );
 
@@ -85,7 +96,7 @@ const CommunityMain = () => {
   }, []);
 
   // ★ 추가 - 최근 루틴 3개를 제외한 운동 5개 무작위 조회.
-  // 로그인 사용자 기준 개인화라 jwtAxios 사용, 비로그인 시 401을 받으면 안내 문구로 대체.
+  // 로그인 사용자 기준 개인화라 jwtAxios 사용, 비로그인 시에는 API 호출 자체를 생략하고 안내 문구를 표시
   useEffect(() => {
     const member = getCookie("member");
     if (!member?.access) {
@@ -112,21 +123,25 @@ const CommunityMain = () => {
     fetchPersonalizedPicks();
   }, []);
 
+  // 현재 선택된 지역의 날씨 데이터
   const selectedWeather = weatherMap[selectedCity];
 
   const EXCLUDED_CATEGORY_KEYWORDS = ["QNA"]; //추가로 제외할 카테고리 이름
+  // 메인 화면에 표시할 게시판 카드 목록 구성
+  // - "전체게시판 추천글": 관리자 전용 탭 게시글과 QNA 카테고리는 제외하고 필터링
+  // - 이후 각 탭별로 카드 하나씩 추가 (byTab에 해당 탭의 미리보기 목록이 들어있음)
   const boardCards = [
     {
       key: "all",
       tabName: "전체게시판 추천글",
       list: mainData.all.filter((item) => {
         const tab = mainData.tabs.find((t) => t.id === item.tabId);
-        if (tab?.adminOnly) return false;
+        if (tab?.adminOnly) return false; // 관리자 전용(공지사항) 탭 게시글은 전체 추천글에서 제외
         const categoryName = item.categoryName || "";
         const isExcluded = EXCLUDED_CATEGORY_KEYWORDS.some((keyword) =>
           categoryName.toUpperCase().includes(keyword.toUpperCase()),
         );
-        if (isExcluded) return false;
+        if (isExcluded) return false; // QNA 등 제외 대상 카테고리 필터링
         return true;
       }),
     },
@@ -137,6 +152,7 @@ const CommunityMain = () => {
     })),
   ];
 
+  // "운동 루틴" 카드 클릭: 로그인 안 되어 있으면 로그인 페이지로, 되어 있으면 루틴 페이지로 이동
   const handleWriteClick = () => {
     const member = getCookie("member");
     if (!member?.access) {
@@ -153,7 +169,7 @@ const CommunityMain = () => {
         {/* 배너 자리 -> 날씨 + 추천운동 + 운동루틴 */}
         <div className="comMain-top">
           <div className="comMain-top-con comMain-top-row">
-            {/* 지역별 날씨 */}
+            {/* 지역별 날씨 카드: select로 지역 선택 시 해당 지역 날씨 표시 */}
             <div className="board-card weather-card-wrap">
               <div className="board-card-header weather-card-header">
                 <h3>지역별 날씨</h3>
@@ -195,7 +211,7 @@ const CommunityMain = () => {
               </div>
             </div>
 
-            {/*최근 루틴 3개를 제외한 운동 5개 무작위 추천 */}
+            {/*최근 루틴 3개를 제외한 운동 5개 무작위 추천 카드 */}
             <div className="board-card recommend-card">
               <div className="board-card-header">
                 <h3>오늘의 추천 운동</h3>
@@ -229,7 +245,7 @@ const CommunityMain = () => {
               </div>
             </div>
 
-            {/* 운동 루틴 이동 */}
+            {/* 운동 루틴 페이지로 이동하는 배너형 카드 */}
             <div className="board-card routine-card" onClick={handleWriteClick}>
               <div className="board-card-header">
                 <h3>운동 루틴</h3>
@@ -245,7 +261,7 @@ const CommunityMain = () => {
           </div>
         </div>
 
-        {/* 게시판 카드 그리드 (전체 너비) */}
+        {/* 게시판 카드 그리드 (전체 너비): 전체게시판 추천글 + 각 탭별 미리보기 */}
         <div className="comMain-center">
           <div className="comMain-center-con">
             <div className="comMain-board-grid">

@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../../css/common/Header.css";
 import { useDispatch, useSelector } from "react-redux";
 import loginSlice, { logout, logoutAsync } from "../../store/slices/loginSlice";
+import axios from "axios";
+import { API_SERVER_URL } from "../../apis/commonApi";
+
 const Header = () => {
   //변수 선언
   const dispatch = useDispatch();
@@ -33,16 +36,33 @@ const Header = () => {
   //메뉴 depth 기능 -> onMouseEnter시 오픈
   const [activeMenu, setActiveMenu] = useState(null);
 
-  //header 검색기능
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (!keyword.trim()) return;
+  // 커뮤니티 탭 + 카테고리 목록
+  const [communityTabs, setCommunityTabs] = useState([]);
 
-    // 검색 페이지로 검색어를 포함해 이동
-    setIsSearchOpen(false);
-    navigate(`/search?search=${encodeURIComponent(keyword)}`); //검색어 encoding ->데이터에 포함된 특수문자나 공백이 URL의 구조를 깨뜨리거나 변조되는 것을 방지
-    setKeyword(""); // 입력창 비우기
-  };
+  useEffect(() => {
+    const fetchCommunityTabs = async () => {
+      try {
+        const res = await axios.get(`${API_SERVER_URL}/api/community/tabList`);
+        setCommunityTabs(res.data?.result || []);
+      } catch (err) {
+        console.error("커뮤니티 탭 로딩 실패", err);
+      }
+    };
+    fetchCommunityTabs();
+  }, []);
+  // 탭 이름으로 FAQ 탭 조회 - 탭 이름 변경되면 변경!
+  const faqTab = communityTabs.find((tab) => tab.tabName === "건의게시판");
+
+  //header 검색기능 -> 나중에 추가
+  // const handleSearch = (e) => {
+  //   e.preventDefault();
+  //   if (!keyword.trim()) return;
+
+  //   // 검색 페이지로 검색어를 포함해 이동
+  //   setIsSearchOpen(false);
+  //   navigate(`/search?search=${encodeURIComponent(keyword)}`); //검색어 encoding ->데이터에 포함된 특수문자나 공백이 URL의 구조를 깨뜨리거나 변조되는 것을 방지
+  //   setKeyword(""); // 입력창 비우기
+  // };
   return (
     <>
       <div className="header" onMouseLeave={() => setActiveMenu(null)}>
@@ -50,11 +70,18 @@ const Header = () => {
           <div className="nav-wrap">
             <div className="gnb-left">
               <ul>
-                <li onMouseEnter={() => setActiveMenu("store")}>
-                  <Link to={`/store`}>스토어</Link>
+                <li onMouseEnter={() => setActiveMenu("shop")}>
+                  <Link to={`/shop`}>스토어</Link>
                 </li>
                 <li onMouseEnter={() => setActiveMenu("community")}>
                   <Link to={`/community`}>게시판</Link>
+                </li>
+                <li>
+                  {faqTab ? (
+                    <Link to={`/community/tab/${faqTab.id}`}>FAQ</Link>
+                  ) : (
+                    <span>FAQ</span>
+                  )}
                 </li>
               </ul>
             </div>
@@ -63,7 +90,8 @@ const Header = () => {
                 <h1>logo</h1>
               </Link>
             </div>
-            <div className={`header_search ${isSearchOpen ? "active" : ""}`}>
+            {/* 검색기능 -> 나중에 추가 */}
+            {/* <div className={`header_search ${isSearchOpen ? "active" : ""}`}>
               <form className="search-bar" onSubmit={handleSearch}>
                 <div className="search_box">
                   <input
@@ -86,10 +114,11 @@ const Header = () => {
                   ×
                 </span>
               </form>
-            </div>
+            </div> */}
             <div className="gnb-right">
               <ul>
-                <span
+                {/* 검색기능용 돋보기 아이콘 */}
+                {/* <span
                   className="header_auth_btn header_search_btn"
                   onClick={() => setIsSearchOpen(true)}
                 >
@@ -98,7 +127,7 @@ const Header = () => {
                     alt="돋보기 아이콘"
                     style={{ width: "25px", height: "25px" }}
                   />
-                </span>
+                </span> */}
                 {!isLogin && (
                   <>
                     <li>
@@ -109,14 +138,12 @@ const Header = () => {
                     </li>
                   </>
                 )}
-                {isLogin && memberData?.result?.role === "ADMIN" && (
-                  // user?.userEmail === "test@email.com" && (
+                {isLogin && memberData?.result?.role !== "MEMBER" && (
                   <li>
                     <Link to="/admin">관리자</Link>
                   </li>
                 )}
                 {isLogin && memberData?.result?.role !== "ADMIN" && (
-                  // user?.userEmail === "test@email.com" && (
                   <li>
                     <Link to="/mypage">{memberData?.result?.userName}님</Link>
                   </li>
@@ -141,16 +168,16 @@ const Header = () => {
             </div>
           </div>
           <div className={`header_depth ${activeMenu ? "active" : ""}`}>
-            {activeMenu === "store" && (
+            {activeMenu === "shop" && (
               <ul>
                 <li>
-                  <Link to={`/store/index`}>스토어</Link>
+                  <Link to={`/shop/index`}>스토어</Link>
                   <Link to="/products?productType=GOODS">운동기구</Link>
                   <Link to="/products?productType=GOODS">식품</Link>
                   <Link to="/products?productType=GOODS">스토어3</Link>
                 </li>
                 <li>
-                  <Link to={`/store/index`}>구독상품</Link>
+                  <Link to={`/shop/index`}>구독상품</Link>
                   <Link to="/products/premium">FitMate Plus+</Link>
                   <Link to="/products?productType=GYM">헬스장</Link>
                   <Link to="/products?productType=PT">PT</Link>
@@ -159,17 +186,34 @@ const Header = () => {
             )}
             {activeMenu === "community" && (
               <ul>
-                <li>
-                  <Link to={`/community/notice`}>공지사항</Link>
-                  <Link to={`/community/`}>자주 묻는 질문</Link>
-                  <Link to={`/community/qna`}>Q&A</Link>
-                </li>
+                {communityTabs.map((tab) => (
+                  <li key={tab.id}>
+                    <Link
+                      to={`/community/tab/${tab.id}`}
+                      onClick={() => setActiveMenu(null)}
+                    >
+                      {tab.tabName}
+                    </Link>
+                    {tab.categoryList?.map((cat) => (
+                      <Link
+                        key={cat.id}
+                        to={`/community/tab/${tab.id}/category/${cat.id}`}
+                        onClick={() => setActiveMenu(null)}
+                      >
+                        {cat.categoryName}
+                      </Link>
+                    ))}
+                  </li>
+                ))}
 
+                {/* 운동루틴을 마지막 li 항목으로 배치 */}
                 <li>
-                  {/* 카테고리 늘어나면 추가될 수 있도록 제작 */}
-                  <Link to={`/community`}>커뮤니티</Link>
-                  <Link to={`/community`}>카테고리1</Link>
-                  <Link to={`/community`}>카테고리2</Link>
+                  <Link
+                    to={`/community/routine`}
+                    onClick={() => setActiveMenu(null)}
+                  >
+                    운동루틴
+                  </Link>
                 </li>
               </ul>
             )}

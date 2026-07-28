@@ -15,7 +15,6 @@ const toShopRouter = () => {
       path: "index",
       element: <StoreIndexPage />,
     },
-
   ];
 };
 

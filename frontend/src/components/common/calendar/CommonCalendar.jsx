@@ -35,7 +35,7 @@ const getCalendarList = async () => {
     return;
   }
   const res = await jwtAxios.get(
-    `/calendar/${memberId}`,
+    `/api/calendar/${memberId}`,
     {
       params: {
         eventType,

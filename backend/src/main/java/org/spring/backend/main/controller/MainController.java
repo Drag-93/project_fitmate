@@ -1,6 +1,7 @@
 package org.spring.backend.main.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.spring.backend.community.dto.CommunityDto;
 import org.spring.backend.member.enumtype.Interest;
 import org.spring.backend.main.dto.MainResponseDto;
 import org.spring.backend.main.service.MainService;
@@ -11,18 +12,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
-@RequestMapping
+@RequestMapping("/api/main")
 @RequiredArgsConstructor
 public class MainController {
     private final MainService mainService;
     private final MemberRepository memberRepository;
-    @GetMapping("/api/main")
+    @GetMapping("")
     public ResponseEntity<MainResponseDto> getMainData(
             @AuthenticationPrincipal CustomUserDetails user       //backend 기준 user 정보가 담기는곳
     ) {
@@ -63,6 +66,15 @@ public class MainController {
         }
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/community/best")
+    public ResponseEntity<List<CommunityDto>> getBestCommunityList(
+            @RequestParam String tabName) {
+
+        return ResponseEntity.ok(
+                mainService.getBestCommunityList(tabName)
+        );
     }
 
 }

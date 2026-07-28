@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/admin/dashboard")
+@RequestMapping("/api/admin/dashboard")
 public class DashboardController {
 
     private final DashboardService dashboardService;

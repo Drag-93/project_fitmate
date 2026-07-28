@@ -210,6 +210,7 @@
 
 .header_depth a {
   font-size: 14px;
+  font-weight: 400; /* ✅ 추가: 기본값을 명시적으로 normal로 고정 (아래 :first-child만 예외적으로 bold) */
   color: #444;
   transition: color 0.2s ease;
 }
@@ -222,6 +223,55 @@
 }
 
 .header_depth a:hover {
+  color: #35c75a;
+}
+
+/* 커뮤니티 드롭다운 (탭 + 카테고리) - .header_depth > ul > li 와 동일한 톤으로 맞춤 */
+.community-depth {
+  min-height: 150px;
+  padding: 28px 32px;
+
+  display: flex;
+  gap: 90px;
+}
+
+.depth-column {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  min-width: 140px;
+}
+
+.depth-column-title {
+  margin-bottom: 4px;
+
+  font-size: 15px;
+  font-weight: 700; /* 탭 이름(예: 자유게시판)만 굵게 - 스토어의 :first-child(스토어/구독상품)와 동일한 톤 */
+  color: #111;
+  transition: color 0.2s ease;
+}
+
+.depth-column-title:hover {
+  color: #35c75a;
+}
+
+.depth-category-list {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+/* ✅ 수정: 하위 카테고리(예: 일상이야기, FAQ 등)가 굵게 보이던 문제 해결.
+   기존엔 font-weight를 지정하지 않아 상황에 따라 굵게 상속/렌더링될 여지가 있었음.
+   스토어 하위 항목(운동기구, 식품 등)과 동일하게 normal(400)로 명시 고정. */
+.depth-category-list a {
+  font-size: 14px;
+  font-weight: 400;
+  color: #444;
+  transition: color 0.2s ease;
+}
+
+.depth-category-list a:hover {
   color: #35c75a;
 }
 

@@ -1,95 +1,20 @@
 package org.spring.backend.exercise;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClientResponseException;
-
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * ExerciseDB(RapidAPI) 원격 데이터를 로컬 DB로 캐싱하는 동기화 서비스.
- * 무료 티어의 빡빡한 rate limit 때문에, 요청마다 API를 호출하지 않고
- * "부위별로 캐시에 없을 때만" 1회 동기화 후 이후에는 로컬 DB만 사용한다.
+ * ExerciseDB(RapidAPI) 원격 데이터를 로컬 DB로 캐싱하는 동기화 서비스 인터페이스
+ * 구현체: ExerciseSyncServiceImpl
  */
-@Slf4j
-@Service
-@RequiredArgsConstructor
-public class ExerciseSyncService {
+public interface ExerciseSyncService {
 
-    private final ExerciseRepository exerciseRepository;
-    private final ExerciseDbClient exerciseDbClient;
+    // 특정 부위(target)의 운동 데이터를 RapidAPI에서 받아와 로컬 DB에 upsert
+    void syncByTarget(String target);
 
-    public void syncByTarget(String target) {
-        JsonNode response;
-        try {
-            response = exerciseDbClient.getExercisesByTarget(target);
-        } catch (RestClientResponseException e) {
-            // RapidAPI 레이트리밋(429) 등 응답 실패 시, 예외를 위로 던지지 않고
-            // 있는 캐시라도 쓸 수 있게 로그만 남기고 조용히 종료한다.
-            log.warn("ExerciseDB sync 실패 (target={}, status={}): {}",
-                    target, e.getStatusCode(), e.getMessage());
-            return;
-        }
+    // 캐시에 해당 target 데이터가 이미 있는지 확인
+    boolean isCached(String target);
 
-        if (response == null || !response.isArray()) {
-            log.warn("ExerciseDB sync: target={} 응답이 비어있거나 배열이 아닙니다.", target);
-            return;
-        }
-
-        List<Exercise> toSave = new ArrayList<>();
-        for (JsonNode node : response) {
-            String id = node.path("id").asText(null);
-            if (id == null) continue;
-
-            String name = node.path("name").asText("");
-            String bodyPart = node.path("bodyPart").asText("");
-            String equipment = node.path("equipment").asText("");
-            String gifUrl = node.path("gifUrl").asText("");
-
-            exerciseRepository.findById(id).ifPresentOrElse(
-                    existing -> existing.update(name, bodyPart, equipment, gifUrl),
-                    () -> toSave.add(new Exercise(id, name, target, bodyPart, equipment, gifUrl))
-            );
-        }
-
-        if (!toSave.isEmpty()) {
-            exerciseRepository.saveAll(toSave);
-        }
-        log.info("ExerciseDB sync 완료: target={}, 신규 {}건 저장", target, toSave.size());
-    }
-
-    /** 캐시에 해당 target 데이터가 이미 있는지 확인 */
-    public boolean isCached(String target) {
-        return exerciseRepository.existsByTargetIgnoreCase(target);
-    }
-
-    public Map<String, Boolean> syncAllTargets(List<String> allTargets) {
-        Map<String, Boolean> result = new LinkedHashMap<>();
-
-        for (String target : allTargets) {
-            try {
-                syncByTarget(target);
-                result.put(target, true);
-                log.info("동기화 성공: {}", target);
-            } catch (Exception e) {
-                // RapidAPI 일일 한도 초과 등으로 하나 실패해도
-                // 나머지 target은 계속 진행되도록 함
-                result.put(target, false);
-                log.error("동기화 실패: {}", target, e);
-            }
-
-            try {
-                // target 간 호출 간격 (RapidAPI 초당 호출 제한 보호)
-                Thread.sleep(500);
-            } catch (InterruptedException ignored) {
-            }
-        }
-
-        return result;
-    }
+    // 여러 target을 순차적으로 동기화 (관리자 전체 동기화용, target별 성공 여부를 맵으로 반환)
+    Map<String, Boolean> syncAllTargets(List<String> allTargets);
 }

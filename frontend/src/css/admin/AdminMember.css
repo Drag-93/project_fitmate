@@ -1,3 +1,156 @@
+@import url("../common/reset.css");
+
+/* ===========================
+   Header Container (Tab + Search)
+=========================== */
+
+.header-con {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap; /* 화면이 좁아지면 자연스럽게 줄바꿈 */
+}
+
+/* ===========================
+   Role Filter Tabs
+=========================== */
+
+.roleFilter {
+  display: inline-flex;
+  gap: 4px;
+  background-color: #f1f3f5;
+  padding: 4px;
+  border-radius: 10px;
+}
+
+.roleFilter button {
+  padding: 8px 16px;
+  border: none;
+  background: transparent;
+  color: #666;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+/* 마우스 호버 및 활성화 상태 */
+.roleFilter button:hover:not(.active) {
+  color: #333;
+}
+
+.roleFilter button.active {
+  background-color: #4b7bec;
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(75, 123, 236, 0.3);
+}
+
+/* ===========================
+   Search Box & Form
+=========================== */
+
+.search .filters form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 드롭다운 select */
+.search select {
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #333;
+  background-color: #fff;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.search select:focus {
+  border-color: #4b7bec;
+}
+
+/* 검색어 input */
+.search input[type="text"] {
+  width: 200px;
+  height: 40px;
+  padding: 0 14px;
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #333;
+  background-color: #fff;
+  outline: none;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.search input[type="text"]::placeholder {
+  color: #aaa;
+}
+
+.search input[type="text"]:focus {
+  border-color: #4b7bec;
+  box-shadow: 0 0 6px rgba(75, 123, 236, 0.2);
+}
+
+/* 검색 버튼 */
+.search input[type="submit"] {
+  height: 40px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 8px;
+  background-color: #4b7bec;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+}
+
+.search input[type="submit"]:hover {
+  background-color: #3867d6;
+}
+
+/* ===========================
+   Responsive
+=========================== */
+
+@media (max-width: 768px) {
+  .header-con {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .roleFilter {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .roleFilter button {
+    flex: 1;
+    text-align: center;
+    padding: 8px 0;
+  }
+
+  .search .filters form {
+    width: 100%;
+  }
+
+  .search input[type="text"] {
+    flex: 1; /* 모바일에서는 검색창이 남은 너비를 꽉 채우도록 설정 */
+    width: auto;
+  }
+}
+
 .admin-member {
   position: relative;
 
