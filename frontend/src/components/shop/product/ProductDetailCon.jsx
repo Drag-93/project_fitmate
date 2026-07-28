@@ -77,6 +77,7 @@ const ProductDetailPage = () => {
       id: product.id,
       productId: product.id,
       productName: product.productName,
+      productType: product.productType,  
       price: product.price,
       productImage: product.fileDtos.find(
         file => file.imageType === "THUMBNAIL"

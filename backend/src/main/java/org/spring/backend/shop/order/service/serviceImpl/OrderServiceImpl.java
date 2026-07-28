@@ -59,6 +59,7 @@ public class OrderServiceImpl implements OrderService {
                                 .receiverName(orderDto.getReceiverName())
                                 .receiverPhone(orderDto.getReceiverPhone())
                                 .receiverAddress(orderDto.getReceiverAddress())
+                                .receiverDetailAddress(orderDto.getReceiverDetailAddress())
                                 .deliveryMemo(orderDto.getDeliveryMemo())
                                 .memberEntity(memberEntity)
                                 .build();
@@ -107,6 +108,7 @@ public class OrderServiceImpl implements OrderService {
                                 .receiverName(orderDto.getReceiverName())
                                 .receiverPhone(orderDto.getReceiverPhone())
                                 .receiverAddress(orderDto.getReceiverAddress())
+                                .receiverDetailAddress(orderDto.getReceiverDetailAddress()) 
                                 .deliveryMemo(orderDto.getDeliveryMemo())
                                 .memberEntity(memberEntity)
                                 .build();

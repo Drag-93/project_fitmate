@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../../css/common/Header.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -34,7 +34,10 @@ const Header = () => {
       navigate("/");
     }
   };
-
+  //드롭다운 메뉴 위치조정
+  const shopRef = useRef(null);
+  const communityRef = useRef(null);
+  const [menuPosition, setMenuPosition] = useState(0);
   // 검색기능변수
   const [keyword, setKeyword] = useState("");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -75,17 +78,30 @@ const Header = () => {
           <div className="nav-wrap">
             <div className="gnb-left">
               <ul>
-                <li onMouseEnter={() => setActiveMenu("shop")}>
+                <li
+                  ref={shopRef}
+                  onMouseEnter={() => {
+                    setActiveMenu("shop");
+                    setMenuPosition(shopRef.current.offsetLeft);
+                  }}
+                >
                   <Link to={`/shop`}>스토어</Link>
                 </li>
-                <li onMouseEnter={() => setActiveMenu("community")}>
+                <li
+                  ref={communityRef}
+                  onMouseEnter={() => {
+                    setActiveMenu("community");
+                    setMenuPosition(communityRef.current.offsetLeft);
+                  }}
+                >
+                  {" "}
                   <Link to={`/community`}>게시판</Link>
                 </li>
                 <li>
                   {faqTab ? (
-                    <Link to={`/community/tab/${faqTab.id}`}>FAQ</Link>
+                    <Link to={`/community/tab/${faqTab.id}`} className="header-faq">FAQ</Link>
                   ) : (
-                    <span>FAQ</span>
+                    <span className="header-faq">FAQ</span>
                   )}
                 </li>
               </ul>
@@ -174,7 +190,10 @@ const Header = () => {
               </ul>
             </div>
           </div>
-          <div className={`header_depth ${activeMenu ? "active" : ""}`}>
+          <div
+            className={`header_depth ${activeMenu ? "active" : ""}`}
+            style={{ left: `${menuPosition}px` }}
+          >
             {activeMenu === "shop" && (
               <ul>
                 <li>

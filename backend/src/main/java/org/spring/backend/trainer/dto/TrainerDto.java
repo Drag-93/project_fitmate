@@ -42,7 +42,11 @@ public class TrainerDto {
                 .specialty(trainer.getSpecialty())
                 .introduce(trainer.getIntroduce())
                 .certificate(trainer.getCertificate())
-                .profileImage(trainer.getProfileImage())
-                .build();
+                .profileImage(
+                        trainer.getMember().getFileEntities() != null &&
+                                !trainer.getMember().getFileEntities().isEmpty()
+                                ? trainer.getMember().getFileEntities().get(0).getNewFileName()
+                                : null
+                ).build();
     }
 }

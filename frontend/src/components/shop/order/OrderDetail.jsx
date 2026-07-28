@@ -1,5 +1,4 @@
 const OrderDetail = ({ order }) => {
-
   if (!order) {
     return <p>주문 정보를 불러오는 중...</p>;
   }
@@ -45,7 +44,7 @@ const OrderDetail = ({ order }) => {
         <h3>배송 정보</h3>
 
         <p>받는 사람 : {order.receiverName}</p>
-        <p>주소: {order.receiverAddress}</p>
+        <p>주소: {order.receiverAddress} {order.receiverDetailAddress}</p>
         <p>연락처 : {order.receiverPhone}</p>
         <p>배송메모 : {order.deliveryMemo}</p>
       </div>

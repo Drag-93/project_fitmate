@@ -130,7 +130,7 @@
   background: inherit;
 }
 
-.slides-container {
+.main .slides-container {
   width: 100%;
   overflow: hidden;
 
