@@ -9,6 +9,7 @@ import org.spring.backend.shop.MemberProduct.entity.MemberProductEntity;
 import org.spring.backend.shop.product.entity.ProductEntity;
 import org.spring.backend.shop.reservation.type.ReservationStatus;
 import org.spring.backend.trainer.entity.TrainerEntity;
+import org.spring.backend.trainer.entity.TrainerScheduleEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,6 +21,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -71,4 +73,8 @@ public class ReservationEntity extends BasicTime {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "member_product_id")
   private MemberProductEntity memberProduct;
+
+  @OneToOne
+  @JoinColumn(name = "trainer_schedule_id")
+  private TrainerScheduleEntity trainerSchedule;
 }

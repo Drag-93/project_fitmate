@@ -1,6 +1,7 @@
 package org.spring.backend.shop.reservation.service.impl;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -14,8 +15,11 @@ import org.spring.backend.shop.reservation.entity.ReservationEntity;
 import org.spring.backend.shop.reservation.repository.ReservationRepository;
 import org.spring.backend.shop.reservation.service.ReservationService;
 import org.spring.backend.shop.reservation.type.ReservationStatus;
+import org.spring.backend.shop.reservation.type.ScheduleStatus;
 import org.spring.backend.trainer.entity.TrainerEntity;
+import org.spring.backend.trainer.entity.TrainerScheduleEntity;
 import org.spring.backend.trainer.repository.TrainerRepository;
+import org.spring.backend.trainer.repository.TrainerScheduleRepository;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -29,6 +33,7 @@ public class ReservationServiceImpl implements ReservationService {
   private final MemberRepository memberRepository;
   private final MemberProductRepository memberProductRepository;
   private final TrainerRepository trainerRepository;
+  private final TrainerScheduleRepository trainerScheduleRepository;
 
   // 회원 예약 생성
   @Override
@@ -71,6 +76,22 @@ public class ReservationServiceImpl implements ReservationService {
         .build();
 
     reservationRepository.save(reservation);
+    TrainerScheduleEntity schedule = TrainerScheduleEntity.builder()
+        .trainer(trainer)
+        .title("PT 수업")
+        .startTime(
+            LocalDateTime.of(
+                reservationDto.getReservationDate(),
+                reservationDto.getReservationTime()))
+        .endTime(
+            LocalDateTime.of(
+                reservationDto.getReservationDate(),
+                reservationDto.getReservationTime()).plusHours(1))
+        .status(ScheduleStatus.RESERVED)
+        .reservation(reservation)
+        .build();
+
+    trainerScheduleRepository.save(schedule);
 
     return reservation.getId();
   }
@@ -144,6 +165,12 @@ public class ReservationServiceImpl implements ReservationService {
 
     reservation.setReservationStatus(
         ReservationStatus.CANCEL);
+    TrainerScheduleEntity schedule = trainerScheduleRepository.findByReservationId(reservationId)
+        .orElse(null);
+
+    if (schedule != null) {
+      schedule.setStatus(ScheduleStatus.AVAILABLE);
+    }
   }
 
   // 트레이너 예약 상태 변경
@@ -183,6 +210,12 @@ public class ReservationServiceImpl implements ReservationService {
 
     reservation.setReservationStatus(
         ReservationStatus.CANCEL);
+    TrainerScheduleEntity schedule = trainerScheduleRepository.findByReservationId(reservationId)
+        .orElse(null);
+
+    if (schedule != null) {
+      schedule.setStatus(ScheduleStatus.AVAILABLE);
+    }
   }
 
   @Override

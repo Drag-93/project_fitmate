@@ -2,9 +2,17 @@ package org.spring.backend.trainer.controller;
 
 import java.util.List;
 
+import org.spring.backend.member.entity.MemberEntity;
+import org.spring.backend.member.jwt.CustomUserDetails;
+import org.spring.backend.member.repository.MemberRepository;
+import org.spring.backend.shop.reservation.dto.ReservationDto;
+import org.spring.backend.shop.reservation.service.ReservationService;
 import org.spring.backend.trainer.dto.TrainerScheduleDto;
+import org.spring.backend.trainer.entity.TrainerEntity;
+import org.spring.backend.trainer.repository.TrainerRepository;
 import org.spring.backend.trainer.service.TrainerScheduleService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,10 +27,21 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/reservation/trainer/schedule")
+@RequestMapping("/api/trainer/schedule")
 public class TrainerScheduleController {
 
   private final TrainerScheduleService trainerScheduleService;
+  private final TrainerRepository trainerRepository;
+  private final ReservationService reservationService;
+  private final MemberRepository memberRepository;
+
+  // 회원 조회 공통 메서드
+  private MemberEntity getMember(CustomUserDetails user) {
+
+    return memberRepository
+        .findByUserEmail(user.getUsername())
+        .orElseThrow(() -> new IllegalArgumentException("회원이 없습니다."));
+  }
 
   // 트레이너 스케줄 등록
   @PostMapping
@@ -38,14 +57,29 @@ public class TrainerScheduleController {
   }
 
   // 트레이너 스케줄 조회
-  @GetMapping("/{trainerId}")
+  @GetMapping
   public ResponseEntity<List<TrainerScheduleDto>> getSchedule(
-      @PathVariable Long trainerId) {
+      @AuthenticationPrincipal CustomUserDetails user) {
 
-    List<TrainerScheduleDto> list = trainerScheduleService.getTrainerSchedule(
-        trainerId);
+    MemberEntity member = getMember(user);
+
+    List<TrainerScheduleDto> list = trainerScheduleService.getTrainerSchedule(member.getId());
 
     return ResponseEntity.ok(list);
+  }
+
+  @GetMapping("/reservation")
+  public ResponseEntity<List<ReservationDto>> getTrainerReservation(
+      @AuthenticationPrincipal CustomUserDetails user) {
+
+    MemberEntity member = getMember(user);
+
+    TrainerEntity trainer = trainerRepository
+        .findByMemberId(member.getId())
+        .orElseThrow();
+
+    return ResponseEntity.ok(
+        reservationService.getTrainerReservation(trainer.getId()));
   }
 
   // 스케줄 삭제
