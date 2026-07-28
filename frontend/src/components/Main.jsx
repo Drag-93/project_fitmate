@@ -204,7 +204,17 @@ const Main = () => {
                   className="main-banner-swiper"
                 >
                   <SwiperSlide>
-                    <a href="/store">
+                    <a href="/products/premium">
+                      <img src="/images/main/event.png" alt="event" />
+                    </a>
+                  </SwiperSlide>
+                  <SwiperSlide>
+                    <a href="/shop">
+                      <img src="/images/main/배너.png" alt="메인 배너" />
+                    </a>
+                  </SwiperSlide>
+                  <SwiperSlide>
+                    <a href="/shop">
                       <img
                         src="/images/test/banner1.jpg"
                         alt="메인 배너 테스트1"
@@ -213,7 +223,7 @@ const Main = () => {
                   </SwiperSlide>
 
                   <SwiperSlide>
-                    <a href="/store">
+                    <a href="/shop">
                       <img
                         src="/images/test/banner2.jpg"
                         alt="메인 배너 테스트1"
@@ -379,15 +389,6 @@ const Main = () => {
           {/* 이벤트, 상품 이미지 -> grid*/}
           <div className="main-bottom">
             <div className="main-bottom-con">
-              <div
-                className="main-bottom-event"
-                style={{ display: "flex", justifyContent: "center" }}
-              >
-                <a href="/store">
-                  <del>이벤트이미지</del>
-                  <img src="" alt="이벤트 이미지" />
-                </a>
-              </div>
               <div className="main-bottom-itemList">
                 <ul
                   style={{
@@ -419,9 +420,7 @@ const Main = () => {
                       </a>
                       <p>{bestProduct.productName}</p>
                       <span>{bestProduct.price?.toLocaleString()}원</span>
-                      <p>
-                        <del>베스트 상품 </del>
-                      </p>
+                      <p></p>
                     </li>
                   )}
                   {Array.isArray(otherProducts) &&
@@ -448,64 +447,9 @@ const Main = () => {
                         </a>
                         <p>{product.productName}</p>
                         <span>{product.price?.toLocaleString()}원</span>
-                        <p>
-                          <del>베스트상품</del>
-                        </p>
+                        <p></p>
                       </li>
                     ))}
-
-                  <li style={{ display: "flex", flexDirection: "column" }}>
-                    <a href="/store">
-                      <img
-                        src="/images/test4.jpg"
-                        alt="테스트이미지"
-                        style={{
-                          width: `10vh`,
-                          height: `10vh`,
-                        }}
-                      />
-                    </a>
-                    <del>상품 목록5</del>
-                  </li>
-                  <li style={{ display: "flex", flexDirection: "column" }}>
-                    <a href="/store">
-                      <img
-                        src="/images/test3.jpg"
-                        alt="테스트이미지"
-                        style={{
-                          width: `10vh`,
-                          height: `10vh`,
-                        }}
-                      />
-                    </a>
-                    <del>상품 목록6</del>
-                  </li>
-                  <li style={{ display: "flex", flexDirection: "column" }}>
-                    <a href="/store">
-                      <img
-                        src="/images/test2.jpg"
-                        alt="테스트이미지"
-                        style={{
-                          width: `10vh`,
-                          height: `10vh`,
-                        }}
-                      />
-                    </a>
-                    <del>상품 목록7</del>
-                  </li>
-                  <li style={{ display: "flex", flexDirection: "column" }}>
-                    <a href="/store">
-                      <img
-                        src="/images/test1.jpg"
-                        alt="테스트이미지"
-                        style={{
-                          width: `10vh`,
-                          height: `10vh`,
-                        }}
-                      />
-                    </a>
-                    <del>상품 목록8</del>
-                  </li>
                 </ul>
               </div>
             </div>
