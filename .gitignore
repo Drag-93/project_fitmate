@@ -10,3 +10,4 @@ Thumbs.db
 .env
 backend/src/main/resources/application-open.yml
 backend/src/main/resources/application-oauth2.yml
+backend/src/main/resources/application-paymentkey.yml
