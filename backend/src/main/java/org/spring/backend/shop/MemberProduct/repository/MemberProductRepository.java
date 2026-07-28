@@ -28,4 +28,5 @@ boolean existsByMemberEntityAndProductEntity_ProductTypeAndStatus(
     ProductType productType,
     String status
 );
+List<MemberProductEntity> findByMemberEntityId(Long memberId);
 }

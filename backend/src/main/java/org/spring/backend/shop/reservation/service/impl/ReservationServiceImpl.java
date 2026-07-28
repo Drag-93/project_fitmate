@@ -65,6 +65,9 @@ public class ReservationServiceImpl implements ReservationService {
 
     memberProduct.setRemainingCount(
         memberProduct.getRemainingCount() - 1);
+    // 남은 횟수 차감 후 계산
+    int lessonNumber = memberProduct.getTotalCount()
+        - memberProduct.getRemainingCount();
     ReservationEntity reservation = ReservationEntity.builder()
         .reservationDate(reservationDto.getReservationDate())
         .reservationTime(reservationDto.getReservationTime())
@@ -73,6 +76,7 @@ public class ReservationServiceImpl implements ReservationService {
         .member(member)
         .trainer(trainer)
         .memberProduct(memberProduct)
+        .lessonNumber(lessonNumber)
         .build();
 
     reservationRepository.save(reservation);
@@ -100,7 +104,7 @@ public class ReservationServiceImpl implements ReservationService {
   @Override
   public List<ReservationDto> getMemberReservation(Long memberId) {
 
-    List<ReservationEntity> reservations = reservationRepository.findByMemberId(memberId);
+    List<ReservationEntity> reservations = reservationRepository.findByMemberIdOrderByReservationDateDescReservationTimeDesc(memberId);
 
     return reservations.stream()
         .map(ReservationDto::toReservationDto)
@@ -111,7 +115,7 @@ public class ReservationServiceImpl implements ReservationService {
   @Override
   public List<ReservationDto> getTrainerReservation(Long trainerId) {
 
-    List<ReservationEntity> reservations = reservationRepository.findByTrainerId(trainerId);
+    List<ReservationEntity> reservations = reservationRepository.findByTrainerIdOrderByReservationDateDescReservationTimeDesc(trainerId);
 
     return reservations.stream()
         .map(ReservationDto::toReservationDto)

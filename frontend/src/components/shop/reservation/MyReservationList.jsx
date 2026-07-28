@@ -64,10 +64,10 @@ const MyReservationList = () => {
                 <span className="reservation-date">
                   📅 {item.reservationDate} ({item.reservationTime})
                 </span>
-                <span className={`status-badge ${item.status}`}>
-                  {item.status === 'RESERVED' && '예약 완료'}
-                  {item.status === 'CANCELLED' && '취소됨'}
-                  {item.status === 'COMPLETED' && '수업 완료'}
+                <span className={`status-badge ${item.reservationStatus}`}>
+                  {item.reservationStatus === 'RESERVED' && '예약 완료'}
+                  {item.reservationStatus === 'CANCELLED' && '취소됨'}
+                  {item.reservationStatus === 'COMPLETED' && '수업 완료'}
                 </span>
               </div>
 
@@ -78,7 +78,7 @@ const MyReservationList = () => {
                 </div>
                 <div className="product-info">
                   <span className="info-label">사용 차수</span>
-                  <span className="info-value">{item.productName || 'PT 10회권'}</span>
+                  <span className="info-value">{item.lessonNumber}회차 / {item.totalCount}회</span>
                 </div>
               </div>
 

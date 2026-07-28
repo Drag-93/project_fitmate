@@ -14,7 +14,7 @@ const Membership = () => {
   // 보유 이용권 목록 조회
   const getMembershipList = async () => {
     try {
-      const res = await jwtAxios.get("/api/subscription/my");
+      const res = await jwtAxios.get("/api/member-products/my");
       console.log("보유 이용권 데이터:", res.data);
       setMemberships(res.data || []);
     } catch (err) {
@@ -62,7 +62,7 @@ const Membership = () => {
   // 필터링된 이용권 목록
   const filteredMemberships = memberships.filter((item) => {
     if (filter === "ALL") return true;
-    return item.type === filter; // GYM or PT
+    return item.productType === filter; // GYM or PT
   });
 
   if (loading) {
@@ -95,13 +95,13 @@ const Membership = () => {
           className={`tab-btn ${filter === "GYM" ? "active" : ""}`}
           onClick={() => setFilter("GYM")}
         >
-          🏋️‍♂️ 헬스장 ({memberships.filter((m) => m.type === "GYM").length})
+          🏋️‍♂️ 헬스장 ({memberships.filter((m) => m.productType === "GYM").length})
         </button>
         <button
           className={`tab-btn ${filter === "PT" ? "active" : ""}`}
           onClick={() => setFilter("PT")}
         >
-          💪 PT 이용권 ({memberships.filter((m) => m.type === "PT").length})
+          💪 PT 이용권 ({memberships.filter((m) => m.productType === "PT").length})
         </button>
       </div>
 
@@ -114,7 +114,7 @@ const Membership = () => {
       ) : (
         <div className="membership-grid">
           {filteredMemberships.map((item) => {
-            const isGym = item.type === "GYM";
+            const isGym = item.productType === "GYM";
             return (
               <div key={item.id} className={`membership-card ${isGym ? "card-gym" : "card-pt"}`}>
                 <div className="card-top">
