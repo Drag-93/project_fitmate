@@ -14,6 +14,11 @@ const Header = () => {
   //로그인 여부 판단
   const { memberData } = useSelector((state) => state.loginSlice); //user 정보
   const isLogin = !!memberData?.result?.userEmail;
+
+  //관리자페이지 허용 여부
+  const isAdminOrManager =
+    memberData?.result?.role === "ADMIN" ||
+    memberData?.result?.role === "MANAGER";
   //로그아웃
   const logoutFn = async () => {
     //기존 그냥 로그아웃함수만 불러오던것 -> 비동기청크로 실제 customLogoutFilter를 거칠수있게 설정
@@ -140,7 +145,7 @@ const Header = () => {
                     </li>
                   </>
                 )}
-                {isLogin && memberData?.result?.role !== "MEMBER" && (
+                {isLogin && isAdminOrManager && (
                   <li>
                     <Link to="/admin">관리자</Link>
                   </li>

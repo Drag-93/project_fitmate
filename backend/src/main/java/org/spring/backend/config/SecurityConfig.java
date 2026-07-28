@@ -61,8 +61,7 @@ public class SecurityConfig {
                                         // hasAnyRole -> hasAnyAuthority 로 변경 ("ROLE_" 접두사 없이 검사)
                                         .requestMatchers(
                                                 "/api/member/admin/memberList",
-                                                "/api/member/admin/memberListSummary",
-                                                "/api/member/admin/summary/**"
+                                                "/api/member/admin/memberListSummary"
                                         ).hasAnyAuthority("TRAINER", "ADMIN", "MANAGER")
 
                                         .requestMatchers("/api/member/admin/**").hasAnyAuthority("ADMIN", "MANAGER")

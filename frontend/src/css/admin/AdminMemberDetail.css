@@ -1,3 +1,5 @@
+@import url("../common/reset.css");
+
 /* ==========================================
    회원 관리 공통 메인 컨테이너
    ========================================== */
@@ -141,10 +143,10 @@
 } /* 이름 */
 .memberList li:nth-child(2) {
   flex: 3;
-} /* 이메일 */
+} /* 이메일/예약상태 */
 .memberList li:nth-child(3) {
   flex: 1.5;
-} /* 권한 */
+} /* 권한/예약날짜 */
 .memberList li:nth-child(4) {
   flex: 1.5;
 } /* 상세보기 */
@@ -200,7 +202,7 @@
 }
 
 /* ==========================================
-   회원 상세 및 수정 컨테이너 (기존 유지)
+   회원 상세 및 수정 컨테이너 (어드민용)
    ========================================== */
 .memberDetail-con {
   max-width: 1000px;
@@ -334,7 +336,92 @@
   color: #64748b;
 }
 
-/* 반응형 대응 */
+/* ==========================================
+   회원 정보 요약 컨테이너 (트레이너용)
+   ========================================== */
+.memberSummary-con {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fcfcfc;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.memberSummary-con > ul {
+  width: 100%;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.memberSummary-con > ul > li:first-child {
+  background-color: #f8fafc;
+  border-bottom: 2px solid #cbd5e1;
+  padding: 15px 20px;
+}
+
+.memberSummary-con h1 {
+  font-size: 1.1rem;
+  color: #1e293b;
+  margin: 0;
+  font-weight: 700;
+}
+
+.memberSummary-con > ul > li:not(:first-child) {
+  display: flex;
+  align-items: center;
+  padding: 14px 20px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.memberSummary-con > ul > li > span:first-child {
+  width: 110px;
+  font-size: 0.9rem;
+  color: #64748b;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.memberSummary-con > ul > li > span:last-child {
+  flex-grow: 1;
+  font-size: 0.95rem;
+  color: #1e293b;
+  font-weight: 500;
+}
+
+/* 뒤로가기 버튼 영역 (우측 정렬) */
+.memberSummary-con > ul > li:last-child {
+  border-bottom: none;
+  justify-content: flex-end;
+  background-color: #f8fafc;
+  padding: 16px 20px;
+}
+
+.memberSummary-con button {
+  padding: 9px 18px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: #475569;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.memberSummary-con button:hover {
+  background-color: #334155;
+  box-shadow: 0 2px 6px rgba(51, 65, 85, 0.2);
+}
+
+/* ==========================================
+   반응형 레이아웃 대응
+   ========================================== */
 @media (max-width: 992px) {
   .header-con {
     flex-direction: column;
@@ -348,10 +435,16 @@
 }
 
 @media (max-width: 768px) {
-  .memberDetail-con {
+  .memberDetail-con,
+  .memberSummary-con {
     padding: 10px;
+    margin: 10px auto;
   }
-  .memberDetail-con > ul {
+  .memberDetail-con > ul,
+  .memberSummary-con > ul {
     min-width: 100%;
+  }
+  .memberSummary-con > ul > li {
+    padding: 12px 16px;
   }
 }

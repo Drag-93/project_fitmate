@@ -12,8 +12,7 @@ const AdminLayout = () => {
   const role = memberData?.result?.role;
   const isLogin = !!memberData?.result?.userEmail;
 
-  const isAdminOrManager =
-    role === "ADMIN" || role === "MANAGER" || role === "TRAINER";
+  const isAdminOrManager = role === "ADMIN" || role === "MANAGER";
   const hasAccess = isLogin && isAdminOrManager;
 
   useEffect(() => {

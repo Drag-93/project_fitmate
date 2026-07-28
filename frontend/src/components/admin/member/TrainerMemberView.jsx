@@ -12,19 +12,14 @@ const TrainerMemberView = () => {
   const [search, setSearch] = useState("");
 
   //관심사를 한글로 바꿔주기위한 상수
-  const interestMap = {
-    DIET: "다이어트",
-    WORKOUT: "운동",
-    HEALTH: "건강관리",
+  const reservationMap = {
+    RESERVED: "예약 완료",
+    COMPLETE: "PT 완료",
+    CANCEL: "예약 취소",
   };
   const handleSearchSubmit = (e) => {
     e.preventDefault(); // 폼 제출 시 페이지 새로고침 방지
     getMemberList(subject, search, 0);
-    // 선택된 조건이 없거나 검색어가 비어있으면 전체 목록으로 이동하거나 알림 처리
-    // if (!subject && search) {
-    //   alert("검색 필터를 선택해주세요.");
-    //   return;
-    // }
   };
   const getMemberList = async (subject, search, page) => {
     //있을때나 없을때나 실행할수있게 설정
@@ -33,7 +28,7 @@ const TrainerMemberView = () => {
       const res = await jwtAxios.get(url);
       setMemberData(res.data);
       console.log(res.data);
-      console.log(url);
+      // console.log(url);
     } catch (err) {
       alert("에러발생 : " + err);
     }
@@ -46,47 +41,51 @@ const TrainerMemberView = () => {
     <>
       {memberData !== null ? (
         <>
-          <div className="search">
-            <div className="filters">
-              <form onSubmit={handleSearchSubmit}>
-                <select
-                  name="subject"
-                  value={subject}
-                  onChange={(e) => setSubject(e.target.value)}
-                >
-                  <option value="">::선택::</option>
-                  <option value="userName">이름</option>
-                  <option value="interest">관심사</option>
-                </select>
+          <div className="header-con">
+            <div className="search">
+              <div className="filters">
+                <form onSubmit={handleSearchSubmit}>
+                  <select
+                    name="subject"
+                    value={subject}
+                    onChange={(e) => setSubject(e.target.value)}
+                  >
+                    <option value="">::선택::</option>
+                    <option value="userName">이름</option>
+                    <option value="interest">관심사</option>
+                  </select>
 
-                <input
-                  type="text"
-                  name="search"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  placeholder="검색어를 입력하세요"
-                />
+                  <input
+                    type="text"
+                    name="search"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder="검색어를 입력하세요"
+                  />
 
-                <input type="submit" value="검색" />
-              </form>
+                  <input type="submit" value="검색" />
+                </form>
+              </div>
             </div>
           </div>
           <div className="memberList">
             <ul className="memberList-head">
               <li>이름</li>
-              <li>관심사</li>
-              <li>구독여부</li>
+              <li>예약상태</li>
+              <li>예약날짜</li>
               <li>상세보기</li>
             </ul>
             {memberData?.memberList?.map((el, idx) => {
               return (
-                <ul className="memberList-body" key={el.id}>
-                  <li>{el.userName}</li>
-                  <li>{interestMap[el.interest] ?? "없음"}</li>
-                  <li>{el.subscribe === 0 ? "X" : "O"}</li>
+                <ul className="memberList-body" key={idx}>
+                  <li>{el.memberName}</li>
+                  <li>{reservationMap[el.reservationStatus] ?? "없음"}</li>
+                  <li>{el.reservationDate}</li>
                   <li>
                     <button
-                      onClick={() => navigate(`/admin/member/detail/${el.id}`)}
+                      onClick={() =>
+                        navigate(`/admin/member/detail/${el.memberId}`)
+                      }
                     >
                       상세보기
                     </button>

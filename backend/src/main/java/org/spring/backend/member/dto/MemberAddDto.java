@@ -37,9 +37,7 @@ public class MemberAddDto {
                 .height(memberAddEntity.getHeight())
                 .weight(memberAddEntity.getWeight())
                 .goalWeight(memberAddEntity.getGoalWeight())
-                .dailyCheck(memberAddEntity.getDailyCheck())
                 .interest(memberAddEntity.getInterest())
-                .badge(memberAddEntity.getBadge())
                 .memberEntity(memberAddEntity.getMemberEntity())
                 .memberId(memberAddEntity.getMemberEntity().getId())
                 .build();

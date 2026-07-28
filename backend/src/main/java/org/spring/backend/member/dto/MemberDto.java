@@ -86,8 +86,6 @@ public class MemberDto {
             .height(addEntity != null ? addEntity.getHeight() : null)
             .weight(addEntity != null ? addEntity.getWeight() : null)
             .goalWeight(addEntity != null ? addEntity.getGoalWeight() : null)
-            .dailyCheck(addEntity != null ? addEntity.getDailyCheck() : null)
-            .badge(addEntity != null ? addEntity.getBadge() : null)
             // 파일 엔티티가 존재할 때만 이름을 넣고, 없으면 null 세팅
             .newFileName(memberEntity.getFileEntities() != null && !memberEntity.getFileEntities().isEmpty() ? memberEntity.getFileEntities().get(0).getNewFileName() : null)
             .oldFileName(memberEntity.getFileEntities() != null && !memberEntity.getFileEntities().isEmpty() ? memberEntity.getFileEntities().get(0).getOldFileName() : null)
@@ -101,17 +99,12 @@ public class MemberDto {
             .userEmail(memberEntity.getUserEmail())
             .userName(memberEntity.getUserName())
             .userPhone(memberEntity.getUserPhone())
-            .userAddress(memberEntity.getUserAddress())
-            .subscribe(memberEntity.getSubscribe())
-            .profilePhoto(memberEntity.getProfilePhoto())
             .role(memberEntity.getRole())
             //memberAddEntity의 값들 저장
             .interest(addEntity != null ? addEntity.getInterest() : null)
             .height(addEntity != null ? addEntity.getHeight() : null)
             .weight(addEntity != null ? addEntity.getWeight() : null)
             .goalWeight(addEntity != null ? addEntity.getGoalWeight() : null)
-            .dailyCheck(addEntity != null ? addEntity.getDailyCheck() : null)
-            .badge(addEntity != null ? addEntity.getBadge() : null)
             // 파일 엔티티가 존재할 때만 이름을 넣고, 없으면 null 세팅
             .newFileName(memberEntity.getFileEntities() != null && !memberEntity.getFileEntities().isEmpty() ? memberEntity.getFileEntities().get(0).getNewFileName() : null)
             .oldFileName(memberEntity.getFileEntities() != null && !memberEntity.getFileEntities().isEmpty() ? memberEntity.getFileEntities().get(0).getOldFileName() : null)
