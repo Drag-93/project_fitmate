@@ -54,12 +54,12 @@ const OrderPage = () => {
 
     orderItemDtos: directItem
       ? [
-          {
-            productId: directItem.productId,
-            quantity: directItem.quantity,
-          },
-        ]
-      : [],
+        {
+          productId: directItem.productId,
+          quantity: directItem.quantity,
+          productType: directItem.productType
+        }
+      ] : []
   };
 
   return (

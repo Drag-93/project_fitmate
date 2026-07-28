@@ -78,10 +78,16 @@ public class SubscriptionDto {
                                                                 .map(payment -> payment.getPaymentMethod().name())
                                                                 .orElse(null))
                                 .totalCount(
-                                                subscriptionEntity.getMemberProductEntity().getTotalCount())
+                                                subscriptionEntity.getMemberProductEntity() != null
+                                                                ? subscriptionEntity.getMemberProductEntity()
+                                                                                .getTotalCount()
+                                                                : null)
 
                                 .remainingCount(
-                                                subscriptionEntity.getMemberProductEntity().getRemainingCount())
+                                                subscriptionEntity.getMemberProductEntity() != null
+                                                                ? subscriptionEntity.getMemberProductEntity()
+                                                                                .getRemainingCount()
+                                                                : null)
                                 .build();
         }
 }

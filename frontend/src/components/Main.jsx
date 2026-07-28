@@ -12,6 +12,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import CommonCalendar from "./common/calendar/CommonCalendar";
 import { useNavigate } from "react-router-dom";
+import { getMyMembership } from "../apis/shop/memberProductApi";
 
 const Main = () => {
   const navigate = useNavigate();
@@ -41,6 +42,9 @@ const Main = () => {
 
   //팝업 변수
   const [popupList, setPopupList] = useState([]);
+
+  // 내 이용권 조회
+  const [myMembership, setMyMembership] = useState([]);
 
   //오늘 하루 그만 보기
   const closeToday = (popupId) => {
@@ -73,6 +77,22 @@ const Main = () => {
     } catch (err) {
       console.error("캘린더 조회 오류:", err);
       setCalendarEvents([]);
+    }
+  };
+  // 내 이용권 조회
+  const loadMyMembership = async () => {
+    if (!isLogin) {
+      setMyMembership([]);
+      return;
+    }
+
+    try {
+      const data = await getMyMembership();
+      console.log(data);
+      setMyMembership(data || []);
+    } catch (err) {
+      console.error("내 이용권 조회 실패:", err);
+      setMyMembership([]);
     }
   };
 
@@ -141,6 +161,10 @@ const Main = () => {
   // 로그인 상태에 따라 개인 캘린더 조회
   useEffect(() => {
     getCalendarList();
+  }, [isLogin]);
+
+  useEffect(() => {
+    getMyMembership();
   }, [isLogin]);
 
   return (
@@ -302,7 +326,7 @@ const Main = () => {
                               {/* 선택된 탭의 게시글 */}
                               <ul className="main-best-list">
                                 {Array.isArray(communityList) &&
-                                communityList.length > 0 ? (
+                                  communityList.length > 0 ? (
                                   communityList.map((community) => (
                                     <li key={community.id}>
                                       <a
@@ -327,28 +351,66 @@ const Main = () => {
                 </div>
               </div>
               {/* 로그인 개인 캘린더 */}
-              {isLogin ? (
-                <CommonCalendar
-                  events={calendarEvents}
-                  showHeader={false}
-                  onDateClick={() => navigate("/mypage/schedule")}
-                  onEventClick={() => navigate("/mypage/schedule")}
-                />
-              ) : (
-                <div className="main-calendar-login">
-                  <h3>나의 운동 일정을 관리해 보세요</h3>
-                  <p>
-                    로그인하면 개인 일정과 PT일정 등을
-                    <br />
-                    캘린더에서 한눈에 확인할 수 있습니다.
-                  </p>
+              <div className="main-right-area">
+                {isLogin ? (
+                  <>
+                    <CommonCalendar
+                      events={calendarEvents}
+                      showHeader={false}
+                      onDateClick={() => navigate("/mypage/schedule")}
+                      onEventClick={() => navigate("/mypage/schedule")}
+                    />
 
-                  <button type="button" onClick={() => navigate("/auth/login")}>
-                    로그인하고 일정 확인하기
-                  </button>
-                </div>
-              )}
+                    <div className="main-membership-card">
+                      <div className="membership-header">
+                        <h3>내 이용권</h3>
+                        <button
+                          onClick={() => navigate("/mypage/memberships")}
+                        >
+                          전체보기
+                        </button>
+                      </div>
+                      {myMembership.length === 0 ? (
+                        <p>
+                          보유 중인 이용권이 없습니다.
+                        </p>
+                      ) : (
+                        myMembership.slice(0, 2).map((item) => (
+                          <div
+                            className="membership-item"
+                            key={item.id}>
+                            <div>
+                              <strong>
+                                {item.productName}
+                              </strong>
+                              <p>
+                                {item.productType === "PT"
+                                  ? `잔여 ${item.remainingCount}/${item.totalCount}회`
+                                  : "이용 중"}
+                              </p>
+                            </div>
+                            <span>
+                              {item.endDate?.substring(0, 10)}
+                            </span>
+                          </div>
+                        )))}
+                    </div>
+                  </>
+                ) : (
+                  <div className="main-calendar-login">
+                    <h3>나의 운동 일정을 관리해 보세요</h3>
+                    <p>
+                      로그인하면 개인 일정과 PT일정 등을
+                      <br />
+                      캘린더에서 한눈에 확인할 수 있습니다.
+                    </p>
 
+                    <button type="button" onClick={() => navigate("/auth/login")}>
+                      로그인하고 일정 확인하기
+                    </button>
+                  </div>
+                )}
+              </div>
               {/* 베스트셀러, 상품 이미지 -> 아래에 상품 있어서 없어도 되나 */}
               {/* <div className="main-right">
                 <div className="main-right-con">
@@ -402,7 +464,7 @@ const Main = () => {
                   {bestProduct && (
                     <li
                       key={bestProduct.id}
-                      // style={{ display: `flex`, justifyContent: `end` }}
+                    // style={{ display: `flex`, justifyContent: `end` }}
                     >
                       <a
                         href={`/products/detail/${bestProduct.id}`}

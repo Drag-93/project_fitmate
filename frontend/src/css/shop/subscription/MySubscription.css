@@ -14,7 +14,7 @@
 .subscription-header h2 {
   font-size: 1.8rem;
   font-weight: 800;
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  background: linear-gradient(135deg, #1f283f, #1f283f);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin: 0 0 6px 0;
@@ -201,7 +201,7 @@
 
 .promo-badge {
   display: inline-block;
-  background: #2563eb;
+  background: #1f283f;
   color: #fff;
   font-size: 0.75rem;
   font-weight: 800;
@@ -221,16 +221,16 @@
   margin-bottom: 24px;
 }
 
-.btn-primary {
-  background-color: #2563eb;
+.my-subscription-page .btn-primary {
+  background-color: #1a2238;
   color: #fff;
 }
 
-.btn-primary:hover {
-  background-color: #1d4ed8;
+.my-subscription-page .btn-primary:hover {
+  background-color: #121929;
 }
 
-.btn-large {
+.my-subscription-page .btn-large {
   padding: 16px;
   font-size: 1rem;
 }

@@ -22,9 +22,8 @@ public interface ReservationRepository extends JpaRepository<ReservationEntity, 
       """)
   List<ReservationEntity> findAllWithMemberAndTrainer();
 
-  List<ReservationEntity> findByTrainerId(Long trainerId);
-
-  List<ReservationEntity> findByMemberId(Long memberId);
+  List<ReservationEntity> findByTrainerIdOrderByReservationDateDescReservationTimeDesc(Long trainerId);
+  List<ReservationEntity> findByMemberIdOrderByReservationDateDescReservationTimeDesc(Long memberId);
 
   List<ReservationEntity>
   findByTrainer_IdAndReservationDateAndReservationStatus(

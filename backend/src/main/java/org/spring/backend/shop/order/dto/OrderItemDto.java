@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.spring.backend.shop.order.entity.OrderItemEntity;
+import org.spring.backend.shop.product.type.ProductType;
 
 import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
@@ -31,8 +32,10 @@ public class OrderItemDto {
   private Long productId;
 
   private Long orderId;
-  
+
   private LocalDate startDate;
+
+  private ProductType productType;
 
   public static OrderItemDto toOrderItemDto(OrderItemEntity orderItemEntity) {
     return OrderItemDto.builder()
@@ -52,6 +55,10 @@ public class OrderItemDto {
         .productId(orderItemEntity.getProductEntity().getId())
         .orderId(orderItemEntity.getOrderEntity().getId())
         .startDate(orderItemEntity.getStartDate())
+        .productType(
+            orderItemEntity
+                .getProductEntity()
+                .getProductType())
         .build();
   }
 }

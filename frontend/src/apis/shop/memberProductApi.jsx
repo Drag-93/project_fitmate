@@ -14,3 +14,10 @@ export const checkSubscribe = async () => {
   );
   return res.data;
 };
+// 내 이용권 조회
+export const getMyMembership = async () => {
+  const res = await jwtAxios.get(
+    `${API_SERVER_URL}/api/member-products/my`
+  );
+  return res.data;
+};

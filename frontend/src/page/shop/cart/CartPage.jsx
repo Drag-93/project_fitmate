@@ -77,7 +77,7 @@ const CartPage = () => {
             <h3> 장바구니가 비어있습니다.</h3>
             <button
               className="shop-btn"
-              onClick={() => navigate("/store/index")}
+              onClick={() => navigate("/shop/index")}
             >
               상품 주문하러 가기 →
             </button>
