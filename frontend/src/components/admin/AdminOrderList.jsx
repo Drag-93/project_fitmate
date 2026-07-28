@@ -11,7 +11,15 @@ const AdminOrderList = () => {
   useEffect(() => {
     getOrders();
   }, [currentPage]);
+  const isSubscriptionProduct = (order) => {
+    const type = order.orderItemDtos?.[0]?.productType;
 
+    return (
+      type === "GYM" ||
+      type === "PT" ||
+      type === "PREMIUM"
+    );
+  };
   const getOrders = async () => {
     try {
       const res = await axios.get(`${API_SERVER_URL}/api/order/orderList`, {
@@ -57,8 +65,7 @@ const AdminOrderList = () => {
             <th>상품명</th>
             <th>금액</th>
             <th>주문일</th>
-            <th>상태</th>
-            <th>관리</th>
+            <th>배송관리</th>
           </tr>
         </thead>
 
@@ -85,19 +92,21 @@ const AdminOrderList = () => {
 
               <td>{order.createTime?.substring(0, 10)}</td>
 
-              <td>{order.deliveryStatus}</td>
-
               <td>
-                <select
-                  value={order.deliveryStatus}
-                  onChange={(e) => changeStatus(order.id, e.target.value)}
-                >
-                  <option value="READY">준비중</option>
-
-                  <option value="SHIPPING">배송중</option>
-
-                  <option value="COMPLETE">배송완료</option>
-                </select>
+                {isSubscriptionProduct(order) ? (
+                  <span>구독 상품</span>
+                ) : (
+                  <select
+                    value={order.deliveryStatus}
+                    onChange={(e) =>
+                      changeStatus(order.id, e.target.value)
+                    }
+                  >
+                    <option value="READY">준비중</option>
+                    <option value="SHIPPING">배송중</option>
+                    <option value="COMPLETE">배송완료</option>
+                  </select>
+                )}
               </td>
             </tr>
           ))}

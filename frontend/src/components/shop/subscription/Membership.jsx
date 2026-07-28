@@ -14,12 +14,16 @@ const Membership = () => {
   // 보유 이용권 목록 조회
   const getMembershipList = async () => {
     try {
-      const res = await jwtAxios.get("/api/subscription/my");
+      const res = await jwtAxios.get("/api/member-products/my");
       console.log("보유 이용권 데이터:", res.data);
       setMemberships(res.data || []);
     } catch (err) {
       console.error("이용권 조회 실패:", err);
-    } finally {
+    
+      console.log("err 자체:", err);
+      console.log("response:", err?.response);
+      console.log("message:", err?.message);
+    }finally {
       setLoading(false);
     }
   };
@@ -62,7 +66,7 @@ const Membership = () => {
   // 필터링된 이용권 목록
   const filteredMemberships = memberships.filter((item) => {
     if (filter === "ALL") return true;
-    return item.type === filter; // GYM or PT
+    return item.productType === filter; // GYM or PT
   });
 
   if (loading) {
@@ -95,26 +99,25 @@ const Membership = () => {
           className={`tab-btn ${filter === "GYM" ? "active" : ""}`}
           onClick={() => setFilter("GYM")}
         >
-          🏋️‍♂️ 헬스장 ({memberships.filter((m) => m.type === "GYM").length})
+          🏋️‍♂️ 헬스장 ({memberships.filter((m) => m.productType === "GYM").length})
         </button>
         <button
           className={`tab-btn ${filter === "PT" ? "active" : ""}`}
           onClick={() => setFilter("PT")}
         >
-          💪 PT 이용권 ({memberships.filter((m) => m.type === "PT").length})
+          💪 PT 이용권 ({memberships.filter((m) => m.productType === "PT").length})
         </button>
       </div>
 
       {/* 이용권 리스트 */}
       {filteredMemberships.length === 0 ? (
         <div className="empty-membership">
-          <span className="empty-icon">🎟️</span>
           <p>보유 중인 이용권이 없습니다.</p>
         </div>
       ) : (
         <div className="membership-grid">
           {filteredMemberships.map((item) => {
-            const isGym = item.type === "GYM";
+            const isGym = item.productType === "GYM";
             return (
               <div key={item.id} className={`membership-card ${isGym ? "card-gym" : "card-pt"}`}>
                 <div className="card-top">

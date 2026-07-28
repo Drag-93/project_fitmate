@@ -83,17 +83,17 @@ const MyReservationList = () => {
             {reservations.map((item) => (
               <div
                 key={item.id}
-                className={`reservation-card status-${item.status?.toLowerCase()}`}
+                className={`reservation-card status-${item.reservationStatus?.toLowerCase()}`}
                 onClick={() => memberModalFn(item.trainerId)}
               >
                 <div className="card-header">
                   <span className="reservation-date">
-                    📅 {item.reservationDate} ({item.reservationTime})
+                    📅 {item.reservationDate} ({item.reservationTime.slice(0, 5)})
                   </span>
-                  <span className={`status-badge ${item.status}`}>
-                    {item.status === "RESERVED" && "예약 완료"}
-                    {item.status === "CANCELLED" && "취소됨"}
-                    {item.status === "COMPLETED" && "수업 완료"}
+                  <span className={`status-badge ${item.reservationStatus}`}>
+                    {item.reservationStatus === "RESERVED" && "예약 완료"}
+                    {item.reservationStatus === "CANCELLED" && "취소됨"}
+                    {item.reservationStatus === "COMPLETED" && "수업 완료"}
                   </span>
                 </div>
 
@@ -107,21 +107,25 @@ const MyReservationList = () => {
                   <div className="product-info">
                     <span className="info-label">사용 차수</span>
                     <span className="info-value">
-                      {item.productName || "PT 10회권"}
+                      {item.lessonNumber}회차 / {item.totalCount}회
                     </span>
                   </div>
                 </div>
 
                 {/* 예약 상태가 RESERVED(예약완료) 일 때만 취소 버튼 활성화 */}
-                {item.status === "RESERVED" && (
+                {item.reservationStatus === "RESERVED" && (
                   <div className="card-footer">
                     <button
                       className="btn-cancel"
-                      onClick={() => handleCancel(item.id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleCancel(item.id);
+                      }}
                     >
                       예약 취소
                     </button>
                   </div>
+
                 )}
               </div>
             ))}

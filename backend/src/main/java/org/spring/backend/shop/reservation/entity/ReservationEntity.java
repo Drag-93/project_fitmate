@@ -55,6 +55,9 @@ public class ReservationEntity extends BasicTime {
   @Column(length = 500)
   private String memo; // 요청사항
 
+  @Column(nullable = false)
+  private Integer lessonNumber; //PT 회차
+
   // 예약한 회원
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "member_id", nullable = false)

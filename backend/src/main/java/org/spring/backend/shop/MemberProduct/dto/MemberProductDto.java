@@ -47,6 +47,7 @@ public class MemberProductDto {
 
   private LocalDateTime createTime;
 
+
   public static MemberProductDto toMemberProductDto(MemberProductEntity memberProductEntity) {
 
     ProductEntity product = memberProductEntity.getProductEntity();

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.spring.backend.member.entity.MemberEntity;
 import org.spring.backend.member.repository.MemberRepository;
+import org.spring.backend.shop.MemberProduct.entity.MemberProductEntity;
 import org.spring.backend.shop.payment.repository.PaymentRepository;
 import org.spring.backend.shop.product.entity.ProductEntity;
 import org.spring.backend.shop.product.repository.ProductRepository;
@@ -39,7 +40,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     // 프리미엄 상품 조회
     ProductEntity premiumProduct = productRepository
         .findFirstByProductType(ProductType.PREMIUM)
-        .orElseThrow(() -> new RuntimeException("프리미엄 상품 없음"));
+        .orElseThrow(() -> new RuntimeException("프리미엄 상품 없음"));  
 
     // 이미 구독 중인지 확인
     boolean exists = subscriptionRepository

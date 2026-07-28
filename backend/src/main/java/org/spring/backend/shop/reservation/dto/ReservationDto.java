@@ -24,7 +24,7 @@ public class ReservationDto {
   private Long id;
 
   private LocalDate reservationDate;
-  
+
   private LocalTime reservationTime;
 
   private ReservationStatus reservationStatus;
@@ -32,7 +32,7 @@ public class ReservationDto {
   private String memo;
 
   private Long memberId;
-  
+
   private String memberName;
 
   private Long trainerId;
@@ -40,6 +40,9 @@ public class ReservationDto {
   private String trainerName;
 
   private Long memberProductId;
+
+  private Integer lessonNumber;
+  private Integer totalCount;
 
   public static ReservationDto toReservationDto(
       ReservationEntity entity) {
@@ -55,6 +58,8 @@ public class ReservationDto {
         .trainerId(entity.getTrainer().getId())
         .trainerName(entity.getTrainer().getMember().getUserName())
         .memberProductId(entity.getMemberProduct().getId())
+        .lessonNumber(entity.getLessonNumber())
+        .totalCount(entity.getMemberProduct().getTotalCount())
         .build();
   }
 }
