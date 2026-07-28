@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import jwtAxios from "../../../apis/util/jwtUtil";
-import "../../../css/shop/reservation/myReservationList.css";
+import "../../../css/shop/reservation/MyReservationList.css";
 import ReservationModal from "./ReservationModal";
 
 const MyReservationList = () => {

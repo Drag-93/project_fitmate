@@ -1,11 +1,9 @@
-import React from 'react'
-import PaymentList from '../../../components/shop/payment/PaymentList.jsx'
-import "../../../css/shop/payment/paymentList.css"
+import React from "react";
+import PaymentList from "../../../components/shop/payment/PaymentList.jsx";
+import "../../../css/shop/payment/PaymentList.css";
 
 const PaymentListPage = () => {
-  return (
-    <PaymentList />
-  )
-}
+  return <PaymentList />;
+};
 
-export default PaymentListPage
+export default PaymentListPage;

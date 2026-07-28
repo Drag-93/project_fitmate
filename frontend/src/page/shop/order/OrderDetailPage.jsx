@@ -2,11 +2,9 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getOrderDetail } from "../../../apis/shop/orderApi";
 import OrderDetail from "../../../components/shop/order/OrderDetail";
-import "../../../css/shop/order/orderDetail.css";
-
+import "../../../css/shop/order/OrderDetail.css";
 
 const OrderDetailPage = () => {
-
   const { orderId } = useParams();
   const [order, setOrder] = useState(null);
 

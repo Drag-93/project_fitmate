@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
 import jwtAxios from "../../../apis/util/jwtUtil";
 
 import ProductList from "../../../components/shop/order/ProductList";
 import BuyerInfo from "../../../components/shop/order/BuyerInfo";
 import PaymentMethod from "../../../components/shop/order/PaymentMethod";
 import OrderRight from "../../../components/shop/order/OrderRight";
-import { useLocation } from 'react-router-dom';
-import "../../../css/shop/order/orderPage.css"
+import { useLocation } from "react-router-dom";
+import "../../../css/shop/order/OrderPage.css";
 
 const OrderPage = () => {
   const location = useLocation();
@@ -14,21 +14,20 @@ const OrderPage = () => {
     receiverName: "",
     receiverPhone: "",
     receiverAddress: "",
-    deliveryMemo: ""
+    deliveryMemo: "",
   });
   const [payment, setPayment] = useState("kakao");
   const [memberInfo, setMemberInfo] = useState(null);
 
   useEffect(() => {
-
-    jwtAxios.get("/api/member/detail")
-      .then(res => {
+    jwtAxios
+      .get("/api/member/detail")
+      .then((res) => {
         setMemberInfo(res.data.result);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
-
   }, []);
 
   // 회원 정보를 기본 배송 정보로 세팅
@@ -38,11 +37,10 @@ const OrderPage = () => {
         receiverName: memberInfo.userName || "",
         receiverPhone: memberInfo.userPhone || "",
         receiverAddress: memberInfo.userAddress || "",
-        deliveryMemo: ""
+        deliveryMemo: "",
       });
     }
   }, [memberInfo]);
-
 
   // 장바구니 주문 데이터
   const cartItems = location.state?.cartItems || [];
@@ -56,11 +54,12 @@ const OrderPage = () => {
 
     orderItemDtos: directItem
       ? [
-        {
-          productId: directItem.productId,
-          quantity: directItem.quantity
-        }
-      ] : []
+          {
+            productId: directItem.productId,
+            quantity: directItem.quantity,
+          },
+        ]
+      : [],
   };
 
   return (
@@ -69,17 +68,9 @@ const OrderPage = () => {
         <h1>주문하기</h1>
         <div className="orderContainer">
           <div className="left">
-            <ProductList
-              cartItems={
-                directItem
-                  ? [directItem]
-                  : cartItems} />
-            <BuyerInfo
-              orderInfo={orderInfo}
-              setOrderInfo={setOrderInfo} />
-            <PaymentMethod payment={payment}
-              setPayment={setPayment}
-            />
+            <ProductList cartItems={directItem ? [directItem] : cartItems} />
+            <BuyerInfo orderInfo={orderInfo} setOrderInfo={setOrderInfo} />
+            <PaymentMethod payment={payment} setPayment={setPayment} />
           </div>
 
           <div className="right">
@@ -87,9 +78,7 @@ const OrderPage = () => {
               cartIds={cartIds}
               orderData={orderData}
               totalPrice={
-                directItem
-                  ? directItem.price * directItem.quantity
-                  : totalPrice
+                directItem ? directItem.price * directItem.quantity : totalPrice
               }
               payment={payment}
             />
@@ -97,7 +86,7 @@ const OrderPage = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default OrderPage;

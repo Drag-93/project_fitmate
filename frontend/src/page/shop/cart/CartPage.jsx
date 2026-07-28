@@ -2,18 +2,16 @@ import { useEffect, useState } from "react";
 
 import CartItem from "../../../components/shop/cart/CartItem";
 import CartSummary from "../../../components/shop/cart/CartSummary";
-import "../../../css/shop/cart/cart.css";
+import "../../../css/shop/cart/Cart.css";
 
 import {
   getCartList,
   updateCartQuantity,
-  deleteCartItem
+  deleteCartItem,
 } from "../../../apis/shop/cartApi";
 import { useNavigate } from "react-router-dom";
 
-
 const CartPage = () => {
-
   const [cartItems, setCartItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
   const navigate = useNavigate();
@@ -28,7 +26,7 @@ const CartPage = () => {
       setCartItems(res.data);
 
       // 기본이 전체 선택
-      setSelectedItems(res.data.map(item => item.id));
+      setSelectedItems(res.data.map((item) => item.id));
     } catch (e) {
       console.error(e);
       if (e.response) {
@@ -42,7 +40,7 @@ const CartPage = () => {
   // 전체선택
   const handleSelectAll = (checked) => {
     if (checked) {
-      setSelectedItems(cartItems.map(item => item.id));
+      setSelectedItems(cartItems.map((item) => item.id));
     } else {
       setSelectedItems([]);
     }
@@ -50,24 +48,17 @@ const CartPage = () => {
 
   // 개별선택
   const handleSelectItem = (cartId, checked) => {
-
     if (checked) {
-      setSelectedItems(prev => [...prev, cartId]);
+      setSelectedItems((prev) => [...prev, cartId]);
     } else {
-      setSelectedItems(prev =>
-        prev.filter(id => id !== cartId)
-      );
+      setSelectedItems((prev) => prev.filter((id) => id !== cartId));
     }
-
   };
 
   // 수량 변경
   const changeQuantity = async (cartItemId, quantity) => {
     if (quantity < 1) return;
-    await updateCartQuantity(
-      cartItemId,
-      quantity
-    );
+    await updateCartQuantity(cartItemId, quantity);
     loadCart();
   };
 
@@ -83,7 +74,7 @@ const CartPage = () => {
       <div className="cart-list">
         {cartItems.length === 0 ? (
           <div className="empty-cart">
-            <h3>  장바구니가 비어있습니다.</h3>
+            <h3> 장바구니가 비어있습니다.</h3>
             <button
               className="shop-btn"
               onClick={() => navigate("/store/index")}
@@ -93,7 +84,7 @@ const CartPage = () => {
           </div>
         ) : (
           <>
-            {cartItems.map(item => (
+            {cartItems.map((item) => (
               <CartItem
                 key={item.id}
                 item={item}
@@ -105,31 +96,25 @@ const CartPage = () => {
             ))}
 
             <div className="cart-select-all">
-
               <input
                 type="checkbox"
                 checked={
                   cartItems.length > 0 &&
                   selectedItems.length === cartItems.length
                 }
-                onChange={(e) =>
-                  handleSelectAll(e.target.checked)
-                }
+                onChange={(e) => handleSelectAll(e.target.checked)}
               />
 
               <span>전체 선택</span>
-
             </div>
           </>
         )}
       </div>
       {cartItems.length > 0 && (
-        <CartSummary
-          cartItems={cartItems}
-          selectedItems={selectedItems} />)}
+        <CartSummary cartItems={cartItems} selectedItems={selectedItems} />
+      )}
     </div>
   );
 };
-
 
 export default CartPage;
