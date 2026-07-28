@@ -117,8 +117,12 @@ const AdminMemberView = () => {
               <li>{el.userName}</li>
               <li>{el.userEmail}</li>
               <li>{el.role}</li>
-              <li onClick={() => navigate(`/admin/member/detail/${el.id}`)}>
-                {el.userName}
+              <li>
+                <button
+                  onClick={() => navigate(`/admin/member/detail/${el.id}`)}
+                >
+                  상세보기
+                </button>
               </li>
             </ul>
           );

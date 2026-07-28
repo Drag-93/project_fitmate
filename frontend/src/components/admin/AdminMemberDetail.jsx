@@ -7,10 +7,10 @@ const AdminMemberDetail = () => {
   return (
     <>
       <div className="admin-member">
-        {memberData?.result?.role === "ADMIN" ? (
+        {memberData?.result?.role !== "TRAINER" ? (
           <AdminMemberViewDetail />
         ) : (
-          memberData?.result?.role === "TRAINER" && <TrainerMemberViewDetail />
+          <TrainerMemberViewDetail />
         )}
       </div>
     </>

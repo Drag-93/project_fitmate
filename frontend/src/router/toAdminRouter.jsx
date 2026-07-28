@@ -60,22 +60,6 @@ const toAdminRouter = () => {
       ),
     },
     {
-      path: "index",
-      element: (
-        <Suspense fallback={Loading}>
-          <AdminIndexPage />
-        </Suspense>
-      ),
-    },
-    {
-      path: "index",
-      element: (
-        <Suspense fallback={Loading}>
-          <AdminIndexPage />
-        </Suspense>
-      ),
-    },
-    {
       path: "popup",
       element: (
         <Suspense fallback={Loading}>

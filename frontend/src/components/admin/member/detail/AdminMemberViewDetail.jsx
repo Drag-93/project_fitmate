@@ -46,7 +46,7 @@ const AdminMemberViewDetail = () => {
       const res = await jwtAxios.get(url);
       setMemberViewData(res.data.result);
       setOriginMemberViewData(res.data.result);
-      // console.log(res.data);
+      console.log(res.data);
     } catch (err) {
       alert("에러발생 : " + err);
     }
@@ -250,7 +250,6 @@ const AdminMemberViewDetail = () => {
                   </span>
                 </li>
               )}
-
               <li>
                 <span>구독여부</span>
                 <span>
