@@ -63,8 +63,8 @@ const AdminCommunity = () => {
     const fetchTcList = async () => {
       try {
         const [tabRes, catRes] = await Promise.all([
-          axios.get(`${API_SERVER_URL}/api/community/tabList`),
-          axios.get(`${API_SERVER_URL}/api/community/category`),
+          jwtAxios.get(`${API_SERVER_URL}/api/community/tabList`),
+          jwtAxios.get(`${API_SERVER_URL}/api/community/category`),
         ]);
         setTabs(tabRes.data.result || []);
         setCategories(catRes.data.result || []);
@@ -469,7 +469,7 @@ const AdminCommunity = () => {
                     ) : (
                       <div className="board-item-thumb board-item-thumb-empty" />
                     )} */}
-                    <td>{item.title}</td>
+                    {item.title}
                   </td>
                   <td>{item.userName}</td>
                   <td>{item.hit}</td>

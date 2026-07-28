@@ -3,6 +3,7 @@ import "../../../css/admin/AdminMemberModal.css";
 import axios from "axios";
 import { API_SERVER_URL } from "../../../apis/commonApi";
 import { useSelector } from "react-redux";
+import jwtAxios from "../../../apis/util/jwtUtil";
 const initData = {
   userName: "",
   userEmail: "",
@@ -52,13 +53,14 @@ const AdminMemberInsertModal = ({ getMemberList, setIsBool }) => {
     });
 
     try {
-      const res = await axios.post(
+      const res = await jwtAxios.post(
         `${API_SERVER_URL}/api/member/admin/insert`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
         },
       );
+      console.log(res);
       if (res.data === "ok") {
         alert("회원생성 성공!");
         getMemberList("", "", 0);
@@ -82,7 +84,7 @@ const AdminMemberInsertModal = ({ getMemberList, setIsBool }) => {
     const formData = new FormData();
     formData.append("userEmail", memberInsertData.userEmail);
     try {
-      const res = await axios.post(
+      const res = await jwtAxios.post(
         `${API_SERVER_URL}/api/member/email`,
         formData,
         {

@@ -10,10 +10,10 @@
 }
 
 /* =========================
-   검색
+   검색 & 생성 버튼 영역
 ========================= */
 .search {
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .filters form {
@@ -28,6 +28,12 @@
   border: 1px solid #d1d5db;
   border-radius: 6px;
   font-size: 14px;
+  outline: none;
+}
+
+.filters select:focus,
+.filters input[type="text"]:focus {
+  border-color: #2563eb;
 }
 
 .filters input[type="submit"] {
@@ -38,14 +44,40 @@
   color: #fff;
   cursor: pointer;
   transition: 0.2s;
+  font-weight: 500;
 }
 
 .filters input[type="submit"]:hover {
   background: #1d4ed8;
 }
 
+/* 🟢 [추가됨] 검색단어생성 버튼 영역 */
+.chatInsert {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+}
+
+.chatInsert button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  background: #10b981; /* 모달/생성 느낌을 주는 그린 계열 */
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.chatInsert button:hover {
+  background: #059669;
+  transform: translateY(-1px);
+}
+
 /* =========================
-   리스트
+   리스트 (Grid 방식 통일 - 4개 컬럼)
 ========================= */
 .chatList {
   width: 100%;
@@ -56,13 +88,18 @@
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
-/* 헤더 */
-.chatList-head {
+/* 공통 그리드 비율: 검색단어(1.5) : 답변(3) : 수정(1) : 상세보기(1.2) */
+.chatList-head,
+.chatList-body {
   display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-columns: 1.5fr 3fr 1fr 1.2fr;
   align-items: center;
   list-style: none;
   margin: 0;
+}
+
+/* 헤더 */
+.chatList-head {
   padding: 14px 20px;
   background: #f8fafc;
   border-bottom: 2px solid #cbd5e1;
@@ -71,12 +108,8 @@
   text-align: center;
 }
 
-/* 바디 */
+/* 바디 Row */
 .chatList-body {
-  display: flex;
-  align-items: center;
-  list-style: none;
-  margin: 0;
   padding: 0 20px;
   border-bottom: 1px solid #f1f5f9;
   transition: background-color 0.2s;
@@ -94,50 +127,54 @@
   padding: 14px 8px;
   font-size: 14px;
   color: #475569;
+  text-align: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/* 이름 */
+/* 1. 검색단어 */
 .chatList-body li:nth-child(1) {
-  flex: 1;
-  text-align: center;
+  font-weight: 600;
+  color: #1e293b;
 }
 
-/* 이메일 */
+/* 2. 답변 */
 .chatList-body li:nth-child(2) {
-  flex: 2;
-  text-align: center;
+  text-align: left; /* 답변이 길 수 있으므로 좌측 정렬 */
+  padding-left: 16px;
 }
 
-/* 권한 */
-.chatList-body li:nth-child(3) {
-  flex: 1;
-  text-align: center;
-}
-
-/* 버튼 */
-.chatList-body li:nth-child(4) {
-  width: 120px;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.chatList-body button {
-  padding: 6px 16px;
+/* 3, 4번째 버튼 스타일 */
+.chatList-body li:nth-child(3) button,
+.chatList-body li:nth-child(4) button {
+  padding: 6px 14px;
   border: none;
   border-radius: 6px;
-  background: #2563eb;
-  color: #fff;
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
   transition: 0.2s;
 }
 
-.chatList-body button:hover {
+/* 수정하기 버튼 (블루) */
+.chatList-body li:nth-child(3) button {
+  background: #2563eb;
+  color: #fff;
+}
+
+.chatList-body li:nth-child(3) button:hover {
   background: #1d4ed8;
+}
+
+/* 상세보기 버튼 (다크/서브 버튼 느낌) */
+.chatList-body li:nth-child(4) button {
+  background: #64748b;
+  color: #fff;
+}
+
+.chatList-body li:nth-child(4) button:hover {
+  background: #475569;
 }
 
 /* =========================

@@ -20,7 +20,7 @@ const AdminLeft = ({ isMobile, show, onClose }) => {
         <div className="admin-left-con">
           <h1 className="logo">
             <Link to={"/"}>
-              <img src={""} alt="logo" />
+              <img src={"/images/main/가로로고.png"} alt="logo" />
             </Link>
           </h1>
           {/* {isMobile && show && (
@@ -39,7 +39,7 @@ const AdminLeft = ({ isMobile, show, onClose }) => {
                 대시보드
               </NavLink>
             </li>
-            <li>
+            {/* <li>
               <NavLink
                 to={"/admin/calendar"}
                 className={linkClass}
@@ -47,7 +47,7 @@ const AdminLeft = ({ isMobile, show, onClose }) => {
               >
                 캘린더
               </NavLink>
-            </li>
+            </li> */}
             <li>
               <NavLink
                 to={"/admin/member"}

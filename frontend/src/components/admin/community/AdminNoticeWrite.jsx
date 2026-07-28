@@ -71,7 +71,7 @@ const AdminNoticeWrite = ({ tabId, tabs, categories, onClose, onSuccess }) => {
       return;
     }
     try {
-      await jwtAxios.post(`${API_SERVER_URL}/community/insert`, formData);
+      await jwtAxios.post(`${API_SERVER_URL}/api/community/insert`, formData);
       alert("작성 완료!");
       onSuccess(); // 부모에서 모달 닫기 및 목록 새로고침 처리
     } catch (err) {

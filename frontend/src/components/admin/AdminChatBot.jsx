@@ -26,11 +26,6 @@ const AdminChatBot = () => {
   const handleSearchSubmit = (e) => {
     e.preventDefault(); // 폼 제출 시 페이지 새로고침 방지
     getMemberList(search, subject, 0);
-    // 선택된 조건이 없거나 검색어가 비어있으면 전체 목록으로 이동하거나 알림 처리
-    // if (!subject && search) {
-    //   alert("검색 필터를 선택해주세요.");
-    //   return;
-    // }
   };
   const insertUrl = `${API_SERVER_URL}/api/chatbot/insert/chat`;
   const updateUrl = `${API_SERVER_URL}/api/chatbot/update/chat`;
@@ -42,7 +37,7 @@ const AdminChatBot = () => {
     try {
       const res = await jwtAxios.get(url);
       setChatList(res.data.chatList);
-      console.log(res.data);
+      // console.log(res.data);
     } catch (err) {
       alert("에러발생 : " + err);
     }

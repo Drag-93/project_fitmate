@@ -237,7 +237,7 @@
 .admin-title-cell {
   display: flex;
   align-items: center;
-  gap: 10px;
+  /* gap: 10px; */
   text-align: left !important;
   font-weight: 500;
   color: #1f2937;
@@ -245,7 +245,7 @@
   overflow: hidden;
 }
 
-.admin-title-cell p {
+/* .admin-title-cell p {
   margin: 0;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -255,10 +255,10 @@
 .admin-title-cell:hover p {
   color: #2563eb;
   text-decoration: underline;
-}
+} */
 
 /* 썸네일 */
-.admin-title-cell .board-item-thumb {
+/* .admin-title-cell .board-item-thumb {
   width: 40px;
   height: 40px;
   border-radius: 6px;
@@ -269,7 +269,7 @@
 
 .admin-title-cell .board-item-thumb-empty {
   background: #eee;
-}
+} */
 
 /* 행별 개별 삭제 버튼 */
 .comMain td button {

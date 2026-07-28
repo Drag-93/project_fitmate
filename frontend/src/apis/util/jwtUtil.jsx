@@ -74,7 +74,7 @@ const responseFail = async (err) => {
       const originalRequest = err.config;
       originalRequest.headers.access = newAccessToken;
       //새로운 토큰으로 교체 후 백그라운드 요청 재시도
-      return await axios(originalRequest);
+      return await jwtAxios(originalRequest);
     } catch (refreshError) {
       //리프레시 토큰까지 만료 시 만료 응답 처리
       // 로컬 청소 전개
