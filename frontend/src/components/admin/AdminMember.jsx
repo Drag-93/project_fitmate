@@ -41,6 +41,12 @@ const AdminMember = () => {
   return memberData !== null ? (
     <div className="admin-member">
       <div className="admin-member-con">
+        <div className="admin-member-title-con">
+          <h2 className="admin-member-title">회원 관리</h2>
+          <div className="insertMember">
+            <button onClick={() => setIsBool(true)}>회원추가</button>
+          </div>
+        </div>
         {isBool && (
           <AdminMemberInsertModal
             getMemberList={getMemberList}
@@ -99,9 +105,6 @@ const AdminMember = () => {
                 <input type="submit" value="검색" />
               </form>
             </div>
-          </div>
-          <div className="insertMember">
-            <button onClick={() => setIsBool(true)}>회원추가</button>
           </div>
         </div>
         <div className="memberList">

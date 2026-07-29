@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import jwtAxios from "../../apis/util/jwtUtil";
 import { API_SERVER_URL } from "../../apis/commonApi";
 import PageGenerate from "../common/Page/PageGenerate";
+import "../../css/admin/AdminPopup.css";
 //초기값 선언
 const initState = {
   id: null,

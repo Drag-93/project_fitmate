@@ -115,26 +115,54 @@ const AdminProductUpdatePage = () => {
 
   return (
     <div className="admin-product-update">
-      <h2> 상품 수정 </h2>
-      <ProductForm product={product} onSubmit={handleSubmit} />
+      <h2>상품 수정</h2>
+      <div className="product-content-wrapper">
+        {/* 좌측 영역: 상품 정보 입력 폼 */}
+        <ProductForm product={product} onSubmit={handleSubmit} />
 
-      <ImageUpload onChange={handleImageChange} />
+        {/* 우측 영역: 이미지 관련 요소를 하나로 감싸기 */}
+        <div className="image-manage-section">
+          {/* 새 이미지 업로드 */}
+          <ImageUpload onChange={handleImageChange} />
 
-      <div>
-        <button onClick={handleDeleteAllImages}>이미지 전체 삭제</button>
-      </div>
+          {/* 기존 등록된 이미지 목록 카드 */}
+          <div className="image-list">
+            <div className="image-list-header">
+              <h3>등록된 이미지 목록</h3>
+              {product.fileDtos && product.fileDtos.length > 0 && (
+                <button
+                  type="button"
+                  className="btn-delete-all"
+                  onClick={handleDeleteAllImages}
+                >
+                  이미지 전체 삭제
+                </button>
+              )}
+            </div>
 
-      <div className="image-list">
-        {product.fileDtos?.map((file) => (
-          <div key={file.id}>
-            <img
-              src={`${API_SERVER_URL}/upload/product/${file.newFileName}`}
-              width="100"
-            />
-
-            <button onClick={() => handleDeleteImage(file.id)}>삭제</button>
+            {product.fileDtos && product.fileDtos.length > 0 ? (
+              <div className="image-grid">
+                {product.fileDtos.map((file) => (
+                  <div key={file.id} className="image-item">
+                    <img
+                      src={`${API_SERVER_URL}/upload/product/${file.newFileName}`}
+                      alt="상품 이미지"
+                    />
+                    <button
+                      type="button"
+                      className="btn-delete-single"
+                      onClick={() => handleDeleteImage(file.id)}
+                    >
+                      삭제
+                    </button>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="no-images">등록된 이미지가 없습니다.</p>
+            )}
           </div>
-        ))}
+        </div>
       </div>
     </div>
   );

@@ -14,11 +14,7 @@ const AdminOrderList = () => {
   const isSubscriptionProduct = (order) => {
     const type = order.orderItemDtos?.[0]?.productType;
 
-    return (
-      type === "GYM" ||
-      type === "PT" ||
-      type === "PREMIUM"
-    );
+    return type === "GYM" || type === "PT" || type === "PREMIUM";
   };
   const getOrders = async () => {
     try {
@@ -55,77 +51,79 @@ const AdminOrderList = () => {
 
   return (
     <div className="admin-order-page">
-      <h2 className="admin-order-title">주문 관리</h2>
+      <div className="admin-order-con">
+        <h2 className="admin-order-title">주문 관리</h2>
 
-      <table className="admin-order-table">
-        <thead>
-          <tr>
-            <th>주문번호</th>
-            <th>회원</th>
-            <th>상품명</th>
-            <th>금액</th>
-            <th>주문일</th>
-            <th>배송관리</th>
-          </tr>
-        </thead>
+        <div className="admin-order-table-wrapper">
+          <table className="admin-order-table">
+            <thead>
+              <tr>
+                <th>주문번호</th>
+                <th>회원</th>
+                <th>상품명</th>
+                <th>금액</th>
+                <th>주문일</th>
+                <th>배송관리</th>
+              </tr>
+            </thead>
 
-        <tbody>
-          {orders.map((order) => (
-            <tr key={order.id}>
-              <td>{order.id}</td>
+            <tbody>
+              {orders.map((order) => (
+                <tr key={order.id}>
+                  <td>{order.id}</td>
 
-              <td>
-                {order.memberName}
-                <br />
-                <small>{order.memberEmail}</small>
-              </td>
+                  <td>
+                    {order.memberName}
+                    <br />
+                    <small>{order.memberEmail}</small>
+                  </td>
 
-              <td>
-                {order.orderItemDtos?.length > 0 &&
-                  order.orderItemDtos[0].productName}
+                  <td>
+                    {order.orderItemDtos?.length > 0 &&
+                      order.orderItemDtos[0].productName}
 
-                {order.orderItemDtos?.length > 1 &&
-                  ` 외 ${order.orderItemDtos.length - 1}개`}
-              </td>
+                    {order.orderItemDtos?.length > 1 &&
+                      ` 외 ${order.orderItemDtos.length - 1}개`}
+                  </td>
 
-              <td>{order.totalPrice?.toLocaleString()}원</td>
+                  <td>{order.totalPrice?.toLocaleString()}원</td>
 
-              <td>{order.createTime?.substring(0, 10)}</td>
+                  <td>{order.createTime?.substring(0, 10)}</td>
 
-              <td>
-                {isSubscriptionProduct(order) ? (
-                  <span>구독 상품</span>
-                ) : (
-                  <select
-                    value={order.deliveryStatus}
-                    onChange={(e) =>
-                      changeStatus(order.id, e.target.value)
-                    }
-                  >
-                    <option value="READY">준비중</option>
-                    <option value="SHIPPING">배송중</option>
-                    <option value="COMPLETE">배송완료</option>
-                  </select>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      {pageInfo && (
-        <PageGenerate
-          currentPage={pageInfo.number}
-          startPage={Math.floor(pageInfo.number / 10) * 10 + 1}
-          endPage={Math.min(
-            Math.floor(pageInfo.number / 10) * 10 + 10,
-            pageInfo.totalPages,
+                  <td>
+                    {isSubscriptionProduct(order) ? (
+                      <span>구독 상품</span>
+                    ) : (
+                      <select
+                        value={order.deliveryStatus}
+                        onChange={(e) => changeStatus(order.id, e.target.value)}
+                      >
+                        <option value="READY">준비중</option>
+                        <option value="SHIPPING">배송중</option>
+                        <option value="COMPLETE">배송완료</option>
+                      </select>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {pageInfo && (
+            <PageGenerate
+              currentPage={pageInfo.number}
+              startPage={Math.floor(pageInfo.number / 10) * 10 + 1}
+              endPage={Math.min(
+                Math.floor(pageInfo.number / 10) * 10 + 10,
+                pageInfo.totalPages,
+              )}
+              totalPage={pageInfo.totalPages}
+              onPageChange={(search, subject, page) => setCurrentPage(page)}
+              search=""
+              subject=""
+            />
           )}
-          totalPage={pageInfo.totalPages}
-          onPageChange={(search, subject, page) => setCurrentPage(page)}
-          search=""
-          subject=""
-        />
-      )}
+        </div>
+      </div>
     </div>
   );
 };

@@ -197,23 +197,6 @@ const AdminIndex = () => {
                       {(member.activeSubscriptionCount ?? 0).toLocaleString()}명
                     </strong>
                   </li>
-
-                  <li>
-                    <span>7일 내 구독 만료</span>
-                    <strong>
-                      {(member.expiringSubscriptionCount ?? 0).toLocaleString()}
-                      명
-                    </strong>
-                  </li>
-
-                  <li>
-                    <span>구독 만료 회원</span>
-                    <strong>
-                      {(member.expiredSubscriptionCount ?? 0).toLocaleString()}
-                      명
-                    </strong>
-                  </li>
-
                   <li>
                     <span>미구독 회원</span>
                     <strong>

@@ -21,7 +21,7 @@ const AdminCommunityDetail = ({ id, onClose, onDeleted }) => {
       try {
         setIsLoading(true);
         // count=true : 상세 조회 시 조회수(hit)를 증가시키기 위한 파라미터
-        const res = await axios.get(
+        const res = await jwtAxios.get(
           `${API_SERVER_URL}/api/community/detail/${id}?count=true`,
         );
         if (res.data?.community) setCommunity(res.data.community);
@@ -40,7 +40,9 @@ const AdminCommunityDetail = ({ id, onClose, onDeleted }) => {
   const handleDelete = async () => {
     if (!window.confirm("이 게시글을 삭제하시겠습니까?")) return;
     try {
-      await jwtAxios.delete(`${API_SERVER_URL}/community/adminDelete/${id}`);
+      await jwtAxios.delete(
+        `${API_SERVER_URL}/api/community/adminDelete/${id}`,
+      );
       alert("삭제되었습니다");
       onDeleted(); // 부모 컴포넌트에 삭제 완료를 알려 목록 갱신 및 모달 닫기 처리
     } catch (err) {
