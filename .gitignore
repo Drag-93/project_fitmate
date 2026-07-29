@@ -6,8 +6,21 @@
 .DS_Store
 Thumbs.db
 
+# VS Code
+.vscode/
+
 # 환경파일
 .env
+.env.*
+!.env.example  
+
+# 시크릿 키
 backend/src/main/resources/application-open.yml
 backend/src/main/resources/application-oauth2.yml
 backend/src/main/resources/application-paymentkey.yml
+
+# Build
+backend/build/
+backend/.gradle/
+frontend/node_modules/
+frontend/dist/

@@ -1,6 +1,7 @@
 .gradle
 build
-.idea
 out
+.idea
 *.iml
-.git
+.env
+uploads
