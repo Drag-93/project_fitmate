@@ -69,3 +69,6 @@ img:
 jwt:
   secret:
     key: ${JWT_SECRET_KEY}
+
+app:
+  front-url: ${FRONT_SERVER_URL:http://localhost:3000}

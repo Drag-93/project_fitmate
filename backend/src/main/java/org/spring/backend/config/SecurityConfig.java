@@ -21,6 +21,7 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Arrays;
 
@@ -28,7 +29,10 @@ import java.util.Arrays;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-        private String frontServerURL = "http://localhost:3000";
+        // private String frontServerURL = "http://localhost:3000";
+        @Value("${app.front-url}")
+        private String frontServerURL;
+
         private final JWTUtil jwtUtil;
 
         private final AuthenticationConfiguration authenticationConfiguration;
@@ -97,6 +101,7 @@ public class SecurityConfig {
                                 "http://localhost:3000", // react서버
                                 "http://localhost:8090", // 백앤드 서버
                                 "http://online-payment.kakaopay.com" // 카카오페이 결제 도메인
+                                frontServerURL
                 ));
                 configuration.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT", "DELETE", "OPTIONS"));
 

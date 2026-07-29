@@ -42,8 +42,8 @@ public class UploadController {
      * - 저장 성공 시 { url: "/upload/community/{uuid}-{원본파일명}" } 형태로 응답
      *   (프론트는 이 url 앞에 API_SERVER_URL을 붙여 <img src>로 사용)
      */
+    // @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/image")
-    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<Map<String, String>> uploadImage(
             @RequestParam("file") MultipartFile file) {
 
