@@ -1,0 +1,107 @@
+@import url("../common/reset.css");
+/* ==========================================================================
+   AdminOrderList.css - 관리자 주문 관리 페이지
+   ========================================================================== */
+
+/* 전체 페이지 레이아웃 */
+.admin-order-page {
+  padding: 30px;
+  max-width: 1200px;
+  margin-left: 260px;
+  margin-top: 100px;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+  color: #333333;
+}
+
+/* 제목 */
+.admin-order-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: #111111;
+  border-bottom: 2px solid #222222;
+  padding-bottom: 12px;
+}
+
+/* 주문 테이블 메인 */
+.admin-order-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  overflow: hidden;
+  text-align: left;
+}
+
+/* 테이블 헤더 */
+.admin-order-table thead tr {
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.admin-order-table th {
+  padding: 16px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #495057;
+  white-space: nowrap;
+}
+
+/* 테이블 바디 셀 */
+.admin-order-table td {
+  padding: 14px;
+  font-size: 14px;
+  border-bottom: 1px solid #f1f3f5;
+  color: #212529;
+  vertical-align: middle;
+}
+
+/* 테이블 행 호버 효과 */
+.admin-order-table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.admin-order-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+/* 데이터가 없을 경우 처리 (선택 사항) */
+.admin-order-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* 상태 변경 셀렉트 박스 (Select Box) */
+.admin-order-table select {
+  padding: 6px 12px;
+  font-size: 13px;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  background-color: #ffffff;
+  color: #333333;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.admin-order-table select:focus {
+  border-color: #4dabf7;
+  box-shadow: 0 0 0 3px rgba(77, 171, 247, 0.15);
+}
+
+.admin-order-table select:hover {
+  border-color: #adb5bd;
+}
+
+/* 반응형 테이블 (모바일/작은 화면 지원) */
+@media (max-width: 768px) {
+  .admin-order-page {
+    padding: 16px;
+  }
+
+  .admin-order-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}

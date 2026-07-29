@@ -1,0 +1,249 @@
+/* ===========================
+   CommunityMain.css
+=========================== */
+
+/* ---------- 전체 ---------- */
+
+.comMain {
+  flex: 1;
+  min-width: 0;
+  margin: 30px 20px 30px 20px;
+  box-sizing: border-box;
+}
+
+.comMain-wrap {
+  width: 100%;
+}
+
+/* ---------- 상단 (날씨 + 추천운동 + 운동루틴) ---------- */
+
+.comMain-top {
+  margin-bottom: 30px;
+}
+
+.comMain-top-row {
+  display: flex;
+  align-items: stretch;
+  gap: 20px;
+}
+
+.comMain-top-row .board-card {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ---------- 본문 (게시판 그리드) ---------- */
+
+.comMain-board-grid {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+/* ---------- 카드 ---------- */
+
+.board-card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.board-card-header {
+  padding: 14px 18px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #ddd;
+}
+
+.board-card-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
+}
+
+.board-card-body {
+  min-height: 220px;
+}
+
+/* ---------- 게시글 ---------- */
+
+.board-card-body ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.board-card-body li {
+  border-bottom: 1px solid #eee;
+}
+
+.board-card-body li:last-child {
+  border-bottom: none;
+}
+
+.board-card-body a {
+  display: block;
+  padding: 14px 18px;
+  color: #333;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.board-card-body a:hover {
+  background: #f8f9fa;
+}
+
+.board-card-body p {
+  margin: 0;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.board-card-empty,
+.comMain-loading {
+  padding: 80px 0;
+  text-align: center;
+  color: #999;
+}
+
+/* ---------- 날씨 ---------- */
+
+.weather-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.weather-city-select {
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 13px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.weather-card-body {
+  padding: 20px !important;
+  min-height: auto !important;
+}
+
+.weather-slide {
+  text-align: center;
+}
+
+.weather-slide-city {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.weather-slide-icon {
+  width: 70px;
+  height: 70px;
+}
+
+.weather-slide-temp {
+  margin-top: 5px;
+  font-size: 30px;
+  font-weight: bold;
+  color: #007bff;
+}
+
+.weather-slide-desc {
+  margin-top: 5px;
+  color: #666;
+  font-size: 14px;
+}
+
+.weather-slide-empty {
+  padding: 40px 0;
+  text-align: center;
+  color: #999;
+}
+
+/* ---------- 추천 운동 ---------- */
+
+.recommend-card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px !important;
+  min-height: auto !important;
+}
+
+.recommend-title {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
+}
+
+.recommend-desc {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ---------- 운동 루틴 ---------- */
+
+.routine-card {
+  text-decoration: none;
+  color: inherit;
+}
+
+.routine-card-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px !important;
+  min-height: auto !important;
+}
+
+.routine-card-img {
+  width: 100%;
+  max-height: 220px;
+  object-fit: contain;
+}
+
+/* ---------- 반응형 ---------- */
+
+@media (max-width: 1100px) {
+  .comMain {
+    margin: 20px 15px;
+  }
+
+  .comMain-top-row {
+    flex-direction: column;
+  }
+
+  .comMain-board-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 썸네일 */
+.board-card-body a.board-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.board-item-thumb {
+  width: 48px;
+  height: 48px;
+  border-radius: 6px;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: #f0f0f0;
+}
+
+.board-item-thumb-empty {
+  background: #eee;
+}

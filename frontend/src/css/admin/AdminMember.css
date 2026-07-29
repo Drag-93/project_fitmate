@@ -1,0 +1,285 @@
+@import url("../common/reset.css");
+
+/* ===========================
+   Header Container (Tab + Search + Action)
+=========================== */
+
+.header-con {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap; /* 화면이 좁아지면 자연스럽게 줄바꿈 */
+}
+
+/* ===========================
+   Role Filter Tabs
+=========================== */
+
+.roleFilter {
+  display: inline-flex;
+  gap: 4px;
+  background-color: #f1f3f5;
+  padding: 4px;
+  border-radius: 10px;
+}
+
+.roleFilter button {
+  padding: 8px 16px;
+  border: none;
+  background: transparent;
+  color: #666;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+/* 마우스 호버 및 활성화 상태 */
+.roleFilter button:hover:not(.active) {
+  color: #333;
+}
+
+.roleFilter button.active {
+  background-color: #4b7bec;
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(75, 123, 236, 0.3);
+}
+
+/* ===========================
+   Search Box & Form
+=========================== */
+
+.search {
+  margin-bottom: 0; /* header-con 안에서 정렬을 위해 margin 제거 */
+}
+
+.search .filters form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 드롭다운 select */
+.search select {
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #333;
+  background-color: #fff;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.search select:focus {
+  border-color: #4b7bec;
+}
+
+/* 검색어 input */
+.search input[type="text"] {
+  width: 200px;
+  height: 40px;
+  padding: 0 14px;
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #333;
+  background-color: #fff;
+  outline: none;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.search input[type="text"]::placeholder {
+  color: #aaa;
+}
+
+.search input[type="text"]:focus {
+  border-color: #4b7bec;
+  box-shadow: 0 0 6px rgba(75, 123, 236, 0.2);
+}
+
+/* 검색 제출 버튼 */
+.search input[type="submit"] {
+  height: 40px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 8px;
+  background-color: #4b7bec;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+}
+
+.search input[type="submit"]:hover {
+  background-color: #3867d6;
+}
+
+/* ===========================
+   Insert Member Button (회원 추가)
+=========================== */
+
+.insertMember button {
+  height: 40px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 8px;
+  background-color: #20bf6b;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+}
+
+.insertMember button:hover {
+  background-color: #26de81;
+}
+
+/* ===========================
+   Layout Container
+=========================== */
+
+.admin-member {
+  position: relative;
+  width: calc(100% - 260px);
+  min-height: calc(100vh - 70px);
+  margin-left: 260px;
+  margin-top: 70px;
+  padding: 32px;
+  box-sizing: border-box;
+  background-color: #f5f7fb;
+}
+
+/* 전체 컨테이너 */
+.admin-member-con {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* ===========================
+   Member List Table
+=========================== */
+
+.memberList {
+  width: 100%;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* 헤더와 바디의 공통 레이아웃 (Grid 설정) */
+.memberList-head,
+.memberList-body {
+  display: grid;
+  /* 4개 열의 비율 설정 */
+  grid-template-columns: 1fr 1fr 1.5fr 1fr;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+  text-align: center;
+}
+
+/* 공통 셀 스타일 */
+.memberList-head li,
+.memberList-body li {
+  padding: 14px 8px;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 헤더 전용 스타일 */
+.memberList-head {
+  background-color: #f8fafc;
+  border-bottom: 2px solid #cbd5e1;
+  font-weight: bold;
+  color: #334155;
+}
+
+/* 데이터 바디 전용 스타일 */
+.memberList-body {
+  background-color: #ffffff;
+  color: #475569;
+  border-bottom: 1px solid #f1f5f9;
+  transition: background-color 0.2s ease;
+}
+
+/* 마지막 행은 밑줄 제거 */
+.memberList-body:last-child {
+  border-bottom: none;
+}
+
+/* 마우스 올렸을 때 효과 */
+.memberList-body:hover {
+  background-color: #f1f5f9;
+}
+
+/* ===========================
+   Table Action Button (상세보기 버튼)
+=========================== */
+
+.memberList-body button {
+  padding: 6px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background-color: #ffffff;
+  color: #475569;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.memberList-body button:hover {
+  background-color: #4b7bec;
+  color: #ffffff;
+  border-color: #4b7bec;
+  box-shadow: 0 2px 4px rgba(75, 123, 236, 0.2);
+}
+
+/* ===========================
+   Responsive
+=========================== */
+
+@media (max-width: 768px) {
+  .header-con {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .roleFilter {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .roleFilter button {
+    flex: 1;
+    text-align: center;
+    padding: 8px 0;
+  }
+
+  .search .filters form {
+    width: 100%;
+  }
+
+  .search input[type="text"] {
+    flex: 1;
+    width: auto;
+  }
+}

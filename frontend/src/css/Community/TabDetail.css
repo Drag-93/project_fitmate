@@ -1,0 +1,218 @@
+/* 전체 레이아웃 컨테이너 */
+.tabDetail {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 20px;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.tabDetail-con {
+  width: 100%;
+  max-width: 700px;
+  background: #ffffff;
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.tabDetail-con h1 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #333333;
+  margin-bottom: 24px;
+  border-bottom: 2px solid #eaeaea;
+  padding-bottom: 12px;
+}
+
+/* 로딩 및 안내 문구 */
+.tabDetail-con > p {
+  text-align: center;
+  color: #666666;
+  font-size: 16px;
+  padding: 40px 0;
+}
+
+/* 상세 본문 폼 영역 */
+.detailbody ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.detailbody li {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.detailbody label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 8px;
+}
+
+/* 체크박스 라벨 스타일 별도 조정 */
+.detailbody li:first-child label {
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+  font-weight: 500;
+  color: #212529;
+  cursor: pointer;
+}
+
+.detailbody li:first-child input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+/* 텍스트 입력창 공통 스타일 */
+.detailbody input[type="text"] {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  font-size: 15px;
+  color: #495057;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.detailbody input[type="text"]:focus {
+  border-color: #3182ce;
+  box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+}
+
+/* 카테고리 편집 그룹 영역 */
+.category-edit-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: #f1f3f5;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.category-edit-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.category-edit-row input[type="text"] {
+  background-color: #ffffff;
+}
+
+/* 카테고리 삭제 버튼 */
+.category-edit-row button {
+  padding: 10px 14px;
+  background-color: #e03131;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.2s;
+}
+
+.category-edit-row button:hover {
+  background-color: #c92a2a;
+}
+
+/* 카테고리 추가 버튼 */
+.category-edit-group > button[type="button"] {
+  padding: 10px;
+  background-color: #e9ecef;
+  color: #495057;
+  border: 1px dashed #adb5bd;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: all 0.2s;
+}
+
+.category-edit-group > button[type="button"]:hover {
+  background-color: #dee2e6;
+  color: #212529;
+  border-color: #6c757d;
+}
+
+/* 생성일/수정일 뷰 박스 */
+.view-box {
+  padding: 10px 14px;
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  color: #868e96;
+  font-size: 14px;
+}
+
+/* 수정 완료 버튼 (li 내부 단독 버튼) */
+.detailbody li > button {
+  width: 100%;
+  padding: 12px;
+  background-color: #3182ce;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.2s;
+}
+
+.detailbody li > button:hover {
+  background-color: #2b6cb0;
+}
+
+/* 하단 버튼 영역 (목록으로, 삭제) */
+.button {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  border-top: 1px solid #eaeaea;
+  padding-top: 20px;
+}
+
+.button button {
+  flex: 1;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.2s;
+}
+
+/* 목록으로 돌아가기 버튼 */
+.button button:first-child {
+  background-color: #e9ecef;
+  color: #495057;
+}
+
+.button button:first-child:hover {
+  background-color: #dee2e6;
+}
+
+/* 삭제 버튼 */
+.button button:last-child {
+  background-color: #fff5f5;
+  color: #e03131;
+  border: 1px solid #ffc9c9;
+}
+
+.button button:last-child:hover {
+  background-color: #ffe3e3;
+}

@@ -1,0 +1,33 @@
+package org.spring.backend.shop.product.repository;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.spring.backend.shop.product.entity.ProductEntity;
+import org.spring.backend.shop.product.type.ProductType;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
+
+  @EntityGraph(attributePaths = "fileEntities")
+  Page<ProductEntity> findByProductType(ProductType productType, Pageable pageable);
+
+  @EntityGraph(attributePaths = "fileEntities")
+  Page<ProductEntity> findByProductNameContaining(String keyword, Pageable pageable);
+
+  @EntityGraph(attributePaths = "fileEntities")
+  Optional<ProductEntity> findById(Long id);
+
+  @EntityGraph(attributePaths = "fileEntities")
+  Page<ProductEntity> findAll(Pageable pageable);
+
+  boolean existsByProductName(String productName);
+
+  @EntityGraph(attributePaths = "fileEntities")
+  Optional<ProductEntity> findFirstByProductType(ProductType productType);
+
+  boolean existsByProductType(ProductType productType);
+}

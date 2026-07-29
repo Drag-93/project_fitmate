@@ -8,5 +8,16 @@ export default defineConfig({
   server: {
     host: true,
     port: 3000,
+
+    proxy: {
+      "/api": {
+        target: "http://localhost:8090",
+        changeOrigin: true,
+      },
+    },
+  },
+  define: {
+    // global 변수를 window로 매핑하여 SockJS 에러 해결
+    global: "window",
   },
 });

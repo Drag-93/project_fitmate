@@ -4,14 +4,14 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/backendprojectdb
-    username: root
-    password: 1234
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/backendprojectdb}
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    password: ${SPRING_DATASOURCE_PASSWORD}
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: update #create #update
+      ddl-auto: update
     properties:
       hibernate:
         show_sql: true
@@ -19,10 +19,10 @@ spring:
 
   profiles:
     include:
-      - open   #application-open.yml
-      - oauth2 #application-oauth2.yml
+      - open
+      - oauth2
+      - paymentkey
 
-  # JSON 직렬화 설정
   jackson:
     serialization:
       fail-on-empty-beans: false
@@ -31,20 +31,41 @@ spring:
     allow-bean-definition-overriding: true
 
   rabbitmq:
-    host: localhost #Docker 내부 배포 시 환경변수로 'rabbitmq'주입 가능
-    port: 5672
-    username: admin #docker run 의 default user
-    password: 1234 #docker run 의 default password
+    host: ${SPRING_RABBITMQ_HOST:localhost}
+    port: ${SPRING_RABBITMQ_PORT:5672}
+    username: ${SPRING_RABBITMQ_USERNAME}
+    password: ${SPRING_RABBITMQ_PASSWORD}
 
-rabbitmq.queue.name: ec2.queue
-rabbitmq.exchange.name: ec2.exchange
-rabbitmq.question.routing.key: ec2.routing.#
+  data:
+    redis:
+      host: ${SPRING_DATA_REDIS_HOST:localhost}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
 
-#로그 설정
+rabbitmq:
+  queue:
+    question: ec2.queue
+    notification: notification.queue
+  exchange:
+    name: ec2.exchange
+  routing:
+    key:
+      question: ec2.routing.#
+      notification: ec2.notification.#
+
 logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
 
-img.path.item: file:///E:/fitmate/backend/item/
-img.path.community: file:///E:/fitmate/backend/community/
+img:
+  path:
+    product: ${IMG_PATH_PRODUCT:file:///E:/fitmate/backend/product/}
+    community: ${IMG_PATH_COMMUNITY:file:///E:/fitmate/backend/community/}
+    member: ${IMG_PATH_MEMBER:file:///E:/fitmate/backend/member/}
+    popup: ${IMG_PATH_POPUP:file:///E:/fitmate/backend/popup/}
+    exercise: ${IMG_PATH_EXERCISE:file:///E:/fitmate/backend/exercise/}
+    schedule: ${IMG_PATH_SCHEDULE:file:///E:/fitmate/backend/schedule/}
+
+jwt:
+  secret:
+    key: ${JWT_SECRET_KEY}

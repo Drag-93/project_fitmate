@@ -1,0 +1,535 @@
+@import url("../common/reset.css");
+.product-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.admin-product-insert-page {
+  margin-left: 260px;
+  margin-top: 100px;
+  padding: 30px;
+}
+
+/* ==========================================
+   Admin Product List Page Container
+   ========================================== */
+
+/* 페이지 전체 영역 레이아웃 */
+.admin-product-list-page {
+  margin-left: 260px;
+  margin-top: 100px;
+  padding: 40px 20px;
+  box-sizing: border-box;
+}
+.admin-product-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #f1f5f9;
+}
+/* 상품 등록 버튼 */
+.admin-product-insert-btn {
+  background-color: #2563eb;
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.2);
+}
+
+.admin-product-insert-btn:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+/* ==========================================
+   Product Table Styling
+   ========================================== */
+
+.product-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.product-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #334155;
+}
+
+/* 테이블 헤더 */
+.product-table thead {
+  background-color: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.product-table th {
+  padding: 14px 12px;
+  font-weight: 600;
+  color: #475569;
+  white-space: nowrap;
+}
+
+/* 테이블 바디 Row */
+.product-table tbody tr {
+  border-bottom: 1px solid #f1f5f9;
+  transition: background-color 0.15s ease;
+}
+
+.product-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.product-table tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+.product-table td {
+  padding: 12px;
+  vertical-align: middle;
+}
+
+/* 데이터가 없을 때 */
+.product-table td[colspan] {
+  padding: 48px 0;
+  color: #94a3b8;
+  font-size: 0.95rem;
+}
+
+/* 썸네일 이미지 공통 스타일 */
+.product-table img {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+}
+
+/* 관리 버튼 (수정/삭제) 스타일 */
+.product-table .btn-edit,
+.product-table .btn-delete {
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  margin: 0 2px;
+  transition: background-color 0.2s;
+}
+
+.product-table .btn-edit {
+  background-color: #f1f5f9;
+  color: #334155;
+}
+
+.product-table .btn-edit:hover {
+  background-color: #e2e8f0;
+}
+
+.product-table .btn-delete {
+  background-color: #fef2f2;
+  color: #ef4444;
+}
+
+.product-table .btn-delete:hover {
+  background-color: #fee2e2;
+}
+
+/* 로딩 스타일 */
+.admin-loading {
+  text-align: center;
+  padding: 80px 0;
+  font-size: 1.1rem;
+  color: #64748b;
+  font-weight: 600;
+}
+.admin-product-header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+/* 제목 + 버튼 */
+.admin-product-list-page .title {
+  text-align: center;
+  margin: 0 0 25px;
+
+  font-size: 26px;
+  font-weight: 700;
+  color: #222;
+}
+
+.admin-product-update{
+  margin-left: 260px;
+  margin-top: 100px;
+  padding: 30px;
+}
+
+
+.admin-product-update h2{
+  text-align: center;
+  margin-bottom: 20px;
+
+}
+/* 상품 등록 버튼 */
+.admin-product-insert-btn {
+
+  padding: 10px 20px;
+
+  display: block;
+  margin-left: auto;
+  margin-bottom: 20px;
+
+  border: none;
+  border-radius: 8px;
+
+  background-color: #4a90e2;
+  color: white;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.admin-product-insert-btn:hover  {
+  background-color: #357abd;
+}
+
+
+/* 버튼 float 영향 제거 */
+.admin-product-list-page::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+
+/* 테이블 */
+.admin-product-list-page .product-table {
+  width: 100%;
+  margin-top: 10px;
+
+  border-collapse: collapse;
+  background-color: #fff;
+
+  border-radius: 10px;
+  overflow: hidden;
+
+  box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+}
+
+/* 헤더 */
+.product-table thead {
+  background-color: #f7f7f7;
+}
+
+.product-table th {
+  padding: 15px 12px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 1px solid #ddd;
+}
+
+/* 데이터 */
+.product-table td {
+  padding: 12px;
+  text-align: center;
+  font-size: 14px;
+  color: #555;
+  border-bottom: 1px solid #eee;
+  vertical-align: middle;
+}
+
+/* 행 hover */
+.product-table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.product-table tbody tr:hover {
+  background-color: #fafafa;
+}
+
+/* 썸네일 컬럼 */
+.product-table th:nth-child(2),
+.product-table td:nth-child(2) {
+  width: 110px;
+}
+
+/* 상품명 */
+.product-table th:nth-child(3),
+.product-table td:nth-child(3) {
+  width: 180px;
+}
+
+/* 가격 */
+.product-table th:nth-child(7),
+.product-table td:nth-child(7) {
+  width: 120px;
+}
+
+/* 관리 버튼 */
+.product-table button {
+  border: none;
+  padding: 7px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  margin: 0 3px;
+}
+
+/* 데이터 없음 */
+.product-table td[colspan] {
+  padding: 40px;
+  color: #999;
+  font-size: 15px;
+}
+
+.productRow {
+  height: 90px;
+  border-bottom: 1px solid #eee;
+  transition: background-color 0.2s ease;
+}
+
+.productRow:hover {
+  background-color: #fafafa;
+}
+
+.productRow td {
+  padding: 12px;
+  text-align: center;
+  font-size: 14px;
+  color: #333;
+  vertical-align: middle;
+}
+
+/* 상품 번호 */
+.productId {
+  width: 60px;
+  font-weight: 600;
+}
+
+/* 썸네일 */
+.thumbnail {
+  width: 100px;
+}
+
+.thumbnail img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.thumbnail span {
+  display: flex;
+  width: 80px;
+  height: 80px;
+  align-items: center;
+  justify-content: center;
+  background: #eee;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+
+/* 버튼 공통 */
+.productRow button {
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  margin: 0 4px;
+}
+
+/* =======================폼 영역======================== */
+.product-form {
+  width: 600px;
+  margin: 40px auto;
+  padding: 30px;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #eee;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* 각 입력 영역 */
+.product-form > div {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* 라벨 */
+.product-form label {
+  width: 120px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* input, select */
+.product-form input,
+.product-form select,
+.product-form textarea {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.product-form input:focus,
+.product-form select:focus,
+.product-form textarea:focus {
+  border-color: #4a90e2;
+}
+
+/* 설명 textarea */
+.product-form textarea {
+  height: 120px;
+  resize: none;
+}
+
+/* 가격 input */
+.product-form input[type="number"] {
+  text-align: right;
+}
+
+/* 버튼 */
+.product-form button {
+  width: 100%;
+  margin-top: 20px;
+  padding: 13px;
+  border: none;
+  border-radius: 8px;
+  background-color: #4a90e2;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.product-form button:hover {
+  background-color: #357abd;
+}
+
+
+
+/* =======================파일 영역======================== */
+.image-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 10px;
+}
+
+/* 각 파일 입력 영역 */
+.image-upload > div {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* 라벨 */
+.image-upload label {
+  width: 100px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* 파일 input */
+.image-upload input[type="file"] {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #fafafa;
+  cursor: pointer;
+}
+
+.image-upload input[type="file"]:hover {
+  border-color: #999;
+}
+/* =======================product-card ====================*/
+.product-card {
+  width: 250px;
+  cursor: pointer;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: white;
+  transition: 0.2s;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+}
+
+
+/* 상품 이미지 */
+.product-card img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  display: block;
+}
+
+
+/* 이미지 없을 때 */
+.product-card > div {
+  width: 100%;
+  height: 250px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f5f5f5;
+  color: #999;
+}
+
+
+/* 상품명 */
+.product-card h3 {
+  font-size: 18px;
+  margin: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+/* 가격 */
+.product-card p {
+  margin: 0 15px 15px;
+  font-size: 16px;
+  font-weight: bold;
+}
