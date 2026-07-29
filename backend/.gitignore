@@ -4,11 +4,7 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-#oauth2 설정파일 제외
-**/src/main/resources/application-oauth2.yaml
-#API결제 key 설정파일 제외
-**/src/main/resources/application-paymentkey.yaml
-**/src/main/resources/application-paymentkey.yml
+
 ### STS ###
 .apt_generated
 .classpath
