@@ -75,6 +75,10 @@ services:
       - fitmate-network
 
   backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+
     image: ${DOCKERHUB_USERNAME}/fitmate-backend:latest
     container_name: fitmate-backend
     restart: unless-stopped
@@ -126,6 +130,10 @@ services:
       - fitmate-network
 
   frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+
     image: ${DOCKERHUB_USERNAME}/fitmate-frontend:latest
     container_name: fitmate-frontend
     restart: unless-stopped
