@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../../../css/shop/subscription/PremiumCard.css";
+import "../../../css/shop/subscription/premiumCard.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -12,10 +12,10 @@ const PremiumCard = () => {
   useEffect(() => {
     axios
       .get("/api/product/premium")
-      .then(res => {
+      .then((res) => {
         setPremiumProduct(res.data);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       })
       .finally(() => {
@@ -64,9 +64,12 @@ const PremiumCard = () => {
       </ul>
 
       {/* 결제하기 버튼 */}
-      <button className="subscribe-cta-btn" onClick={() => navigate("/order/membership",
-        { state: { product: premiumProduct } }
-      )}>
+      <button
+        className="subscribe-cta-btn"
+        onClick={() =>
+          navigate("/order/membership", { state: { product: premiumProduct } })
+        }
+      >
         FitMate Plus+ 시작하기
       </button>
     </div>

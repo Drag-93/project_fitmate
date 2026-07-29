@@ -5,8 +5,6 @@ import { API_SERVER_URL } from "../../apis/commonApi";
 import { getCookie } from "../../apis/util/cookieUtil";
 
 // FAQ 카테고리 여부 판단 (대소문자 무관, 다른 곳의 QNA 체크와 동일한 방식으로 통일)
-// 이름 문자열 비교 방식이라 카테고리명이 바뀌면 같이 깨짐 - 나중에 CategoryEntity에
-// 구조화된 플래그(예: isFaq)를 추가하는 쪽으로 옮기는 걸 권장
 const isFaqCategory = (categoryName) =>
   !!categoryName && categoryName.toUpperCase().includes("FAQ");
 
@@ -28,6 +26,7 @@ const CommunityList = ({ params, tab }) => {
   const [keyword, setKeyword] = useState("");
   const member = getCookie("member");
   const isAdmin = member?.role && String(member.role).toUpperCase() === "ADMIN";
+
   const handleSearch = (e) => {
     e.preventDefault();
     setPage(0);
@@ -125,6 +124,19 @@ const CommunityList = ({ params, tab }) => {
       `src="${API_SERVER_URL}/upload/`,
     );
 
+  //시간 서식 함수
+  const formatDateTime = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+
+    return `${year}-${month}-${day} ${hours}:${minutes}`;
+  };
+
   return (
     <>
       <div className="communityList">
@@ -134,13 +146,9 @@ const CommunityList = ({ params, tab }) => {
             {tab?.categoryName && ` > ${tab.categoryName}`}
           </h1>
 
-          {/* 검색 영역 */}
-          <div className="saerch">
-            <form
-              onSubmit={handleSearch}
-              className="search-form"
-              style={{ marginBottom: "20px", display: "flex", gap: "8px" }}
-            >
+          {/* 상단 검색 영역 (우측 정렬) */}
+          <div className="community-top-bar">
+            <form onSubmit={handleSearch} className="search-form">
               <select
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
@@ -158,6 +166,7 @@ const CommunityList = ({ params, tab }) => {
               <button type="submit">검색</button>
             </form>
           </div>
+
           <table>
             <thead>
               <tr>
@@ -165,13 +174,12 @@ const CommunityList = ({ params, tab }) => {
                 <th>카테고리</th>
                 <th>제목</th>
                 <th>작성자</th>
+                <th>작성시간</th>
                 <th>조회수</th>
               </tr>
             </thead>
             <tbody>
               {list.map((item, index) => {
-                // 게시글 번호를 최신순으로 내림차순 표시하기 위한 계산
-                // 전체 게시글 수 - (현재 페이지 * 페이지당 개수) - 행 인덱스
                 const displayId = totalElements - page * size - index;
                 const isFaq = isFaqCategory(item.categoryName);
                 const isOpen = openFaqIds.has(item.id);
@@ -182,22 +190,24 @@ const CommunityList = ({ params, tab }) => {
                       <td>{displayId}</td>
                       <td>{item.categoryName}</td>
                       <td onClick={() => handleTitleClick(item)}>
-                        {item.thumbnail ? (
-                          <img
-                            className="board-item-thumb"
-                            src={item.thumbnail}
-                            alt=""
-                          />
-                        ) : (
-                          <div className="board-item-thumb board-item-thumb-empty" />
-                        )}
-                        <p>
-                          {item.title}
-                          {/* FAQ일 시 펼침 접힘 상태를 보여주는 화살표 표시 */}
-                          {isFaq && <span> {isOpen ? "▲" : "▼"}</span>}
-                        </p>
+                        <div className="board-title-wrapper">
+                          {item.thumbnail ? (
+                            <img
+                              className="board-item-thumb"
+                              src={item.thumbnail}
+                              alt=""
+                            />
+                          ) : (
+                            <div className="board-item-thumb board-item-thumb-empty" />
+                          )}
+                          <p>
+                            {item.title}
+                            {isFaq && <span> {isOpen ? "▲" : "▼"}</span>}
+                          </p>
+                        </div>
                       </td>
                       <td>{item.userName}</td>
+                      <td>{formatDateTime(item.createTime)}</td>
                       <td>{item.hit}</td>
                     </tr>
 
@@ -219,9 +229,19 @@ const CommunityList = ({ params, tab }) => {
               })}
             </tbody>
           </table>
-          {canShowWriteButton && (
-            <button onClick={handleWriteClick}>게시글 작성</button>
-          )}
+
+          {/* 하단 영역 (게시글 작성 버튼을 우측에 여백을 주어 배치) */}
+          <div className="community-bottom-bar">
+            {canShowWriteButton && (
+              <button
+                type="button"
+                className="write-btn"
+                onClick={handleWriteClick}
+              >
+                게시글 작성
+              </button>
+            )}
+          </div>
 
           {/* 페이지네이션: 이전/다음 버튼 방식 (페이지가 2개 이상일 때만 표시) */}
           {totalPages > 1 && (

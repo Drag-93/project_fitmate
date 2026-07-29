@@ -1,8 +1,6 @@
-import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
 import jwtAxios from "../../apis/util/jwtUtil.jsx";
 import { API_SERVER_URL } from "../../apis/commonApi";
-import "../../css/admin/AdminCommunity.css";
 import { getCookie } from "../../apis/util/cookieUtil";
 import TabList from "../community/TabList.jsx";
 import PageGenerate from "../common/Page/PageGenerate.jsx";
@@ -63,8 +61,8 @@ const AdminCommunity = () => {
     const fetchTcList = async () => {
       try {
         const [tabRes, catRes] = await Promise.all([
-          axios.get(`${API_SERVER_URL}/api/community/tabList`),
-          axios.get(`${API_SERVER_URL}/api/community/category`),
+          jwtAxios.get(`${API_SERVER_URL}/api/community/tabList`),
+          jwtAxios.get(`${API_SERVER_URL}/api/community/category`),
         ]);
         setTabs(tabRes.data.result || []);
         setCategories(catRes.data.result || []);
@@ -469,7 +467,7 @@ const AdminCommunity = () => {
                     ) : (
                       <div className="board-item-thumb board-item-thumb-empty" />
                     )} */}
-                    <td>{item.title}</td>
+                    {item.title}
                   </td>
                   <td>{item.userName}</td>
                   <td>{item.hit}</td>

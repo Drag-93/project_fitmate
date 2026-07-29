@@ -1,9 +1,13 @@
-package org.spring.backend.exercise;
+package org.spring.backend.exercise.service.impl;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.spring.backend.exercise.entity.Exercise;
+import org.spring.backend.exercise.ExerciseDbClient;
+import org.spring.backend.exercise.repository.ExerciseRepository;
+import org.spring.backend.exercise.service.ValidValuesService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientResponseException;
 

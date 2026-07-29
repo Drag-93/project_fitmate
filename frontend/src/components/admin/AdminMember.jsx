@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import PageGenerate from "../common/Page/PageGenerate";
 import { API_SERVER_URL } from "../../apis/commonApi";
 import jwtAxios from "../../apis/util/jwtUtil";
+import AdminMemberInsertModal from "./member/AdminMemberInsertModal";
 
 const AdminMember = () => {
   const navigate = useNavigate();

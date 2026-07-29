@@ -1,8 +1,11 @@
-package org.spring.backend.exercise;
+package org.spring.backend.exercise.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.spring.backend.exception.RateLimitExceededException;
+import org.spring.backend.exercise.dto.ExerciseDetail;
+import org.spring.backend.exercise.dto.ExerciseDto;
+import org.spring.backend.exercise.service.*;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

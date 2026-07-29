@@ -3,10 +3,9 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { getProductList } from "../../../apis/shop/productApi";
 import ProductCard from "../../../components/shop/product/ProductCard";
 
-import "../../../css/shop/product/productListPage.css";
+import "../../../css/shop/product/ProductListPage.css";
 
 const ProductListPage = () => {
-
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const productType = searchParams.get("productType");
@@ -32,15 +31,10 @@ const ProductListPage = () => {
       <div className="product-list">
         <div className="product-list-con">
           {products.length === 0 ? (
-            <div className="no-product">
-              해당 카테고리에 상품이 없습니다.
-            </div>
+            <div className="no-product">해당 카테고리에 상품이 없습니다.</div>
           ) : (
-            products.map(product => (
-              <ProductCard
-                key={product.id}
-                product={product}
-              />
+            products.map((product) => (
+              <ProductCard key={product.id} product={product} />
             ))
           )}
         </div>

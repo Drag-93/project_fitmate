@@ -4,6 +4,8 @@
   border-right: 1px solid #eee;
   padding: 15px 10px;
   box-sizing: border-box;
+  min-height: 100vh;
+  height: 100%;
 }
 
 .community-left ul {
@@ -29,7 +31,7 @@
 
 /* 현재 선택된 탭 강조 */
 .community-left a.active {
-  color: #007bff;
+  color: #0058b6;
   font-weight: bold;
 }
 
@@ -76,5 +78,5 @@
 /* ★ 현재 선택된 카테고리 볼드 처리 및 색상 강조 */
 .overTab li a.active {
   font-weight: bold;
-  color: #007bff;
+  color: #0d1b2a;
 }

@@ -1,0 +1,145 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: fitmate-mysql
+    restart: unless-stopped
+
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: fitmate_db
+
+    ports:
+      - "3308:3306"
+
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p1234"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+    networks:
+      - fitmate-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: fitmate-redis
+    restart: unless-stopped
+
+    ports:
+      - "6379:6379"
+
+    volumes:
+      - redis-data:/data
+
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+    networks:
+      - fitmate-network
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: fitmate-rabbitmq
+    restart: unless-stopped
+
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: 1234
+
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+    networks:
+      - fitmate-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+
+    container_name: fitmate-backend
+    restart: unless-stopped
+
+    environment:
+      TZ: Asia/Seoul
+
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/fitmate_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 1234
+
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: admin
+      SPRING_RABBITMQ_PASSWORD: 1234
+
+      IMG_PATH_PRODUCT: file:/app/uploads/product/
+      IMG_PATH_COMMUNITY: file:/app/uploads/community/
+      IMG_PATH_MEMBER: file:/app/uploads/member/
+      IMG_PATH_POPUP: file:/app/uploads/popup/
+      IMG_PATH_EXERCISE: file:/app/uploads/exercise/
+      IMG_PATH_SCHEDULE: file:/app/uploads/schedule/
+
+    ports:
+      - "8090:8090"
+
+    volumes:
+      - upload-data:/app/uploads
+
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+    networks:
+      - fitmate-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+
+    container_name: fitmate-frontend
+    restart: unless-stopped
+
+    ports:
+      - "3000:80"
+
+    depends_on:
+      - backend
+
+    networks:
+      - fitmate-network
+
+volumes:
+  mysql-data:
+  redis-data:
+  rabbitmq-data:
+  upload-data:
+
+networks:
+  fitmate-network:
+    driver: bridge

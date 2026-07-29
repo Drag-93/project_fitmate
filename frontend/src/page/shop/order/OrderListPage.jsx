@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import OrderList from "../../../components/shop/order/OrderList";
 import jwtAxios from "../../../apis/util/jwtUtil";
-import "../../../css/shop/order/orderList.css";
+import "../../../css/shop/order/OrderList.css";
 
 const OrderListPage = () => {
-
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
@@ -20,9 +19,7 @@ const OrderListPage = () => {
     fetchOrders();
   }, []);
 
-  return (
-      <OrderList orders={orders} />
-  );
+  return <OrderList orders={orders} />;
 };
 
 export default OrderListPage;

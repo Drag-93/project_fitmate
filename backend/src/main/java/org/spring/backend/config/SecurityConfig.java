@@ -59,13 +59,8 @@ public class SecurityConfig {
                                 .authorizeHttpRequests(authorize -> authorize
                                                 .requestMatchers("/api/member/login", "/api/member/join", "/api/member/email").permitAll()
                                         // hasAnyRole -> hasAnyAuthority 로 변경 ("ROLE_" 접두사 없이 검사)
-                                        .requestMatchers(
-                                                "/api/member/admin/memberList",
-                                                "/api/member/admin/memberListSummary"
-                                        ).hasAnyAuthority("TRAINER", "ADMIN", "MANAGER")
-
                                         .requestMatchers("/api/member/admin/**").hasAnyAuthority("ADMIN", "MANAGER")
-                                        .requestMatchers("/admin/**").hasAnyAuthority("ADMIN", "MANAGER", "TRAINER")
+                                        .requestMatchers("/api/admin/**").hasAnyAuthority("ADMIN", "MANAGER")
                                                  .requestMatchers("/api/member/**").authenticated()
                                                 .requestMatchers("/api/payment/kakao/pg/**").permitAll() // 카카오결제 임시허용
                                                 .anyRequest().permitAll())

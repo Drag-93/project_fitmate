@@ -1,4 +1,4 @@
-package org.spring.backend.exercise;
+package org.spring.backend.exercise.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

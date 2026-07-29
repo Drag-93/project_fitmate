@@ -185,7 +185,7 @@ const AdminPopup = () => {
     try {
       const formData = createFormData();
 
-      await jwtAxios.post(`${API_SERVER_URL}/admin/popupInsert`, formData);
+      await jwtAxios.post(`${API_SERVER_URL}/api/admin/popupInsert`, formData);
 
       alert("팝업이 등록되었습니다.");
 
@@ -205,7 +205,7 @@ const AdminPopup = () => {
       const formData = createFormData();
 
       await jwtAxios.put(
-        `${API_SERVER_URL}/admin/popupUpdate/${popup.id}`,
+        `${API_SERVER_URL}/api/admin/popupUpdate/${popup.id}`,
         formData,
       );
 
@@ -224,7 +224,9 @@ const AdminPopup = () => {
   //팝업 삭제
   const deletePopup = async () => {
     try {
-      await jwtAxios.delete(`${API_SERVER_URL}/admin/popupDelete/${popup.id}`);
+      await jwtAxios.delete(
+        `${API_SERVER_URL}/api/admin/popupDelete/${popup.id}`,
+      );
 
       alert("팝업이 삭제되었습니다.");
 

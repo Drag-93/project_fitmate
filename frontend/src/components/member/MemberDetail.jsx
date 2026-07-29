@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logout, logoutAsync } from "../../store/slices/loginSlice";
 
-import "../../css/member/memberDetail.css";
+import "../../css/member/MemberDetail.css";
 import MemberDetailUpdateView from "./detailComponents/MemberDetailUpdateView";
 import MemberDetailView from "./detailComponents/MemberDetailView";
 

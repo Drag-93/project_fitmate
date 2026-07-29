@@ -3,7 +3,7 @@
    ========================================= */
 .community-insert-container,
 .communityDetail {
-  max-width: 800px;
+  max-width: 1200px;
   margin: 40px auto;
   padding: 20px;
   background-color: #fff;
@@ -65,7 +65,7 @@ select {
 }
 
 .submit-btn {
-  background-color: #007bff;
+  background-color: #0d1b2a;
   color: white;
   border: none;
   padding: 12px 24px;

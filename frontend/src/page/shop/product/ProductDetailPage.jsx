@@ -1,5 +1,5 @@
 import ProductDetailCon from "../../../components/shop/product/ProductDetailCon";
-import "../../../css/shop/product/productDetailPage.css";
+import "../../../css/shop/product/ProductDetailPage.css";
 
 const ProductDetailPage = () => {
   return (
