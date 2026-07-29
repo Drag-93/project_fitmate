@@ -13,7 +13,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RequestMapping("/api/map")
 public class MapController {
-    @Value("${kakao.map.kakao-key}")
+    @Value("${KAKAO_MAP_KEY}")
     private String kakaoKey;
 
     @GetMapping("/kakaoMap")
