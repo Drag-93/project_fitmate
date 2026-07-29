@@ -212,15 +212,9 @@
 /* 수정 완료 버튼 (폼 내부 저장) */
 .detailbody li > button {
   width: 100%;
-<<<<<<< HEAD
-  height: 48px;
-  background-color: #2563eb;
-  color: #ffffff;
-=======
   padding: 12px;
   background-color: #122854;
   color: white;
->>>>>>> 82d35053565d8830ac8d825ac879c3dcd6b3d388
   border: none;
   border-radius: 6px;
   font-size: 0.95rem;
