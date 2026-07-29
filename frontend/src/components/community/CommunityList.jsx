@@ -124,6 +124,19 @@ const CommunityList = ({ params, tab }) => {
       `src="${API_SERVER_URL}/upload/`,
     );
 
+  //시간 서식 함수
+  const formatDateTime = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+
+    return `${year}-${month}-${day} ${hours}:${minutes}`;
+  };
+
   return (
     <>
       <div className="communityList">
@@ -161,6 +174,7 @@ const CommunityList = ({ params, tab }) => {
                 <th>카테고리</th>
                 <th>제목</th>
                 <th>작성자</th>
+                <th>작성시간</th>
                 <th>조회수</th>
               </tr>
             </thead>
@@ -193,6 +207,7 @@ const CommunityList = ({ params, tab }) => {
                         </div>
                       </td>
                       <td>{item.userName}</td>
+                      <td>{formatDateTime(item.createTime)}</td>
                       <td>{item.hit}</td>
                     </tr>
 

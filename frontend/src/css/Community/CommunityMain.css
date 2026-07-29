@@ -7,13 +7,14 @@
 .comMain {
   flex: 1;
   min-width: 0;
-  margin: 30px 20px 30px 20px;
+  margin: 10px 10px 10px 10px;
   box-sizing: border-box;
 }
 
 .comMain-wrap {
-  width: 1450px;
-  max-width: 100%;
+  width: 1400px; /* 지정하신 너비 */
+  margin: 30px auto; /* 위아래 여백은 주고, 좌우는 auto로 설정하여 중앙 정렬 */
+  box-sizing: border-box;
 }
 
 /* ---------- 상단 대시보드 레이아웃 (3개 카드 가로 3분할 & 동일 크기) ---------- */
@@ -269,5 +270,5 @@
 }
 
 .board-item-thumb-empty {
-  background: #eee;
+  background: #fff;
 }
