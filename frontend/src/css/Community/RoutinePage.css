@@ -2,7 +2,7 @@
 
 /* ---------- 페이지 레이아웃 (좌: 폼 / 우: 결과) ---------- */
 .routine-page {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 32px 20px 60px;
   display: flex;
@@ -24,7 +24,7 @@
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.04em;
-  color: #2f6df6;
+  color: #122754;
   text-transform: uppercase;
 }
 
@@ -43,7 +43,7 @@
 
 /* ---------- 왼쪽: 조건 선택 폼 ---------- */
 .form-panel {
-  flex: 0 0 340px;
+  flex: 0 0 200px;
   position: sticky;
   top: 24px;
 }
@@ -88,7 +88,7 @@
   width: 100%;
   border: none;
   border-radius: 8px;
-  background: #2f6df6;
+  background: #122754;
   color: #fff;
   font-size: 14px;
   font-weight: 700;
@@ -111,7 +111,7 @@
 /* ---------- 오른쪽: 결과 패널 ---------- */
 .result-panel {
   flex: 1;
-  min-width: 0;
+  min-width: 600px;
   min-height: 200px;
 }
 
@@ -122,7 +122,8 @@
   justify-content: center;
   align-items: flex-start;
   text-align: left;
-  min-height: 300px;
+  min-height: 200px;
+  min-width: 600px;
 }
 
 .empty-state .panel-title {
@@ -224,6 +225,64 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   max-width: 50px;
   width: 100%;
+}
+
+/* ---------- 03 - 히스토리 패널 및 아이템 스타일 ---------- */
+.history-panel {
+  flex: 0 0 240px; /* 히스토리 패널의 고정 너비 조절 */
+}
+
+.history-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.history-card {
+  border: 1px solid #eef1f5;
+  border-radius: 10px;
+  padding: 12px 14px;
+  background: #fafbfc;
+  transition:
+    box-shadow 0.15s ease,
+    border-color 0.15s ease;
+  cursor: pointer;
+}
+
+.history-card:hover {
+  border-color: #2f6df6;
+  box-shadow: 0 2px 8px rgba(47, 109, 246, 0.08);
+  background: #fff;
+}
+
+.history-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 4px;
+  word-break: break-all; /* 긴 글자 줄바꿈 처리 */
+}
+
+.history-date {
+  font-size: 11px;
+  color: #6b7280;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.history-content {
+  font-size: 12px;
+  color: #4b5563;
+  margin: 0;
+  line-height: 1.4;
+  word-break: break-all; /* 줄바꿈 문제 해결 */
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* 2줄까지만 보이고 요약 (선택사항) */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 /* ---------- 반응형 ---------- */

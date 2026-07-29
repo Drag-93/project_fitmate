@@ -1,7 +1,9 @@
-package org.spring.backend.exercise;
+package org.spring.backend.exercise.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.spring.backend.exercise.ExerciseDbClient;
+import org.spring.backend.exercise.service.ExerciseImageService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 

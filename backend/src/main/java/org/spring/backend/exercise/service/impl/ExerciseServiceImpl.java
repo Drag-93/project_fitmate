@@ -1,9 +1,20 @@
-package org.spring.backend.exercise;
+package org.spring.backend.exercise.service.impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.spring.backend.exercise.dto.ExerciseDetail;
+import org.spring.backend.exercise.entity.Exercise;
+import org.spring.backend.exercise.entity.ExercisePlan;
+import org.spring.backend.exercise.exception.ExerciseNotFoundException;
+import org.spring.backend.exercise.exception.InvalidExerciseRequestException;
+import org.spring.backend.exercise.repository.ExercisePlanRepository;
+import org.spring.backend.exercise.repository.ExerciseRepository;
+import org.spring.backend.exercise.service.ExerciseService;
+import org.spring.backend.exercise.service.ExerciseSyncService;
+import org.spring.backend.exercise.service.ExerciseTranslationService;
+import org.spring.backend.exercise.service.ValidValuesService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;

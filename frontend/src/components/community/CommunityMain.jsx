@@ -126,6 +126,13 @@ const CommunityMain = () => {
   // 현재 선택된 지역의 날씨 데이터
   const selectedWeather = weatherMap[selectedCity];
 
+  // 작성자 이름 2번째 글자 마스킹 함수 (* 처리) - userName 기준 반영
+  const maskWriterName = (name) => {
+    if (!name) return "익명";
+    if (name.length <= 1) return name;
+    return name.substring(0, 1) + "*" + name.substring(2);
+  };
+
   const EXCLUDED_CATEGORY_KEYWORDS = ["QNA"]; //추가로 제외할 카테고리 이름
   // 메인 화면에 표시할 게시판 카드 목록 구성
   // - "전체게시판 추천글": 관리자 전용 탭 게시글과 QNA 카테고리는 제외하고 필터링
@@ -168,9 +175,9 @@ const CommunityMain = () => {
       <div className="comMain-wrap">
         {/* 배너 자리 -> 날씨 + 추천운동 + 운동루틴 */}
         <div className="comMain-top">
-          <div className="comMain-top-con comMain-top-row">
+          <div className="comMain-dashboard-layout">
             {/* 지역별 날씨 카드: select로 지역 선택 시 해당 지역 날씨 표시 */}
-            <div className="board-card weather-card-wrap">
+            <div className="board-card weather-card-wrap weather-mini-card">
               <div className="board-card-header weather-card-header">
                 <h3>지역별 날씨</h3>
                 <select
@@ -210,7 +217,6 @@ const CommunityMain = () => {
                 )}
               </div>
             </div>
-
             {/*최근 루틴 3개를 제외한 운동 5개 무작위 추천 카드 */}
             <div className="board-card recommend-card">
               <div className="board-card-header">
@@ -293,7 +299,24 @@ const CommunityMain = () => {
                                 ) : (
                                   <div className="board-item-thumb board-item-thumb-empty" />
                                 )}
-                                <p>{item.title}</p>
+                                <div className="board-item-content">
+                                  <p className="board-item-title">
+                                    {item.title}
+                                  </p>
+                                  <div className="board-item-sub">
+                                    <span className="board-item-writer">
+                                      {maskWriterName(
+                                        item.userName ||
+                                          item.writer ||
+                                          item.nickname ||
+                                          item.memberName,
+                                      )}
+                                    </span>
+                                    <span className="board-item-views">
+                                      조회 {item.viewCount || item.views || 0}
+                                    </span>
+                                  </div>
+                                </div>
                               </a>
                             </li>
                           ))}
