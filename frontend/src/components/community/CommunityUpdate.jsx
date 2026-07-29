@@ -133,7 +133,7 @@ const CommunityUpdate = () => {
         </div>
 
         {/* 탭 선택 */}
-        <div className="form-group">
+        <div className="select-group">
           <label>탭 선택</label>
           <select name="tabId" value={community.tabId} onChange={handleChange}>
             <option value="">탭을 선택하세요</option>
@@ -143,10 +143,8 @@ const CommunityUpdate = () => {
               </option>
             ))}
           </select>
-        </div>
 
-        {/* 카테고리 선택 (선택된 탭에 속한 카테고리만 노출) */}
-        <div className="form-group">
+          {/* 카테고리 선택 (선택된 탭에 속한 카테고리만 노출) */}
           <label>카테고리 선택</label>
           <select
             name="categoryId"

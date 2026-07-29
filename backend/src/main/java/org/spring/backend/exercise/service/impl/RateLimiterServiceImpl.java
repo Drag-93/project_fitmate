@@ -1,5 +1,6 @@
-package org.spring.backend.exercise;
+package org.spring.backend.exercise.service.impl;
 
+import org.spring.backend.exercise.service.RateLimiterService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayDeque;

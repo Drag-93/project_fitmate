@@ -1,4 +1,5 @@
-package org.spring.backend.exercise;
+package org.spring.backend.exercise.repository;
+import org.spring.backend.exercise.entity.ExercisePlan;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

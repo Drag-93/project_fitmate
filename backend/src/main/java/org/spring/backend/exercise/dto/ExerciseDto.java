@@ -1,8 +1,10 @@
-package org.spring.backend.exercise;
+package org.spring.backend.exercise.dto;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.*;
+import org.spring.backend.exercise.entity.ExercisePlan;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
