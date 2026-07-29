@@ -62,7 +62,7 @@ const CommunityDetail = () => {
     try {
       setIsLoading(true);
       const res = await jwtAxios.delete(
-        `${API_SERVER_URL}/community/delete/${id}`,
+        `${API_SERVER_URL}/api/community/delete/${id}`,
       );
       if (res.data?.result) {
         setCommunity(res.data.result);
