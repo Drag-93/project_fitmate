@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { API_SERVER_URL } from "../../../apis/commonApi";
 import jwtAxios from "../../../apis/util/jwtUtil";
 
@@ -40,6 +39,10 @@ const AdminCommunityDetail = ({ id, onClose, onDeleted }) => {
   const handleDelete = async () => {
     if (!window.confirm("이 게시글을 삭제하시겠습니까?")) return;
     try {
+<<<<<<< HEAD
+=======
+      // 올바른 코드
+>>>>>>> 82d35053565d8830ac8d825ac879c3dcd6b3d388
       await jwtAxios.delete(
         `${API_SERVER_URL}/api/community/adminDelete/${id}`,
       );

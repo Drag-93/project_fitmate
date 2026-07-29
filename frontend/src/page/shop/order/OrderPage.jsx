@@ -6,7 +6,7 @@ import BuyerInfo from "../../../components/shop/order/BuyerInfo";
 import PaymentMethod from "../../../components/shop/order/PaymentMethod";
 import OrderRight from "../../../components/shop/order/OrderRight";
 import { useLocation } from "react-router-dom";
-import "../../../css/shop/order/OrderPage.css";
+import "../../../css/shop/order/orderPage.css";
 
 const OrderPage = () => {
   const location = useLocation();
@@ -14,10 +14,12 @@ const OrderPage = () => {
     receiverName: "",
     receiverPhone: "",
     receiverAddress: "",
+    receiverDetailAddress: "",
     deliveryMemo: "",
   });
   const [payment, setPayment] = useState("kakao");
   const [memberInfo, setMemberInfo] = useState(null);
+  const [isPremium, setIsPremium] = useState(false);
 
   useEffect(() => {
     jwtAxios
@@ -29,7 +31,17 @@ const OrderPage = () => {
         console.log(err);
       });
   }, []);
-
+  //프리미엄 여부
+  useEffect(() => {
+    jwtAxios
+      .get("/api/member-products/subscribe")
+      .then((res) => {
+        setIsPremium(res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
   // 회원 정보를 기본 배송 정보로 세팅
   useEffect(() => {
     if (memberInfo) {
@@ -37,6 +49,7 @@ const OrderPage = () => {
         receiverName: memberInfo.userName || "",
         receiverPhone: memberInfo.userPhone || "",
         receiverAddress: memberInfo.userAddress || "",
+        receiverDetailAddress: memberInfo.userDetailAddress || "",
         deliveryMemo: "",
       });
     }
@@ -46,22 +59,36 @@ const OrderPage = () => {
   const cartItems = location.state?.cartItems || [];
   const cartIds = location.state?.cartIds || [];
   const totalPrice = location.state?.totalPrice || 0;
+  
+
   // 바로구매 데이터
   const directItem = location.state?.directItem;
+
+  // 배송상품 여부
+  const hasDeliveryProduct = directItem
+    ? directItem.productType === "GOODS"
+    : cartItems.some((item) => item.productType === "GOODS");
 
   const orderData = {
     ...orderInfo,
 
     orderItemDtos: directItem
       ? [
-        {
-          productId: directItem.productId,
-          quantity: directItem.quantity,
-          productType: directItem.productType
-        }
-      ] : []
+          {
+            productId: directItem.productId,
+            quantity: directItem.quantity,
+            productType: directItem.productType,
+          },
+        ]
+      : [],
   };
-
+console.log("cartItems", cartItems);
+console.log(
+  "상품타입",
+  cartItems.map(item => item.productType)
+);
+console.log("hasDeliveryProduct", hasDeliveryProduct);
+console.log("isPremium", isPremium);
   return (
     <div className="orderPage">
       <div className="orderPage-con">
@@ -81,6 +108,8 @@ const OrderPage = () => {
                 directItem ? directItem.price * directItem.quantity : totalPrice
               }
               payment={payment}
+              hasDeliveryProduct={hasDeliveryProduct}
+              isPremium={isPremium}
             />
           </div>
         </div>

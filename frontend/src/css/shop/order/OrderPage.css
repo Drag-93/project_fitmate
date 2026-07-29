@@ -131,50 +131,108 @@
   /* ==========================================================================
      2. BuyerInfo 컴포넌트 스타일 (입력 폼)
      ========================================================================== */
-  .buyerInfo {
-    background: #fff;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    padding: 24px;
-  }
-  
-  .inputBox {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-bottom: 18px;
-  }
-  
-  .inputBox:last-child {
-    margin-bottom: 0;
-  }
-  
-  .inputBox label {
-    font-size: 14px;
-    font-weight: 500;
-    color: #475569;
-  }
-  
-  .inputBox input {
-    width: 100%;
-    height: 44px;
-    padding: 0 14px;
-    border: 1px solid #cbd5e1;
-    border-radius: 6px;
-    font-size: 15px;
-    box-sizing: border-box;
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
-  
-  .inputBox input:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.14);
-  }
-  
-  .inputBox input::placeholder {
-    color: #cbd5e1;
-  }
+ 
+.buyerInfo {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 28px;
+}
+
+
+/* 입력 영역 */
+.inputBox {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+
+.inputBox label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+}
+
+
+/* input + select 공통 */
+.inputBox input,
+.inputBox select {
+  width: 100%;
+  height: 46px;
+  padding: 0 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background-color: #fff;
+  font-size: 15px;
+  color: #334155;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+
+
+.inputBox input:focus,
+.inputBox select:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+
+/* placeholder */
+.inputBox input::placeholder {
+  color: #94a3b8;
+}
+
+
+/* 주소 찾기 버튼 */
+.inputBox button {
+  width: 110px;
+  height: 42px;
+  border: 1px solid #2563eb;
+  border-radius: 8px;
+  background: #fff;
+  color: #2563eb;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+
+.inputBox button:hover {
+  background: #2563eb;
+  color: white;
+}
+
+
+/* 주소 찾기 버튼과 input 사이 */
+.inputBox button + input {
+  margin-top: 10px;
+  background: #f8fafc;
+}
+
+
+/* 읽기 전용 주소 */
+.inputBox input[readonly] {
+  cursor: default;
+  color: #475569;
+}
+
+
+/* 배송 요청사항 select */
+.inputBox select {
+  cursor: pointer;
+  appearance: auto;
+}
+
+
+/* 직접 입력창 */
+.inputBox select + input {
+  margin-top: 10px;
+}
+
   
   /* ==========================================================================
      3. PaymentMethod 컴포넌트 스타일 (라디오 버튼)
@@ -213,95 +271,167 @@
   /* ==========================================================================
      4. OrderRight 컴포넌트 스타일 (우측 사이드바 내부)
      ========================================================================== */
-  .orderRight h2 {
-    border-bottom: none;
-    padding-bottom: 0;
-    margin-bottom: 24px;
-  }
+  .orderRight {
+  width: 100%;
+  max-width: 420px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 28px 24px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+  border: 1px solid #e2e8f0;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: #1e293b;
+}
+.orderRight h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0f172a; /* 딥 네이비 */
+  margin-top: 0;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #0f172a;
+}
   
-  .priceBox {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    margin-bottom: 24px;
-  }
-  
-  .priceRow {
-    display: flex;
-    justify-content: space-between;
-    font-size: 15px;
-    color: #64748b;
-  }
-  
+/* Price Box */
+.priceBox {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.priceRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.95rem;
+  color: #475569;
+}
+  .priceRow span:last-child {
+  font-weight: 600;
+  color: #1e293b;
+}
+/* 총 할인 영역 */
+.priceRow:nth-of-type(3) span:first-child,
+.priceRow:nth-of-type(3) span:last-child {
+  font-weight: 700;
+  color: #2563eb;
+}
+/* FitMate 할인 */
+.priceRow:nth-of-type(4) span:last-child,
+.priceRow:nth-of-type(5) span:last-child {
+  color: #2563eb;
+  font-weight: 600;
+}
+
+
   .priceBox hr {
-    border: none;
-    border-top: 1px solid #e2e8f0;
-    margin: 6px 0;
+width: 100%;
+  border: none;
+  border-top: 1px dashed #cbd5e1;
+  margin: 8px 0;
   }
   
-  .totalPrice {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 16px;
-    color: #111;
-  }
-  
-  .totalPrice strong {
-    font-size: 22px;
-    font-weight: 700;
-    color: #dc2626; /* 총 결제 금액 강조 레디시 컬러 */
-  }
-  
-  /* 일반 결제 버튼 */
-  .paymentButton {
-    width: 100%;
-    height: 50px;
-    background-color: #111;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    margin-bottom: 10px;
-    transition: background-color 0.2s;
-  }
-  
-  .paymentButton:hover {
-    background-color: #333;
-  }
-  
-  /* 카카오페이 시그니처 버튼 */
-  .kakaoPayBtn {
-    width: 100%;
-    height: 50px;
-    background-color: #fee500; /* 카카오 고유 옐로우 */
-    color: #191919;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    transition: background-color 0.2s;
-  }
-  
-  .kakaoPayBtn:hover {
-    background-color: #fdd835;
-  }
+/* Total Price (최종 결제금액) */
+.totalPrice {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 4px;
+  padding-top: 4px;
+}
+
+.totalPrice > span {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.totalPrice div {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* 할인 전 원가 (취소선) */
+.totalPrice div > span {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  text-decoration: line-through;
+}
+
+/* 최종 결제 금액 */
+.totalPrice strong {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #1e3a8a; /* 메인 포인트 네이비 */
+}
+/* 무료배송 강조 */
+.priceRow:nth-of-type(5) span:first-child,
+.priceRow:nth-of-type(4) span:first-child {
+  color: #2563eb;
+}
+
+/* 결제 버튼 */
+.paymentButton {
+  width: 100%;
+  margin-top: 24px;
+  padding: 16px;
+  background-color: #1b2846; /* 메인 네이비 */
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 4px 12px rgba(30, 58, 138, 0.25);
+}
+
+.paymentButton:hover {
+  background-color: #0f172a; /* 더 짙은 네이비 */
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.35);
+}
+
+.paymentButton:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.2);
+}
 
 /* 반응형 레이아웃: 화면이 좁아지면 세로로 배치 */
 @media (max-width: 992px) {
+
   .orderContainer {
+    width: 100%;
     flex-direction: column;
+    align-items: center;
+  }
+
+  .orderContainer .left,
+  .orderContainer .right {
+    width: 100% !important;
+    max-width: 1200px !important;
+  }
+
+  .orderContainer .right {
+    padding: 0;
+  }
+
+  .orderRight {
+    width: 100% !important;
+    max-width: none !important;
+  }
+}
+
+
+@media (max-width: 640px) {
+  .orderRight {
+    padding: 20px 16px;
   }
   
-  .orderContainer .right {
-    width: 100%;
-    position: static; /* 세로 배치 시 고정 해제 */
+  .totalPrice strong {
+    font-size: 1.35rem;
   }
 }

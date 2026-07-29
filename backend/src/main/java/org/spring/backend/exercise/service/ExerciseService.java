@@ -1,4 +1,7 @@
-package org.spring.backend.exercise;
+package org.spring.backend.exercise.service;
+
+import org.spring.backend.exercise.dto.ExerciseDetail;
+import org.spring.backend.exercise.entity.ExercisePlan;
 
 import java.util.List;
 import java.util.Map;
