@@ -100,7 +100,7 @@ public class SecurityConfig {
                 configuration.setAllowedOrigins(Arrays.asList(
                                 "http://localhost:3000", // react서버
                                 "http://localhost:8090", // 백앤드 서버
-                                "http://online-payment.kakaopay.com" // 카카오페이 결제 도메인
+                                "http://online-payment.kakaopay.com", // 카카오페이 결제 도메인
                                 frontServerURL
                 ));
                 configuration.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT", "DELETE", "OPTIONS"));
