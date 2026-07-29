@@ -1,0 +1,140 @@
+/* shopIndex */
+
+/* 배너 영역 */
+.shopIndex-top-con .shop-banner-swiper {
+  width: 80%;
+  height: 45rem;
+  border-radius: 2rem;
+  overflow: hidden;
+}
+
+.shopIndex-top-con .shop-banner {
+  width: 80%;
+  height: 45rem;
+  object-fit: cover;
+  display: block;
+}
+
+.slides-container {
+  width: 100%;
+  overflow: hidden;
+}
+
+.shop-banner-swiper {
+  width: 100%;
+}
+
+.shop-banner-swiper .swiper-slide {
+  width: 100%;
+}
+
+.shop-banner-swiper img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+/* 트레이너 카드 영역 */
+.shopIndex-wrap .trainer-section {
+  width: min(1200px, calc(100% - 40px));
+  margin: 8rem auto;
+}
+
+.shopIndex-wrap .trainer-section h2 {
+  margin-bottom: 3rem;
+  color: #0d1b2a;
+}
+
+.shopIndex-wrap .trainer-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem;
+}
+
+.shopIndex-wrap .trainer-card {
+
+  height: 32rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border-radius: 1.6rem;
+  border: 1px solid #e5e7eb;
+  box-shadow:
+    0 1rem 2rem rgba(13,27,42,.08);
+  transition: .25s ease;
+}
+
+.shopIndex-wrap .trainer-card:hover {
+  transform: translateY(-0.5rem);
+}
+
+.shopIndex-wrap .trainer-card img {
+
+  width: 12rem;
+  height: 12rem;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 2rem;
+}
+
+.shopIndex-wrap .empty-profile {
+  width: 12rem;
+  height: 12rem;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  background:#f1f5f9;
+  color:#94a3b8;
+  font-size:4rem;
+  margin-bottom:2rem;
+}
+
+.shopIndex-wrap .trainer-card h3 {
+  color:#0d1b2a;
+  margin-bottom:1rem;
+}
+
+.shopIndex-wrap .trainer-card p {
+  color:#64748b;
+}
+/* 하단 상품 영역 */
+.shopIndex-bottom-productList {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.product-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  padding: 15px;
+}
+
+.product-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.product-name {
+  margin-top: 12px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.product-price {
+  margin-top: 8px;
+  font-size: 15px;
+  color: #2563eb;
+}
+@media(max-width:900px){
+  .shopIndex-wrap .trainer-list{
+    grid-template-columns:1fr;
+  }
+}

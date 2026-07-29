@@ -3,8 +3,12 @@ import { useSelector } from "react-redux";
 import { API_SERVER_URL } from "../../apis/commonApi";
 import jwtAxios from "../../apis/util/jwtUtil";
 import axios from "axios";
-// Swiper 필요하면 추가
-// import { Swiper } from "swiper/types";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Pagination, Navigation } from "swiper/modules";
+
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
 
 const ShopIndex = () => {
   //로그인 여부 판단
@@ -18,7 +22,27 @@ const ShopIndex = () => {
   const bestProduct = productList[0];
   //top 2~5
   const otherProducts = productList.slice(1);
+  // 트레이너 정보
+  const [trainerList, setTrainerList] = useState([]);
+  const [products, setProducts] = useState([]);
+  const getTrainerList = async () => {
+    try {
+      const res = await jwtAxios.get(`${API_URL}/api/trainer/list`);
+      console.log(res.data);
+      const trainers = res.data || [];
+      // 3개 카드 고정
+      const fixedTrainers = [
+        trainers[0] || null,
+        trainers[1] || null,
+        trainers[2] || null,
+      ];
 
+      setTrainerList(fixedTrainers);
+    } catch (err) {
+      console.error("트레이너 조회 실패", err);
+      setTrainerList([null, null, null]);
+    }
+  };
   // 추천 리스트 가져오는 함수
   const getProductData = async () => {
     try {
@@ -33,9 +57,22 @@ const ShopIndex = () => {
   };
 
   useEffect(() => {
-    getProductData();
-  }, []);
+    const getProducts = async () => {
+      try {
+        const res = await jwtAxios.get(`${API_URL}/api/products`);
 
+        setProducts(res.data.content || res.data);
+      } catch (err) {
+        console.log("상품 조회 실패", err);
+      }
+    };
+
+    getProducts();
+  }, []);
+  useEffect(() => {
+    getProductData();
+    getTrainerList();
+  }, [isLogin]);
   return (
     <>
       <div className="shopIndex">
@@ -43,7 +80,7 @@ const ShopIndex = () => {
           <div className="shopIndex-top">
             <div className="shopIndex-top-con">
               {/* Swiper 배너 */}
-              {/* <div className="slides-container">
+              <div className="slides-container">
                 <Swiper
                   modules={[Autoplay, Pagination, Navigation]}
                   spaceBetween={0}
@@ -55,155 +92,84 @@ const ShopIndex = () => {
                   }}
                   pagination={{ clickable: true }}
                   Navigation={true}
-                  className="main-banner-swiper"
+                  className="shop-banner-swiper"
                 >
                   <SwiperSlide>
-                    <a href="/shop">
-                      <img
-                        src="/images/test/banner1.jpg"
-                        alt="메인 배너 테스트1"
-                      />
+                    <a href="/products?productType=GYM">
+                      <img src="/images/shop/gymbanner.png" alt="헬스장 배너" />
                     </a>
                   </SwiperSlide>
                   <SwiperSlide>
-                    <a href="/shop">
+                    <a href="/products?productType=PT">
                       <img
-                        src="/images/test/banner2.jpg"
-                        alt="메인 배너 테스트1"
+                        src="/images/shop/trainerbanner.png"
+                        alt="트레이너 배너"
                       />
                     </a>
                   </SwiperSlide>
                 </Swiper>
-              </div> */}
+              </div>
             </div>
           </div>
-          {/* 베스트 셀러 
-              로그인 시 해당 관심사(없으면 비로그인과 동일)
-              가장 많이 팔린 상품 노출*/}
-          <div className="shopIndex-best">
-            {bestProduct && (
-              <li
-                key={bestProduct.id}
-                // style={{ display: `flex`, justifyContent: `end` }}
-              >
-                <a
-                  href={`/products/detail/${bestProduct.id}`}
-                  style={{ display: "flex", flexDirection: "column" }}
-                >
-                  <img
-                    // src={`${API_SERVER_URL}/upload/product/${bestProduct.newFileName}`}
-                    src=""
-                    alt={bestProduct.productName}
-                    style={{
-                      width: `30vh`,
-                      height: `30vh`,
-                    }}
-                  />
-                </a>
-                <p>{bestProduct.productName}</p>
-                <span>{bestProduct.price?.toLocaleString()}원</span>
-                <p>
-                  <del>베스트 상품 </del>
-                </p>
-              </li>
-            )}
-          </div>
 
+          <div className="trainer-section">
+            <h2>FitMate 전문 트레이너</h2>
+
+            <div className="trainer-list">
+              {trainerList.map((trainer, index) => (
+                <div className="trainer-card" key={index}>
+                  {trainer ? (
+                    <>
+                      <img
+                        src={
+                          trainer?.profileImage
+                            ? `${API_SERVER_URL}/upload/member/${trainer.profileImage}`
+                            : "/images/default-profile.png"
+                        }
+                        alt="트레이너 프로필"
+                      />
+
+                      <h3>{trainer.name}</h3>
+
+                      <p>{trainer.specialty || "전문 분야 준비중"}</p>
+
+                      <span>{trainer.career || "경력 정보 준비중"}</span>
+                      <span>{trainer.certificate || " "}</span>
+                    </>
+                  ) : (
+                    <>
+                      <div className="empty-profile">+</div>
+
+                      <h3>트레이너 준비중</h3>
+
+                      <p>곧 새로운 트레이너가 등록됩니다</p>
+                    </>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
           <div className="shopIndex-bottom">
             <div className="shopIndex-bottom-con">
               <div className="shopIndex-bottom-productList">
-                {/* 상품 리스트 -> 강제 style 적용 -> css적용 시 변경 */}
-                <ul
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(4, 1fr)",
-                    gridTemplateRows: "repeat(1, 1fr)",
-                    gridAutoRows: "1fr",
-                    gap: "3rem",
-                  }}
-                >
-                  {Array.isArray(otherProducts) &&
-                    otherProducts.map((product) => (
-                      <li key={product.id}>
-                        <a href={`/products/detail/${product.id}`}>
-                          <img
-                            // src={`${API_SERVER_URL}/upload/product/${product.newFileName}`}
-                            src=""
-                            alt={product.productName}
-                            style={{
-                              width: `10vh`,
-                              height: `10vh`,
-                            }}
-                          />
-                          {/* <img
-                            src={`/images/test/test${product.id}.jpg`}
-                            alt="테스트용 이미지"
-                            style={{
-                              width: `10vh`,
-                              height: `10vh`,
-                            }}
-                          /> */}
-                        </a>
-                        <p>{product.productName}</p>
-                        <span>{product.price?.toLocaleString()}원</span>
-                        <p>
-                          <del>베스트상품</del>
-                        </p>
-                      </li>
-                    ))}
-                  <li style={{ display: "flex", flexDirection: "column" }}>
-                    <a href="/store">
-                      <img
-                        src="/images/test4.jpg"
-                        alt="테스트이미지"
-                        style={{
-                          width: `10vh`,
-                          height: `10vh`,
-                        }}
-                      />
-                    </a>
-                    <del>상품 목록5</del>
-                  </li>
-                  <li style={{ display: "flex", flexDirection: "column" }}>
-                    <a href="/store">
-                      <img
-                        src="/images/test3.jpg"
-                        alt="테스트이미지"
-                        style={{
-                          width: `10vh`,
-                          height: `10vh`,
-                        }}
-                      />
-                    </a>
-                    <del>상품 목록6</del>
-                  </li>
-                  <li style={{ display: "flex", flexDirection: "column" }}>
-                    <a href="/store">
-                      <img
-                        src="/images/test2.jpg"
-                        alt="테스트이미지"
-                        style={{
-                          width: `10vh`,
-                          height: `10vh`,
-                        }}
-                      />
-                    </a>
-                    <del>상품 목록7</del>
-                  </li>
-                  <li style={{ display: "flex", flexDirection: "column" }}>
-                    <a href="/store">
-                      <img
-                        src="/images/test1.jpg"
-                        alt="테스트이미지"
-                        style={{
-                          width: `10vh`,
-                          height: `10vh`,
-                        }}
-                      />
-                    </a>
-                    <del>상품 목록8</del>
-                  </li>
-                </ul>
+                {products.slice(0, 8).map((product) => (
+                  <div className="product-card" key={product.id}>
+                    <img
+                      src={`${API_SERVER_URL}${
+                        product.productFileDtos?.find(
+                          (file) => file.imageType === "THUMBNAIL",
+                        )?.newFileName
+                      }`}
+                      alt={product.productName}
+                    />
+
+                    <div className="product-name">{product.productName}</div>
+
+                    <div className="product-price">
+                      {product.price.toLocaleString()}원
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

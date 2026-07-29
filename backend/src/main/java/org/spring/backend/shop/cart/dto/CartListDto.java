@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.spring.backend.shop.product.type.ProductType;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,6 +32,8 @@ public class CartListDto {
 
   private String productImage;
 
+  private ProductType productType;
+
   private LocalDateTime createTime;
 
   private LocalDateTime updateTime;
@@ -47,6 +50,7 @@ public class CartListDto {
             : null)
         .productName(cartListEntity.getProductEntity().getProductName())
         .price(cartListEntity.getProductEntity().getPrice())
+        .productType(cartListEntity.getProductEntity().getProductType())
         .productImage(
           cartListEntity.getProductEntity()
           .getFileEntities()
