@@ -42,6 +42,22 @@ const AdminChatBot = () => {
       alert("에러발생 : " + err);
     }
   };
+
+  const onDeleteChatFn = async (id) => {
+    const agree = confirm("검색단어를 삭제하시겠습니까?");
+    if (!agree) return;
+    const url = `${API_SERVER_URL}/api/chatbot/delete/chat/${id}`;
+    // console.log(url);
+    try {
+      const res = await jwtAxios.delete(url);
+      if (res.data === "ok") {
+        alert("삭제 성공");
+      }
+      getChatData("", "", 0);
+    } catch (err) {
+      alert("에러발생 : " + err);
+    }
+  };
   useEffect(() => {
     getChatData("", "", 0);
   }, []);
@@ -65,7 +81,7 @@ const AdminChatBot = () => {
       )}
       <div className="admin-chat">
         <div className="admin-chat-title-con">
-          <h2 className="admin-chat-title">챗봇 관리</h2>
+          <h2 className="admin-chat-title">챗봇(질문) 관리</h2>
           <div className="chatInsert">
             <button onClick={() => setIsBoolInsert(true)}>검색단어생성</button>
           </div>
@@ -105,6 +121,7 @@ const AdminChatBot = () => {
                 <li>답변</li>
                 <li>수정</li>
                 <li>답변예약어보기</li>
+                <li>삭제</li>
               </ul>
               {chatData?.length !== null ? (
                 <>
@@ -129,7 +146,12 @@ const AdminChatBot = () => {
                               navigate(`/admin/chatbot/detail/${el.id}`)
                             }
                           >
-                            상세보기
+                            답변보기
+                          </button>
+                        </li>
+                        <li>
+                          <button onClick={() => onDeleteChatFn(el.id)}>
+                            삭제
                           </button>
                         </li>
                       </ul>
