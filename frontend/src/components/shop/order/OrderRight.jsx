@@ -110,21 +110,24 @@ const OrderRight = ({
         </div>
         <hr />
         {/* 할인 영역 */}
-        <div className="priceRow">
-          <span>
-            총 할인받은 금액
-          </span>
-
-          <span>
-            -{totalDiscount.toLocaleString()}원
-          </span>
-        </div>
-        <div className="priceRow">
-          <span>FitMate Plus+ 상품 할인</span>
-          <span>
-            -{plusProductDiscount.toLocaleString()}원
-          </span>
-        </div>
+        {totalDiscount > 0 && (
+          <div className="priceRow">
+            <span>총 할인받은 금액</span>
+            <span>
+              -{totalDiscount.toLocaleString()}원
+            </span>
+          </div>
+        )}
+        {/* 프리미엄 할인 */}
+        {isPremium && plusProductDiscount > 0 && (
+          <div className="priceRow">
+            <span>FitMate Plus+ 상품 할인</span>
+            <span>
+              -{plusProductDiscount.toLocaleString()}원
+            </span>
+          </div>
+        )}
+        {/* 무료배송 할인 */}
         {isPremium && hasDeliveryProduct && (
           <div className="priceRow">
             <span>FitMate Plus+ 무료배송</span>
@@ -138,11 +141,15 @@ const OrderRight = ({
           <span>결제 예정 금액</span>
 
           <div>
-            <span>
-              {(totalPrice + shippingFee).toLocaleString()}원
-            </span>
-
-            <strong>{finalPrice.toLocaleString()}원</strong>
+            {/* 할인 있을 때만 할인 전 금액 표시 */}
+            {totalDiscount > 0 && (
+              <span className="beforePrice">
+                {(totalPrice + shippingFee).toLocaleString()}원
+              </span>
+            )}
+            <strong>
+              {finalPrice.toLocaleString()}원
+            </strong>
           </div>
         </div>
       </div>

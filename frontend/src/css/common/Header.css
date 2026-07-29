@@ -39,6 +39,14 @@
   min-width: 0;
   z-index: 1; 
 }
+.gnb-left {
+  padding-left: 6rem;
+}
+
+.gnb-right {
+  padding-right: 6rem;
+}
+
 .gnb-left > ul,
 .gnb-right > ul {
   display: flex;
@@ -225,16 +233,6 @@
    Header 반응형
 ========================= */
 
-@media (max-width: 1200px) {
-  .gnb-left a,
-  .gnb-left span,
-  .gnb-right a,
-  .header-logout-btn,
-  .header-faq {
-    font-size: 1rem;
-  }
-}
-
 @media (max-width: 1024px) {
   .header,
   .nav-wrap {
@@ -257,6 +255,17 @@
   .header-faq {
     font-size: 0.88rem;
   }
+  .gnb-logo img {
+    width: 10rem;
+  }
+  .gnb-left {
+    padding-left: 3rem;
+  }
+  
+  .gnb-right {
+    padding-right: 3rem;
+  }
+  
 }
 
 /* 768px 이하 태블릿/모바일 반응형 */
@@ -269,7 +278,14 @@
   .gnb-right > ul {
     gap: 0.6rem;
   }
-
+  .gnb-left {
+    padding-left:1rem;
+  }
+  
+  .gnb-right {
+    padding-right:1rem;
+  }
+  
   .gnb-left a,
   .gnb-left span,
   .gnb-right a,
@@ -277,4 +293,9 @@
   .header-faq {
     font-size: 0.8rem;
   }
+    /* 로고 축소 */
+    .gnb-logo img {
+      width: 8rem;
+    }
+  
 }

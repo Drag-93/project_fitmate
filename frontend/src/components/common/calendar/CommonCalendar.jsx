@@ -4,6 +4,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import koLocale from "@fullcalendar/core/locales/ko";
+import "../../../css/common/CommonCalendar.css";
 
 /* ===================== CommonCalendar 사용 방법 =====================
 CommonCalendar는 캘린더 화면을 담당하는 공통 컴포넌트입니다.
@@ -84,6 +85,7 @@ const CommonCalendar = ({
   onDateClick,
   // 날짜 선택 범위 제한가능한 옵션
   validRange,
+  showHeader = true,
 }) => {
   // CalendarDto의 eventType에 따라 일정별 CSS 클래스 적용
   const getEventClassNames = (info) => {
@@ -141,21 +143,15 @@ const CommonCalendar = ({
         // 캘린더 높이를 내용에 맞게 자동 조절
         height="auto"
         // 캘린더 상단 버튼 구성
-        headerToolbar={{
-          // 이전, 다음, 오늘 버튼
-          left: "prev,next today",
-          // 현재 연도와 월 표시
-          center: "title",
-          // 월간, 주간, 일간 화면 전환 버튼
-          right: "dayGridMonth,timeGridWeek,timeGridDay",
-        }}
-        // 캘린더 버튼 한글 표시
-        buttonText={{
-          today: "오늘",
-          month: "월",
-          week: "주",
-          day: "일",
-        }}
+        headerToolbar={
+          showHeader
+            ? {
+                left: "prev,next", // 🔥 'today' 제거: 좌측 이전/다음(< >) 화살표만 유지
+                center: "title",   // 중앙 연도/월 제목 유지
+                right: "",         // 우측 월/주/일 선택 버튼 숨김
+              }
+            : false
+        }
         // 일정에 표시되는 시간 형식
         eventTimeFormat={{
           hour: "2-digit",

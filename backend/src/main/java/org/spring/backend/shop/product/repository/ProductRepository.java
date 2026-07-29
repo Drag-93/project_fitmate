@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 
@@ -30,4 +31,15 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
   Optional<ProductEntity> findFirstByProductType(ProductType productType);
 
   boolean existsByProductType(ProductType productType);
+
+  // 주문 수량(quantity) 합계 기준 판매량 TOP N 조회
+  @Query("""
+          SELECT oi.productEntity
+          FROM OrderItemEntity oi
+          GROUP BY oi.productEntity
+          ORDER BY SUM(oi.quantity) DESC
+      """)
+  List<ProductEntity> findTopSalesProducts(Pageable pageable);
+
+  List<ProductEntity> findAllByOrderByIdDesc(Pageable fallbackPageable);
 }

@@ -44,20 +44,12 @@ public class MemberProductController {
     @GetMapping("/my")
     public ResponseEntity<List<MemberProductDto>> getMyProducts(
             @AuthenticationPrincipal CustomUserDetails user) {
-    
-        System.out.println("로그인 유저 : " + user);
-        System.out.println("이메일 : " + user.getUsername());
-    
         MemberEntity member = memberRepository
                 .findByUserEmail(user.getUsername())
                 .orElseThrow(() -> new IllegalArgumentException("회원이 없습니다."));
-    
-        System.out.println("회원 id : " + member.getId());
-    
+  
         List<MemberProductDto> list =
                 memberProductService.getMyProducts(member.getId());
-    
-        System.out.println("조회 개수 : " + list.size());
     
         return ResponseEntity.ok(list);
     }

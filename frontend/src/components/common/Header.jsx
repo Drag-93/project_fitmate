@@ -200,7 +200,7 @@ const Header = () => {
                   <Link to={`/shop/index`}>스토어</Link>
                   <Link to="/products?productType=GOODS">운동기구</Link>
                   <Link to="/products?productType=GOODS">식품</Link>
-                  <Link to="/products?productType=GOODS">스토어3</Link>
+                  <Link to="/products?productType=GOODS">트레이닝복</Link>
                 </li>
                 <li>
                   <Link to={`/shop/index`}>구독상품</Link>

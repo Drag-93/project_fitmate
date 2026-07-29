@@ -31,4 +31,6 @@ public interface ProductService {
   void deleteImages(Long productId);
 
   ProductDto getPremiumProduct();
+
+  List<ProductDto> getTopSalesProducts();
 }
