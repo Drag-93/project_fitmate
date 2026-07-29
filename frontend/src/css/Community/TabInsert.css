@@ -33,22 +33,12 @@
     width 0.3s ease;
 }
 
-<<<<<<< HEAD
-/* 타이틀 */
-.tabInsert .tab-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #0f172a;
-  margin: 0 0 24px 0;
-  letter-spacing: -0.02em;
-=======
 .tabInsert h1 {
   margin: 0 0 30px;
   padding-bottom: 15px;
   border-bottom: 2px solid #0d1b2a;
   font-size: 28px;
   color: #333;
->>>>>>> 82d35053565d8830ac8d825ac879c3dcd6b3d388
 }
 
 /* -----------------------------------------------------
@@ -112,13 +102,7 @@
   color: #0f172a;
   background-color: #ffffff;
   outline: none;
-<<<<<<< HEAD
-  transition:
-    border-color 0.15s ease,
-    box-shadow 0.15s ease;
-=======
   border-color: #2b6cb0;
->>>>>>> 82d35053565d8830ac8d825ac879c3dcd6b3d388
 }
 
 .tabInsert .input-box:focus {
@@ -186,15 +170,10 @@
   height: 38px;
   padding: 0 16px;
   border-radius: 6px;
-<<<<<<< HEAD
-  font-size: 0.875rem;
-  font-weight: 600;
-=======
 
   background: #0d1b2a;
   color: white;
 
->>>>>>> 82d35053565d8830ac8d825ac879c3dcd6b3d388
   cursor: pointer;
   transition: all 0.15s ease;
   display: inline-flex;
@@ -204,16 +183,8 @@
   box-sizing: border-box;
 }
 
-<<<<<<< HEAD
-/* 아웃라인 버튼 (+ 카테고리 추가) */
-.tabInsert .btn-outline {
-  background-color: #ffffff;
-  border: 1px solid #cbd5e1;
-  color: #334155;
-=======
 .tabInsert button:hover {
   background: #2b6cb0;
->>>>>>> 82d35053565d8830ac8d825ac879c3dcd6b3d388
 }
 
 .tabInsert .btn-outline:hover {

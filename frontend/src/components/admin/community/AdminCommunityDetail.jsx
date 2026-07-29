@@ -39,15 +39,11 @@ const AdminCommunityDetail = ({ id, onClose, onDeleted }) => {
   const handleDelete = async () => {
     if (!window.confirm("이 게시글을 삭제하시겠습니까?")) return;
     try {
-<<<<<<< HEAD
-=======
-      // 올바른 코드
->>>>>>> 82d35053565d8830ac8d825ac879c3dcd6b3d388
       await jwtAxios.delete(
         `${API_SERVER_URL}/api/community/adminDelete/${id}`,
       );
       alert("삭제되었습니다");
-      onDeleted(); // 부모 컴포넌트에 삭제 완료를 알려 목록 갱신 및 모달 닫기 처리
+      onDeleted();
     } catch (err) {
       alert("삭제 실패");
     }
