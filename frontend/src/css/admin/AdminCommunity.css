@@ -480,11 +480,11 @@
 
 /* 삭제/취소 등 서브 버튼 스타일 */
 .admin-modal-actions button:first-child {
-  background-color: #122754;
+  background-color: #0d1b2a;
   color: white;
 }
 .admin-modal-actions button:first-child:hover {
-  background-color: #2b6cb0;
+  background-color: #3b6ea8;
   color: white;
 }
 

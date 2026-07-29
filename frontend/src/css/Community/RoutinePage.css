@@ -24,7 +24,7 @@
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.04em;
-  color: #122754;
+  color: #0d1b2a;
   text-transform: uppercase;
 }
 
@@ -88,7 +88,7 @@
   width: 100%;
   border: none;
   border-radius: 8px;
-  background: #122754;
+  background: #0d1b2a;
   color: #fff;
   font-size: 14px;
   font-weight: 700;
@@ -100,7 +100,7 @@
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: #2559d1;
+  background: #3b6ea8;
 }
 
 .btn-primary:disabled {

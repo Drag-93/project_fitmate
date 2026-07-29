@@ -49,13 +49,13 @@
 
 .search-form select:focus,
 .search-form input[type="text"]:focus {
-  border-color: #122754;
+  border-color: #0d1b2a;
 }
 
 /* 검색 버튼 */
 .search-form button {
   padding: 8px 16px;
-  background: #122754;
+  background: #0d1b2a;
   color: white;
   border: none;
   border-radius: 6px;
@@ -67,7 +67,7 @@
 }
 
 .search-form button:hover {
-  background: #0056b3;
+  background: #3b6ea8;
 }
 
 /* 테이블 하단 영역 (작성 버튼 우측 정렬 및 넉넉한 여백 부여) */
@@ -81,7 +81,7 @@
 /* 게시글 작성 버튼 (하단 우측 배치) */
 .write-btn {
   padding: 10px 22px;
-  background: #122754;
+  background: #0d1b2a;
   color: white;
   border: none;
   border-radius: 6px;
@@ -92,7 +92,7 @@
 }
 
 .write-btn:hover {
-  background: #0056b3;
+  background: #3b6ea8;
 }
 
 /* 테이블 */
@@ -119,7 +119,7 @@ th {
 td:nth-child(3) {
   text-align: left;
   cursor: pointer;
-  color: #122754;
+  color: #0d1b2a;
   font-weight: 500;
 }
 
@@ -207,7 +207,7 @@ td:nth-child(6) {
 
 .pagination button {
   padding: 8px 15px;
-  background: #122754;
+  background: #0d1b2a;
   color: white;
   border: none;
   border-radius: 6px;
@@ -215,7 +215,7 @@ td:nth-child(6) {
 }
 
 .pagination button:hover {
-  background: #0056b3;
+  background: #3b6ea8;
 }
 
 @media (max-width: 900px) {

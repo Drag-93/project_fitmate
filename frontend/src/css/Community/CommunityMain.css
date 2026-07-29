@@ -69,7 +69,7 @@
 
 .board-card-header {
   padding: 14px 18px;
-  background: #122754;
+  background: #0d1b2a;
   border-bottom: 1px solid #ddd;
 }
 
@@ -196,7 +196,7 @@
   margin-top: 4px;
   font-size: 24px;
   font-weight: bold;
-  color: #122754;
+  color: #0d1b2a;
 }
 
 .weather-slide-desc {

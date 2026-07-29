@@ -45,7 +45,7 @@
   padding: 9px 18px;
   border: none;
   border-radius: 6px;
-  background: #122754;
+  background: #0d1b2a;
   color: #ffffff;
   font-size: 14px;
   font-weight: 600;
@@ -54,7 +54,7 @@
 }
 
 .tabList-con button:hover {
-  background: #2b6cb0;
+  background: #3b6ea8;
 }
 
 /* =====================================================
@@ -115,7 +115,7 @@
 
 /* 탭 이름 클릭 유도 (호버 효과) */
 .tabList-con td:nth-child(1):hover {
-  color: #2b6cb0;
+  color: #3b6ea8;
   text-decoration: underline;
 }
 
