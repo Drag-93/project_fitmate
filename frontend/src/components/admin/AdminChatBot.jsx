@@ -9,7 +9,7 @@ import ChatBotUpdateModal from "./chatbot/ChatBotUpdateModal";
 
 const AdminChatBot = () => {
   //chat값들을 저장할 상태값List
-  const [chatList, setChatList] = useState(null);
+  const [chatData, setChatData] = useState(null);
   const navigate = useNavigate();
   //검색, 필터링 상태값
   const [subject, setSubject] = useState("");
@@ -30,20 +30,20 @@ const AdminChatBot = () => {
   const insertUrl = `${API_SERVER_URL}/api/chatbot/insert/chat`;
   const updateUrl = `${API_SERVER_URL}/api/chatbot/update/chat`;
 
-  const getChatList = async (search, subject, page) => {
+  const getChatData = async (search, subject, page) => {
     //있을때나 없을때나 실행할수있게 설정
     const url = `${API_SERVER_URL}/api/chatbot/list/chat?page=${page}&size=5&subject=${subject ? subject : ""}&search=${encodeURIComponent(search ? search : "")}`;
     // console.log(url);
     try {
       const res = await jwtAxios.get(url);
-      setChatList(res.data.chatList);
-      // console.log(res.data);
+      setChatData(res.data);
+      console.log(res.data);
     } catch (err) {
       alert("에러발생 : " + err);
     }
   };
   useEffect(() => {
-    getChatList("", "", 0);
+    getChatData("", "", 0);
   }, []);
   return (
     <>
@@ -51,7 +51,7 @@ const AdminChatBot = () => {
         <ChatBotInsertModal
           url={insertUrl}
           setIsBool={setIsBoolInsert}
-          getList={getChatList}
+          getList={getChatData}
         />
       )}
       {isBoolUpdate === true && (
@@ -59,42 +59,45 @@ const AdminChatBot = () => {
           id={id}
           url={updateUrl}
           setIsBool={setIsBoolUpdate}
-          getList={getChatList}
+          getList={getChatData}
           isAnswer={false}
         />
       )}
       <div className="admin-chat">
-        {chatList !== null ? (
+        <div className="admin-chat-title-con">
+          <h2 className="admin-chat-title">챗봇 관리</h2>
+          <div className="chatInsert">
+            <button onClick={() => setIsBoolInsert(true)}>검색단어생성</button>
+          </div>
+        </div>
+        {chatData !== null ? (
           <>
-            <div className="search">
-              <div className="filters">
-                <form onSubmit={handleSearchSubmit}>
-                  <select
-                    name="subject"
-                    value={subject}
-                    onChange={(e) => setSubject(e.target.value)}
-                  >
-                    <option value="">::선택::</option>
-                    <option value="search">검색단어</option>
-                    <option value="resStr">답변</option>
-                  </select>
+            <div className="header-con">
+              <div className="search">
+                <div className="filters">
+                  <form onSubmit={handleSearchSubmit}>
+                    <select
+                      name="subject"
+                      value={subject}
+                      onChange={(e) => setSubject(e.target.value)}
+                    >
+                      <option value="">::선택::</option>
+                      <option value="search">검색단어</option>
+                      <option value="resStr">답변</option>
+                    </select>
 
-                  <input
-                    type="text"
-                    name="search"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    placeholder="검색어를 입력하세요"
-                  />
+                    <input
+                      type="text"
+                      name="search"
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                      placeholder="검색어를 입력하세요"
+                    />
 
-                  <input type="submit" value="검색" />
-                </form>
+                    <input type="submit" value="검색" />
+                  </form>
+                </div>
               </div>
-            </div>
-            <div className="chatInsert">
-              <button onClick={() => setIsBoolInsert(true)}>
-                검색단어생성
-              </button>
             </div>
             <div className="chatList">
               <ul className="chatList-head">
@@ -103,9 +106,9 @@ const AdminChatBot = () => {
                 <li>수정</li>
                 <li>답변예약어보기</li>
               </ul>
-              {chatList?.length > 0 ? (
+              {chatData?.length !== null ? (
                 <>
-                  {chatList.map((el, idx) => {
+                  {chatData.chatList.map((el, idx) => {
                     return (
                       <ul className="chatList-body" key={idx}>
                         <li>{el.search}</li>
@@ -134,11 +137,11 @@ const AdminChatBot = () => {
                   })}
                   <ul className="chatList-foot">
                     <PageGenerate
-                      currentPage={chatList.currentPage} //현재 페이지
-                      startPage={chatList.startPage} //시작 페이지
-                      endPage={chatList.endPage} //끝 페이지
-                      totalPage={chatList.totalPage} //전체 페이지
-                      onPageChange={getChatList} //리스트를 불러오는 함수
+                      currentPage={chatData.currentPage} //현재 페이지
+                      startPage={chatData.startPage} //시작 페이지
+                      endPage={chatData.endPage} //끝 페이지
+                      totalPage={chatData.totalPage} //전체 페이지
+                      onPageChange={getChatData} //리스트를 불러오는 함수
                       search={search} //검색어
                       subject={subject} //검색필터
                     />

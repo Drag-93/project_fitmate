@@ -16,7 +16,9 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -96,7 +98,13 @@ public class ProductController {
       Pageable pageable) {
 
     return ResponseEntity.ok(
-        productService.productList( productType, pageable, search));
+        productService.productList(productType, pageable, search));
+  }
+
+  // 메인페이지 전용: 판매량 높은 순 상위 8개 상품
+  @GetMapping("/top-sales")
+  public ResponseEntity<List<ProductDto>> getTopSalesProducts() {
+    return ResponseEntity.ok(productService.getTopSalesProducts());
   }
 
   @GetMapping("/premium")

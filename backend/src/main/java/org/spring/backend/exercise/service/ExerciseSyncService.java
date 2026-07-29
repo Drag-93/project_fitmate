@@ -1,4 +1,4 @@
-package org.spring.backend.exercise;
+package org.spring.backend.exercise.service;
 
 import java.util.List;
 import java.util.Map;

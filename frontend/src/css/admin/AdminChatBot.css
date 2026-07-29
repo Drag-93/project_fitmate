@@ -1,207 +1,296 @@
+@charset "UTF-8";
+
+/* =====================================================
+   챗봇 관리 페이지 전용 스타일 (admin-chat.css)
+   * admin-member.css 의 테마 변수 및 기본 레이아웃을 상속받습니다.
+===================================================== */
+
+/* -----------------------------------------------------
+   1. 전체 Layout Container
+----------------------------------------------------- */
 .admin-chat {
   position: relative;
-  width: calc(100% - 260px);
-  min-height: calc(100vh - 70px);
-  margin-left: 260px;
-  margin-top: 70px;
+  width: calc(100% - var(--sidebar-width, 260px));
+  min-height: calc(100vh - var(--header-height, 70px));
+  margin-left: var(--sidebar-width, 260px);
+  margin-top: var(--header-height, 70px);
   padding: 32px;
   box-sizing: border-box;
-  background: #f5f7fb;
+  background-color: var(--bg-main, #f5f7fb);
+  transition:
+    margin-left 0.3s ease,
+    width 0.3s ease;
 }
 
-/* =========================
-   검색 & 생성 버튼 영역
-========================= */
-.search {
-  margin-bottom: 16px;
+.admin-chat .admin-chat-con {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
-.filters form {
+/* -----------------------------------------------------
+   2. Title + Insert Button
+----------------------------------------------------- */
+.admin-chat .admin-chat-title-con {
   display: flex;
-  gap: 10px;
+  justify-content: space-between;
   align-items: center;
+  margin-bottom: 24px;
 }
 
-.filters select,
-.filters input[type="text"] {
-  padding: 8px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
+.admin-chat .admin-chat-title {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--text-main, #111827);
+}
+
+/* 상단 버튼 스타일 (예: 추가버튼 등) */
+.admin-chat .chatInsert button {
+  height: 40px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--primary-color, #2563eb);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.2);
+  transition: all 0.2s ease;
+}
+
+.admin-chat .chatInsert button:hover {
+  background-color: var(--primary-hover, #1d4ed8);
+}
+
+/* -----------------------------------------------------
+   3. Header (필터 + 검색창)
+----------------------------------------------------- */
+.admin-chat .header-con {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.admin-chat .search {
+  margin-bottom: 0;
+  width: 100%;
+}
+
+.admin-chat .search .filters form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-chat .search select {
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--border-color, #d1d5db);
+  border-radius: 8px;
+  background-color: var(--bg-surface, #ffffff);
+  color: var(--text-main, #111827);
   font-size: 14px;
   outline: none;
-}
-
-.filters select:focus,
-.filters input[type="text"]:focus {
-  border-color: #2563eb;
-}
-
-.filters input[type="submit"] {
-  padding: 8px 18px;
-  border: none;
-  border-radius: 6px;
-  background: #2563eb;
-  color: #fff;
   cursor: pointer;
-  transition: 0.2s;
-  font-weight: 500;
+  transition: border-color 0.2s ease;
 }
 
-.filters input[type="submit"]:hover {
-  background: #1d4ed8;
+.admin-chat .search select:focus {
+  border-color: var(--primary-color, #2563eb);
 }
 
-/* 🟢 [추가됨] 검색단어생성 버튼 영역 */
-.chatInsert {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 16px;
-}
-
-.chatInsert button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 6px;
-  background: #10b981; /* 모달/생성 느낌을 주는 그린 계열 */
-  color: #fff;
+.admin-chat .search input[type="text"] {
+  width: 220px;
+  height: 40px;
+  padding: 0 14px;
+  box-sizing: border-box;
+  border: 1px solid var(--border-color, #d1d5db);
+  border-radius: 8px;
+  background-color: var(--bg-surface, #ffffff);
+  color: var(--text-main, #111827);
   font-size: 14px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.admin-chat .search input[type="text"]::placeholder {
+  color: var(--text-muted, #9ca3af);
+}
+
+.admin-chat .search input[type="text"]:focus {
+  border-color: var(--primary-color, #2563eb);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.admin-chat .search input[type="submit"] {
+  height: 40px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--primary-color, #2563eb);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.admin-chat .search input[type="submit"]:hover {
+  background-color: var(--primary-hover, #1d4ed8);
+}
+
+/* -----------------------------------------------------
+   4. Chat List Container (요청하신 핵심 영역)
+----------------------------------------------------- */
+.admin-chat .chatList {
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 10px; /* 둥근 카드 형태 */
+  background-color: var(--bg-surface, #ffffff);
+  box-shadow: 0 3px 12px rgba(15, 23, 42, 0.06);
+}
+
+/* -----------------------------------------------------
+   5. Grid Layout & Item Style
+----------------------------------------------------- */
+/* 4개 열 비율 설정 (검색단어 1.5 : 답변 2.5 : 수정 1 : 상세보기 1) */
+.admin-chat .chatList-head,
+.admin-chat .chatList-body {
+  display: grid;
+  grid-template-columns: 1.5fr 2.5fr 1fr 1fr;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-align: center;
+}
+
+.admin-chat .chatList-head li,
+.admin-chat .chatList-body li {
+  padding: 15px 10px;
+  overflow: hidden;
+  font-size: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 헤더 영역 */
+.admin-chat .chatList-head {
+  border-bottom: 2px solid var(--border-color, #e5e7eb);
+  background-color: var(--bg-subtle, #f8fafc);
+  color: var(--text-main, #111827);
+  font-weight: 700;
+}
+
+/* 데이터 바디 영역 */
+.admin-chat .chatList-body {
+  border-bottom: 1px solid var(--border-color, #e5e7eb);
+  background-color: var(--bg-surface, #ffffff);
+  color: var(--text-sub, #4b5563);
+  transition: background-color 0.2s ease;
+}
+
+.admin-chat .chatList-body:last-child {
+  border-bottom: none; /* 마지막 줄 선 제거 */
+}
+
+.admin-chat .chatList-body:hover {
+  background-color: #f9fafb;
+}
+
+/* 목록 내부 버튼 스타일 (수정하기 / 상세보기) */
+.admin-chat .chatList-body button {
+  padding: 6px 14px;
+  border: 1px solid var(--border-color, #d1d5db);
+  border-radius: 6px;
+  background-color: var(--bg-surface, #ffffff);
+  color: var(--text-sub, #4b5563);
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.chatInsert button:hover {
-  background: #059669;
-  transform: translateY(-1px);
+.admin-chat .chatList-body button:hover {
+  border-color: var(--primary-color, #2563eb);
+  background-color: var(--primary-color, #2563eb);
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.2);
 }
 
-/* =========================
-   리스트 (Grid 방식 통일 - 4개 컬럼)
-========================= */
-.chatList {
-  width: 100%;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  overflow: hidden;
-  background: #fff;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-}
-
-/* 공통 그리드 비율: 검색단어(1.5) : 답변(3) : 수정(1) : 상세보기(1.2) */
-.chatList-head,
-.chatList-body {
-  display: grid;
-  grid-template-columns: 1.5fr 3fr 1fr 1.2fr;
+/* -----------------------------------------------------
+   6. Pagination Foot Area (하단 페이지네이션)
+----------------------------------------------------- */
+.admin-chat .chatList-foot {
+  display: flex;
+  justify-content: center;
   align-items: center;
-  list-style: none;
   margin: 0;
+  padding: 20px 10px;
+  list-style: none;
+  border-top: 1px solid var(--border-color, #e5e7eb); /* 리스트와 구분선 추가 */
+  background-color: var(--bg-surface, #ffffff);
 }
 
-/* 헤더 */
-.chatList-head {
-  padding: 14px 20px;
-  background: #f8fafc;
-  border-bottom: 2px solid #cbd5e1;
-  font-weight: 600;
-  color: #334155;
-  text-align: center;
-}
-
-/* 바디 Row */
-.chatList-body {
-  padding: 0 20px;
-  border-bottom: 1px solid #f1f5f9;
-  transition: background-color 0.2s;
-}
-
-.chatList-body:hover {
-  background: #f8fafc;
-}
-
-.chatList-body:last-of-type {
-  border-bottom: none;
-}
-
-.chatList-body li {
-  padding: 14px 8px;
+/* -----------------------------------------------------
+   7. Empty Data Area (데이터 없을 때)
+----------------------------------------------------- */
+.admin-chat .chatList-body-none {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 160px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--text-muted, #9ca3af);
   font-size: 14px;
-  color: #475569;
-  text-align: center;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  background-color: var(--bg-surface, #ffffff);
 }
 
-/* 1. 검색단어 */
-.chatList-body li:nth-child(1) {
-  font-weight: 600;
-  color: #1e293b;
+/* -----------------------------------------------------
+   8. Responsive (반응형 모바일/태블릿)
+----------------------------------------------------- */
+@media screen and (max-width: 900px) {
+  .admin-chat {
+    width: 100%;
+    margin-left: 0;
+    padding: 20px 16px;
+  }
 }
 
-/* 2. 답변 */
-.chatList-body li:nth-child(2) {
-  text-align: left; /* 답변이 길 수 있으므로 좌측 정렬 */
-  padding-left: 16px;
-}
-
-/* 3, 4번째 버튼 스타일 */
-.chatList-body li:nth-child(3) button,
-.chatList-body li:nth-child(4) button {
-  padding: 6px 14px;
-  border: none;
-  border-radius: 6px;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-/* 수정하기 버튼 (블루) */
-.chatList-body li:nth-child(3) button {
-  background: #2563eb;
-  color: #fff;
-}
-
-.chatList-body li:nth-child(3) button:hover {
-  background: #1d4ed8;
-}
-
-/* 상세보기 버튼 (다크/서브 버튼 느낌) */
-.chatList-body li:nth-child(4) button {
-  background: #64748b;
-  color: #fff;
-}
-
-.chatList-body li:nth-child(4) button:hover {
-  background: #475569;
-}
-
-/* =========================
-   데이터 없음
-========================= */
-.chatList-body-none {
-  list-style: none;
-  margin: 0;
-  padding: 40px 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #64748b;
-  font-size: 15px;
-  font-weight: 500;
-}
-
-/* =========================
-   페이지네이션
-========================= */
-.chatList-foot {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  list-style: none;
-  margin: 0;
-  padding: 16px;
-  background: #f8fafc;
-  border-top: 1px solid #e2e8f0;
+@media screen and (max-width: 600px) {
+  .admin-chat .admin-chat-title-con {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .admin-chat .chatInsert button {
+    width: 100%;
+  }
+  .admin-chat .header-con {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .admin-chat .search .filters form {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .admin-chat .search input[type="text"] {
+    width: 100%;
+  }
+  /* 모바일에서 테이블 그리드 조정 */
+  .admin-chat .chatList-head,
+  .admin-chat .chatList-body {
+    grid-template-columns: 1fr 1fr;
+  }
 }

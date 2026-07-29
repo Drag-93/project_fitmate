@@ -34,7 +34,7 @@
 
 .footer li {
   color: #aeb9c5;
-  font-size: 1.3rem;
+  font-size: 1rem;
   line-height: 1.6;
 }
 
@@ -44,7 +44,7 @@
 
 .footer-left li {
   color: #fff;
-  font-size: 2.6rem;
+  font-size: 2rem;
   font-weight: 800;
   letter-spacing: 0.05em;
 }
@@ -59,13 +59,13 @@
   margin-bottom: 0.8rem;
 
   color: #fff;
-  font-size: 1.5rem;
+  font-size: 1rem;
   font-weight: 700;
 }
 
 .footer-tel {
   color: #fff !important;
-  font-size: 2rem !important;
+  font-size: 1.3rem !important;
   font-weight: 700;
 }
 
@@ -92,7 +92,7 @@
   border-radius: 50%;
   box-shadow: 0 0.8rem 2rem rgba(0, 0, 0, 0.2);
 
-  font-size: 1.3rem;
+  font-size: 1rem;
   font-weight: 700;
 
   transition:

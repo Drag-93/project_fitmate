@@ -17,6 +17,9 @@ const initUserData = {
 const Join = () => {
   const navigate = useNavigate();
 
+  //비밀번호 확인용 상태값
+  const [checkPw, setCheckPw] = useState("");
+
   const { memberData } = useSelector((state) => state.loginSlice);
   //이메일의 존재유무에 따라 true, false
   const isLogin = !!memberData?.result?.userEmail;
@@ -125,6 +128,9 @@ const Join = () => {
   if (isLogin) {
     return null;
   }
+  //비밀번호 확인유무
+  const isMatch =
+    joinData.userPw !== "" && checkPw !== "" && joinData.userPw === checkPw;
   return (
     <>
       <AddressModal
@@ -176,6 +182,23 @@ const Join = () => {
                 onChange={onChangeFn}
               />
             </li>
+            {/* 입력 중일 때 실시간 결과 표시 */}
+            {checkPw.length > 0 && (
+              <p style={{ color: isMatch ? "green" : "red" }}>
+                {isMatch
+                  ? "비밀번호가 일치합니다."
+                  : "비밀번호가 일치하지 않습니다."}
+              </p>
+            )}
+            <li>
+              <input
+                type="password"
+                placeholder="비밀번호 확인"
+                value={checkPw}
+                onChange={(e) => setCheckPw(e.target.value)}
+              />
+            </li>
+
             <li>
               <input
                 type="text"

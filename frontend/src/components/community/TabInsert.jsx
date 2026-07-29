@@ -70,57 +70,85 @@ const TabInsert = () => {
 
   return (
     <div className="tabInsert">
-      <h1>탭 생성 페이지</h1>
+      <h1 className="tab-title">탭 생성 페이지</h1>
       {tabList.map((tab, tabIndex) => (
-        <div key={tabIndex}>
+        <div key={tabIndex} className="tab-section">
+          <div className="section-header">
+            <span className="badge">탭 {tabIndex + 1}</span>
+            {/* 탭이 2개 이상일 때만 해당 탭 삭제 버튼 노출 (최소 1개는 유지) */}
+            {tabList.length > 1 && (
+              <button
+                className="btn btn-danger-outline"
+                onClick={() =>
+                  setTabList(tabList.filter((_, i) => i !== tabIndex))
+                }
+              >
+                탭 삭제
+              </button>
+            )}
+          </div>
           {/* 탭 이름 입력 */}
-          <input
-            name="tabName"
-            value={tab.tabName}
-            onChange={(e) => onChangeInput(tabIndex, e)}
-            placeholder="탭 이름"
-          />
-
-          {/* 해당 탭에 속한 카테고리 입력칸들 출력 */}
-          {tab.categoryList.map((cat, catIndex) => (
+          <div className="form-group">
+            <label className="form-label">탭 이름</label>
             <input
-              key={catIndex}
-              value={cat.categoryName || ""}
-              onChange={(e) =>
-                onChangeCategory(tabIndex, catIndex, e.target.value)
-              }
-              placeholder={`카테고리 ${catIndex + 1}`}
+              className="input-box tab-name-input"
+              name="tabName"
+              value={tab.tabName}
+              onChange={(e) => onChangeInput(tabIndex, e)}
+              placeholder="탭 이름"
             />
-          ))}
-
-          {/* 카테고리 추가 버튼 */}
-          <button onClick={() => onAddCategory(tabIndex)}>
-            + 카테고리 추가
-          </button>
-          {/* 카테고리가 2개 이상일 때만 삭제 버튼 노출 (최소 1개는 유지) */}
-          {tab.categoryList.length > 1 && (
-            <button onClick={() => onRemoveCategory(tabIndex)}>
-              - 카테고리 삭제
-            </button>
-          )}
-          {/* 탭이 2개 이상일 때만 해당 탭 삭제 버튼 노출 (최소 1개는 유지) */}
-          {tabList.length > 1 && (
-            <button
-              onClick={() =>
-                setTabList(tabList.filter((_, i) => i !== tabIndex))
-              }
-            >
-              탭 삭제
-            </button>
-          )}
-          {/* 마지막 탭 아래에만 "탭 추가" 버튼 노출 */}
-          {tabIndex === tabList.length - 1 && (
-            <button onClick={onAddInput}>+ 탭 추가</button>
-          )}
+          </div>
+          {/* 해당 탭에 속한 카테고리 입력칸들 출력 */}
+          <div className="category-container">
+            <label className="form-label">하위 카테고리 목록</label>
+            <div className="category-list">
+              {tab.categoryList.map((cat, catIndex) => (
+                <div key={catIndex} className="category-item">
+                  <span className="category-index">{catIndex + 1}</span>
+                  <input
+                    className="input-box"
+                    value={cat.categoryName || ""}
+                    onChange={(e) =>
+                      onChangeCategory(tabIndex, catIndex, e.target.value)
+                    }
+                    placeholder={`카테고리 명칭`}
+                  />
+                </div>
+              ))}
+            </div>
+            <div className="category-btn-group">
+              {/* 카테고리 추가 버튼 */}
+              <button
+                onClick={() => onAddCategory(tabIndex)}
+                className="btn btn-outline"
+              >
+                + 카테고리 추가
+              </button>
+              {/* 카테고리가 2개 이상일 때만 삭제 버튼 노출 (최소 1개는 유지) */}
+              {tab.categoryList.length > 1 && (
+                <button
+                  onClick={() => onRemoveCategory(tabIndex)}
+                  className="btn btn-danger-outline"
+                >
+                  - 카테고리 삭제
+                </button>
+              )}
+            </div>
+            {/* 마지막 탭 아래에만 "탭 추가" 버튼 노출 */}
+            {tabIndex === tabList.length - 1 && (
+              <div className="add-tab-wrapper">
+                <button onClick={onAddInput} className="btn btn-sub">
+                  + 새 탭 추가하기
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       ))}
       {/* 구성된 모든 탭/카테고리를 서버에 일괄 등록 */}
-      <button onClick={onTabFn}>전체 만들기</button>
+      <button onClick={onTabFn} className="btn btn-submit">
+        전체 만들기
+      </button>
     </div>
   );
 };

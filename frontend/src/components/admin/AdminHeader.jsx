@@ -1,10 +1,9 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "../../css/admin/AdminHeader.css";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../store/slices/loginSlice";
 
-const AdminHeader = () => {
+const AdminHeader = ({ onToggleSidebar }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -32,6 +31,14 @@ const AdminHeader = () => {
     <>
       <div className="admin-header">
         <div className="admin-header-con">
+          {/* 모바일 900px 이하에서만 노출되는 햄버거 버튼 */}
+          <button
+            className="mobile-toggle-btn"
+            onClick={onToggleSidebar}
+            aria-label="메뉴 열기"
+          >
+            ☰
+          </button>
           <div className="admin-nav-wrap">
             <div className="admin-gnb-right">
               <ul>
@@ -45,9 +52,7 @@ const AdminHeader = () => {
                   <Link to="/mypage">{memberData?.result?.userName}님</Link>
                 </li>
                 <li>
-                  <button className="header-logout-btn" onClick={logoutFn}>
-                    로그아웃
-                  </button>
+                  <button onClick={logoutFn}>로그아웃</button>
                 </li>
               </ul>
             </div>

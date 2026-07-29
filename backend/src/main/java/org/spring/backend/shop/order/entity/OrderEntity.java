@@ -65,6 +65,9 @@ public class OrderEntity extends BasicTime {
   private String receiverAddress;
 
   @Column
+  private String receiverDetailAddress;
+
+  @Column
   private String deliveryMemo;
 
   // //N:1

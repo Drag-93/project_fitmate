@@ -3,6 +3,7 @@ package org.spring.backend.shop.product.service.serviceImpl;
 import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 import org.spring.backend.file.enumtype.TableType;
 import org.spring.backend.file.handler.FileHandler;
@@ -15,6 +16,7 @@ import org.spring.backend.shop.product.type.ImageType;
 import org.spring.backend.shop.product.type.ProductType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -194,7 +196,6 @@ public class ProductServiceImpl implements ProductService {
     return ProductDto.toProductDto(productEntity);
   }
 
-
   @Override
   public void deleteImage(Long productFileId) {
 
@@ -228,5 +229,31 @@ public class ProductServiceImpl implements ProductService {
             () -> new RuntimeException("프리미엄 상품 없음"));
 
     return ProductDto.toProductDto(product);
+  }
+
+  @Transactional(readOnly = true)
+  @Override
+  public List<ProductDto> getTopSalesProducts() {
+    Pageable pageable = PageRequest.of(0, 8);
+    List<ProductEntity> topProducts = productRepository.findTopSalesProducts(pageable);
+
+    // 판매 기록이 있는 상품이 8개 미만인 경우, 최신 등록 상품으로 나머지 채우기
+    if (topProducts.size() < 8) {
+      int needCount = 8 - topProducts.size();
+      Pageable fallbackPageable = PageRequest.of(0, needCount);
+
+      // 이미 뽑힌 상품 ID 제외하고 최신순 조회 (필요 시 적용)
+      List<ProductEntity> latestProducts = productRepository.findAllByOrderByIdDesc(fallbackPageable);
+
+      for (ProductEntity product : latestProducts) {
+        if (!topProducts.contains(product) && topProducts.size() < 8) {
+          topProducts.add(product);
+        }
+      }
+    }
+
+    return topProducts.stream()
+        .map(ProductDto::toProductDto)
+        .collect(Collectors.toList());
   }
 }

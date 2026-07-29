@@ -14,7 +14,7 @@ const initAnswerData = {
 
 const ChatBotInsertModal = ({ url, setIsBool, id, getList }) => {
   const isAnswer = Boolean(id);
-  console.log(isAnswer);
+  // console.log(isAnswer);
   // console.log(id);
   //대주제 저장용 data
   const [chatData, setChatData] = useState(initChatData);

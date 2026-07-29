@@ -1,4 +1,4 @@
-package org.spring.backend.exercise;
+package org.spring.backend.exercise.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;

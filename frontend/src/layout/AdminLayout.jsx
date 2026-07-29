@@ -3,7 +3,9 @@ import AdminHeader from "../components/admin/AdminHeader";
 import AdminLeft from "../components/admin/AdminLeft";
 import "../css/admin/Admin.css";
 import { useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import "../css/admin/AdminLayout.css";
+
 const AdminLayout = () => {
   const navigate = useNavigate();
   //authSlice에 저장된 멤버데이터를 가져옴
@@ -22,13 +24,29 @@ const AdminLayout = () => {
     }
   }, [hasAccess, navigate]);
 
+  //모바일인지 확인할 상태값
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  //사이드바 제어용 함수
+  const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
+  const closeSidebar = () => setIsSidebarOpen(false);
+
   if (!hasAccess) return null;
 
   return (
     <>
-      <AdminHeader />
+      <AdminHeader onToggleSidebar={toggleSidebar} />
+
       <Outlet />
-      <AdminLeft />
+
+      {/* 모바일에서 어두운 배경 클릭 시 닫기 */}
+      <div
+        className={`sidebar-overlay ${isSidebarOpen ? "open" : ""}`}
+        onClick={closeSidebar}
+      />
+
+      {/* 사이드바에 isOpen 상태와 closeSidebar 함수 전달 */}
+      <AdminLeft isOpen={isSidebarOpen} onClose={closeSidebar} />
     </>
   );
 };

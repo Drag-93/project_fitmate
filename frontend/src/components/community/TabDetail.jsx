@@ -1,8 +1,8 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { API_SERVER_URL } from "../../apis/commonApi";
 import "../../css/Community/TabDetail.css";
+import jwtAxios from "../../apis/util/jwtUtil";
 
 /**
  * 관리자용 탭 상세/수정 페이지
@@ -21,7 +21,7 @@ const TabDetail = () => {
   const getTabDetail = async () => {
     try {
       setIsLoading(true);
-      const res = await axios.get(
+      const res = await jwtAxios.get(
         `${API_SERVER_URL}/api/admin/tabDetail/${id}`,
       );
       if (res.data?.tab) {
@@ -77,8 +77,8 @@ const TabDetail = () => {
 
     try {
       setIsLoading(true);
-      const res = await axios.put(
-        `${API_SERVER_URL}/admin/tabUpdate/${id}`,
+      const res = await jwtAxios.put(
+        `${API_SERVER_URL}/api/admin/tabUpdate/${id}`,
         tab,
       );
       alert("수정되었습니다.");
@@ -96,7 +96,9 @@ const TabDetail = () => {
     if (!window.confirm("정말 삭제하시겠습니까?")) return;
     try {
       setIsLoading(true);
-      const res = await axios.delete(`${API_SERVER_URL}/admin/tabDelete/${id}`);
+      const res = await jwtAxios.delete(
+        `${API_SERVER_URL}/api/admin/tabDelete/${id}`,
+      );
       if (res.data?.result) {
         setTab(res.data.result);
         navigate("/community/tabList");

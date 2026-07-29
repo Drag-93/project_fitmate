@@ -1,4 +1,4 @@
-package org.spring.backend.exercise;
+package org.spring.backend.exercise.service;
 
 /**
  * exercise 테이블의 한글 컬럼(name_ko, target_ko, equip_ko, body_ko)이 비어있는 행들을

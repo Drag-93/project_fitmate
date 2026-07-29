@@ -1,4 +1,4 @@
-package org.spring.backend.exercise;
+package org.spring.backend.exercise.service;
 
 /**
  * 사용자별 요청 빈도를 제한하는 레이트리미터 서비스 인터페이스
