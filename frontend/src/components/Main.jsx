@@ -105,6 +105,7 @@ const Main = () => {
       });
 
       setPopupList(visiblePopupList.slice(0, 2));
+      console.log(res.data);
     } catch (err) {
       console.error("메인 데이터 조회 오류:", err);
     }
