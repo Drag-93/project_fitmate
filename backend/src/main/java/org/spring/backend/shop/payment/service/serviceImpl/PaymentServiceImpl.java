@@ -54,6 +54,9 @@ public class PaymentServiceImpl implements PaymentService {
   @Value("${kakao.admin-key}")
   private String kakaoAdminKey;
 
+  @Value("${app.front-url}")
+  private String frontServerURL;
+
   @Override
   public void paymentInsert(PaymentDto paymentDto) {
 
@@ -292,9 +295,9 @@ public class PaymentServiceImpl implements PaymentService {
         .queryParam("quantity", "1")
         .queryParam("total_amount", amount)
         .queryParam("tax_free_amount", "0")
-        .queryParam("approval_url", "http://localhost:3000/payment/approval/" + paymentEntity.getId())
-        .queryParam("cancel_url", "http://localhost:3000/payment/cancel")
-        .queryParam("fail_url", "http://localhost:3000/payment/fail")
+        .queryParam("approval_url", frontServerURL + "/payment/approval/" + paymentEntity.getId())
+        .queryParam("cancel_url", frontServerURL + "/payment/cancel")
+        .queryParam("fail_url", frontServerURL + "/payment/fail")
         .encode()
         .build()
         .toUri();

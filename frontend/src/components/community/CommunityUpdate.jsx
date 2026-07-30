@@ -110,7 +110,10 @@ const CommunityUpdate = () => {
     }
 
     try {
-      await jwtAxios.put(`${API_SERVER_URL}/community/update/${id}`, community);
+      await jwtAxios.put(
+        `${API_SERVER_URL}/api/community/update/${id}`,
+        community,
+      );
       alert("수정되었습니다.");
       // 수정 완료 후 해당 게시글 상세 페이지로 이동
       navigate(`/community/detail/${id}`);

@@ -97,8 +97,13 @@ const ChatBot = () => {
   //소켓통신 연결 함수
   const onConnectFn = async () => {
     setIsOpen(true);
-    //웹소켓 연결
-    const socket = new SockJS(`${API_SERVER_URL}/chatEndpoint`);
+    const serverUrl = import.meta.env.BACKEND_API_SERVER_URL || "";
+    const socketUrl = `${serverUrl}/api/chatEndpoint`;
+    //웹소켓 연결, transports 옵션을 주어 폴백 순서를 제어
+    const socket = () =>
+      new SockJS(socketUrl, null, {
+        transports: ["websocket", "xhr-streaming", "xhr-polling"],
+      });
     //STOMP 클라이언트 생성
     stompClient.current = Stomp.over(socket);
     stompClient.current.connect(
@@ -174,113 +179,107 @@ const ChatBot = () => {
     }
   }, [messages]);
   return (
-    <>
-      <div className="chat">
-        <div id="chat-bot">
-          <div className="wrap">
-            {!isOpen ? (
-              <button type="button" id="btn-chat-open" onClick={onConnectFn}>
-                OPEN
-              </button>
-            ) : (
-              <div id="chat-disp">
-                <div id="chat-disp-con">
-                  <div id="chat-header">
-                    <span>Chat-Bot(WebSocket)</span>
-                    <button id="close" type="button" onClick={disconnectFn}>
-                      X
-                    </button>
-                  </div>
-                  <div id="chat-content" ref={chatContentRef}>
-                    {messages.map((msg, idx) => (
-                      <div
-                        key={msg.id || idx}
-                        className={`msg-wrapper ${msg.sender}`}
-                      >
-                        {/* 서버 메시지인 경우 */}
-                        {msg.sender === "bot" ? (
-                          <div className="bot-msg-box">
-                            <div className="head-img">
-                              <img
-                                src="/images/chatbot/chatbot.png"
-                                alt="챗봇 프로필"
-                              />
-                            </div>
-                            <div className="message">
-                              {/* 1. 기본 시스템 메시지 */}
-                              <div>{msg.text}</div>
+    <div className="chat">
+      <div id="chat-bot">
+        <div className="wrap">
+          {!isOpen ? (
+            <button type="button" id="btn-chat-open" onClick={onConnectFn}>
+              OPEN
+            </button>
+          ) : (
+            <div id="chat-disp">
+              <div id="chat-disp-con">
+                <div id="chat-header">
+                  <span>Chat-Bot(WebSocket)</span>
+                  <button id="close" type="button" onClick={disconnectFn}>
+                    X
+                  </button>
+                </div>
+                <div id="chat-content" ref={chatContentRef}>
+                  {messages.map((msg, idx) => (
+                    <div
+                      key={msg.id || idx}
+                      className={`msg-wrapper ${msg.sender}`}
+                    >
+                      {/* 서버 메시지인 경우 */}
+                      {msg.sender === "bot" ? (
+                        <div className="bot-msg-box">
+                          <div className="head-img">
+                            <img
+                              src="/images/chatbot/chatbot.png"
+                              alt="챗봇 프로필"
+                            />
+                          </div>
+                          <div className="message">
+                            {/* 1. 기본 시스템 메시지 */}
+                            <div>{msg.text}</div>
 
-                              {/* 2. 세부 답변 목록이 존재할 경우 하나씩 줄바꿈하여 출력 */}
-                              {msg.answers && msg.answers.length > 0 && (
-                                <div
-                                  className="answer-list"
-                                  style={{ marginTop: "8px" }}
-                                >
-                                  {msg.answers.map((answer, index) => (
-                                    <div key={index} className="answer-item">
-                                      {answer}
-                                    </div>
-                                  ))}
-                                </div>
-                              )}
-                            </div>
-                            <div className="time">{msg.time}</div>
+                            {/* 2. 세부 답변 목록이 존재할 경우 하나씩 줄바꿈하여 출력 */}
+                            {msg.answers && msg.answers.length > 0 && (
+                              <div
+                                className="answer-list"
+                                style={{ marginTop: "8px" }}
+                              >
+                                {msg.answers.map((answer, index) => (
+                                  <div key={index} className="answer-item">
+                                    {answer}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
                           </div>
-                        ) : (
-                          /* 유저 메시지인 경우 */
-                          <div className="user-msg-box">
-                            <span className="time">{msg.time}</span>
-                            <span className="content">{msg.text}</span>
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                  <div id="chat-question" className="flex between">
-                    <input
-                      type="text"
-                      id="question"
-                      placeholder="질문을 입력하세요"
-                      ref={questionRef}
-                      value={question}
-                      onChange={(e) => setQuestion(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                          e.preventDefault(); // 페이지 새로고침 방지
-                          if (!e.nativeEvent.isComposing) {
-                            // 한글 중복/오작동 방지
-                            rabbitMsgSendClickFn(e);
-                          }
+                          <div className="time">{msg.time}</div>
+                        </div>
+                      ) : (
+                        /* 유저 메시지인 경우 */
+                        <div className="user-msg-box">
+                          <span className="time">{msg.time}</span>
+                          <span className="content">{msg.text}</span>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                <div id="chat-question" className="flex between">
+                  <input
+                    type="text"
+                    id="question"
+                    placeholder="질문을 입력하세요"
+                    ref={questionRef}
+                    value={question}
+                    onChange={(e) => setQuestion(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault(); // 페이지 새로고침 방지
+                        if (!e.nativeEvent.isComposing) {
+                          // 한글 중복/오작동 방지
+                          rabbitMsgSendClickFn(e);
                         }
-                      }}
-                    />
-                    {/* webSocket전송버튼 */}
-                    {/* <button
+                      }
+                    }}
+                  />
+                  {/* webSocket전송버튼 */}
+                  {/* <button
                       id="btn-msg-send"
                       type="button"
                       onClick={msgSendClickFn}
                     >
                       전송
                     </button> */}
-                    <button
-                      id="rabbit-btn-msg-send"
-                      type="button"
-                      onClick={rabbitMsgSendClickFn}
-                    >
-                      전송
-                    </button>
-                  </div>
+                  <button
+                    id="rabbit-btn-msg-send"
+                    type="button"
+                    onClick={rabbitMsgSendClickFn}
+                  >
+                    전송
+                  </button>
                 </div>
               </div>
-            )}
-          </div>
-          {/* 저작권 표시 (Footer) */}
-          <div className="chat-footer-attribution">
-            챗봇 아이콘 제작자: Magnific - Flaticon
-          </div>
+            </div>
+          )}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

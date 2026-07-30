@@ -6,7 +6,7 @@ import BuyerInfo from "../../../components/shop/order/BuyerInfo";
 import PaymentMethod from "../../../components/shop/order/PaymentMethod";
 import OrderRight from "../../../components/shop/order/OrderRight";
 import { useLocation } from "react-router-dom";
-import "../../../css/shop/order/orderPage.css";
+import "../../../css/shop/order/OrderPage.css";
 
 const OrderPage = () => {
   const location = useLocation();
@@ -59,7 +59,6 @@ const OrderPage = () => {
   const cartItems = location.state?.cartItems || [];
   const cartIds = location.state?.cartIds || [];
   const totalPrice = location.state?.totalPrice || 0;
-  
 
   // 바로구매 데이터
   const directItem = location.state?.directItem;
@@ -82,13 +81,13 @@ const OrderPage = () => {
         ]
       : [],
   };
-console.log("cartItems", cartItems);
-console.log(
-  "상품타입",
-  cartItems.map(item => item.productType)
-);
-console.log("hasDeliveryProduct", hasDeliveryProduct);
-console.log("isPremium", isPremium);
+  console.log("cartItems", cartItems);
+  console.log(
+    "상품타입",
+    cartItems.map((item) => item.productType),
+  );
+  console.log("hasDeliveryProduct", hasDeliveryProduct);
+  console.log("isPremium", isPremium);
   return (
     <div className="orderPage">
       <div className="orderPage-con">
