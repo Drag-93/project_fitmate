@@ -55,6 +55,9 @@ const ProductForm = ({ product, onSubmit }) => {
         if (value !== "PT") {
           next.sessionCount = "";
         }
+        if (value !== "GOODS") {
+          next.category = "";
+        }
       }
       return next;
     });
@@ -137,7 +140,21 @@ const ProductForm = ({ product, onSubmit }) => {
           />
         </div>
       )}
-
+      {formData.productType === "GOODS" && (
+        <div>
+          <label>카테고리</label>
+          <select
+            name="category"
+            value={formData.category}
+            onChange={changeHandler}
+          >
+            <option value="">선택</option>
+            <option value="운동기구">운동기구</option>
+            <option value="식품">식품</option>
+            <option value="트레이닝복">트레이닝복</option>
+          </select>
+        </div>
+      )}
       <div>
         <label>상품상태</label>
         <select
