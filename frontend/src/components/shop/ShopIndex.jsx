@@ -182,15 +182,14 @@ const ShopIndex = () => {
 
           <div className="shopIndex-bottom-productList">
             {products.slice(0, 8).map((product) => {
-              const thumbnail = product.productFileDtos?.find(
+              const thumbnail = product.fileDtos?.find(
                 (file) => file.imageType === "THUMBNAIL"
-              )?.newFileName;
-
+              );
               return (
                 <div className="product-card" key={product.id} onClick={() => navigate(`/products/detail/${product.id}`)}>
                   <div className="product-thumb-container">
                     <img
-                      src={thumbnail ? `${API_SERVER_URL}${thumbnail}` : "/images/no-image.png"}
+                      src={thumbnail ? `${API_SERVER_URL}/upload/product/${thumbnail.newFileName}` : "/images/no-image.png"}
                       alt={product.productName}
                     />
                     <div className="product-hover-actions">
