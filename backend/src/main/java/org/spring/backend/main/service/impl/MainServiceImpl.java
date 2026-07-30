@@ -56,7 +56,7 @@ public class MainServiceImpl implements MainService {
                         .toList();
 
         // 전체 상품 중 판매량 높은 TOP 5
-        Pageable pageable = PageRequest.of(0, 5);
+        Pageable pageable = PageRequest.of(0, 8);
 
         List<ProductDto> productList =
                 orderItemRepository
