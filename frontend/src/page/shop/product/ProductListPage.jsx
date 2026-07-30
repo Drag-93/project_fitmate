@@ -9,6 +9,7 @@ const ProductListPage = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const productType = searchParams.get("productType");
+  const category = searchParams.get("category");
 
   const [products, setProducts] = useState([]);
   const [page, setPage] = useState(0);
@@ -25,15 +26,17 @@ const ProductListPage = () => {
       console.error(err);
     }
   };
-
+  const filteredProducts = category
+    ? products.filter((product) => product.category === category)
+    : products;
   return (
     <>
       <div className="product-list">
         <div className="product-list-con">
-          {products.length === 0 ? (
+          {filteredProducts.length === 0 ? (
             <div className="no-product">해당 카테고리에 상품이 없습니다.</div>
           ) : (
-            products.map((product) => (
+            filteredProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))
           )}

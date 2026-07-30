@@ -198,9 +198,9 @@ const Header = () => {
               <ul>
                 <li>
                   <Link to={`/shop/index`}>스토어</Link>
-                  <Link to="/products?productType=GOODS">운동기구</Link>
-                  <Link to="/products?productType=GOODS">식품</Link>
-                  <Link to="/products?productType=GOODS">트레이닝복</Link>
+                  <Link to="/products?productType=GOODS&category=운동기구">운동기구</Link>
+                  <Link to="/products?productType=GOODS&category=식품">식품</Link>
+                  <Link to="/products?productType=GOODS&category=트레이닝복">트레이닝복</Link>
                 </li>
                 <li>
                   <Link to={`/shop/index`}>구독상품</Link>

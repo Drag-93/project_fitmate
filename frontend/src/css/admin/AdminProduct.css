@@ -98,9 +98,9 @@
   border-bottom: 2px solid var(--border-color, #e5e7eb);
 }
 
-.product-table th {
+.product-table-wrapper .product-table th {
   padding: 15px 12px;
-  color: var(--text-main, #111827);
+  color: #111827;
   font-weight: 700;
   white-space: nowrap;
 }
