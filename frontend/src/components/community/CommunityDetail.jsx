@@ -80,7 +80,7 @@ const CommunityDetail = () => {
   // 백엔드 서버 주소 기준 절대경로로 보정 (그래야 이미지가 정상적으로 표시됨)
   const renderableContent = (community?.content || "").replace(
     /src="\/upload\//g,
-    `src="${API_SERVER_URL}/upload/`,
+    `src="${API_SERVER_URL}/api/upload/`,
   );
 
   return (

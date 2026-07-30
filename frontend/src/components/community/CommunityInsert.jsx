@@ -156,7 +156,7 @@ const CommunityInsert = () => {
     }
 
     try {
-      await jwtAxios.post(`${API_SERVER_URL}/community/insert`, formData);
+      await jwtAxios.post(`${API_SERVER_URL}/api/community/insert`, formData);
       alert("작성 완료!");
       navigate(
         `/community/tab/${formData.tabId}/category/${formData.categoryId}`,
