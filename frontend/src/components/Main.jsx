@@ -81,8 +81,8 @@ const Main = () => {
   const getMainData = async () => {
     try {
       const res = isLogin
-        ? await jwtAxios.get(`${API_URL}/api/product/top-sales`)
-        : await axios.get(`${API_URL}/api/product/top-sales`);
+        ? await jwtAxios.get(`${API_URL}/api/main`)
+        : await axios.get(`${API_URL}/api/main`);
 
       //선택한 탭 별 커뮤니티 리스트
       const mainCommunityList = res.data.communityList || [];
@@ -91,7 +91,7 @@ const Main = () => {
       setDefaultCommunityList(mainCommunityList);
 
       //상품 리스트
-      setProductList(res.data || []);
+      setProductList(res.data.productList || []);
       //공지사항 리스트
       setNoticeList(res.data.noticeList || []);
 
@@ -153,11 +153,7 @@ const Main = () => {
       {popupList.length > 0 && (
         <div className="main-popup-area">
           {popupList.map((popup, index) => (
-            <div
-              className="main-popup"
-              key={popup.id}
-              style={{ left: `${80 + index * 370}px` }}
-            >
+            <div className="main-popup" key={popup.id}>
               <button
                 className="main-popup-close"
                 onClick={() => closePopup(popup.id)}
@@ -175,7 +171,9 @@ const Main = () => {
               <h3>{popup.title}</h3>
               <p>{popup.content}</p>
               <div className="main-popup-bottom">
-                <button onClick={() => closeToday(popup.id)}>오늘 그만보기</button>
+                <button onClick={() => closeToday(popup.id)}>
+                  오늘 그만보기
+                </button>
                 <button onClick={() => closePopup(popup.id)}>닫기</button>
               </div>
             </div>
@@ -203,7 +201,10 @@ const Main = () => {
             </SwiperSlide>
             <SwiperSlide>
               <a href="/community/index">
-                <img src="/images/main/communitybanner.png" alt="메인 커뮤니티 배너" />
+                <img
+                  src="/images/main/communitybanner.png"
+                  alt="메인 커뮤니티 배너"
+                />
               </a>
             </SwiperSlide>
           </Swiper>
@@ -262,7 +263,8 @@ const Main = () => {
                     ))}
                   </div>
                   <ul className="best-list">
-                    {Array.isArray(communityList) && communityList.length > 0 ? (
+                    {Array.isArray(communityList) &&
+                    communityList.length > 0 ? (
                       communityList.slice(0, 3).map((item) => (
                         <li key={item.id} className="board-item">
                           <a href={`/community/detail/${item.id}`}>
@@ -303,12 +305,16 @@ const Main = () => {
                   </div>
                   <div className="membership-list">
                     {myMembership.length === 0 ? (
-                      <p className="no-membership">보유 중인 이용권이 없습니다.</p>
+                      <p className="no-membership">
+                        보유 중인 이용권이 없습니다.
+                      </p>
                     ) : (
                       myMembership.slice(0, 2).map((item) => (
                         <div className="membership-item" key={item.id}>
                           <div className="item-info">
-                            <span className="item-name">{item.productName}</span>
+                            <span className="item-name">
+                              {item.productName}
+                            </span>
                             <span className="item-count">
                               {item.productType === "PT"
                                 ? `잔여 ${item.remainingCount}/${item.totalCount}회`
@@ -329,7 +335,8 @@ const Main = () => {
                 <div className="prompt-icon">📅</div>
                 <h3>나의 운동 일정을 관리해보세요</h3>
                 <p>
-                  로그인하시면 개인 스케줄 및 PT 일정을<br />
+                  로그인하시면 개인 스케줄 및 PT 일정을
+                  <br />
                   한눈에 쉽게 확인하실 수 있습니다.
                 </p>
                 <button

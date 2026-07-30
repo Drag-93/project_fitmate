@@ -18,9 +18,9 @@ package org.spring.backend.member.enumtype;
         //community 카테고리
         public String getCommunityTabName() {
             return switch (this) {
-                case DIET -> "자유게시판";
-                case WORKOUT -> "자유게시판";
-                case HEALTH -> "자유게시판";
+                case DIET -> "운동게시판";
+                case WORKOUT -> "운동게시판";
+                case HEALTH -> "운동게시판";
             };
         }
     }

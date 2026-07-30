@@ -7,7 +7,6 @@ import ProductDetail from "../../../components/shop/product/ProductDetail";
 import CartModal from "../../../components/shop/cart/CartModal";
 
 const ProductDetailPage = () => {
-
   const { productId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -33,7 +32,6 @@ const ProductDetailPage = () => {
 
   // 장바구니 추가
   const handleCart = async () => {
-
     const member = getCookie("member");
 
     if (!member) {
@@ -51,7 +49,7 @@ const ProductDetailPage = () => {
     try {
       await addCart({
         productId: product.id,
-        quantity: quantity
+        quantity: quantity,
       });
       setShowCartModal(true);
     } catch (e) {
@@ -61,7 +59,6 @@ const ProductDetailPage = () => {
 
   // 바로 구매
   const handleBuy = async () => {
-
     const member = getCookie("member");
     if (!member) {
       alert("로그인이 필요합니다.");
@@ -77,19 +74,19 @@ const ProductDetailPage = () => {
       id: product.id,
       productId: product.id,
       productName: product.productName,
-      productType: product.productType,  
+      productType: product.productType,
       price: product.price,
       productImage: product.fileDtos.find(
-        file => file.imageType === "THUMBNAIL"
+        (file) => file.imageType === "THUMBNAIL",
       )?.newFileName,
-      quantity: product.productType === "GOODS" ? quantity : 1
+      quantity: product.productType === "GOODS" ? quantity : 1,
     };
 
     if (product.productType === "GOODS") {
       navigate("/order", {
         state: {
-          directItem
-        }
+          directItem,
+        },
       });
     } else {
       // PT / GYM / PREMIUM 공통
@@ -113,20 +110,16 @@ const ProductDetailPage = () => {
           handleCart={handleCart}
           handleBuy={handleBuy}
         />
-        {
-          showCartModal &&
+        {showCartModal && (
           <CartModal
-
             onContinue={() => {
               setShowCartModal(false);
             }}
-
             onCart={() => {
               navigate("/cart");
             }}
-
           />
-        }
+        )}
       </div>
     </div>
   );
