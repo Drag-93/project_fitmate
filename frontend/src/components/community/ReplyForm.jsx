@@ -66,7 +66,10 @@ const ReplyForm = ({ communityId, categoryName, onReplyAdd }) => {
       return;
     }
     try {
-      const res = await jwtAxios.post(`${API_SERVER_URL}/reply/insert`, reply);
+      const res = await jwtAxios.post(
+        `${API_SERVER_URL}/api/reply/insert`,
+        reply,
+      );
       alert("댓글이 작성되었습니다");
       setReply({ ...reply, content: "" }); // 입력창 초기화
       if (onReplyAdd) {
