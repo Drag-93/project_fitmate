@@ -61,6 +61,7 @@ public class SecurityConfig {
                 http.csrf(
                                 csrf -> csrf.disable())
                                 .authorizeHttpRequests(authorize -> authorize
+                                        .requestMatchers("/api/chatEndpoint/**").permitAll()
                                                 .requestMatchers("/api/member/login", "/api/member/join", "/api/member/email").permitAll()
                                         // hasAnyRole -> hasAnyAuthority 로 변경 ("ROLE_" 접두사 없이 검사)
                                         .requestMatchers("/api/member/admin/**").hasAnyAuthority("ADMIN", "MANAGER")

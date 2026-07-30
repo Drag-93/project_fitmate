@@ -88,7 +88,7 @@ const ReplyList = ({ communityId, refreshKey }) => {
       return;
     }
     try {
-      await jwtAxios.put(`${API_SERVER_URL}/reply/update/${reply.id}`, {
+      await jwtAxios.put(`${API_SERVER_URL}/api/reply/update/${reply.id}`, {
         content: editContent,
         communityId: reply.communityId,
       });
@@ -109,7 +109,7 @@ const ReplyList = ({ communityId, refreshKey }) => {
   const deleteEdit = async (reply) => {
     if (!window.confirm("정말 삭제하시겠습니까?")) return;
     try {
-      await jwtAxios.delete(`${API_SERVER_URL}/reply/delete/${reply.id}`, {
+      await jwtAxios.delete(`${API_SERVER_URL}/api/reply/delete/${reply.id}`, {
         communityId: reply.communityId,
       });
       setReplies((prev) => prev.filter((item) => item.id !== reply.id));

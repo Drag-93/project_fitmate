@@ -25,7 +25,7 @@ const AdminChatBot = () => {
 
   const handleSearchSubmit = (e) => {
     e.preventDefault(); // 폼 제출 시 페이지 새로고침 방지
-    getMemberList(search, subject, 0);
+    getChatData(search, subject, 0);
   };
   const insertUrl = `${API_SERVER_URL}/api/chatbot/insert/chat`;
   const updateUrl = `${API_SERVER_URL}/api/chatbot/update/chat`;
