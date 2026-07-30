@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import org.spring.backend.file.entity.FileEntity;
 import org.spring.backend.member.enumtype.Role;
 import org.spring.backend.file.enumtype.TableType;
 import org.spring.backend.community.dto.CommunityDto;
@@ -126,6 +127,7 @@ private final TabRepository tabRepository;
                 .tabName(categoryEntity.getTabEntity().getTabName())
                 .userEmail(communityDto.getUserEmail())
                 .hasFile(hasFile?1:0)
+                .fileEntities((List<FileEntity>) communityDto.getAttachFile())
                 .hit(0)
                 .reply(0)
                 .thumbnail(extractThumbnail(communityDto.getContent())) // 본문 HTML에서 첫 번째 이미지를 썸네일로 자동 추출

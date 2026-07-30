@@ -26,13 +26,13 @@ public class CommunityTest {
 
     @Test
     void insert(){
-        CategoryEntity fixedCategory = categoryRepository.findById(Long.valueOf(102))
+        CategoryEntity fixedCategory = categoryRepository.findById(Long.valueOf(1))
                 .orElseThrow(() -> new RuntimeException("구매 카테고리가 없습니다."));
         for (int i = 0; i < 10; i++) {
             communityRepository.save(CommunityEntity.builder()
-                    .title("구매" + i)
-                    .userName("writer" + i)
-                    .content("구매" + i)
+                    .title("공지사항 예시입니다" + i)
+                    .userName("admin")
+                    .content("공지사항 예시입니다" + i)
                     .categoryEntity(fixedCategory)
                     .hasFile(0)
                     .hit(0)
