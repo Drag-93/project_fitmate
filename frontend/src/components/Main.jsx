@@ -388,8 +388,8 @@ const Main = () => {
                   <div className="product-img-wrapper">
                     <img
                       src={
-                        product.newFileName
-                          ? `${API_SERVER_URL}/upload/product/${product.newFileName}`
+                        product.fileDtos?.[0]?.newFileName
+                          ? `${API_SERVER_URL}/upload/product/${product.fileDtos[0].newFileName}`
                           : "/images/test/placeholder.png"
                       }
                       alt={product.productName}

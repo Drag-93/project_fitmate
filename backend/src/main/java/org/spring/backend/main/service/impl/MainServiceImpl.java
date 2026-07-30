@@ -62,12 +62,7 @@ public class MainServiceImpl implements MainService {
                 orderItemRepository
                         .findPopularProducts(pageable)
                         .stream()
-                        .map(entity -> ProductDto.builder()
-                                .id(entity.getId())
-                                .productName(entity.getProductName())
-                                .price(entity.getPrice())
-          //   썸네일 추가        .thumbnail(...)
-                                .build())
+                        .map(ProductDto::toProductDto)
                         .toList();
 
         // 현재 시간 기준으로 노출 가능한 팝업 조회
@@ -125,12 +120,7 @@ public class MainServiceImpl implements MainService {
                                 pageable
                         )
                         .stream()
-                        .map(entity -> ProductDto.builder()
-                                .id(entity.getId())
-                                .productName(entity.getProductName())
-                                .price(entity.getPrice())
-         //    썸네일 추가        .thumbnail(...)
-                                .build())
+                        .map(ProductDto::toProductDto)
                         .toList();
 
         // 현재 시간 기준으로 노출 가능한 팝업 조회
