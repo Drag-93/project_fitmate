@@ -12,6 +12,7 @@ export default defineConfig({
     proxy: {
       "/api": {
         target: "http://localhost:8090",
+        ws: true, // 웹소켓 업그레이드 에러제거
         changeOrigin: true,
       },
     },
