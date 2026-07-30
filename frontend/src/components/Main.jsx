@@ -114,7 +114,7 @@ const Main = () => {
     setBestTab(tabName);
     // 추천 탭은 메인 최초 조회에서 받은 목록 다시 사용
     if (tabName === "추천") {
-      setCommunityList(defaultCommunityList);
+      setCommunityList(defaultCommunityList.slice(0, 5));
       return;
     }
     try {
