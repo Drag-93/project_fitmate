@@ -175,7 +175,7 @@ const Reservation = ({ onSuccess }) => {
                 <img
                   src={
                     trainer.profileImage
-                      ? `${API_SERVER_URL}${trainer.profileImage}`
+                      ? `${API_SERVER_URL}/upload/member/${trainer.profileImage}`
                       : "/images/default.png"
                   }
                   alt="trainer"
