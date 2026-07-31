@@ -93,10 +93,18 @@ export default function RoutineResult({ result }) {
                   <div style={{ marginTop: "12px", textAlign: "center" }}>
                     <img
                       className="exercise-gif"
-                      src={`${API_SERVER_URL}/api/exercise/image/${ex.id}`}
+                      src={`${API_SERVER_URL}/upload/exercise/${String(
+                        ex.id,
+                      ).padStart(4, "0")}_360.gif`}
                       alt={ex.name}
                       loading="lazy"
-                      style={{ maxWidth: "100%", borderRadius: "8px" }}
+                      style={{
+                        maxWidth: "100%",
+                        borderRadius: "8px",
+                      }}
+                      onError={(e) => {
+                        console.error("이미지 로드 실패:", e.currentTarget.src);
+                      }}
                     />
                   </div>
                 )}
