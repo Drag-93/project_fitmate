@@ -23,6 +23,9 @@ public class WebConfigMvcClass implements WebMvcConfigurer {
     @Value("${img.path.schedule}")
     private String schedulePath;
 
+    @Value("${img.path.exercise}")
+    private String exercisePath;
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
@@ -32,6 +35,7 @@ public class WebConfigMvcClass implements WebMvcConfigurer {
         String communityLoc = ensureTrailingSlash(communityPath);
         String popupLoc = ensureTrailingSlash(popupPath);
         String scheduleLoc = ensureTrailingSlash(schedulePath);
+        String exerciseLoc = ensureTrailingSlash(exercisePath);
 
         // 멤버 프로필 이미지 경로 매핑
         registry.addResourceHandler("/upload/member/**")
@@ -50,6 +54,10 @@ public class WebConfigMvcClass implements WebMvcConfigurer {
         // 스케줄 이미지 경로 매핑
         registry.addResourceHandler("/upload/schedule/**")
                 .addResourceLocations(scheduleLoc);
+        // 운동 이미지 경로 매핑
+        registry.addResourceHandler("/upload/exercise/**")
+                .addResourceLocations(exerciseLoc);
+
     }
     //경로 끝에 / 경로로 변경해주고, 윈도우 프로토콜 형식을 맞춰주는 메서드
     private String ensureTrailingSlash(String path) {
