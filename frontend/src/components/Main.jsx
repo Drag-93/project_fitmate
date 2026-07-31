@@ -91,7 +91,7 @@ const Main = () => {
       setDefaultCommunityList(mainCommunityList);
 
       //상품 리스트
-      setProductList(res.data.productList || []);
+      // setProductList(res.data.productList || []);
       //공지사항 리스트
       setNoticeList(res.data.noticeList || []);
 
@@ -108,6 +108,20 @@ const Main = () => {
       console.log(res.data);
     } catch (err) {
       console.error("메인 데이터 조회 오류:", err);
+    }
+  };
+  //상품 8개
+  const getTopProducts = async () => {
+    try {
+      const res = isLogin
+        ? await jwtAxios.get(`${API_URL}/api/product/top-sales`)
+        : await axios.get(`${API_URL}/api/product/top-sales`);
+  
+      setProductList(res.data || []);
+  
+    } catch (err) {
+      console.error("상품 조회 실패", err);
+      setProductList([]);
     }
   };
   // 선택한 게시판 탭의 조회수 높은 게시글 TOP 5 조회
@@ -135,6 +149,7 @@ const Main = () => {
   useEffect(() => {
     setBestTab("추천");
     getMainData();
+    getTopProducts();
   }, [isLogin]);
 
   // 로그인 상태에 따라 개인 캘린더 조회

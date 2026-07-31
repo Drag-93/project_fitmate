@@ -54,12 +54,14 @@ const ShopIndex = () => {
 
   //인기 상품 TOP 8 조회
   useEffect(() => {
+    console.log("useEffect 실행");
     const getTopProducts = async () => {
       try {
         const res = isLogin
           ? await jwtAxios.get(`${API_URL}/api/product/top-sales`)
           : await axios.get(`${API_URL}/api/product/top-sales`);
-
+          console.log(res.data);
+          console.log(res.data.length)
         setProducts(res?.data || []);
       } catch (err) {
         console.error("인기 상품 조회 실패:", err?.response?.data || err?.message || err);

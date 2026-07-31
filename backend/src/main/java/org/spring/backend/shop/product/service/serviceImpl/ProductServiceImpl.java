@@ -1,6 +1,7 @@
 package org.spring.backend.shop.product.service.serviceImpl;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -234,26 +235,35 @@ public class ProductServiceImpl implements ProductService {
   @Transactional(readOnly = true)
   @Override
   public List<ProductDto> getTopSalesProducts() {
-    Pageable pageable = PageRequest.of(0, 8);
-    List<ProductEntity> topProducts = productRepository.findTopSalesProducts(pageable);
 
-    // 판매 기록이 있는 상품이 8개 미만인 경우, 최신 등록 상품으로 나머지 채우기
+    Pageable pageable = PageRequest.of(0, 8);
+
+    List<ProductEntity> topProducts = new ArrayList<>(productRepository.findTopSalesProducts(pageable));
+
+    System.out.println("판매상품 : " + topProducts.size());
+
     if (topProducts.size() < 8) {
+
       int needCount = 8 - topProducts.size();
+
       Pageable fallbackPageable = PageRequest.of(0, needCount);
 
-      // 이미 뽑힌 상품 ID 제외하고 최신순 조회 (필요 시 적용)
-      List<ProductEntity> latestProducts = productRepository.findAllByOrderByIdDesc(fallbackPageable);
+      List<ProductEntity> latestProducts = new ArrayList<>(productRepository.findAllByOrderByIdDesc(fallbackPageable));
+
+      System.out.println("최신상품 : " + latestProducts.size());
 
       for (ProductEntity product : latestProducts) {
-        if (!topProducts.contains(product) && topProducts.size() < 8) {
+
+        if (topProducts.size() < 8) {
           topProducts.add(product);
         }
       }
     }
 
+    System.out.println("최종상품 : " + topProducts.size());
+
     return topProducts.stream()
         .map(ProductDto::toProductDto)
-        .collect(Collectors.toList());
+        .toList();
   }
 }
