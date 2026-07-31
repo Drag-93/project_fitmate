@@ -420,7 +420,7 @@ const Main = () => {
                 </div>
               ))
             ) : (
-              <div className="empty-products">등록된 상품이 없습니다.</div>
+              <div className="empty-products">등록된 상품이 없습니다</div>
             )}
           </div>
         </div>
