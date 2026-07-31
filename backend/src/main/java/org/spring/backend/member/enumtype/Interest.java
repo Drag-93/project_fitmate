@@ -9,7 +9,7 @@ package org.spring.backend.member.enumtype;
         //product 카테고리
         public String getProductCategory() {
             return switch (this) {
-                case DIET -> "트레이닝복";
+                case DIET -> "식품";
                 case WORKOUT -> "운동기구";
                 case HEALTH -> "식품";
             };

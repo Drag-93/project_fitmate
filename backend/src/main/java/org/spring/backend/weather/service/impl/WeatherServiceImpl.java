@@ -137,7 +137,14 @@ public class WeatherServiceImpl implements WeatherService {
                     .retrieve()
                     .body(Map.class);
         } catch (RestClientException e) {
-            log.warn("날씨 조회 실패: city={}", city);
+            log.error(
+                    "날씨 조회 실패: city={}, baseUrl={}, apiKeyExists={}, message={}",
+                    city,
+                    baseUrl,
+                    apiKey != null && !apiKey.isBlank(),
+                    e.getMessage(),
+                    e
+            );
             return null;
         }
     }
