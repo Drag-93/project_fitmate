@@ -257,7 +257,7 @@ const Main = () => {
               {selectMenu === "notice" && (
                 <ul className="notice-list">
                   {Array.isArray(noticeList) && noticeList.length > 0 ? (
-                    noticeList.slice(0, 3).map((notice) => (
+                    noticeList.slice(0, 5).map((notice) => (
                       <li key={notice.id} className="board-item">
                         <a href={`/community/detail/${notice.id}`}>
                           <span className="notice-badge">공지</span>
@@ -274,20 +274,20 @@ const Main = () => {
               {selectMenu === "best" && (
                 <div className="best-wrapper">
                   <div className="sub-tab-group">
-                    {["추천", "운동정보", "자유게시판"].map((tab) => (
+                    {["추천", "운동게시판", "자유게시판"].map((tab) => (
                       <button
                         key={tab}
                         className={`sub-tab ${bestTab === tab ? "active" : ""}`}
                         onClick={() => getBestCommunityList(tab)}
                       >
-                        {tab === "운동정보" ? "운동게시판" : tab}
+                        {tab}
                       </button>
                     ))}
                   </div>
                   <ul className="best-list">
                     {Array.isArray(communityList) &&
                     communityList.length > 0 ? (
-                      communityList.slice(0, 3).map((item) => (
+                      communityList.slice(0, 5).map((item) => (
                         <li key={item.id} className="board-item">
                           <a href={`/community/detail/${item.id}`}>
                             <span className="item-title">{item.title}</span>

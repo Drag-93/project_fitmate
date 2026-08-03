@@ -52,11 +52,12 @@ const AdminPopup = () => {
 
   //팝업 공용 페이징 추가
   const [popupData, setPopupData] = useState(null);
-  const [subject, setSubject] = useState("");
+  const [status, setStatus] = useState("ALL");
+  const [sortType, setSortType] = useState("SORT_ORDER_ASC");
   const [search, setSearch] = useState("");
   const handleSearchSubmit = (e) => {
     e.preventDefault(); // 폼 제출 시 페이지 새로고침 방지
-    getPopupList(subject, search, 0);
+    getPopupList(0);
     // 선택된 조건이 없거나 검색어가 비어있으면 전체 목록으로 이동하거나 알림 처리
     // if (!subject && search) {
     //   alert("검색 필터를 선택해주세요.");
@@ -64,22 +65,30 @@ const AdminPopup = () => {
     // }
   };
 
-  const getPopupList = async (subject, search, page) => {
-    //있을때나 없을때나 실행할수있게 설정
-    const url = `${API_SERVER_URL}/api/admin/popupList?page=${page}&size=5&subject=${subject ? subject : ""}&search=${encodeURIComponent(search ? search : "")}`;
+  //팝업리스트 조회 함수
+  const getPopupList = async (page = 0) => {
     try {
-      const res = await jwtAxios.get(url);
+      const res = await jwtAxios.get(`${API_SERVER_URL}/api/admin/popupList`, {
+        params: {
+          page,
+          size: 5,
+          status,
+          sortType,
+          search: search.trim(),
+        },
+      });
+
       setPopupData(res.data);
-      // setPopupList(popupData.popupList);
-      console.log(res.data);
     } catch (err) {
-      alert("에러발생 : " + err);
+      console.error("팝업 목록 조회 실패", err);
+      alert("팝업 목록 조회 중 오류가 발생했습니다.");
     }
   };
   //페이지 최초 실행 시 팝업 목록 조회
+  //필터값 변경되면 다시 조회
   useEffect(() => {
-    getPopupList();
-  }, []);
+    getPopupList(0);
+  }, [status, sortType]);
 
   // input 값 변경
   const handleChange = (e) => {
@@ -284,30 +293,36 @@ const AdminPopup = () => {
         </button>
       </div>
       <div className="search">
-        <div className="filters">
-          <form onSubmit={handleSearchSubmit}>
-            <select
-              name="subject"
-              value={subject}
-              onChange={(e) => setSubject(e.target.value)}
-            >
-              <option value="">::선택::</option>
-              <option value="active">노출 여부</option>
-              <option value="sortOrder">노출 순서</option>
-              <option value="title">제목</option>
-            </select>
-
+        <form className="search-form" onSubmit={handleSearchSubmit}>
+          <div className="search-left">
             <input
               type="text"
-              name="search"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="검색어를 입력하세요"
+              placeholder="팝업 제목 검색"
             />
 
-            <input type="submit" value="검색" />
-          </form>
-        </div>
+            <button type="submit">검색</button>
+          </div>
+
+          <div className="search-right">
+            <select value={status} onChange={(e) => setStatus(e.target.value)}>
+              <option value="ALL">전체</option>
+              <option value="VISIBLE">노출</option>
+              <option value="HIDDEN">미노출</option>
+            </select>
+
+            <select
+              value={sortType}
+              onChange={(e) => setSortType(e.target.value)}
+            >
+              <option value="SORT_ORDER_ASC">우선순위 높은순</option>
+              <option value="SORT_ORDER_DESC">우선순위 낮은순</option>
+              <option value="START_DATE_DESC">노출 시작일 최신순</option>
+              <option value="START_DATE_ASC">노출 시작일 오래된순</option>
+            </select>
+          </div>
+        </form>
       </div>
       <div className="admin-popup-table-wrap">
         <table className="admin-popup-table">
@@ -316,7 +331,7 @@ const AdminPopup = () => {
               <th>번호</th>
               <th>제목</th>
               <th>노출 여부</th>
-              <th>노출 순서</th>
+              <th>우선순위</th>
               <th>이미지</th>
               <th>노출 시작일</th>
               <th>노출 종료일</th>
@@ -333,8 +348,7 @@ const AdminPopup = () => {
               </tr>
             ) : (
               popupData?.popupList.map((popup) => {
-                // 노출 종료일이 현재 시간보다 이전이면 true
-                const isExpired =
+                const expired =
                   popup.endDate && new Date(popup.endDate) < new Date();
 
                 return (
@@ -348,12 +362,12 @@ const AdminPopup = () => {
                         className={
                           !popup.active
                             ? "popup-status inactive"
-                            : isExpired
+                            : expired
                               ? "popup-status expired"
                               : "popup-status active"
                         }
                       >
-                        {popup.active ? "노출" : "미노출"}
+                        {!popup.active || expired ? "미노출" : "노출"}
                       </span>
                     </td>
 
@@ -361,13 +375,15 @@ const AdminPopup = () => {
 
                     <td>{popup.newFileName ? "O" : "X"}</td>
 
+                    {/* 노출 시작일 */}
                     <td>
                       {popup.startDate
                         ? popup.startDate.replace("T", " ").slice(0, 16)
                         : "-"}
                     </td>
 
-                    <td className={isExpired ? "popup-end-date expired" : ""}>
+                    {/* 노출 종료일 */}
+                    <td className={expired ? "popup-end-date expired" : ""}>
                       {popup.endDate
                         ? popup.endDate.replace("T", " ").slice(0, 16)
                         : "-"}
@@ -402,13 +418,11 @@ const AdminPopup = () => {
       <div className="admin-popup-bottom">
         <div className="admin-popup-paging">
           <PageGenerate
-            currentPage={popupData?.currentPage} //현재 페이지
-            startPage={popupData?.startPage} //시작 페이지
-            endPage={popupData?.endPage} //끝 페이지
-            totalPage={popupData?.totalPage} //전체 페이지
-            onPageChange={getPopupList} //리스트를 불러오는 함수
-            search={search} //검색어
-            subject={subject} //검색필터
+            currentPage={popupData?.currentPage}
+            startPage={popupData?.startPage}
+            endPage={popupData?.endPage}
+            totalPage={popupData?.totalPage}
+            onPageChange={getPopupList}
           />
         </div>
       </div>

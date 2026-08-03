@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import jwtAxios from "../../apis/util/jwtUtil";
 import { API_SERVER_URL } from "../../apis/commonApi";
+import { getCookie } from "../../apis/util/cookieUtil";
+import { useNavigate } from "react-router-dom";
 
 /**
  * 최근 5개까지만 저장되도록 백엔드에서 제한하므로 페이지네이션은 없애다.
@@ -16,17 +18,25 @@ export default function HistoryList({ onSelect, refreshKey, selectedId }) {
   const [items, setItems] = useState([]); // 최근 루틴 히스토리 목록 (최대 5개)
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   // refreshKey가 바뀔 때마다(새 루틴 생성 시 등) 최근 5개 히스토리를 재조회
   useEffect(() => {
-    setLoading(true);
-    jwtAxios
-      .get(`${API_SERVER_URL}/api/exercise/history`, {
-        params: { page: 0, size: 5 },
-      })
-      .then((res) => setItems(res.data || []))
-      .catch((e) => setError(e.message))
-      .finally(() => setLoading(false));
+    const member = getCookie("member");
+    if (!member?.access) {
+      alert("로그인이 필요한 기능입니다");
+      navigate("/auth/login");
+      return;
+    } else {
+      setLoading(true);
+      jwtAxios
+        .get(`${API_SERVER_URL}/api/exercise/history`, {
+          params: { page: 0, size: 5 },
+        })
+        .then((res) => setItems(res.data || []))
+        .catch((e) => setError(e.message))
+        .finally(() => setLoading(false));
+    }
   }, [refreshKey]);
 
   // 날짜 문자열을 "YYYY.MM.DD" 형태로 변환

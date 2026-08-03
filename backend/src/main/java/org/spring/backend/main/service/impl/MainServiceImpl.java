@@ -115,9 +115,7 @@ public class MainServiceImpl implements MainService {
                                 .build())
                         .toList();
 
-        /*
-         * 1. 관심 카테고리 추천 상품 최대 4개
-         */
+        // 1. 관심 카테고리 추천 상품 최대 4개
         Pageable recommendedPageable =
                 PageRequest.of(0, RECOMMENDED_PRODUCT_LIMIT);
 
@@ -131,11 +129,8 @@ public class MainServiceImpl implements MainService {
                         .map(ProductDto::toProductDto)
                         .toList();
 
-        /*
-         * 2. 전체 인기 상품 조회
-         *
-         * 추천 상품과 중복될 수 있으므로 8개보다 넉넉하게 조회합니다.
-         */
+        // 2. 전체 인기 상품 조회
+        // 추천 상품과 중복될 수 있으므로 8개보다 넉넉하게 조회
         Pageable popularPageable =
                 PageRequest.of(0, MAIN_PRODUCT_LIMIT * 2);
 
@@ -146,10 +141,7 @@ public class MainServiceImpl implements MainService {
                         .map(ProductDto::toProductDto)
                         .toList();
 
-        /*
-         * 3. 추천 상품을 먼저 넣고
-         * 전체 인기 상품으로 부족한 수량을 채웁니다.
-         */
+        // 3. 추천 상품을 먼저 넣고 전체 인기 상품으로 부족한 수량을 채움
         List<ProductDto> productList =
                 mergeMainProducts(
                         recommendedProducts,
@@ -179,9 +171,8 @@ public class MainServiceImpl implements MainService {
         List<ProductDto> result = new ArrayList<>();
         Set<Long> addedProductIds = new HashSet<>();
 
-        /*
-         * 추천 상품 최대 4개 추가
-         */
+        // 추천 상품 최대 4개 추가
+
         for (ProductDto product : recommendedProducts) {
 
             if (result.size() >= RECOMMENDED_PRODUCT_LIMIT) {
@@ -195,9 +186,7 @@ public class MainServiceImpl implements MainService {
             );
         }
 
-        /*
-         * 인기 상품으로 총 8개까지 채우기
-         */
+        // 인기 상품으로 총 8개까지 채우기
         for (ProductDto product : popularProducts) {
 
             if (result.size() >= MAIN_PRODUCT_LIMIT) {
