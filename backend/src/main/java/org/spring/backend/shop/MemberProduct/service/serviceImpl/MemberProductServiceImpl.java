@@ -79,7 +79,7 @@ public class MemberProductServiceImpl implements MemberProductService {
   public List<MemberProductDto> getMyProducts(Long memberId) {
 
     return memberProductRepository
-            .findByMemberEntityId(memberId)
+            .findActiveProducts(memberId)
             .stream()
             .map(MemberProductDto::toMemberProductDto)
             .toList();

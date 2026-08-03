@@ -46,22 +46,58 @@ const Main = () => {
     setPopupList((prev) => prev.filter((popup) => popup.id !== popupId));
   };
 
-  // 캘린더 조회
+  // 회원 개인 일정 조회
   const getCalendarList = async () => {
+    if (!isLogin) {
+      return [];
+    }
+
+    try {
+      const res = await jwtAxios.get(`${API_URL}/api/calendar/scheduleList`, {
+        params: {
+          eventType: "ALL",
+        },
+      });
+
+      return Array.isArray(res.data) ? res.data : [];
+    } catch (err) {
+      console.error("개인 캘린더 조회 오류:", err);
+      return [];
+    }
+  };
+
+  // 트레이너 PT 일정 조회
+  const getTrainerCalendar = async () => {
+    try {
+      const res = await jwtAxios.get(`${API_URL}/api/calendar/trainer`);
+
+      return Array.isArray(res.data) ? res.data : [];
+    } catch (err) {
+      console.error("트레이너 캘린더 조회 실패:", err);
+      return [];
+    }
+  };
+  const loadCalendar = async () => {
     if (!isLogin) {
       setCalendarEvents([]);
       return;
     }
-    try {
-      const res = await jwtAxios.get(`${API_URL}/api/calendar/scheduleList`, {
-        params: { eventType: "ALL" },
-      });
-      setCalendarEvents(res.data || []);
-    } catch (err) {
-      console.error("캘린더 조회 오류:", err);
-      setCalendarEvents([]);
+
+    // 모든 로그인 사용자의 개인 일정 조회
+    const memberEvents = await getCalendarList();
+
+    // 일반 회원은 개인 일정만 사용
+    if (user.role !== "TRAINER") {
+      setCalendarEvents(memberEvents);
+      return;
     }
+
+    // 트레이너는 개인 일정 + 담당 PT 일정
+    const trainerEvents = await getTrainerCalendar();
+
+    setCalendarEvents([...memberEvents, ...trainerEvents]);
   };
+
   // 내 이용권 조회
   const loadMyMembership = async () => {
     if (!isLogin) {
@@ -156,11 +192,11 @@ const Main = () => {
     getMainData();
   }, [isLogin]);
 
-  // 로그인 상태에 따라 개인 캘린더 조회
+  // 회원, 트레이너 캘린더 조회
   useEffect(() => {
-    getCalendarList();
+    loadCalendar();
     loadMyMembership();
-  }, [isLogin]);
+  }, [isLogin, user.role]);
 
   // 상위 8개 상품 가져오기
   const displayProducts = productList.slice(0, 8);

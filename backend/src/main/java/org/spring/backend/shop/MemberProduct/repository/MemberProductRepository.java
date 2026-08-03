@@ -1,6 +1,7 @@
 package org.spring.backend.shop.MemberProduct.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.spring.backend.member.entity.MemberEntity;
 import org.spring.backend.shop.MemberProduct.entity.MemberProductEntity;
@@ -29,4 +30,17 @@ boolean existsByMemberEntityAndProductEntity_ProductTypeAndStatus(
     String status
 );
 List<MemberProductEntity> findByMemberEntityId(Long memberId);
+
+@Query("""
+    select mp
+    from MemberProductEntity mp
+    join fetch mp.productEntity p
+    where mp.memberEntity.id = :memberId
+      and mp.status = 'ACTIVE'
+""")
+List<MemberProductEntity> findActiveProducts(
+        @Param("memberId") Long memberId
+);
+
+  Optional<MemberProductEntity> findByMemberEntity_IdAndProductEntity_IdAndStatus(Long memberId, Long id, String active);
 }

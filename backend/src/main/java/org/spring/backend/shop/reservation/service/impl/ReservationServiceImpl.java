@@ -169,6 +169,10 @@ public class ReservationServiceImpl implements ReservationService {
 
     reservation.setReservationStatus(
         ReservationStatus.CANCEL);
+
+    MemberProductEntity memberProductEntity = reservation.getMemberProduct();
+    memberProductEntity.setRemainingCount(memberProductEntity.getRemainingCount()+1);
+
     TrainerScheduleEntity schedule = trainerScheduleRepository.findByReservationId(reservationId)
         .orElse(null);
 

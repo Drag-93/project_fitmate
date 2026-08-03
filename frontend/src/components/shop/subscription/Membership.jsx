@@ -19,11 +19,11 @@ const Membership = () => {
       setMemberships(res.data || []);
     } catch (err) {
       console.error("이용권 조회 실패:", err);
-    
+
       console.log("err 자체:", err);
       console.log("response:", err?.response);
       console.log("message:", err?.message);
-    }finally {
+    } finally {
       setLoading(false);
     }
   };
@@ -84,7 +84,9 @@ const Membership = () => {
     <div className="membership-page">
       <div className="page-header">
         <h2>내 보유 이용권</h2>
-        <p className="sub-title">현재 보유 및 이용 중인 헬스장 회원권과 PT 이용권입니다.</p>
+        <p className="sub-title">
+          현재 보유 및 이용 중인 헬스장 회원권과 PT 이용권입니다.
+        </p>
       </div>
 
       {/* 필터 탭 (전체 / 헬스장 / PT) */}
@@ -96,16 +98,25 @@ const Membership = () => {
           전체 ({memberships.length})
         </button>
         <button
+          className={`tab-btn ${filter === "PREMIUM" ? "active" : ""}`}
+          onClick={() => setFilter("PREMIUM")}
+        >
+          ✨ Plus+ (
+          {memberships.filter((m) => m.productType === "PREMIUM").length})
+        </button>
+        <button
           className={`tab-btn ${filter === "GYM" ? "active" : ""}`}
           onClick={() => setFilter("GYM")}
         >
-          🏋️‍♂️ 헬스장 ({memberships.filter((m) => m.productType === "GYM").length})
+          🏋️‍♂️ 헬스장 ({memberships.filter((m) => m.productType === "GYM").length}
+          )
         </button>
         <button
           className={`tab-btn ${filter === "PT" ? "active" : ""}`}
           onClick={() => setFilter("PT")}
         >
-          💪 PT 이용권 ({memberships.filter((m) => m.productType === "PT").length})
+          💪 PT 이용권 (
+          {memberships.filter((m) => m.productType === "PT").length})
         </button>
       </div>
 
@@ -119,15 +130,22 @@ const Membership = () => {
           {filteredMemberships.map((item) => {
             const isGym = item.productType === "GYM";
             return (
-              <div key={item.id} className={`membership-card ${isGym ? "card-gym" : "card-pt"}`}>
+              <div
+                key={item.id}
+                className={`membership-card ${isGym ? "card-gym" : "card-pt"}`}
+              >
                 <div className="card-top">
-                  <span className="type-badge">{isGym ? "헬스장 회원권" : "개인 PT"}</span>
+                  <span className="type-badge">
+                    {isGym ? "헬스장 회원권" : "개인 PT"}
+                  </span>
                   {renderStatusBadge(item.status, item.endDate)}
                 </div>
 
                 <div className="card-main">
                   <h3 className="item-title">{item.title}</h3>
-                  <p className="gym-name">📍 {item.gymName || "FitMate 피트니스 Center"}</p>
+                  <p className="gym-name">
+                    📍 {item.gymName || "FitMate 피트니스 Center"}
+                  </p>
                 </div>
 
                 <div className="card-info-box">
@@ -136,7 +154,8 @@ const Membership = () => {
                     <div className="info-row highlight-row">
                       <span className="label">잔여 횟수</span>
                       <span className="value count-text">
-                        <strong>{item.remainingCount ?? 0}</strong> / {item.totalCount ?? 0} 회
+                        <strong>{item.remainingCount ?? 0}</strong> /{" "}
+                        {item.totalCount ?? 0} 회
                       </span>
                     </div>
                   )}

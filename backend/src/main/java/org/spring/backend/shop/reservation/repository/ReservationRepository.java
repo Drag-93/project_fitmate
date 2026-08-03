@@ -46,4 +46,19 @@ public interface ReservationRepository extends JpaRepository<ReservationEntity, 
           @Param("trainerId") Long trainerId,
           @Param("search") String search,
           Pageable pageable);
+
+  // 회원별 + 예약 상태별 조회
+  List<ReservationEntity>
+  findByMember_IdAndReservationStatusOrderByReservationDateDescReservationTimeDesc(
+          Long memberId,
+          ReservationStatus reservationStatus
+  );
+
+  // 트레이너 + 예약 상태별 조회
+  List<ReservationEntity>
+  findByTrainer_IdAndReservationStatusOrderByReservationDateDescReservationTimeDesc(
+          Long trainerId,
+          ReservationStatus reservationStatus
+  );
+
 }

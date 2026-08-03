@@ -6,6 +6,7 @@ import java.util.List;
 import org.spring.backend.member.entity.MemberEntity;
 import org.spring.backend.member.repository.MemberRepository;
 import org.spring.backend.shop.MemberProduct.entity.MemberProductEntity;
+import org.spring.backend.shop.MemberProduct.repository.MemberProductRepository;
 import org.spring.backend.shop.payment.repository.PaymentRepository;
 import org.spring.backend.shop.product.entity.ProductEntity;
 import org.spring.backend.shop.product.repository.ProductRepository;
@@ -29,6 +30,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
   private final MemberRepository memberRepository;
   private final ProductRepository productRepository;
   private final PaymentRepository paymentRepository;
+  private final MemberProductRepository memberProductRepository;
 
   @Override
   public void insertPremiumSubscription(Long memberId) {
@@ -117,16 +119,46 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
   @Override
   public void cancelSubscription(Long memberId, Long subscriptionId) {
-    SubscriptionEntity subscription = subscriptionRepository.findById(subscriptionId)
-        .orElseThrow(() -> new IllegalArgumentException("구독 상품이 존재하지 않습니다."));
+
+    SubscriptionEntity subscription = subscriptionRepository
+            .findById(subscriptionId)
+            .orElseThrow(() ->
+                    new IllegalArgumentException("구독 상품이 존재하지 않습니다.")
+            );
 
     if (!subscription.getMemberEntity().getId().equals(memberId)) {
       throw new IllegalArgumentException("접근 권한이 없습니다.");
     }
 
+    if (subscription.getSubscriptionStatus() == SubscriptionStatus.CANCELED) {
+      throw new IllegalStateException("이미 취소된 구독입니다.");
+    }
+
+    LocalDateTime now = LocalDateTime.now();
+
+    // 구독 상태 변경
     subscription.setSubscriptionStatus(SubscriptionStatus.CANCELED);
     subscription.setNextPaymentDate(null);
-    subscription.setEndDate(LocalDateTime.now());
+    subscription.setEndDate(now);
+
+    // 이용권 상태 변경
+    MemberProductEntity memberProduct = memberProductRepository
+            .findByMemberEntity_IdAndProductEntity_IdAndStatus(
+                    memberId,
+                    subscription.getProductEntity().getId(),
+                    "ACTIVE"
+            )
+            .orElseThrow(() ->
+                    new IllegalStateException("활성 이용권을 찾을 수 없습니다.")
+            );
+
+    memberProduct.setStatus("CANCELED");
+    memberProduct.setEndDate(now);
+
+    // 프리미엄이면 회원 구독 여부도 해제
+    if (subscription.getProductEntity().getProductType() == ProductType.PREMIUM) {
+      subscription.getMemberEntity().setSubscribe(0);
+    }
   }
 
   @Override

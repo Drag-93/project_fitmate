@@ -88,11 +88,12 @@ const MyReservationList = () => {
               >
                 <div className="card-header">
                   <span className="reservation-date">
-                    📅 {item.reservationDate} ({item.reservationTime.slice(0, 5)})
+                    📅 {item.reservationDate} (
+                    {item.reservationTime.slice(0, 5)})
                   </span>
                   <span className={`status-badge ${item.reservationStatus}`}>
                     {item.reservationStatus === "RESERVED" && "예약 완료"}
-                    {item.reservationStatus === "CANCELLED" && "취소됨"}
+                    {item.reservationStatus === "CANCEL" && "취소됨"}
                     {item.reservationStatus === "COMPLETED" && "수업 완료"}
                   </span>
                 </div>
@@ -125,7 +126,6 @@ const MyReservationList = () => {
                       예약 취소
                     </button>
                   </div>
-
                 )}
               </div>
             ))}
