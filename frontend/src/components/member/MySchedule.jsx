@@ -393,11 +393,14 @@ const MySchedule = () => {
               </button>
 
               <button type="button" onClick={() => setEventType("WORKOUT")}>
-                운동
+                운동일정
               </button>
 
               <button type="button" onClick={() => setEventType("PERSONAL")}>
-                개인
+                개인일정
+              </button>
+              <button type="button" onClick={() => setEventType("PT")}>
+                PT일정
               </button>
             </div>
           </div>

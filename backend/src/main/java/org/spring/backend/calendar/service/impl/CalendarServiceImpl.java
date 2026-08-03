@@ -8,9 +8,13 @@ import org.spring.backend.calendar.service.CalendarService;
 import org.spring.backend.file.entity.FileEntity;
 import org.spring.backend.file.repository.FileRepository;
 import org.spring.backend.member.repository.MemberRepository;
+import org.spring.backend.shop.reservation.repository.ReservationRepository;
+import org.spring.backend.shop.subscription.entity.SubscriptionEntity;
+import org.spring.backend.shop.subscription.repository.SubscriptionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +25,7 @@ public class CalendarServiceImpl implements CalendarService {
     private final MemberRepository memberRepository;
     private final PersonalScheduleRepository personalScheduleRepository;
     private final FileRepository fileRepository;
+    private final ReservationRepository reservationRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -82,10 +87,30 @@ public class CalendarServiceImpl implements CalendarService {
         // 추후 SubscriptionRepository 연결
         return new ArrayList<>();
     }
-
     private List<CalendarDto> getPt(Long memberId) {
-        // 추후 PtRepository 연결
-        return new ArrayList<>();
+
+        return reservationRepository
+                .findByMemberIdOrderByReservationDateDescReservationTimeDesc(memberId)
+                .stream()
+                .map(reservationEntity -> {
+
+                    LocalDateTime start = LocalDateTime.of(
+                            reservationEntity.getReservationDate(),
+                            reservationEntity.getReservationTime()
+                    );
+
+                    return CalendarDto.builder()
+                            .id(reservationEntity.getId())
+                            .sourceId(reservationEntity.getId())
+                            .eventType("PT")
+                            .title("PT " + reservationEntity.getLessonNumber() + "회차")
+                            .start(start)
+                            .end(start.plusHours(1))
+                            .description(reservationEntity.getMemo())
+                            .editable(false)
+                            .build();
+                })
+                .toList();
     }
 
     private void validateMember(Long memberId) {

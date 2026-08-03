@@ -313,7 +313,7 @@ const CommunityMain = () => {
                                       )}
                                     </span>
                                     <span className="board-item-views">
-                                      조회 {item.viewCount || item.views || 0}
+                                      조회 {item.hit || 0}
                                     </span>
                                   </div>
                                 </div>

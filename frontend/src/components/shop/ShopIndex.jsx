@@ -17,7 +17,6 @@ const ShopIndex = () => {
   const isLogin = !!user?.userEmail;
   const API_URL = API_SERVER_URL;
 
-
   const [productList, setProductList] = useState([]);
   const [trainerList, setTrainerList] = useState([]);
   const [products, setProducts] = useState([]);
@@ -54,17 +53,20 @@ const ShopIndex = () => {
 
   //인기 상품 TOP 8 조회
   useEffect(() => {
-    console.log("useEffect 실행");
+    // console.log("useEffect 실행");
     const getTopProducts = async () => {
       try {
         const res = isLogin
           ? await jwtAxios.get(`${API_URL}/api/product/top-sales`)
           : await axios.get(`${API_URL}/api/product/top-sales`);
-          console.log(res.data);
-          console.log(res.data.length)
+        // console.log(res.data);
+        // console.log(res.data.length)
         setProducts(res?.data || []);
       } catch (err) {
-        console.error("인기 상품 조회 실패:", err?.response?.data || err?.message || err);
+        console.error(
+          "인기 상품 조회 실패:",
+          err?.response?.data || err?.message || err,
+        );
         setProducts([]);
       }
     };
@@ -98,7 +100,10 @@ const ShopIndex = () => {
               className="shop-banner-swiper"
             >
               <SwiperSlide>
-                <a href="/products?productType=GYM" className="banner-slide-link">
+                <a
+                  href="/products?productType=GYM"
+                  className="banner-slide-link"
+                >
                   <div className="banner-img-wrapper">
                     <img src="/images/shop/gymbanner.png" alt="헬스장 배너" />
                     <div className="banner-overlay">
@@ -110,9 +115,15 @@ const ShopIndex = () => {
                 </a>
               </SwiperSlide>
               <SwiperSlide>
-                <a href="/products?productType=PT" className="banner-slide-link">
+                <a
+                  href="/products?productType=PT"
+                  className="banner-slide-link"
+                >
                   <div className="banner-img-wrapper">
-                    <img src="/images/shop/trainerbanner.png" alt="트레이너 배너" />
+                    <img
+                      src="/images/shop/trainerbanner.png"
+                      alt="트레이너 배너"
+                    />
                     <div className="banner-overlay">
                       <span className="badge">1:1 MATCHING</span>
                       <h2>검증된 전문 트레이너 PT</h2>
@@ -129,7 +140,9 @@ const ShopIndex = () => {
         <section className="trainer-section">
           <div className="section-header">
             <h2>FitMate 전문 트레이너</h2>
-            <p className="section-sub">엄격한 검증을 거친 분야별 수석 트레이너진입니다.</p>
+            <p className="section-sub">
+              엄격한 검증을 거친 분야별 수석 트레이너진입니다.
+            </p>
           </div>
 
           <div className="trainer-list">
@@ -150,17 +163,29 @@ const ShopIndex = () => {
                     </div>
 
                     <div className="trainer-info">
-                      <h3>{trainer.name} <span className="trainer-title">트레이너</span></h3>
-                      <p className="specialty">{trainer.specialty || "전문 분야 준비중"}</p>
+                      <h3>
+                        {trainer.name}{" "}
+                        <span className="trainer-title">트레이너</span>
+                      </h3>
+                      <p className="specialty">
+                        {trainer.specialty || "전문 분야 준비중"}
+                      </p>
 
                       <div className="trainer-meta">
                         <span>경력: {trainer.career || "정보 준비중"}</span>
                         {trainer.certificate && (
-                          <span className="cert-tag">{trainer.certificate}</span>
+                          <span className="cert-tag">
+                            {trainer.certificate}
+                          </span>
                         )}
                       </div>
 
-                      <button onClick={() => navigate("/products?productType=PT")} className="trainer-btn" >예약하기</button>
+                      <button
+                        onClick={() => navigate("/products?productType=PT")}
+                        className="trainer-btn"
+                      >
+                        예약하기
+                      </button>
                     </div>
                   </>
                 ) : (
@@ -179,23 +204,32 @@ const ShopIndex = () => {
         <section className="shopIndex-bottom">
           <div className="section-header">
             <h2>추천 상품 목록</h2>
-            <Link to="/products" className="view-more">전체보기 &gt;</Link>
+            <Link to="/products" className="view-more">
+              전체보기 &gt;
+            </Link>
           </div>
 
           <div className="shopIndex-bottom-productList">
             {products.slice(0, 8).map((product) => {
               const thumbnail = product.fileDtos?.find(
-                (file) => file.imageType === "THUMBNAIL"
+                (file) => file.imageType === "THUMBNAIL",
               );
               return (
-                <div className="product-card" key={product.id} onClick={() => navigate(`/products/detail/${product.id}`)}>
+                <div
+                  className="product-card"
+                  key={product.id}
+                  onClick={() => navigate(`/products/detail/${product.id}`)}
+                >
                   <div className="product-thumb-container">
                     <img
-                      src={thumbnail ? `${API_SERVER_URL}/upload/product/${thumbnail.newFileName}` : "/images/no-image.png"}
+                      src={
+                        thumbnail
+                          ? `${API_SERVER_URL}/upload/product/${thumbnail.newFileName}`
+                          : "/images/no-image.png"
+                      }
                       alt={product.productName}
                     />
-                    <div className="product-hover-actions">
-                    </div>
+                    <div className="product-hover-actions"></div>
                   </div>
 
                   <div className="product-details">

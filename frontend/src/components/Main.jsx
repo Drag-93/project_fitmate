@@ -71,7 +71,7 @@ const Main = () => {
 
     try {
       const data = await getMyMembership();
-      console.log(data);
+      // console.log(data);
       setMyMembership(data || []);
     } catch (err) {
       console.error("내 이용권 조회 실패:", err);
@@ -166,8 +166,8 @@ const Main = () => {
   const displayProducts = productList.slice(0, 8);
 
   useEffect(() => {
-    console.log("메인 상품 목록:", productList);
-    console.log("메인 상품 개수:", productList.length);
+    // console.log("메인 상품 목록:", productList);
+    // console.log("메인 상품 개수:", productList.length);
   }, [productList]);
   return (
     <div className="main-container">
