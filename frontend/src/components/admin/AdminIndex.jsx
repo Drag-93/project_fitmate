@@ -353,7 +353,7 @@ const AdminIndex = () => {
                         <span className="rank">{index + 1}</span>
 
                         <Link
-                          to={`/admin/community/detail/${community.id}`}
+                          to={`/community/detail/${community.id}`}
                           className="item-title"
                         >
                           {community.title}

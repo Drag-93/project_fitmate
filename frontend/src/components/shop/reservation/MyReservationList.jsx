@@ -94,7 +94,7 @@ const MyReservationList = () => {
                   <span className={`status-badge ${item.reservationStatus}`}>
                     {item.reservationStatus === "RESERVED" && "예약 완료"}
                     {item.reservationStatus === "CANCEL" && "취소됨"}
-                    {item.reservationStatus === "COMPLETED" && "수업 완료"}
+                    {item.reservationStatus === "COMPLETE" && "수업 완료"}
                   </span>
                 </div>
 
