@@ -8,7 +8,7 @@ import "../../css/trainer/TrainerSchedule.css";
 
 // 일정 등록·수정 폼 초기값
 const initForm = {
-  eventType: "LESSON", // 기본값을 레슨으로 설정
+  eventType: "PERSONAL",
   title: "",
   startTime: "",
   endTime: "",
@@ -17,15 +17,14 @@ const initForm = {
   oldFileName: "",
   newFileName: "",
 };
+
 const TrainerSchedule = () => {
   // 로그인 회원 정보
   const user = useSelector((state) => state.loginSlice);
-
   const isLogin = !!user?.userEmail;
-
   const API_URL = API_SERVER_URL;
 
-  // 조회할 일정 유형
+  // 조회할 일정 유형: ALL / PT / PERSONAL
   const [eventType, setEventType] = useState("ALL");
 
   // 캘린더 일정 목록
@@ -34,7 +33,7 @@ const TrainerSchedule = () => {
   // 모달 상태
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // insert, detail, update
+  // insert / detail / update
   const [modalMode, setModalMode] = useState("insert");
 
   // 현재 선택한 캘린더 일정
@@ -43,34 +42,79 @@ const TrainerSchedule = () => {
   // 등록·수정 입력값
   const [form, setForm] = useState(initForm);
 
-  // 일정 목록 조회
-  const getCalendarList = async () => {
+  // 트레이너가 직접 등록한 개인 일정 조회
+  const getPersonalCalendar = async (type = "ALL") => {
+    if (!isLogin) {
+      return [];
+    }
+
+    try {
+      const res = await jwtAxios.get(`${API_URL}/api/calendar/scheduleList`, {
+        params: {
+          eventType: type,
+        },
+      });
+
+      return Array.isArray(res.data) ? res.data : [];
+    } catch (err) {
+      console.error("트레이너 개인 일정 조회 실패:", err);
+      return [];
+    }
+  };
+
+  // 트레이너 담당 PT 일정 조회
+  const getTrainerCalendar = async () => {
+    if (!isLogin) {
+      return [];
+    }
+
+    try {
+      const res = await jwtAxios.get(`${API_URL}/api/calendar/trainer`);
+
+      return Array.isArray(res.data) ? res.data : [];
+    } catch (err) {
+      console.error("트레이너 PT 일정 조회 실패:", err);
+      return [];
+    }
+  };
+
+  const loadCalendar = async () => {
     if (!isLogin) {
       setCalendarEvents([]);
       return;
     }
 
     try {
-      const res = await jwtAxios.get(
-        `${API_URL}/api/trainer/schedule/reservation`,
-        {
-          params: {
-            eventType,
-          },
-        },
-      );
-      setCalendarEvents(res.data || []);
+      // PT 일정만
+      if (eventType === "PT") {
+        const trainerEvents = await getTrainerCalendar();
+        setCalendarEvents(trainerEvents);
+        return;
+      }
+
+      // 개인 일정만
+      if (eventType === "PERSONAL") {
+        const personalEvents = await getPersonalCalendar("PERSONAL");
+        setCalendarEvents(personalEvents);
+        return;
+      }
+
+      // 전체: 개인 일정 + 담당 PT 일정
+      const [personalEvents, trainerEvents] = await Promise.all([
+        getPersonalCalendar("ALL"),
+        getTrainerCalendar(),
+      ]);
+
+      setCalendarEvents([...personalEvents, ...trainerEvents]);
     } catch (err) {
-      console.error("일정 조회 실패:", err);
+      console.error("트레이너 캘린더 조회 실패:", err);
       setCalendarEvents([]);
     }
   };
 
   // 로그인 상태 또는 조회 유형 변경 시 재조회
   useEffect(() => {
-    if (isLogin) {
-      getCalendarList();
-    }
+    loadCalendar();
   }, [isLogin, eventType]);
 
   // 날짜 클릭 시 등록 모달 열기
@@ -127,8 +171,6 @@ const TrainerSchedule = () => {
       return false;
     }
 
-    // 시작 시간과 종료 시간이 같거나
-    // 종료 시간이 시작 시간보다 빠른 경우
     if (new Date(form.endTime) <= new Date(form.startTime)) {
       alert("종료일은 시작일보다 늦어야 합니다.");
       return false;
@@ -137,46 +179,24 @@ const TrainerSchedule = () => {
     return true;
   };
 
-  //일정 데이터를 FormData로 생성
+  // 일정 데이터를 FormData로 생성
   const createScheduleFormData = () => {
     const formData = new FormData();
 
     formData.append("eventType", form.eventType);
-
     formData.append("title", form.title);
-
     formData.append("startTime", form.startTime);
-
     formData.append("endTime", form.endTime);
-
     formData.append("description", form.description || "");
 
-    /*파일을 선택한 경우에만 전송
-      수정할 때 새 파일을 선택하지 않으면
-      기존 파일을 그대로 유지*/
+    // 수정 시 새 파일을 선택하지 않으면 기존 파일 유지
     if (form.attachFile) {
       formData.append("attachFile", form.attachFile);
     }
 
     return formData;
   };
-  const calendarFormatEvents = calendarEvents.map((reservation) => ({
-    id: reservation.id,
 
-    title: `PT - ${reservation.memberName}`,
-
-    start: `${reservation.reservationDate}T${reservation.reservationTime}`,
-
-    end: `${reservation.reservationDate}T${reservation.reservationTime}`,
-
-    extendedProps: {
-      status: reservation.reservationStatus,
-      memberName: reservation.memberName,
-      sourceId: reservation.id,
-      editable: false,
-      eventType: "LESSON",
-    },
-  }));
   // 일정 등록
   const handleInsert = async () => {
     if (!validateForm()) {
@@ -188,10 +208,7 @@ const TrainerSchedule = () => {
     try {
       await jwtAxios.post(`${API_URL}/api/calendar/insert`, formData);
 
-      // 등록 완료 후 일정 재조회
-      await getCalendarList();
-
-      // 모달 닫기 및 폼 초기화
+      await loadCalendar();
       closeModal();
     } catch (err) {
       console.error("일정 등록 실패:", err);
@@ -209,11 +226,12 @@ const TrainerSchedule = () => {
     if (!selectedEvent) {
       return;
     }
-    const editable = selectedEvent.extendedProps.editable;
-    if (editable === false) {
+
+    if (selectedEvent.editable === false) {
       alert("수정할 수 없는 일정입니다.");
       return;
     }
+
     setModalMode("update");
   };
 
@@ -222,21 +240,26 @@ const TrainerSchedule = () => {
     if (!selectedEvent) {
       return;
     }
+
+    if (selectedEvent.editable === false) {
+      alert("수정할 수 없는 일정입니다.");
+      return;
+    }
+
     if (!validateForm()) {
       return;
     }
-    const scheduleId = selectedEvent.extendedProps.sourceId || selectedEvent.id;
+
+    const scheduleId = selectedEvent.sourceId || selectedEvent.id;
     const formData = createScheduleFormData();
+
     try {
       await jwtAxios.put(
         `${API_URL}/api/calendar/update/${scheduleId}`,
         formData,
       );
 
-      // 수정 완료 후 일정 재조회
-      await getCalendarList();
-
-      // 상세 모드로 돌아가지 않고 모달 닫기
+      await loadCalendar();
       closeModal();
     } catch (err) {
       console.error("일정 수정 실패:", err);
@@ -254,22 +277,22 @@ const TrainerSchedule = () => {
     if (!selectedEvent) {
       return;
     }
-    const editable = selectedEvent.extendedProps.editable;
-    if (editable === false) {
+
+    if (selectedEvent.editable === false) {
       alert("삭제할 수 없는 일정입니다.");
       return;
     }
+
     if (!window.confirm("일정을 삭제하시겠습니까?")) {
       return;
     }
-    const scheduleId = selectedEvent.extendedProps.sourceId || selectedEvent.id;
+
+    const scheduleId = selectedEvent.sourceId || selectedEvent.id;
+
     try {
       await jwtAxios.delete(`${API_URL}/api/calendar/delete/${scheduleId}`);
 
-      // 삭제 완료 후 일정 재조회
-      await getCalendarList();
-
-      // 모달 닫기 및 초기화
+      await loadCalendar();
       closeModal();
     } catch (err) {
       console.error("일정 삭제 실패:", err);
@@ -282,53 +305,43 @@ const TrainerSchedule = () => {
     }
   };
 
-  // 오늘 날짜(00:00:00)
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  // 오늘이 일정 기간에 포함되는 일정만 조회
-  const todayScheduleList = calendarEvents.filter((reservation) => {
-    if (!reservation.reservationDate) {
-      return false;
+  // datetime-local 입력값 형식으로 변환
+  const formatDateTimeLocal = (dateTime) => {
+    if (!dateTime) {
+      return "";
     }
 
-    const reservationDate = new Date(reservation.reservationDate);
+    return dateTime.slice(0, 16);
+  };
 
-    reservationDate.setHours(0, 0, 0, 0);
-
-    return reservationDate.getTime() === today.getTime();
-  });
-
-  // 일정 데이터를 받아 상세 모달 열기
+  // CalendarDto 데이터를 상세 모달에 반영
   const openScheduleDetail = (schedule) => {
-    const isReservation = schedule.reservationStatus;
-    setSelectedEvent({
+    const selectedSchedule = {
       id: schedule.id,
-      extendedProps: {
-        sourceId: schedule.id,
-        editable: isReservation ? false : schedule.editable,
-      },
-    });
+      sourceId: schedule.sourceId || schedule.id,
+      eventType: schedule.eventType || "PERSONAL",
+      title: schedule.title || "",
+      start: schedule.start || "",
+      end: schedule.end || "",
+      description: schedule.description || "",
+      editable: schedule.editable ?? false,
+      oldFileName: schedule.oldFileName || "",
+      newFileName: schedule.newFileName || "",
+    };
 
+    setSelectedEvent(selectedSchedule);
     setModalMode("detail");
 
     setForm({
       ...initForm,
-      eventType: isReservation ? "LESSON" : schedule.eventType || "PERSONAL",
-
-      title: isReservation
-        ? `PT - ${schedule.memberName}`
-        : schedule.title || "",
-
-      startTime: schedule.startTime
-        ? schedule.startTime.slice(0, 16)
-        : `${schedule.reservationDate}T${schedule.reservationTime}`,
-
-      endTime: schedule.endTime
-        ? schedule.endTime.slice(0, 16)
-        : `${schedule.reservationDate}T${schedule.reservationTime}`,
-
-      description: schedule.description || "",
+      eventType: selectedSchedule.eventType,
+      title: selectedSchedule.title,
+      startTime: formatDateTimeLocal(selectedSchedule.start),
+      endTime: formatDateTimeLocal(selectedSchedule.end),
+      description: selectedSchedule.description,
+      oldFileName: selectedSchedule.oldFileName,
+      newFileName: selectedSchedule.newFileName,
+      attachFile: null,
     });
 
     setIsModalOpen(true);
@@ -340,24 +353,41 @@ const TrainerSchedule = () => {
 
     openScheduleDetail({
       id: event.id,
-
+      sourceId: event.extendedProps.sourceId || event.id,
       eventType: event.extendedProps.eventType,
-
       title: event.title,
-
-      startTime: event.startStr,
-      endTime: event.endStr,
-
+      start: event.startStr,
+      end: event.endStr,
       description: event.extendedProps.description,
-
       editable: event.extendedProps.editable,
-
-      // 예약용
-      reservationStatus: event.extendedProps.status,
-      memberName: event.extendedProps.memberName,
-      reservationDate: event.startStr.split("T")[0],
-      reservationTime: event.startStr.split("T")[1]?.substring(0, 5),
+      oldFileName: event.extendedProps.oldFileName,
+      newFileName: event.extendedProps.newFileName,
     });
+  };
+
+  // 오늘 날짜(00:00:00)
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  // CalendarDto.start 기준 오늘 일정 조회
+  const todayScheduleList = calendarEvents.filter((schedule) => {
+    if (!schedule.start) {
+      return false;
+    }
+
+    const scheduleDate = new Date(schedule.start);
+    scheduleDate.setHours(0, 0, 0, 0);
+
+    return scheduleDate.getTime() === today.getTime();
+  });
+
+  // 시간 표시
+  const formatScheduleTime = (dateTime) => {
+    if (!dateTime) {
+      return "-";
+    }
+
+    return dateTime.slice(11, 16);
   };
 
   return (
@@ -368,16 +398,28 @@ const TrainerSchedule = () => {
             <h2>My Schedule</h2>
 
             <div className="trainer-schedule-filter">
-              <button type="button" onClick={() => setEventType("ALL")}>
+              <button
+                type="button"
+                className={eventType === "ALL" ? "active" : ""}
+                onClick={() => setEventType("ALL")}
+              >
                 전체
               </button>
 
-              <button type="button" onClick={() => setEventType("WORKOUT")}>
-                운동
+              <button
+                type="button"
+                className={eventType === "PT" ? "active" : ""}
+                onClick={() => setEventType("PT")}
+              >
+                PT 일정
               </button>
 
-              <button type="button" onClick={() => setEventType("PERSONAL")}>
-                개인
+              <button
+                type="button"
+                className={eventType === "PERSONAL" ? "active" : ""}
+                onClick={() => setEventType("PERSONAL")}
+              >
+                개인 일정
               </button>
             </div>
           </div>
@@ -386,7 +428,7 @@ const TrainerSchedule = () => {
             <div className="trainer-schedule-top">
               <div className="trainer-schedule-calendar">
                 <CommonCalendar
-                  events={calendarFormatEvents}
+                  events={calendarEvents}
                   onDateClick={openInsertModal}
                   onEventClick={openDetailModal}
                 />
@@ -405,14 +447,16 @@ const TrainerSchedule = () => {
                   ) : (
                     <ul>
                       {todayScheduleList.map((schedule) => (
-                        <li key={schedule.id}>
+                        <li
+                          key={`${schedule.eventType}-${schedule.sourceId || schedule.id}`}
+                        >
                           <button
                             type="button"
                             onClick={() => openScheduleDetail(schedule)}
                           >
-                            <span>PT - {schedule.memberName}</span>
+                            <span>{schedule.title}</span>
 
-                            <span>{schedule.reservationTime}</span>
+                            <span>{formatScheduleTime(schedule.start)}</span>
                           </button>
                         </li>
                       ))}
@@ -432,9 +476,7 @@ const TrainerSchedule = () => {
             <div className="schedule-modal-title">
               <h3>
                 {modalMode === "insert" && "일정 등록"}
-
                 {modalMode === "detail" && "일정 상세"}
-
                 {modalMode === "update" && "일정 수정"}
               </h3>
 
@@ -453,9 +495,10 @@ const TrainerSchedule = () => {
                   onChange={handleChange}
                   disabled={modalMode === "detail"}
                 >
+                  {form.eventType === "PT" && (
+                    <option value="PT">PT 일정</option>
+                  )}
                   <option value="PERSONAL">개인 일정</option>
-
-                  <option value="LESSON">PT 수업</option>
                 </select>
               </div>
 
@@ -517,7 +560,6 @@ const TrainerSchedule = () => {
                   />
                 )}
 
-                {/* 새로 선택한 파일명 */}
                 {form.attachFile && <p>선택 파일: {form.attachFile.name}</p>}
 
                 {form.newFileName && (
@@ -550,7 +592,7 @@ const TrainerSchedule = () => {
               {/* 상세 모드 */}
               {modalMode === "detail" && (
                 <>
-                  {selectedEvent?.extendedProps?.editable !== false && (
+                  {selectedEvent?.editable !== false && (
                     <>
                       <button type="button" onClick={changeUpdateMode}>
                         수정

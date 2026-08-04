@@ -30,7 +30,7 @@ public class PersonalScheduleEntity {
     @Column
     private String description;
 
-    // WORKOUT, PERSONAL
+    // WORKOUT, PERSONAL, PT
     @Column(nullable = false)
     private String eventType;
 

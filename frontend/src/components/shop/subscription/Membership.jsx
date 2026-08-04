@@ -129,39 +129,59 @@ const Membership = () => {
         <div className="membership-grid">
           {filteredMemberships.map((item) => {
             const isGym = item.productType === "GYM";
+            const isPremium = item.productType === "PREMIUM";
+            const isPT = item.productType === "PT";
+
+            const getCardClass = () => {
+              if (isPremium) return "card-premium";
+              if (isGym) return "card-gym";
+              if (isPT) return "card-pt";
+              return "";
+            };
+
+            const getProductTypeName = () => {
+              if (isPremium) return "FitMate Plus+";
+              if (isGym) return "헬스장 회원권";
+              if (isPT) return "개인 PT";
+              return "이용권";
+            };
+
             return (
               <div
                 key={item.id}
-                className={`membership-card ${isGym ? "card-gym" : "card-pt"}`}
+                className={`membership-card ${getCardClass()}`}
               >
                 <div className="card-top">
-                  <span className="type-badge">
-                    {isGym ? "헬스장 회원권" : "개인 PT"}
-                  </span>
+                  <span className="type-badge">{getProductTypeName()}</span>
+
                   {renderStatusBadge(item.status, item.endDate)}
                 </div>
 
                 <div className="card-main">
                   <h3 className="item-title">{item.title}</h3>
+
                   <p className="gym-name">
                     📍 {item.gymName || "FitMate 피트니스 Center"}
                   </p>
                 </div>
 
                 <div className="card-info-box">
-                  {/* PT 수강권일 경우 잔여 횟수 표시 */}
-                  {!isGym && (
+                  {/* PT 이용권에만 잔여 횟수 표시 */}
+                  {isPT && (
                     <div className="info-row highlight-row">
                       <span className="label">잔여 횟수</span>
+
                       <span className="value count-text">
-                        <strong>{item.remainingCount ?? 0}</strong> /{" "}
-                        {item.totalCount ?? 0} 회
+                        <strong>{item.remainingCount ?? 0}</strong>
+                        {" / "}
+                        {item.totalCount ?? 0}회
                       </span>
                     </div>
                   )}
 
                   <div className="info-row">
                     <span className="label">이용 기간</span>
+
                     <span className="value">
                       {formatDate(item.startDate)} ~ {formatDate(item.endDate)}
                     </span>
@@ -170,6 +190,7 @@ const Membership = () => {
                   {item.trainerName && (
                     <div className="info-row">
                       <span className="label">담당 트레이너</span>
+
                       <span className="value">{item.trainerName} 트레이너</span>
                     </div>
                   )}
