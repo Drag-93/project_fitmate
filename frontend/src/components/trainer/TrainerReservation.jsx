@@ -38,16 +38,25 @@ const TrainerReservation = () => {
     if (!window.confirm(`정말 해당 예약을 ${actionText}하시겠습니까?`)) return;
 
     try {
-      await jwtAxios.put(`/api/reservations/${id}`, {
-        reservationStatus: status,
-      });
-
+      await jwtAxios.put(
+        `/api/reservations/${id}/status`,
+        null,
+        {
+          params: {
+            status,
+          },
+        }
+      );
       alert(
         `예약이 ${status === "COMPLETE" ? "완료" : "취소"} 처리되었습니다.`,
       );
       getReservationList();
     } catch (error) {
       console.error(error);
+      console.error(error);
+      console.log("response =", error.response);
+      console.log("status =", error.response?.status);
+      console.log("data =", error.response?.data);
       alert("상태 변경 중 오류가 발생했습니다.");
     }
   };
@@ -194,13 +203,19 @@ const TrainerReservation = () => {
                   <div className="card-footer">
                     <button
                       className="btn btn-complete"
-                      onClick={() => changeStatus(reservation.id, "COMPLETE")}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        changeStatus(reservation.id, "COMPLETE");
+                      }}
                     >
                       수업 완료
                     </button>
                     <button
                       className="btn btn-cancel"
-                      onClick={() => changeStatus(reservation.id, "CANCEL")}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        changeStatus(reservation.id, "CANCEL");
+                      }}
                     >
                       예약 취소
                     </button>

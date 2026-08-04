@@ -104,7 +104,8 @@ public class ReservationServiceImpl implements ReservationService {
   @Override
   public List<ReservationDto> getMemberReservation(Long memberId) {
 
-    List<ReservationEntity> reservations = reservationRepository.findByMemberIdOrderByReservationDateDescReservationTimeDesc(memberId);
+    List<ReservationEntity> reservations = reservationRepository
+        .findByMemberIdOrderByReservationDateDescReservationTimeDesc(memberId);
 
     return reservations.stream()
         .map(ReservationDto::toReservationDto)
@@ -115,7 +116,8 @@ public class ReservationServiceImpl implements ReservationService {
   @Override
   public List<ReservationDto> getTrainerReservation(Long trainerId) {
 
-    List<ReservationEntity> reservations = reservationRepository.findByTrainerIdOrderByReservationDateDescReservationTimeDesc(trainerId);
+    List<ReservationEntity> reservations = reservationRepository
+        .findByTrainerIdOrderByReservationDateDescReservationTimeDesc(trainerId);
 
     return reservations.stream()
         .map(ReservationDto::toReservationDto)
@@ -171,7 +173,7 @@ public class ReservationServiceImpl implements ReservationService {
         ReservationStatus.CANCEL);
 
     MemberProductEntity memberProductEntity = reservation.getMemberProduct();
-    memberProductEntity.setRemainingCount(memberProductEntity.getRemainingCount()+1);
+    memberProductEntity.setRemainingCount(memberProductEntity.getRemainingCount() + 1);
 
     TrainerScheduleEntity schedule = trainerScheduleRepository.findByReservationId(reservationId)
         .orElse(null);
@@ -198,6 +200,16 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     reservation.setReservationStatus(status);
+    TrainerScheduleEntity schedule = trainerScheduleRepository.findByReservationId(reservationId)
+        .orElse(null);
+
+    if (schedule != null) {
+      if (status == ReservationStatus.COMPLETE) {
+        schedule.setStatus(ScheduleStatus.COMPLETE);
+      } else if (status == ReservationStatus.CANCEL) {
+        schedule.setStatus(ScheduleStatus.AVAILABLE);
+      }
+    }
 
   }
 

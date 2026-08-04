@@ -329,7 +329,7 @@
     gap: 20px;
   }
   
-  .shopIndex-bottom .product-card {
+  .shopIndex-bottom-productList .product-card {
     background-color: var(--bg-dark-card);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-md);
@@ -339,7 +339,7 @@
     flex-direction: column;
   }
   
-  .shopIndex-bottom .product-card:hover {
+  .shopIndex-bottom-productList .product-card:hover {
     transform: translateY(-4px);
     border-color: var(--border-active);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
@@ -365,7 +365,7 @@
   }
   
   /* 카드 호버시 표시되는 장바구니/좋아요 액션 버튼 */
-  .shopIndex-bottom .product-hover-actions {
+  .shopIndex-bottom-productList .product-hover-actions {
     position: absolute;
     bottom: 12px;
     right: 12px;
@@ -381,7 +381,7 @@
     transform: translateY(0);
   }
   
-  .shopIndex-bottom .action-btn {
+  .shopIndex-bottom-productList .action-btn {
     width: 36px;
     height: 36px;
     border-radius: 50%;
@@ -397,11 +397,11 @@
     transition: background-color 0.2s ease;
   }
   
-  .action-btn:hover {
+  .shopIndex-bottom-productList .action-btn:hover {
     background-color: var(--accent-blue);
   }
   
-  .shopIndex-bottom .product-details {
+  .shopIndex-bottom-productList .product-details {
     padding: 16px;
     display: flex;
     flex-direction: column;
@@ -409,13 +409,13 @@
     flex-grow: 1;
   }
   
-  .shopIndex-bottom .product-category {
+  .shopIndex-bottom-productList .product-category {
     font-size: 0.75rem;
     color: var(--text-muted);
     text-transform: uppercase;
   }
   
-  .shopIndex-bottom .product-name {
+  .shopIndex-bottom-productList .product-name {
     font-size: 0.95rem;
     font-weight: 600;
     color: var(--text-main);
@@ -427,18 +427,18 @@
     overflow: hidden;
   }
   
-  .shopIndex-bottom .product-price-box {
+  .shopIndex-bottom-productList .product-price-box {
     margin-top: auto;
     padding-top: 8px;
   }
   
-  .shopIndex-bottom .product-price {
+  .shopIndex-bottom-productList .product-price {
     font-size: 1.15rem;
     font-weight: 700;
     color: var(--accent-blue);
   }
   
-  .shopIndex-bottom .product-price .unit {
+  .shopIndex-bottom-productList .product-price .unit {
     font-size: 0.85rem;
     font-weight: 400;
     margin-left: 2px;

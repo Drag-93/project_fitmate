@@ -179,6 +179,7 @@ const MemberDetailUpdateView = ({
         </div>
 
         {/* 3. 신체 & 운동 프로필 수정 섹션 (추가된 5개 데이터) */}
+        {member?.role !== "TRAINER" && (
         <div className="infoSection">
           <h3>신체 & 운동 프로필 수정</h3>
           <ul className="infoGrid">
@@ -233,6 +234,7 @@ const MemberDetailUpdateView = ({
             </li>
           </ul>
         </div>
+        )}
 
         {/* 4. 하단 버튼 영역 */}
         <div className="buttonArea">

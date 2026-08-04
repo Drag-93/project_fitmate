@@ -123,14 +123,19 @@ public class ReservationController {
   public ResponseEntity<Void> updateStatus(
       @PathVariable Long reservationId,
       @RequestParam ReservationStatus status,
-      @RequestParam Long trainerId) {
-
-    reservationService.updateStatus(
-        reservationId,
-        status,
-        trainerId);
-
-    return ResponseEntity.ok().build();
+      @AuthenticationPrincipal CustomUserDetails user) {
+  
+      MemberEntity member = getAuthenticatedMember(user);
+  
+      TrainerEntity trainer = trainerRepository.findByMemberId(member.getId())
+              .orElseThrow(() -> new IllegalArgumentException("트레이너 정보를 찾을 수 없습니다."));
+  
+      reservationService.updateStatus(
+              reservationId,
+              status,
+              trainer.getId());
+  
+      return ResponseEntity.ok().build();
   }
 
   // 트레이너 예약 취소

@@ -42,9 +42,12 @@ const MemberDetailView = ({ member, updateFn, memberDelete, navigate }) => {
         </div>
         <div className="profileName">
           <h1>{member?.userName} 님</h1>
-          <span className="subscribeBadge">
-            {subscribe ? "구독중" : "미구독"}
-          </span>
+
+          {member?.role !== "TRAINER" && (
+            <span className="subscribeBadge">
+              {subscribe ? "구독중" : "미구독"}
+            </span>
+          )}
         </div>
       </div>
 
@@ -95,43 +98,45 @@ const MemberDetailView = ({ member, updateFn, memberDelete, navigate }) => {
           </div>
 
           {/* 3. 신체 & 운동 프로필 섹션 */}
-          <div className="infoSection">
-            <h3>신체 & 운동 프로필</h3>
-            <ul className="infoGrid">
-              <li>
-                <span className="label">신장</span>
-                <span className="value">
-                  {member?.height ? `${member.height} cm` : "정보 없음"}
-                </span>
-              </li>
-              <li>
-                <span className="label">현재 체중</span>
-                <span className="value">
-                  {member?.weight ? `${member.weight} kg` : "정보 없음"}
-                </span>
-              </li>
-              <li>
-                <span className="label">목표 체중</span>
-                <span className="value">
-                  {member?.goalWeight ? `${member.goalWeight} kg` : "정보 없음"}
-                </span>
-              </li>
-              <li>
-                <span className="label">관심 분야</span>
-                <span className="value">
-                  {interestMap[member?.interest] ?? "없음"}
-                </span>
-              </li>
-              <li>
-                <span className="label">보유 뱃지</span>
-                <span className="value">{member?.badge || "없음"}</span>
-              </li>
-              <li>
-                <span className="label">출석체크 횟수</span>
-                <span className="value">{member?.dailyCheck || 0}회</span>
-              </li>
-            </ul>
-          </div>
+          {member?.role !== "TRAINER" && (
+            <div className="infoSection">
+              <h3>신체 & 운동 프로필</h3>
+              <ul className="infoGrid">
+                <li>
+                  <span className="label">신장</span>
+                  <span className="value">
+                    {member?.height ? `${member.height} cm` : "정보 없음"}
+                  </span>
+                </li>
+                <li>
+                  <span className="label">현재 체중</span>
+                  <span className="value">
+                    {member?.weight ? `${member.weight} kg` : "정보 없음"}
+                  </span>
+                </li>
+                <li>
+                  <span className="label">목표 체중</span>
+                  <span className="value">
+                    {member?.goalWeight ? `${member.goalWeight} kg` : "정보 없음"}
+                  </span>
+                </li>
+                <li>
+                  <span className="label">관심 분야</span>
+                  <span className="value">
+                    {interestMap[member?.interest] ?? "없음"}
+                  </span>
+                </li>
+                <li>
+                  <span className="label">보유 뱃지</span>
+                  <span className="value">{member?.badge || "없음"}</span>
+                </li>
+                <li>
+                  <span className="label">출석체크 횟수</span>
+                  <span className="value">{member?.dailyCheck || 0}회</span>
+                </li>
+              </ul>
+            </div>
+          )}
 
           {/* 4. 하단 버튼 영역 (상세보기 모드일 때만 노출) */}
           <div className="buttonArea">

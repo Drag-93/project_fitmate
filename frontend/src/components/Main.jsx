@@ -205,6 +205,7 @@ const Main = () => {
     // console.log("메인 상품 목록:", productList);
     // console.log("메인 상품 개수:", productList.length);
   }, [productList]);
+  console.log(user)
   return (
     <div className="main-container">
       {/* 팝업 모달 */}
@@ -350,7 +351,9 @@ const Main = () => {
                     onEventClick={() => navigate("/mypage/schedule")}
                   />
                 </div>
-
+                
+                {user.role !== "TRAINER" && (
+                  
                 <div className="membership-box">
                   <div className="membership-header">
                     <h4>내 보유 이용권</h4>
@@ -387,6 +390,7 @@ const Main = () => {
                     )}
                   </div>
                 </div>
+                 )}
               </>
             ) : (
               <div className="login-prompt-box">
