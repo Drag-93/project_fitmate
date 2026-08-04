@@ -99,6 +99,7 @@ public class MemberDto {
             .userEmail(memberEntity.getUserEmail())
             .userName(memberEntity.getUserName())
             .userPhone(memberEntity.getUserPhone())
+            .userAddress(memberEntity.getUserAddress())
             .role(memberEntity.getRole())
             //memberAddEntity의 값들 저장
             .interest(addEntity != null ? addEntity.getInterest() : null)

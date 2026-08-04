@@ -354,7 +354,12 @@ public class PaymentServiceImpl implements PaymentService {
 
     SubscriptionEntity subscription = subscriptionRepository.save(builder.build());
 
-    // 결제와 구독 연결
+   // PREMIUM 회원 가입 처리
+    if (product.getProductType() == ProductType.PREMIUM) {
+      order.getMemberEntity().setSubscribe(1);
+    }
+
+   // 결제와 구독 연결
     paymentEntity.setSubscriptionEntity(subscription);
   }
 

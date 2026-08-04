@@ -121,7 +121,7 @@ const CommunityList = ({ params, tab }) => {
   const renderableContent = (content) =>
     (content || "").replace(
       /src="\/upload\//g,
-      `src="${API_SERVER_URL}/api/upload/`,
+      `src="${API_SERVER_URL}/upload/`,
     );
 
   //시간 서식 함수

@@ -89,4 +89,22 @@ public class CalendarController {
         return memberRepository.findByUserEmail(user.getUsername())
                 .orElseThrow(() ->new NoSuchElementException("회원 정보를 불러올 수 없습니다."));
     }
+
+
+    // 트레이너 일정 목록 조회
+    @GetMapping("/trainer")
+    public ResponseEntity<List<CalendarDto>> getTrainerCalendar(
+            @AuthenticationPrincipal CustomUserDetails user
+    ) {
+        MemberEntity member = memberRepository
+                .findByUserEmail(user.getUsername())
+                .orElseThrow(() ->
+                        new IllegalArgumentException("회원 정보가 없습니다.")
+                );
+
+        return ResponseEntity.ok(
+                calendarService.getTrainerCalendar(member.getId())
+        );
+    }
+
 }

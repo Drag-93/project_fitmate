@@ -20,8 +20,6 @@ public class AdminController {
     private final TabService tabService;
     private final OrderService orderService;
 
-    // =======================popup=======================
-
     // 탭생성
     @PostMapping("/tabInsert")
     public ResponseEntity<?> tabInsert(@RequestBody List<TabDto> tabDto) {

@@ -113,15 +113,15 @@ const Login = () => {
             <Link to="/auth/join">회원가입</Link>
           </li>
           <li>
-            <Link to={`${API_SERVER_URL}/oauth2/authorization/google`}>
+            <a href={`${API_SERVER_URL}/oauth2/authorization/google`}>
               <img src="/images/auth/google.png" alt="구글로그인" />
-            </Link>
-            <Link to={`${API_SERVER_URL}/oauth2/authorization/naver`}>
+            </a>
+            <a href={`${API_SERVER_URL}/oauth2/authorization/naver`}>
               <img src="/images/auth/naver.png" alt="네이버로그인" />
-            </Link>
-            <Link to={`${API_SERVER_URL}/oauth2/authorization/kakao`}>
+            </a>
+            <a href={`${API_SERVER_URL}/oauth2/authorization/kakao`}>
               <img src="/images/auth/kakao.png" alt="카카오로그인" />
-            </Link>
+            </a>
           </li>
         </ul>
       </div>

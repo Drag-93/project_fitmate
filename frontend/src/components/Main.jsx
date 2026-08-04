@@ -26,7 +26,9 @@ const Main = () => {
   const [bestTab, setBestTab] = useState("추천");
   const [defaultCommunityList, setDefaultCommunityList] = useState([]);
   const [communityList, setCommunityList] = useState([]);
+
   const [productList, setProductList] = useState([]);
+
   const [noticeList, setNoticeList] = useState([]);
   const [popupList, setPopupList] = useState([]);
   const [myMembership, setMyMembership] = useState([]);
@@ -44,22 +46,58 @@ const Main = () => {
     setPopupList((prev) => prev.filter((popup) => popup.id !== popupId));
   };
 
-  // 캘린더 조회
+  // 회원 개인 일정 조회
   const getCalendarList = async () => {
+    if (!isLogin) {
+      return [];
+    }
+
+    try {
+      const res = await jwtAxios.get(`${API_URL}/api/calendar/scheduleList`, {
+        params: {
+          eventType: "ALL",
+        },
+      });
+
+      return Array.isArray(res.data) ? res.data : [];
+    } catch (err) {
+      console.error("개인 캘린더 조회 오류:", err);
+      return [];
+    }
+  };
+
+  // 트레이너 PT 일정 조회
+  const getTrainerCalendar = async () => {
+    try {
+      const res = await jwtAxios.get(`${API_URL}/api/calendar/trainer`);
+
+      return Array.isArray(res.data) ? res.data : [];
+    } catch (err) {
+      console.error("트레이너 캘린더 조회 실패:", err);
+      return [];
+    }
+  };
+  const loadCalendar = async () => {
     if (!isLogin) {
       setCalendarEvents([]);
       return;
     }
-    try {
-      const res = await jwtAxios.get(`${API_URL}/api/calendar/scheduleList`, {
-        params: { eventType: "ALL" },
-      });
-      setCalendarEvents(res.data || []);
-    } catch (err) {
-      console.error("캘린더 조회 오류:", err);
-      setCalendarEvents([]);
+
+    // 모든 로그인 사용자의 개인 일정 조회
+    const memberEvents = await getCalendarList();
+
+    // 일반 회원은 개인 일정만 사용
+    if (user.role !== "TRAINER") {
+      setCalendarEvents(memberEvents);
+      return;
     }
+
+    // 트레이너는 개인 일정 + 담당 PT 일정
+    const trainerEvents = await getTrainerCalendar();
+
+    setCalendarEvents([...memberEvents, ...trainerEvents]);
   };
+
   // 내 이용권 조회
   const loadMyMembership = async () => {
     if (!isLogin) {
@@ -69,7 +107,7 @@ const Main = () => {
 
     try {
       const data = await getMyMembership();
-      console.log(data);
+      // console.log(data);
       setMyMembership(data || []);
     } catch (err) {
       console.error("내 이용권 조회 실패:", err);
@@ -84,46 +122,49 @@ const Main = () => {
         ? await jwtAxios.get(`${API_URL}/api/main`)
         : await axios.get(`${API_URL}/api/main`);
 
-      //선택한 탭 별 커뮤니티 리스트
-      const mainCommunityList = res.data.communityList || [];
+      // 커뮤니티 리스트
+      const mainCommunityList = Array.isArray(res.data.communityList)
+        ? res.data.communityList
+        : [];
 
       setCommunityList(mainCommunityList);
       setDefaultCommunityList(mainCommunityList);
 
-      //상품 리스트
-      // setProductList(res.data.productList || []);
-      //공지사항 리스트
-      setNoticeList(res.data.noticeList || []);
+      // 백엔드에서 조합한 최종 상품 최대 8개
+      const mainProductList = Array.isArray(res.data.productList)
+        ? res.data.productList
+        : [];
 
-      //팝업 관련
+      setProductList(mainProductList.slice(0, 8));
+
+      // 공지사항
+      setNoticeList(
+        Array.isArray(res.data.noticeList) ? res.data.noticeList : [],
+      );
+
+      // 팝업
       const today = new Date().toISOString().slice(0, 10);
 
-      const visiblePopupList = (res.data.popupList || []).filter((popup) => {
+      const visiblePopupList = (
+        Array.isArray(res.data.popupList) ? res.data.popupList : []
+      ).filter((popup) => {
         const hideDate = localStorage.getItem(`mainPopupHideDate_${popup.id}`);
 
         return hideDate !== today;
       });
 
       setPopupList(visiblePopupList.slice(0, 2));
-      console.log(res.data);
     } catch (err) {
       console.error("메인 데이터 조회 오류:", err);
-    }
-  };
-  //상품 8개
-  const getTopProducts = async () => {
-    try {
-      const res = isLogin
-        ? await jwtAxios.get(`${API_URL}/api/product/top-sales`)
-        : await axios.get(`${API_URL}/api/product/top-sales`);
-  
-      setProductList(res.data || []);
-  
-    } catch (err) {
-      console.error("상품 조회 실패", err);
+
+      setCommunityList([]);
+      setDefaultCommunityList([]);
       setProductList([]);
+      setNoticeList([]);
+      setPopupList([]);
     }
   };
+
   // 선택한 게시판 탭의 조회수 높은 게시글 TOP 5 조회
   const getBestCommunityList = async (tabName) => {
     setBestTab(tabName);
@@ -149,19 +190,20 @@ const Main = () => {
   useEffect(() => {
     setBestTab("추천");
     getMainData();
-    getTopProducts();
   }, [isLogin]);
 
-  // 로그인 상태에 따라 개인 캘린더 조회
+  // 회원, 트레이너 캘린더 조회
   useEffect(() => {
-    getCalendarList();
+    loadCalendar();
     loadMyMembership();
-  }, [isLogin]);
+  }, [isLogin, user.role]);
 
   // 상위 8개 상품 가져오기
   const displayProducts = productList.slice(0, 8);
+
   useEffect(() => {
-    console.log("상품 리스트:", productList);
+    // console.log("메인 상품 목록:", productList);
+    // console.log("메인 상품 개수:", productList.length);
   }, [productList]);
   return (
     <div className="main-container">
@@ -251,7 +293,7 @@ const Main = () => {
               {selectMenu === "notice" && (
                 <ul className="notice-list">
                   {Array.isArray(noticeList) && noticeList.length > 0 ? (
-                    noticeList.slice(0, 3).map((notice) => (
+                    noticeList.slice(0, 5).map((notice) => (
                       <li key={notice.id} className="board-item">
                         <a href={`/community/detail/${notice.id}`}>
                           <span className="notice-badge">공지</span>
@@ -268,20 +310,20 @@ const Main = () => {
               {selectMenu === "best" && (
                 <div className="best-wrapper">
                   <div className="sub-tab-group">
-                    {["추천", "운동정보", "자유게시판"].map((tab) => (
+                    {["추천", "운동게시판", "자유게시판"].map((tab) => (
                       <button
                         key={tab}
                         className={`sub-tab ${bestTab === tab ? "active" : ""}`}
                         onClick={() => getBestCommunityList(tab)}
                       >
-                        {tab === "운동정보" ? "운동게시판" : tab}
+                        {tab}
                       </button>
                     ))}
                   </div>
                   <ul className="best-list">
                     {Array.isArray(communityList) &&
                     communityList.length > 0 ? (
-                      communityList.slice(0, 3).map((item) => (
+                      communityList.slice(0, 5).map((item) => (
                         <li key={item.id} className="board-item">
                           <a href={`/community/detail/${item.id}`}>
                             <span className="item-title">{item.title}</span>

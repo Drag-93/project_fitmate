@@ -33,27 +33,30 @@ public class PopupController {
 //        return ResponseEntity.ok(map);
 //    }
     @GetMapping("/popupList")
-    public ResponseEntity<?> popupList(@PageableDefault(page = 0, size = 5, sort="id",
-                                               direction = Sort.Direction.ASC) Pageable pageable,
-                                       @RequestParam(value = "subject",required = false)String subject,
-                                       @RequestParam(value = "search", required = false)String search){
-        Page<PopupDto> popupList = popupService.popupList(pageable, subject, search);
+    public ResponseEntity<?> popupList( @PageableDefault( page = 0,size = 5) Pageable pageable,
+                                        @RequestParam( value = "status", required = false) String status,
+                                        @RequestParam( value = "sortType", required = false) String sortType,
+                                        @RequestParam( value = "search", required = false) String search) {
+        Page<PopupDto> popupList =popupService.popupList( pageable, status, sortType, search);
+        int currentPage = popupList.getNumber();
+        int totalPage = popupList.getTotalPages();
+        int blockNum = 5;
 
-        int newPage = popupList.getNumber(); //현재페이지
-        int totalPage = popupList.getTotalPages(); //전체페이지
-        int blockNum = 5; //한페이지에 보여질 페이지넘버의 수
+        // 현재 페이지가 속한 페이지 블록의 시작 번호
+        int startPage = (currentPage / blockNum) * blockNum + 1;
 
-        //블록 시작
-        int startPage = (newPage / blockNum) * blockNum + 1; //시작페이지
-        //블록 끝
-        int endPage = Math.min(startPage+blockNum-1, totalPage); //끝페이지
+        // 마지막 페이지 번호가 전체 페이지 수를 넘지 않도록 제한
+        int endPage =Math.min(startPage + blockNum - 1, totalPage);
+
         Map<String, Object> response = new HashMap<>();
+
         response.put("popupList", popupList.getContent());
-        response.put("currentPage", newPage);
+        response.put("currentPage", currentPage);
         response.put("totalPage", totalPage);
         response.put("startPage", startPage);
-        response.put("totalElements", popupList.getTotalElements());
         response.put("endPage", endPage);
+        response.put("totalElements", popupList.getTotalElements());
+
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 

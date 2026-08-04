@@ -51,11 +51,14 @@ const TrainerSchedule = () => {
     }
 
     try {
-      const res = await jwtAxios.get(`${API_URL}/api/trainer/schedule/reservation`, {
-        params: {
-          eventType,
+      const res = await jwtAxios.get(
+        `${API_URL}/api/trainer/schedule/reservation`,
+        {
+          params: {
+            eventType,
+          },
         },
-      });
+      );
       setCalendarEvents(res.data || []);
     } catch (err) {
       console.error("일정 조회 실패:", err);
@@ -69,7 +72,6 @@ const TrainerSchedule = () => {
       getCalendarList();
     }
   }, [isLogin, eventType]);
-
 
   // 날짜 클릭 시 등록 모달 열기
   const openInsertModal = (info) => {
@@ -171,8 +173,8 @@ const TrainerSchedule = () => {
       status: reservation.reservationStatus,
       memberName: reservation.memberName,
       sourceId: reservation.id,
-      editable:false,
-      eventType:"LESSON",
+      editable: false,
+      eventType: "LESSON",
     },
   }));
   // 일정 등록
@@ -196,8 +198,8 @@ const TrainerSchedule = () => {
 
       alert(
         err.response?.data?.message ||
-        err.response?.data ||
-        "일정 등록에 실패했습니다.",
+          err.response?.data ||
+          "일정 등록에 실패했습니다.",
       );
     }
   };
@@ -241,8 +243,8 @@ const TrainerSchedule = () => {
 
       alert(
         err.response?.data?.message ||
-        err.response?.data ||
-        "일정 수정에 실패했습니다.",
+          err.response?.data ||
+          "일정 수정에 실패했습니다.",
       );
     }
   };
@@ -274,8 +276,8 @@ const TrainerSchedule = () => {
 
       alert(
         err.response?.data?.message ||
-        err.response?.data ||
-        "일정 삭제에 실패했습니다.",
+          err.response?.data ||
+          "일정 삭제에 실패했습니다.",
       );
     }
   };
@@ -312,9 +314,7 @@ const TrainerSchedule = () => {
 
     setForm({
       ...initForm,
-      eventType: isReservation
-        ? "LESSON"
-        : schedule.eventType || "PERSONAL",
+      eventType: isReservation ? "LESSON" : schedule.eventType || "PERSONAL",
 
       title: isReservation
         ? `PT - ${schedule.memberName}`
@@ -405,20 +405,14 @@ const TrainerSchedule = () => {
                   ) : (
                     <ul>
                       {todayScheduleList.map((schedule) => (
-                        <li
-                          key={schedule.id}
-                        >
+                        <li key={schedule.id}>
                           <button
                             type="button"
                             onClick={() => openScheduleDetail(schedule)}
                           >
-                            <span>
-                              PT - {schedule.memberName}
-                            </span>
+                            <span>PT - {schedule.memberName}</span>
 
-                            <span>
-                              {schedule.reservationTime}
-                            </span>
+                            <span>{schedule.reservationTime}</span>
                           </button>
                         </li>
                       ))}
