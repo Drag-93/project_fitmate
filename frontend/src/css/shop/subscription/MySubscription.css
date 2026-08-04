@@ -27,7 +27,7 @@
 }
 
 /* 프리미엄 멤버십 카드 */
-.membership-card {
+.my-subscription-page .membership-card {
   background: linear-gradient(135deg, #1e293b, #0f172a);
   color: #ffffff;
   border-radius: 20px;
@@ -39,7 +39,7 @@
   transition: all 0.3s ease;
 }
 
-.membership-card.paused-card {
+.my-subscription-page .membership-card.paused-card {
   background: linear-gradient(135deg, #475569, #334155);
 }
 

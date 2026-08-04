@@ -65,7 +65,11 @@ const Membership = () => {
 
   // 필터링된 이용권 목록
   const filteredMemberships = memberships.filter((item) => {
+    // Premium은 항상 제외
+    if (item.productType === "PREMIUM") return false;
+
     if (filter === "ALL") return true;
+
     return item.productType === filter; // GYM or PT
   });
 
@@ -95,7 +99,9 @@ const Membership = () => {
           className={`tab-btn ${filter === "ALL" ? "active" : ""}`}
           onClick={() => setFilter("ALL")}
         >
-          전체 ({memberships.length})
+          전체 (
+          {memberships.filter((m) => m.productType !== "PREMIUM").length}
+          )
         </button>
         <button
           className={`tab-btn ${filter === "PREMIUM" ? "active" : ""}`}

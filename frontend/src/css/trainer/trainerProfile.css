@@ -115,19 +115,19 @@
 }
 
 /* 수정 버튼 */
-.btn-edit {
+.trainer-profile-container .btn-edit {
 
   background: #111;
   color: white;
 
 }
 
-.btn-edit:hover {
+.trainer-profile-container .btn-edit:hover {
   background: #333;
 }
 
 /* 하단 버튼 */
-.form-actions {
+.trainer-profile-container .form-actions {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
@@ -135,22 +135,22 @@
 }
 
 /* 취소 */
-.btn-cancel {
+.trainer-profile-container .btn-cancel {
   background: #eee;
   color: #555;
 }
 
-.btn-cancel:hover {
+.trainer-profile-container .btn-cancel:hover {
   background: #ddd;
 }
 
 /* 저장 */
-.btn-save {
+.trainer-profile-container .btn-save {
   background: #111;
   color: white;
 }
 
-.btn-save:hover {
+.trainer-profile-container .btn-save:hover {
   background: #333;
 }
 
