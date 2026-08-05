@@ -80,7 +80,7 @@ FitMate는 운동을 지속하기 어려운 사용자와 회원 관리에 어려
   <img src="https://img.shields.io/badge/Google_Sheets-34A853?style=for-the-badge&logo=GoogleSheets&logoColor=white"/>
   <img src="https://img.shields.io/badge/ERDCloud-4A90E2?style=for-the-badge"/>
 </p>
-
+---
 ## 🏗 시스템 아키텍처
 
 React와 Spring Boot 기반의 Full Stack 구조로, Nginx를 통해 정적 파일 제공 및 API 요청을 처리합니다.
@@ -103,6 +103,214 @@ Docker 이미지를 Docker Hub에 업로드하고, EC2에서 최신 이미지를
 <p align="center">
   <img src="./readmeimg/파이프라인.png" width="900">
 </p>
+
+
+
+
+# (여기까지 작성 완료)
+
+...
+
+## 📷 프로젝트 미리보기
+
+### 🏠 메인 페이지
+
+> 메인 화면 및 주요 기능 소개
+
+<!-- 메인 화면 이미지 -->
+
+---
+
+### 🏋️ 운동 루틴
+
+> 운동 루틴 생성 및 조회 기능
+
+<!-- 운동 루틴 이미지 -->
+
+---
+
+### 📅 스케줄 관리
+
+> FullCalendar 기반 개인 일정 및 운동 일정 관리
+
+<!-- 스케줄 이미지 -->
+
+---
+
+### 👥 커뮤니티
+
+> 게시글 작성, 댓글 작성 및 운동 정보 공유
+
+<!-- 커뮤니티 이미지 -->
+
+---
+
+### 💳 이용권 및 PT 예약
+
+> 이용권 구매 및 PT 예약 기능
+
+<!-- 이용권 / 예약 이미지 -->
+
+---
+
+### 🛠 관리자 페이지
+
+#### Dashboard
+
+> 회원, 상품, 예약, 결제 등 핵심 운영 지표를 확인할 수 있는 관리자 대시보드
+
+<!-- Dashboard -->
+
+#### Member Management
+
+> 회원 조회 및 관리
+
+<!-- Member -->
+
+#### Product Management
+
+> 상품 등록 및 관리
+
+<!-- Product -->
+
+#### Popup Management
+
+> 메인 팝업 등록 및 관리
+
+<!-- Popup -->
+
+---
+
+## ✨ 주요 기능
+
+### 👤 사용자
+
+- 운동 루틴 생성 및 조회
+- FullCalendar 기반 일정 관리
+- PT 예약
+- 이용권 구매
+- 커뮤니티 게시글 및 댓글
+- 카카오페이 결제
+- OAuth2 로그인
+- 마이페이지
+
+### 👨‍💼 관리자
+
+- 관리자 대시보드
+- 회원 관리(CRM)
+- 상품 관리
+- 예약 관리
+- 결제 관리
+- 커뮤니티 관리
+- 팝업 관리
+
+---
+
+## 👨‍💻 담당 역할
+
+### 프로젝트 관리
+
+- 팀장 역할 수행
+- 프로젝트 구조 설계
+- Git 협업 전략 수립
+- GitHub 브랜치 전략 관리
+
+### Front-End
+
+- Calendar 공통 컴포넌트 개발
+- Kakao Map 공통 컴포넌트 개발
+- 관리자 Dashboard UI 및 기능 구현
+
+### Back-End
+
+- 관리자 Dashboard API 개발
+- CRM 기능 개발
+- 메인 페이지 API 개발
+- Calendar 통합 API 개발
+
+### DevOps
+
+- Docker 환경 구성
+- Docker Hub 기반 이미지 관리
+- GitHub Actions 기반 CI/CD 구축
+- AWS EC2 배포 환경 구축
+
+---
+
+## 🔥 Trouble Shooting
+
+### 1. Docker Volume과 이미지 데이터 분리
+
+> 작성 예정
+
+---
+
+### 2. EC2 이미지 업로드 및 경로 문제
+
+> 작성 예정
+
+---
+
+### 3. Git History 정리 및 협업 환경 개선
+
+> 작성 예정
+
+---
+
+### 4. FullCalendar 공통 컴포넌트 설계
+
+> 작성 예정
+
+---
+
+## 🚀 실행 방법
+
+### Clone
+
+```bash
+git clone Repository_URL
+```
+
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm start
+```
+
+### Backend
+
+```bash
+cd backend
+./gradlew bootRun
+```
+
+또는
+
+```bash
+docker compose up -d
+```
+
+---
+
+## 📂 프로젝트 구조
+
+> 작성 예정
+
+---
+
+## 📄 License
+
+MIT License
+
+
+
+
+
+
+
+
 
 
 
