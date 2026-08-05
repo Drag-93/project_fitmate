@@ -67,6 +67,9 @@ FitMate는 운동을 지속하기 어려운 사용자와 회원 관리에 어려
 <p>
   <img src="https://img.shields.io/badge/Kakao_Map_API-FFCD00?style=for-the-badge&logo=Kakao&logoColor=black"/>
   <img src="https://img.shields.io/badge/KakaoPay-FFCD00?style=for-the-badge&logo=Kakao&logoColor=black"/>
+  <img src="https://img.shields.io/badge/ExerciseDB_API-2563EB?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/OpenWeather_API-EB6E4B?style=for-the-badge&logo=OpenWeatherMap&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Google_Translate_API-4285F4?style=for-the-badge&logo=GoogleTranslate&logoColor=white"/>
 </p>
 
 ### Collaboration
