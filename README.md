@@ -1,83 +1,25 @@
-# Git 규칙
+# FitMate
 
-## 작업 순서
+> 스케줄 관리, 커뮤니티, 구독 서비스와 헬스장 CRM을 하나의 플랫폼으로 통합한 Full Stack 웹 서비스
 
-### 1. 작업 시작 전
+FitMate는 운동을 지속하기 어려운 사용자와 회원 관리에 어려움을 겪는 헬스장을 위해 개발한
+통합 헬스장 CRM 플랫폼입니다.
 
-항상 최신 dev를 먼저 받아옵니다.
+사용자는 운동 루틴 생성, 스케줄 관리, 커뮤니티, PT 예약, 이용권 구매 및 구독 서비스를 이용할 수 있으며,
+관리자는 회원, 상품, 예약, 결제, 커뮤니티, 팝업 관리와 함께 **대시보드를 통해 핵심 운영 지표를 한눈에 확인**할 수 있습니다.
 
-```bash
-git checkout dev
-git pull origin dev
+프로젝트에서는 **팀장 역할을 맡아 프로젝트 구조 설계와 Git 협업 환경을 구축**하였고,
+**관리자 대시보드, 공통 컴포넌트(Calendar · Kakao Map), CI/CD 구축, CRM 기능 구현**을 담당했습니다.
 
-git checkout 본인브랜치
-git merge dev
-```
 
----
+## 📋 프로젝트 정보
 
-### 2. 작업
+| 구분 | 내용 |
+|------|------|
+| 프로젝트명 | FitMate |
+| 개발 기간 | **2026.06.26 ~ 2026.07.31** |
+| 개발 인원 | 4명 |
+| 프로젝트 형태 | Spring Boot + React 기반 팀 프로젝트 |
+| 담당 역할 | 팀장 · 관리자 기능 개발 · CI/CD 구축 |
+| 배포 환경 | Docker · Docker Hub · GitHub Actions · AWS EC2 |
 
-작업 시작 전 본인 브랜치인지 먼저 확인해주세요.
-
-```bash
-git checkout 본인브랜치
-git add .
-git commit -m "작업 내용"
-```
-
----
-
-### 3. 개인 브랜치 업로드
-
-```bash
-git push origin 본인브랜치
-```
-
----
-
-### 4. dev에 반영
-
-최신 dev를 다시 받아온 후 merge합니다.
-
-```bash
-git checkout dev
-git pull origin dev
-
-git merge 본인브랜치
-git push origin dev
-```
-
----
-
-## push가 거부될 경우
-
-다른 팀원이 먼저 dev를 업데이트한 경우입니다.
-
-다시 최신 dev를 받아온 뒤 merge하면 됩니다.
-
-```bash
-git checkout dev
-git pull origin dev
-
-git merge 본인브랜치
-git push origin dev
-```
-
----
-
-## 협업 규칙
-
-- 모든 작업은 개인 브랜치에서 진행합니다.
-- dev에 merge하기 전에는 항상 `git pull origin dev`를 실행합니다.
-- merge 후 프로젝트가 정상 실행되는지 확인한 뒤 dev에 push합니다.
-- 기능 단위로 commit하는 것을 권장합니다.
-
-## 브랜치
-
-- **main** : 최종 배포용 (팀장만 관리)
-- **dev** : 개발 브랜치 (팀원 모두 사용)
-- **yg** : 이용근 개인 브랜치
-- **ws** : 김우송 개인 브랜치
-- **jh** : 김주희 개인 브랜치
-- **lhs** : 이현성 개인 브랜치
