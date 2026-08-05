@@ -24,17 +24,13 @@ FitMate는 운동을 지속하기 어려운 사용자와 회원 관리에 어려
 | 배포 환경 | Docker · Docker Hub · GitHub Actions · AWS EC2 |
 
 
-## 🛠 기술 스택
-
 ### Front-End
 
 <p>
   <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=black"/>
   <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript&logoColor=black"/>
-  <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=Vite&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=Axios&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Redux_Toolkit-764ABC?style=for-the-badge&logo=Redux&logoColor=white"/>
   <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=CSS3&logoColor=white"/>
-  <img src="https://img.shields.io/badge/FullCalendar-2C3E50?style=for-the-badge"/>
 </p>
 
 ### Back-End
@@ -44,7 +40,6 @@ FitMate는 운동을 지속하기 어려운 사용자와 회원 관리에 어려
   <img src="https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=SpringBoot&logoColor=white"/>
   <img src="https://img.shields.io/badge/Spring_Security-6DB33F?style=for-the-badge&logo=SpringSecurity&logoColor=white"/>
   <img src="https://img.shields.io/badge/Spring_Data_JPA-6DB33F?style=for-the-badge&logo=Spring&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Gradle-02303A?style=for-the-badge&logo=Gradle&logoColor=white"/>
   <img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSONWebTokens&logoColor=white"/>
   <img src="https://img.shields.io/badge/OAuth2-4285F4?style=for-the-badge"/>
 </p>
@@ -52,39 +47,32 @@ FitMate는 운동을 지속하기 어려운 사용자와 회원 관리에 어려
 ### Database & Messaging
 
 <p>
-  <img src="https://img.shields.io/badge/MySQL_8.0-4479A1?style=for-the-badge&logo=MySQL&logoColor=white"/>
+  <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=MySQL&logoColor=white"/>
   <img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=Redis&logoColor=white"/>
   <img src="https://img.shields.io/badge/RabbitMQ-FF6600?style=for-the-badge&logo=RabbitMQ&logoColor=white"/>
-  <img src="https://img.shields.io/badge/WebSocket-010101?style=for-the-badge"/>
 </p>
 
-### DevOps & Infrastructure
+### DevOps
 
 <p>
   <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=Docker&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Docker_Compose-2496ED?style=for-the-badge&logo=Docker&logoColor=white"/>
   <img src="https://img.shields.io/badge/Docker_Hub-2496ED?style=for-the-badge&logo=Docker&logoColor=white"/>
   <img src="https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=GitHubActions&logoColor=white"/>
   <img src="https://img.shields.io/badge/AWS_EC2-FF9900?style=for-the-badge&logo=AmazonEC2&logoColor=white"/>
   <img src="https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=Nginx&logoColor=white"/>
 </p>
 
-### External API
+### API
 
 <p>
   <img src="https://img.shields.io/badge/Kakao_Map_API-FFCD00?style=for-the-badge&logo=Kakao&logoColor=black"/>
   <img src="https://img.shields.io/badge/KakaoPay-FFCD00?style=for-the-badge&logo=Kakao&logoColor=black"/>
-  <img src="https://img.shields.io/badge/ExerciseDB_API-2563EB?style=for-the-badge"/>
-  <img src="https://img.shields.io/badge/OpenWeather_API-EB6E4B?style=for-the-badge&logo=OpenWeatherMap&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Google_Translate_API-4285F4?style=for-the-badge&logo=GoogleTranslate&logoColor=white"/>
 </p>
 
-### Collaboration & Tools
+### Collaboration
 
 <p>
   <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=GitHub&logoColor=white"/>
   <img src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=Figma&logoColor=white"/>
   <img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=Notion&logoColor=white"/>
-  <img src="https://img.shields.io/badge/IntelliJ_IDEA-000000?style=for-the-badge&logo=IntelliJIDEA&logoColor=white"/>
-  <img src="https://img.shields.io/badge/VS_Code-007ACC?style=for-the-badge&logo=VisualStudioCode&logoColor=white"/>
 </p>
