@@ -76,6 +76,6 @@ FitMate는 운동을 지속하기 어려운 사용자와 회원 관리에 어려
 
 <p>
   <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=GitHub&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=Figma&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=Notion&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Google_Sheets-34A853?style=for-the-badge&logo=GoogleSheets&logoColor=white"/>
+  <img src="https://img.shields.io/badge/ERDCloud-4A90E2?style=for-the-badge"/>
 </p>
