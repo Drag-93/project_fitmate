@@ -69,7 +69,6 @@ FitMate는 운동을 지속하기 어려운 사용자와 회원 관리에 어려
   <img src="https://img.shields.io/badge/KakaoPay-FFCD00?style=for-the-badge&logo=Kakao&logoColor=black"/>
   <img src="https://img.shields.io/badge/ExerciseDB_API-2563EB?style=for-the-badge"/>
   <img src="https://img.shields.io/badge/OpenWeather_API-EB6E4B?style=for-the-badge&logo=OpenWeatherMap&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Google_Translate_API-4285F4?style=for-the-badge&logo=GoogleTranslate&logoColor=white"/>
 </p>
 
 ### Collaboration
@@ -79,3 +78,31 @@ FitMate는 운동을 지속하기 어려운 사용자와 회원 관리에 어려
   <img src="https://img.shields.io/badge/Google_Sheets-34A853?style=for-the-badge&logo=GoogleSheets&logoColor=white"/>
   <img src="https://img.shields.io/badge/ERDCloud-4A90E2?style=for-the-badge"/>
 </p>
+
+## 🏗 시스템 아키텍처
+
+React와 Spring Boot 기반의 Full Stack 구조로, Nginx를 통해 정적 파일 제공 및 API 요청을 처리합니다.
+
+데이터는 MySQL에 저장하며, Redis는 캐시 및 세션 관리, RabbitMQ는 메시지 브로커로 사용합니다.
+
+<p align="center">
+  <img src="./readmeimg/시스템 아키텍처.png" width="900">
+</p>
+
+---
+
+## 🚀 CI/CD 파이프라인
+
+GitHub Flow 전략을 기반으로 Dev 브랜치에서 기능을 검증한 후
+Main 브랜치에 병합하면 GitHub Actions가 자동으로 빌드 및 배포를 수행합니다.
+
+Docker 이미지를 Docker Hub에 업로드하고, EC2에서 최신 이미지를 가져와 Docker Compose를 통해 서비스를 실행하도록 구성하였습니다.
+
+<p align="center">
+  <img src="./readmeimg/파이프라인.png" width="900">
+</p>
+
+
+
+
+
