@@ -105,13 +105,6 @@ GitHub Actions가 Frontend와 Backend Docker 이미지를 빌드하여 Docker Hu
 
 
 ---
-## 🌐 Demo
-
-현재 AWS EC2 환경에 배포되어 있으며, 아래 URL에서 서비스를 확인할 수 있습니다.
-
-- URL : http://3.35.191.143:3000/
-  
----
 
 ## 📷 프로젝트 미리보기
 
