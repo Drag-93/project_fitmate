@@ -81,33 +81,28 @@ FitMate는 운동을 지속하기 어려운 사용자와 회원 관리에 어려
   <img src="https://img.shields.io/badge/ERDCloud-4A90E2?style=for-the-badge"/>
 </p>
 ---
-## 🏗 시스템 아키텍처
+## 🏗 시스템 구성
 
-React와 Spring Boot 기반의 Full Stack 구조로, Nginx를 통해 정적 파일 제공 및 API 요청을 처리합니다.
-
-데이터는 MySQL에 저장하며, Redis는 캐시 및 세션 관리, RabbitMQ는 메시지 브로커로 구성하였습니다.
+React와 Spring Boot를 기반으로 서비스를 구성하였으며,
+Nginx를 통해 정적 파일 제공과 백엔드 API 요청을 처리합니다.
 
 <p align="center">
-  <img src="./readmeimg/시스템 아키텍처.png" width="900">
+  <img src="./readmeimg/architecture.png" width="900">
 </p>
 
 ---
 
 ## 🚀 CI/CD 파이프라인
 
-GitHub Flow 전략을 기반으로 Dev 브랜치에서 기능을 검증한 후
-Main 브랜치에 병합하면 GitHub Actions가 자동으로 빌드 및 배포를 수행합니다.
+Dev 브랜치에서 기능을 통합·검증한 뒤 Main 브랜치에 병합하면,
+GitHub Actions가 Frontend와 Backend Docker 이미지를 빌드하여 Docker Hub에 업로드합니다.
 
-Docker 이미지를 Docker Hub에 업로드하고, EC2에서 최신 이미지를 가져와 Docker Compose를 통해 서비스를 실행하도록 구성하였습니다.
+이후 EC2에서 최신 이미지를 받아 Docker Compose로 서비스를 자동 재배포하도록 구성하였습니다.
 
 <p align="center">
-  <img src="./readmeimg/파이프라인.png" width="900">
+  <img src="./readmeimg/pipeline.png" width="900">
 </p>
 
-
-
-
-# (여기까지 작성 완료)
 
 ...
 
@@ -115,41 +110,61 @@ Docker 이미지를 Docker Hub에 업로드하고, EC2에서 최신 이미지를
 
 ### 🏠 메인 페이지
 
-> 메인 화면 및 주요 기능 소개
+서비스의 주요 기능과 상품, 커뮤니티 게시글, 공지사항 및 팝업 정보를 한 화면에서 확인할 수 있습니다.
 
-<!-- 메인 화면 이미지 -->
+<p align="center">
+  <img src="./readmeimg/main.gif" width="900">
+</p>
 
 ---
 
 ### 🏋️ 운동 루틴
 
-> 운동 루틴 생성 및 조회 기능
+운동 부위와 종목을 선택하여 개인 운동 루틴을 생성하고, 저장된 루틴을 조회할 수 있습니다.
 
-<!-- 운동 루틴 이미지 -->
+<p align="center">
+  <img src="./readmeimg/routine.gif" width="900">
+</p>
 
 ---
 
 ### 📅 스케줄 관리
 
-> FullCalendar 기반 개인 일정 및 운동 일정 관리
+FullCalendar를 활용하여 개인 일정, 운동 일정, PT 예약 내역을 통합 조회하고 관리할 수 있습니다.
 
-<!-- 스케줄 이미지 -->
+<p align="center">
+  <img src="./readmeimg/calendar.gif" width="900">
+</p>
 
 ---
 
 ### 👥 커뮤니티
 
-> 게시글 작성, 댓글 작성 및 운동 정보 공유
+운동 관련 게시글을 작성하고 댓글을 통해 사용자 간 정보를 공유할 수 있습니다.
 
-<!-- 커뮤니티 이미지 -->
+<p align="center">
+  <img src="./readmeimg/community.gif" width="900">
+</p>
 
 ---
 
-### 💳 이용권 및 PT 예약
+### 💳 이용권 구매
 
-> 이용권 구매 및 PT 예약 기능
+헬스장 이용권과 PT 상품을 조회하고 카카오페이를 통해 결제할 수 있습니다.
 
-<!-- 이용권 / 예약 이미지 -->
+<p align="center">
+  <img src="./readmeimg/payment.gif" width="900">
+</p>
+
+---
+
+### 📆 PT 예약
+
+보유한 PT 이용권을 기반으로 트레이너와 예약 가능한 일정을 확인하고 PT를 예약할 수 있습니다.
+
+<p align="center">
+  <img src="./readmeimg/reservation.gif" width="900">
+</p>
 
 ---
 
@@ -157,27 +172,12 @@ Docker 이미지를 Docker Hub에 업로드하고, EC2에서 최신 이미지를
 
 #### Dashboard
 
-> 회원, 상품, 예약, 결제 등 핵심 운영 지표를 확인할 수 있는 관리자 대시보드
+회원, 상품, 예약, 결제 및 커뮤니티 데이터를 기반으로 핵심 운영 지표를 확인할 수 있습니다.
 
-<!-- Dashboard -->
+<p align="center">
+  <img src="./readmeimg/dashboard.gif" width="900">
+</p>
 
-#### Member Management
-
-> 회원 조회 및 관리
-
-<!-- Member -->
-
-#### Product Management
-
-> 상품 등록 및 관리
-
-<!-- Product -->
-
-#### Popup Management
-
-> 메인 팝업 등록 및 관리
-
-<!-- Popup -->
 
 ---
 
