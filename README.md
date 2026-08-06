@@ -1,5 +1,5 @@
-<h1>
-  <img src="./readmeimg/logo.png" width="45" align="center">
+<h1 align="left">
+  <img src="./readmeimg/logo.png" width="42">
   FitMate
 </h1>
 
