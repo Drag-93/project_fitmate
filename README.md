@@ -1,4 +1,15 @@
-# FitMate
+<p align="center">
+  <img src="./readmeimg/logo.png" width="180">
+</p>
+
+<h1 align="center">FitMate</h1>
+
+<p align="center">
+운동 관리와 헬스장 CRM을 하나로 통합한 Full Stack 웹 서비스
+</p>
+
+
+---
 
 > 스케줄 관리, 커뮤니티, 구독 서비스와 헬스장 CRM을 하나의 플랫폼으로 통합한 Full Stack 웹 서비스
 
@@ -238,35 +249,6 @@ FullCalendar를 활용하여 개인 일정, 운동 일정, PT 예약 내역을 �
 
 ---
 
-
-## 🚀 실행 방법
-
-> 본 프로젝트는 Docker Compose 기반 실행을 권장합니다.
-
-### 1. Clone
-
-```bash
-git clone https://github.com/Drag-93/project_FitMate.git
-cd project_FitMate
-```
-
-### 2. 환경 변수 설정
-
-프로젝트 루트의 `.env.example` 파일을 복사하여 `.env` 파일을 생성한 뒤,
-필요한 환경변수를 설정합니다.
-
-### 3. Docker Compose 실행
-
-```bash
-docker compose up -d --build
-```
-
-> 최초 실행 시 Docker 이미지 빌드로 인해 다소 시간이 소요될 수 있습니다.
-
-### 4. 접속
-
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:8090
 
 
 
