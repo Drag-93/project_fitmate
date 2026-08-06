@@ -1,6 +1,7 @@
-# FitMate
-
-<img src="./readmeimg/logo.png" width="130" align="right">
+<h1>
+  <img src="./readmeimg/logo.png" width="45" align="center">
+  FitMate
+</h1>
 
 > 운동 관리와 헬스장 CRM을 하나의 플랫폼으로 통합한 Full Stack 웹 서비스
 
