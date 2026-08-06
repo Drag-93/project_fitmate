@@ -1,17 +1,11 @@
-<p align="center">
-  <img src="./readmeimg/logo.png" width="180">
-</p>
+# FitMate
 
-<h1 align="center">FitMate</h1>
+<img src="./readmeimg/logo.png" width="130" align="right">
 
-<p align="center">
-운동 관리와 헬스장 CRM을 하나로 통합한 Full Stack 웹 서비스
-</p>
-
+> 운동 관리와 헬스장 CRM을 하나의 플랫폼으로 통합한 Full Stack 웹 서비스
 
 ---
-
-> 스케줄 관리, 커뮤니티, 구독 서비스와 헬스장 CRM을 하나의 플랫폼으로 통합한 Full Stack 웹 서비스
+## 📖 프로젝트 소개
 
 FitMate는 운동을 지속하기 어려운 사용자와 회원 관리에 어려움을 겪는 헬스장을 위해 개발한
 운동 루틴, 일정 관리와 헬스장 CRM을 하나의 서비스에서 제공하는 통합 플랫폼입니다.
@@ -249,7 +243,9 @@ FullCalendar를 활용하여 개인 일정, 운동 일정, PT 예약 내역을 �
 
 ---
 
+## 🌐 Demo
 
+👉 **http://3.35.191.143**
 
 
 
