@@ -105,6 +105,13 @@ GitHub Actions가 Frontend와 Backend Docker 이미지를 빌드하여 Docker Hu
 
 
 ---
+## 🌐 Demo
+
+현재 AWS EC2 환경에 배포되어 있으며, 아래 URL에서 서비스를 확인할 수 있습니다.
+
+- URL : http://3.35.191.143:3000/
+  
+---
 
 ## 📷 프로젝트 미리보기
 
@@ -238,12 +245,6 @@ FullCalendar를 활용하여 개인 일정, 운동 일정, PT 예약 내역을 �
 
 ---
 
-## 🌐 Demo
-
-현재 AWS EC2에 배포되어 있습니다.
-
-- URL : http://3.35.191.143:3000/
-
 
 ## 🚀 실행 방법
 
@@ -258,7 +259,7 @@ cd project_FitMate
 
 ### 2. 환경 변수 설정
 
-프로젝트 루트의 `.env.example` 파일을 참고하여 `.env` 파일을 생성하고,
+프로젝트 루트의 `.env.example` 파일을 복사하여 `.env` 파일을 생성한 뒤,
 필요한 환경변수를 설정합니다.
 
 ### 3. Docker Compose 실행
@@ -271,15 +272,8 @@ docker compose up -d --build
 
 ### 4. 접속
 
-- Frontend : http://localhost:3000
-- Backend(API) : http://localhost:8090
-
-
-
-
-
-
-
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:8090
 
 
 
