@@ -2,14 +2,14 @@
 
 > 스케줄 관리, 커뮤니티, 구독 서비스와 헬스장 CRM을 하나의 플랫폼으로 통합한 Full Stack 웹 서비스
 
-FitMate는 운동을 지속하기 어려운 사용자와 회원 관리에 어려움을 겪는 헬스장을 위해 개발한 
-운동 관리와 헬스장 CRM을 통합한 플랫폼입니다.
+FitMate는 운동을 지속하기 어려운 사용자와 회원 관리에 어려움을 겪는 헬스장을 위해 개발한
+운동 관리 및 헬스장 CRM 통합 플랫폼입니다.
 
-사용자는 운동 루틴 생성, 스케줄 관리, 커뮤니티, PT 예약, 이용권 구매 및 구독 서비스를 이용할 수 있으며,
-관리자는 회원, 상품, 예약, 결제, 커뮤니티, 팝업 관리와 함께 **대시보드를 통해 핵심 운영 지표를 한눈에 확인**할 수 있습니다.
+사용자는 운동 루틴 생성, 일정 관리, PT 예약, 이용권 구매, 커뮤니티 기능을 이용할 수 있으며,
+관리자는 회원, 상품, 예약, 결제, 커뮤니티, 팝업을 관리하고 Dashboard를 통해 핵심 운영 지표를 확인할 수 있습니다.
 
-프로젝트에서는 **팀장 역할을 맡아 프로젝트 구조 설계와 Git 협업 환경을 구축**하였고,
-**관리자 대시보드, 공통 컴포넌트(Calendar · Kakao Map), CI/CD 구축, CRM 기능 구현**을 담당했습니다.
+프로젝트에서는 팀장으로서 프로젝트 구조 설계와 Git 협업 환경을 구축하였으며,
+관리자 Dashboard, FullCalendar 및 Kakao Map 공통 컴포넌트 개발과 Docker 기반 CI/CD 구축을 담당했습니다.
 
 
 ## 📋 프로젝트 정보
@@ -20,7 +20,7 @@ FitMate는 운동을 지속하기 어려운 사용자와 회원 관리에 어려
 | 개발 기간 | **2026.06.26 ~ 2026.07.31** |
 | 개발 인원 | 4명 |
 | 프로젝트 형태 | Spring Boot + React 기반 팀 프로젝트 |
-| 담당 역할 | 팀장 · 관리자 기능 개발 · Calendar / Kakao Map 공통 컴포넌트 · CI/CD 구축 |
+| 담당 역할 | 팀장 · 관리자 대시보드 · Calendar / Kakao Map 공통 컴포넌트 · CI/CD 구축 |
 | 배포 환경 | Docker · Docker Hub · GitHub Actions · AWS EC2 |
 
 
@@ -104,7 +104,7 @@ GitHub Actions가 Frontend와 Backend Docker 이미지를 빌드하여 Docker Hu
 </p>
 
 
-...
+---
 
 ## 📷 프로젝트 미리보기
 
@@ -133,7 +133,7 @@ GitHub Actions가 Frontend와 Backend Docker 이미지를 빌드하여 Docker Hu
 FullCalendar를 활용하여 개인 일정, 운동 일정, PT 예약 내역을 통합 조회하고 관리할 수 있습니다.
 
 <p align="center">
-  <img src="./readmeimg/calendar.gif" width="900">
+  <img src="./readmeimg/schedule.gif" width="900">
 </p>
 
 ---
@@ -185,24 +185,25 @@ FullCalendar를 활용하여 개인 일정, 운동 일정, PT 예약 내역을 �
 
 ### 👤 사용자
 
+- 관심사 기반 추천 상품 및 커뮤니티 게시글 제공
 - 운동 루틴 생성 및 조회
 - FullCalendar 기반 일정 관리
 - PT 예약
-- 이용권 구매
 - 커뮤니티 게시글 및 댓글
-- 카카오페이 결제
+- 이용권 구매 및 카카오페이 결제
 - OAuth2 로그인
 - 마이페이지
 
 ### 👨‍💼 관리자
 
 - 관리자 대시보드
-- 회원 관리(CRM)
+- 회원 관리
 - 상품 관리
 - 예약 관리
 - 결제 관리
 - 커뮤니티 관리
 - 팝업 관리
+- 챗봇 질문/답변 관리
 
 ---
 
@@ -217,16 +218,16 @@ FullCalendar를 활용하여 개인 일정, 운동 일정, PT 예약 내역을 �
 
 ### Front-End
 
-- Calendar 공통 컴포넌트 개발
-- Kakao Map 공통 컴포넌트 개발
+- 사용자 관심사 기반 메인 페이지 추천 기능 개발
+- FullCalendar 기반 공통 Calendar 컴포넌트 개발
+- 주소 검색 및 지도 표시를 위한 Kakao Map 공통 컴포넌트 개발
 - 관리자 Dashboard UI 및 기능 구현
 
 ### Back-End
 
 - 관리자 Dashboard API 개발
-- CRM 기능 개발
 - 메인 페이지 API 개발
-- Calendar 통합 API 개발
+- 운동 일정, PT 예약, 개인 일정을 통합 조회하는 Calendar API 개발
 
 ### DevOps
 
@@ -293,16 +294,6 @@ docker compose up -d
 ```
 
 ---
-
-## 📂 프로젝트 구조
-
-> 작성 예정
-
----
-
-## 📄 License
-
-MIT License
 
 
 
