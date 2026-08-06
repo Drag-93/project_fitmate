@@ -8,7 +8,7 @@ FitMate는 운동을 지속하기 어려운 사용자와 회원 관리에 어려
 사용자는 운동 루틴 생성, 일정 관리, PT 예약, 이용권 구매, 커뮤니티 기능을 이용할 수 있으며,
 관리자는 회원, 상품, 예약, 결제, 커뮤니티, 팝업을 관리하고 Dashboard를 통해 핵심 운영 지표를 확인할 수 있습니다.
 
-프로젝트에서는 팀장으로서 프로젝트 구조 설계와 Git 협업 환경을 구축하였으며,
+프로젝트에서는 팀장으로서 프로젝트 구조 설계와 Git 협업 환경을 구축하고,
 관리자 Dashboard, FullCalendar 및 Kakao Map 공통 컴포넌트 개발과 Docker 기반 CI/CD 구축을 담당했습니다.
 
 
@@ -185,12 +185,12 @@ FullCalendar를 활용하여 개인 일정, 운동 일정, PT 예약 내역을 �
 
 ### 👤 사용자
 
-- 관심사 기반 추천 상품 및 커뮤니티 게시글 제공
+- 사용자 관심사 기반 추천 상품 및 커뮤니티 게시글 제공
 - 운동 루틴 생성 및 조회
 - FullCalendar 기반 일정 관리
 - PT 예약
 - 커뮤니티 게시글 및 댓글
-- 이용권 구매 및 카카오페이 결제
+- 이용권 구매 및 카카오페이 결제 지원
 - OAuth2 로그인
 - 마이페이지
 
@@ -231,67 +231,38 @@ FullCalendar를 활용하여 개인 일정, 운동 일정, PT 예약 내역을 �
 
 ### DevOps
 
-- Docker 환경 구성
+- Docker 기반 개발 및 배포 환경 구성
 - Docker Hub 기반 이미지 관리
 - GitHub Actions 기반 CI/CD 구축
 - AWS EC2 배포 환경 구축
 
 ---
 
-## 🔥 Trouble Shooting
-
-### 1. Docker Volume과 이미지 데이터 분리
-
-> 작성 예정
-
----
-
-### 2. EC2 이미지 업로드 및 경로 문제
-
-> 작성 예정
-
----
-
-### 3. Git History 정리 및 협업 환경 개선
-
-> 작성 예정
-
----
-
-### 4. FullCalendar 공통 컴포넌트 설계
-
-> 작성 예정
-
----
-
 ## 🚀 실행 방법
+※ 본 프로젝트는 Docker Compose 기반으로 실행하는 것을 권장합니다.
 
-### Clone
+### 1. Clone
 
 ```bash
 git clone https://github.com/Drag-93/project_FitMate.git
+cd project_FitMate
 ```
 
-### Frontend
+### 2. 환경 변수 설정
+
+프로젝트 루트의 `.env.example`을 참고하여 `.env` 파일을 생성하고,
+필요한 환경변수를 설정합니다.
+
+### 3. Docker Compose 실행
 
 ```bash
-cd frontend
-npm install
-npm start
+docker compose up -d --build
 ```
 
-### Backend
+### 4. 접속
 
-```bash
-cd backend
-./gradlew bootRun
-```
-
-또는
-
-```bash
-docker compose up -d
-```
+- Frontend : http://localhost:3000
+- Backend : http://localhost:8090
 
 ---
 
