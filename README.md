@@ -1,11 +1,12 @@
-<h1 align="left">
-  <img src="./readmeimg/logo.png" width="42">
+<h1>
+  <img src="./readmeimg/logo.png" width="42" alt="FitMate Logo" />
   FitMate
 </h1>
 
 > 운동 관리와 헬스장 CRM을 하나의 플랫폼으로 통합한 Full Stack 웹 서비스
 
 ---
+
 ## 📖 프로젝트 소개
 
 FitMate는 운동을 지속하기 어려운 사용자와 회원 관리에 어려움을 겪는 헬스장을 위해 개발한
@@ -17,21 +18,19 @@ FitMate는 운동을 지속하기 어려운 사용자와 회원 관리에 어려
 프로젝트에서는 팀장으로서 프로젝트 구조 설계와 Git 협업 환경을 구축하고,
 관리자 Dashboard, FullCalendar 및 Kakao Map 공통 컴포넌트 개발과 Docker 기반 CI/CD 구축을 담당했습니다.
 
-
 ## 📋 프로젝트 정보
 
-| 구분 | 내용 |
-|------|------|
-| 프로젝트명 | FitMate |
-| 개발 기간 | **2026.06.26 ~ 2026.07.31** |
-| 개발 인원 | 4명 |
-| 프로젝트 형태 | Spring Boot + React 기반 팀 프로젝트 |
-| 담당 역할 | 팀장 · 관리자 대시보드 · Calendar / Kakao Map 공통 컴포넌트 · CI/CD 구축 |
-| 배포 환경 | Docker · Docker Hub · GitHub Actions · AWS EC2 |
-
-
+| 구분          | 내용                                                                     |
+| ------------- | ------------------------------------------------------------------------ |
+| 프로젝트명    | FitMate                                                                  |
+| 개발 기간     | **2026.06.26 ~ 2026.07.31**                                              |
+| 개발 인원     | 4명                                                                      |
+| 프로젝트 형태 | Spring Boot + React 기반 팀 프로젝트                                     |
+| 담당 역할     | 팀장 · 관리자 대시보드 · Calendar / Kakao Map 공통 컴포넌트 · CI/CD 구축 |
+| 배포 환경     | Docker · Docker Hub · GitHub Actions · AWS EC2                           |
 
 ## 🛠 기술 스택
+
 ### Front-End
 
 <p>
@@ -109,7 +108,6 @@ GitHub Actions가 Frontend와 Backend Docker 이미지를 빌드하여 Docker Hu
   <img src="./readmeimg/pipeline.png" width="900">
 </p>
 
-
 ---
 
 ## 📷 프로젝트 미리보기
@@ -184,7 +182,6 @@ FullCalendar를 활용하여 개인 일정, 운동 일정, PT 예약 내역을 �
   <img src="./readmeimg/dashboard.gif" width="900">
 </p>
 
-
 ---
 
 ## ✨ 주요 기능
@@ -247,7 +244,3 @@ FullCalendar를 활용하여 개인 일정, 운동 일정, PT 예약 내역을 �
 ## 🌐 Demo
 
 👉 **http://3.35.191.143**
-
-
-
-
