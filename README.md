@@ -3,7 +3,7 @@
 > 스케줄 관리, 커뮤니티, 구독 서비스와 헬스장 CRM을 하나의 플랫폼으로 통합한 Full Stack 웹 서비스
 
 FitMate는 운동을 지속하기 어려운 사용자와 회원 관리에 어려움을 겪는 헬스장을 위해 개발한
-운동 관리 및 헬스장 CRM 통합 플랫폼입니다.
+운동 루틴, 일정 관리와 헬스장 CRM을 하나의 서비스에서 제공하는 통합 플랫폼입니다.
 
 사용자는 운동 루틴 생성, 일정 관리, PT 예약, 이용권 구매, 커뮤니티 기능을 이용할 수 있으며,
 관리자는 회원, 상품, 예약, 결제, 커뮤니티, 팝업을 관리하고 Dashboard를 통해 핵심 운영 지표를 확인할 수 있습니다.
@@ -238,8 +238,16 @@ FullCalendar를 활용하여 개인 일정, 운동 일정, PT 예약 내역을 �
 
 ---
 
+## 🌐 Demo
+
+현재 AWS EC2에 배포되어 있습니다.
+
+- URL : http://http://3.35.191.143:3000/
+
+
 ## 🚀 실행 방법
-※ 본 프로젝트는 Docker Compose 기반으로 실행하는 것을 권장합니다.
+
+> 본 프로젝트는 Docker Compose 기반 실행을 권장합니다.
 
 ### 1. Clone
 
@@ -250,7 +258,7 @@ cd project_FitMate
 
 ### 2. 환경 변수 설정
 
-프로젝트 루트의 `.env.example`을 참고하여 `.env` 파일을 생성하고,
+프로젝트 루트의 `.env.example` 파일을 참고하여 `.env` 파일을 생성하고,
 필요한 환경변수를 설정합니다.
 
 ### 3. Docker Compose 실행
@@ -259,13 +267,12 @@ cd project_FitMate
 docker compose up -d --build
 ```
 
+> 최초 실행 시 Docker 이미지 빌드로 인해 다소 시간이 소요될 수 있습니다.
+
 ### 4. 접속
 
 - Frontend : http://localhost:3000
-- Backend : http://localhost:8090
-
----
-
+- Backend(API) : http://localhost:8090
 
 
 
