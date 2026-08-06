@@ -1,83 +1,318 @@
-# Git 규칙
+# FitMate
 
-## 작업 순서
+> 스케줄 관리, 커뮤니티, 구독 서비스와 헬스장 CRM을 하나의 플랫폼으로 통합한 Full Stack 웹 서비스
 
-### 1. 작업 시작 전
+FitMate는 운동을 지속하기 어려운 사용자와 회원 관리에 어려움을 겪는 헬스장을 위해 개발한 
+운동 관리와 헬스장 CRM을 통합한 플랫폼입니다.
 
-항상 최신 dev를 먼저 받아옵니다.
+사용자는 운동 루틴 생성, 스케줄 관리, 커뮤니티, PT 예약, 이용권 구매 및 구독 서비스를 이용할 수 있으며,
+관리자는 회원, 상품, 예약, 결제, 커뮤니티, 팝업 관리와 함께 **대시보드를 통해 핵심 운영 지표를 한눈에 확인**할 수 있습니다.
+
+프로젝트에서는 **팀장 역할을 맡아 프로젝트 구조 설계와 Git 협업 환경을 구축**하였고,
+**관리자 대시보드, 공통 컴포넌트(Calendar · Kakao Map), CI/CD 구축, CRM 기능 구현**을 담당했습니다.
+
+
+## 📋 프로젝트 정보
+
+| 구분 | 내용 |
+|------|------|
+| 프로젝트명 | FitMate |
+| 개발 기간 | **2026.06.26 ~ 2026.07.31** |
+| 개발 인원 | 4명 |
+| 프로젝트 형태 | Spring Boot + React 기반 팀 프로젝트 |
+| 담당 역할 | 팀장 · 관리자 기능 개발 · Calendar / Kakao Map 공통 컴포넌트 · CI/CD 구축 |
+| 배포 환경 | Docker · Docker Hub · GitHub Actions · AWS EC2 |
+
+
+
+## 🛠 기술 스택
+### Front-End
+
+<p>
+  <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=black"/>
+  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript&logoColor=black"/>
+  <img src="https://img.shields.io/badge/Redux_Toolkit-764ABC?style=for-the-badge&logo=Redux&logoColor=white"/>
+  <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=CSS3&logoColor=white"/>
+</p>
+
+### Back-End
+
+<p>
+  <img src="https://img.shields.io/badge/Java_17-007396?style=for-the-badge&logo=OpenJDK&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=SpringBoot&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Spring_Security-6DB33F?style=for-the-badge&logo=SpringSecurity&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Spring_Data_JPA-6DB33F?style=for-the-badge&logo=Spring&logoColor=white"/>
+  <img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSONWebTokens&logoColor=white"/>
+  <img src="https://img.shields.io/badge/OAuth2-4285F4?style=for-the-badge"/>
+</p>
+
+### Database & Messaging
+
+<p>
+  <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=MySQL&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=Redis&logoColor=white"/>
+  <img src="https://img.shields.io/badge/RabbitMQ-FF6600?style=for-the-badge&logo=RabbitMQ&logoColor=white"/>
+</p>
+
+### DevOps
+
+<p>
+  <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=Docker&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Docker_Hub-2496ED?style=for-the-badge&logo=Docker&logoColor=white"/>
+  <img src="https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=GitHubActions&logoColor=white"/>
+  <img src="https://img.shields.io/badge/AWS_EC2-FF9900?style=for-the-badge&logo=AmazonEC2&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=Nginx&logoColor=white"/>
+</p>
+
+### API
+
+<p>
+  <img src="https://img.shields.io/badge/Kakao_Map_API-FFCD00?style=for-the-badge&logo=Kakao&logoColor=black"/>
+  <img src="https://img.shields.io/badge/KakaoPay-FFCD00?style=for-the-badge&logo=Kakao&logoColor=black"/>
+  <img src="https://img.shields.io/badge/ExerciseDB_API-2563EB?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/OpenWeather_API-EB6E4B?style=for-the-badge&logo=OpenWeatherMap&logoColor=white"/>
+</p>
+
+### Collaboration
+
+<p>
+  <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=GitHub&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Google_Sheets-34A853?style=for-the-badge&logo=GoogleSheets&logoColor=white"/>
+  <img src="https://img.shields.io/badge/ERDCloud-4A90E2?style=for-the-badge"/>
+</p>
+---
+## 🏗 시스템 구성
+
+React와 Spring Boot를 기반으로 서비스를 구성하였으며,
+Nginx를 통해 정적 파일 제공과 백엔드 API 요청을 처리합니다.
+
+<p align="center">
+  <img src="./readmeimg/architecture.png" width="900">
+</p>
+
+---
+
+## 🚀 CI/CD 파이프라인
+
+Dev 브랜치에서 기능을 통합·검증한 뒤 Main 브랜치에 병합하면,
+GitHub Actions가 Frontend와 Backend Docker 이미지를 빌드하여 Docker Hub에 업로드합니다.
+
+이후 EC2에서 최신 이미지를 받아 Docker Compose로 서비스를 자동 재배포하도록 구성하였습니다.
+
+<p align="center">
+  <img src="./readmeimg/pipeline.png" width="900">
+</p>
+
+
+...
+
+## 📷 프로젝트 미리보기
+
+### 🏠 메인 페이지
+
+서비스의 주요 기능과 상품, 커뮤니티 게시글, 공지사항 및 팝업 정보를 한 화면에서 확인할 수 있습니다.
+
+<p align="center">
+  <img src="./readmeimg/main.gif" width="900">
+</p>
+
+---
+
+### 🏋️ 운동 루틴
+
+운동 부위와 종목을 선택하여 개인 운동 루틴을 생성하고, 저장된 루틴을 조회할 수 있습니다.
+
+<p align="center">
+  <img src="./readmeimg/routine.gif" width="900">
+</p>
+
+---
+
+### 📅 스케줄 관리
+
+FullCalendar를 활용하여 개인 일정, 운동 일정, PT 예약 내역을 통합 조회하고 관리할 수 있습니다.
+
+<p align="center">
+  <img src="./readmeimg/calendar.gif" width="900">
+</p>
+
+---
+
+### 👥 커뮤니티
+
+운동 관련 게시글을 작성하고 댓글을 통해 사용자 간 정보를 공유할 수 있습니다.
+
+<p align="center">
+  <img src="./readmeimg/community.gif" width="900">
+</p>
+
+---
+
+### 💳 이용권 구매
+
+헬스장 이용권과 PT 상품을 조회하고 카카오페이를 통해 결제할 수 있습니다.
+
+<p align="center">
+  <img src="./readmeimg/payment.gif" width="900">
+</p>
+
+---
+
+### 📆 PT 예약
+
+보유한 PT 이용권을 기반으로 트레이너와 예약 가능한 일정을 확인하고 PT를 예약할 수 있습니다.
+
+<p align="center">
+  <img src="./readmeimg/reservation.gif" width="900">
+</p>
+
+---
+
+### 🛠 관리자 페이지
+
+#### Dashboard
+
+회원, 상품, 예약, 결제 및 커뮤니티 데이터를 기반으로 핵심 운영 지표를 확인할 수 있습니다.
+
+<p align="center">
+  <img src="./readmeimg/dashboard.gif" width="900">
+</p>
+
+
+---
+
+## ✨ 주요 기능
+
+### 👤 사용자
+
+- 운동 루틴 생성 및 조회
+- FullCalendar 기반 일정 관리
+- PT 예약
+- 이용권 구매
+- 커뮤니티 게시글 및 댓글
+- 카카오페이 결제
+- OAuth2 로그인
+- 마이페이지
+
+### 👨‍💼 관리자
+
+- 관리자 대시보드
+- 회원 관리(CRM)
+- 상품 관리
+- 예약 관리
+- 결제 관리
+- 커뮤니티 관리
+- 팝업 관리
+
+---
+
+## 👨‍💻 담당 역할
+
+### 프로젝트 관리
+
+- 팀장 역할 수행
+- 프로젝트 구조 설계
+- Git 협업 전략 수립
+- GitHub 브랜치 전략 관리
+
+### Front-End
+
+- Calendar 공통 컴포넌트 개발
+- Kakao Map 공통 컴포넌트 개발
+- 관리자 Dashboard UI 및 기능 구현
+
+### Back-End
+
+- 관리자 Dashboard API 개발
+- CRM 기능 개발
+- 메인 페이지 API 개발
+- Calendar 통합 API 개발
+
+### DevOps
+
+- Docker 환경 구성
+- Docker Hub 기반 이미지 관리
+- GitHub Actions 기반 CI/CD 구축
+- AWS EC2 배포 환경 구축
+
+---
+
+## 🔥 Trouble Shooting
+
+### 1. Docker Volume과 이미지 데이터 분리
+
+> 작성 예정
+
+---
+
+### 2. EC2 이미지 업로드 및 경로 문제
+
+> 작성 예정
+
+---
+
+### 3. Git History 정리 및 협업 환경 개선
+
+> 작성 예정
+
+---
+
+### 4. FullCalendar 공통 컴포넌트 설계
+
+> 작성 예정
+
+---
+
+## 🚀 실행 방법
+
+### Clone
 
 ```bash
-git checkout dev
-git pull origin dev
+git clone Repository_URL
+```
 
-git checkout 본인브랜치
-git merge dev
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm start
+```
+
+### Backend
+
+```bash
+cd backend
+./gradlew bootRun
+```
+
+또는
+
+```bash
+docker compose up -d
 ```
 
 ---
 
-### 2. 작업
+## 📂 프로젝트 구조
 
-작업 시작 전 본인 브랜치인지 먼저 확인해주세요.
-
-```bash
-git checkout 본인브랜치
-git add .
-git commit -m "작업 내용"
-```
+> 작성 예정
 
 ---
 
-### 3. 개인 브랜치 업로드
+## 📄 License
 
-```bash
-git push origin 본인브랜치
-```
+MIT License
 
----
 
-### 4. dev에 반영
 
-최신 dev를 다시 받아온 후 merge합니다.
 
-```bash
-git checkout dev
-git pull origin dev
 
-git merge 본인브랜치
-git push origin dev
-```
 
----
 
-## push가 거부될 경우
 
-다른 팀원이 먼저 dev를 업데이트한 경우입니다.
 
-다시 최신 dev를 받아온 뒤 merge하면 됩니다.
 
-```bash
-git checkout dev
-git pull origin dev
 
-git merge 본인브랜치
-git push origin dev
-```
 
----
 
-## 협업 규칙
-
-- 모든 작업은 개인 브랜치에서 진행합니다.
-- dev에 merge하기 전에는 항상 `git pull origin dev`를 실행합니다.
-- merge 후 프로젝트가 정상 실행되는지 확인한 뒤 dev에 push합니다.
-- 기능 단위로 commit하는 것을 권장합니다.
-
-## 브랜치
-
-- **main** : 최종 배포용 (팀장만 관리)
-- **dev** : 개발 브랜치 (팀원 모두 사용)
-- **yg** : 이용근 개인 브랜치
-- **ws** : 김우송 개인 브랜치
-- **jh** : 김주희 개인 브랜치
-- **lhs** : 이현성 개인 브랜치
