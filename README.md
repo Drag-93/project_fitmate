@@ -269,7 +269,7 @@ FullCalendar를 활용하여 개인 일정, 운동 일정, PT 예약 내역을 �
 ### Clone
 
 ```bash
-git clone Repository_URL
+git clone [Repository_URL](https://github.com/Drag-93/project_FitMate.git)
 ```
 
 ### Frontend
