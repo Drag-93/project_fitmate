@@ -1,9 +1,10 @@
 <h1>FitMate</h1>
-<br>
 
-> **운동 관리와 헬스장 CRM을 하나의 플랫폼으로 통합한 Full Stack 웹 서비스**
+<strong>
+운동 관리와 헬스장 CRM을 하나의 플랫폼으로 통합한 Full Stack 웹 서비스
+</strong>
 
-<br>
+<br><br>
 
 ---
 
