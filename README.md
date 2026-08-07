@@ -1,8 +1,9 @@
-<h1>
-  FitMate
-</h1>
+<h1>FitMate</h1>
+<br>
 
-> 운동 관리와 헬스장 CRM을 하나의 플랫폼으로 통합한 Full Stack 웹 서비스
+> **운동 관리와 헬스장 CRM을 하나의 플랫폼으로 통합한 Full Stack 웹 서비스**
+
+<br>
 
 ---
 
@@ -27,6 +28,8 @@ FitMate는 운동을 지속하기 어려운 사용자와 회원 관리에 어려
 | 프로젝트 형태 | Spring Boot + React 기반 팀 프로젝트                                     |
 | 담당 역할     | 팀장 · 관리자 대시보드 · Calendar / Kakao Map 공통 컴포넌트 · CI/CD 구축 |
 | 배포 환경     | Docker · Docker Hub · GitHub Actions · AWS EC2                           |
+
+---
 
 ## 🛠 기술 스택
 
@@ -84,7 +87,9 @@ FitMate는 운동을 지속하기 어려운 사용자와 회원 관리에 어려
   <img src="https://img.shields.io/badge/Google_Sheets-34A853?style=for-the-badge&logo=GoogleSheets&logoColor=white"/>
   <img src="https://img.shields.io/badge/ERDCloud-4A90E2?style=for-the-badge"/>
 </p>
+
 ---
+
 ## 🏗 시스템 구성
 
 React와 Spring Boot를 기반으로 서비스를 구성하였으며,
